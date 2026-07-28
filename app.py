@@ -116,7 +116,7 @@ PLANS = [
 
 
     {
-        "id"6,
+        "id":6,
         "name":"TESLA VIP 6",
         "investment":1500,
         "daily":280,
@@ -355,39 +355,68 @@ def dashboard():
 # TEAM PAGE
 # =========================
 
-
 @app.route("/team")
 def team():
-
 
     if "user_id" not in session:
         return redirect("/login")
 
 
-    user_id=session["user_id"]
+    conn = get_db()
+    cur = conn.cursor()
 
 
-    conn=get_db()
-    cur=conn.cursor()
-
-
+    # Get current user's referral code
 
     cur.execute(
         """
-        SELECT COUNT(*) 
-        FROM users
-        WHERE invite_code IN
-        (
-        SELECT invite_code
+        SELECT referral_code, income
         FROM users
         WHERE id=%s
-        )
         """,
-        (user_id,)
+        (session["user_id"],)
     )
 
 
-    result=cur.fetchone()
+    user = cur.fetchone()
+
+
+
+    if not user:
+
+        conn.close()
+        return redirect("/login")
+
+
+
+    # Get invited members and their plans
+
+    cur.execute(
+        """
+        SELECT
+            users.phone,
+            user_plans.plan_name
+
+        FROM users
+
+        LEFT JOIN user_plans
+
+        ON users.id = user_plans.user_id
+
+        WHERE users.invited_by=%s
+
+        ORDER BY users.id DESC
+        """,
+        (user["referral_code"],)
+    )
+
+
+    members = cur.fetchall()
+
+
+
+    total_team = len(members)
+
 
 
     conn.close()
@@ -396,19 +425,15 @@ def team():
 
     return render_template(
         "team.html",
-        direct_team=result["count"],
-        total_team=result["count"],
-        team_income=0,
-        commission=0,
-        level1_members=result["count"],
-        level1_income=0,
-        level2_members=0,
-        level2_income=0,
-        level3_members=0,
-        level3_income=0,
-        referral_link=""
-    )
 
+        total_team=total_team,
+
+        referral_code=user["referral_code"],
+
+        commission=user["income"],
+
+        members=members
+    )
 
 
 
