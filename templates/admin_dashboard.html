@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+    background:#000;
+    color:white;
+    padding-bottom:30px;
+}
+
+
+/* Header */
+
+.header{
+
+    background:#111;
+    padding:25px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+
+}
+
+
+
+/* Welcome */
+
+.welcome{
+
+    padding:20px;
+
+}
+
+
+
+/* Stats */
+
+.stats{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    padding:20px;
+
+}
+
+
+
+.card{
+
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #333;
+
+}
+
+
+
+.card h4{
+
+    color:#aaa;
+
+}
+
+
+
+.card p{
+
+    margin-top:10px;
+    font-size:25px;
+    color:#e82127;
+
+}
+
+
+
+/* Menu */
+
+
+.menu{
+
+    padding:20px;
+
+}
+
+
+
+.menu a{
+
+    display:block;
+    background:#e82127;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+
+}
+
+
+
+.menu a:hover{
+
+    background:#b91c22;
+
+}
+
+
+
+.logout{
+
+    background:#222 !important;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+
+<div class="header">
+
+TESLA ADMIN
+
+</div>
+
+
+
+
+<div class="welcome">
+
+<h2>
+Welcome Admin
+</h2>
+
+<p>
+Manage your platform from here
+</p>
+
+</div>
+
+
+
+
+
+
+<div class="stats">
+
+
+<div class="card">
+
+<h4>
+Total Users
+</h4>
+
+<p>
+{{ total_users }}
+</p>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h4>
+Total Deposits
+</h4>
+
+<p>
+GHS {{ total_deposits }}
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h4>
+Pending Deposits
+</h4>
+
+<p>
+{{ pending_deposits }}
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h4>
+Pending Withdrawals
+</h4>
+
+<p>
+{{ pending_withdrawals }}
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h4>
+Plans Purchased
+</h4>
+
+<p>
+{{ total_plans }}
+</p>
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h4>
+Total Balance
+</h4>
+
+<p>
+GHS {{ total_balance }}
+</p>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="menu">
+
+
+<a href="/admin/users">
+👥 Manage Users
+</a>
+
+
+
+<a href="/admin/deposits">
+💳 Manage Deposits
+</a>
+
+
+
+<a href="/admin/withdrawals">
+💸 Manage Withdrawals
+</a>
+
+
+
+<a href="/admin/plans">
+🚗 Manage Plans
+</a>
+
+
+
+<a href="/admin/logout" class="logout">
+🚪 Logout
+</a>
+
+
+
+</div>
+
+
+
+
+
+</body>
+
+</html>
