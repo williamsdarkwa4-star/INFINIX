@@ -204,6 +204,7 @@ def register():
             (
             phone,
             password,
+            withdraw_password,
             invite_code,
             balance
             )
@@ -213,6 +214,7 @@ def register():
             (
             phone,
             hashed_password,
+            hashed_withdraw_password,
             invite,
             10
             )
