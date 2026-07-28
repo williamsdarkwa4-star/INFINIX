@@ -1,240 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal - LATEX FOAM</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
 
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 30px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .top-navbar {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #020708;
-            border-bottom: 1px solid #0c2024;
-        }
+<title>Withdraw</title>
 
-        .back-btn {
-            text-decoration: none;
-            color: #00bcd4;
-            font-size: 20px;
-            margin-right: 15px;
-            font-weight: bold;
-        }
+<style>
 
-        .page-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+body{
+    background:#000;
+    color:white;
+    padding-bottom:90px;
+}
 
-        .balance-banner {
-            background: linear-gradient(135deg, #072a2e 0%, #031416 100%);
-            border: 1px solid #103338;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.1);
-            text-align: center;
-        }
 
-        .balance-label {
-            font-size: 13px;
-            color: #9cb1b4;
-            margin-bottom: 5px;
-        }
+.header{
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+}
 
-        .balance-amount {
-            font-size: 26px;
-            font-weight: bold;
-            color: #00bcd4;
-        }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+.card{
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:18px;
+    border:1px solid #333;
+}
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #9cb1b4;
-        }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            background-color: #050f11;
-            border: 1px solid #102a30;
-            border-radius: 10px;
-            padding: 14px;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
-        }
+.card h3{
+    color:#e82127;
+    margin-bottom:15px;
+}
 
-        .form-group input:focus, .form-group select:focus {
-            border-color: #00bcd4;
-        }
 
-        .form-group select option {
-            background-color: #050f11;
-            color: #ffffff;
-        }
+.info{
+    background:#000;
+    padding:15px;
+    border-radius:12px;
+}
 
-        .fee-calc-box {
-            font-size: 13px;
-            color: #8da4a7;
-            margin-top: 6px;
-            line-height: 1.6;
-        }
 
-        .fee-calc-box span {
-            color: #00bcd4;
-            font-weight: 600;
-        }
+.info p{
+    margin:10px 0;
+}
 
-        .instruction-card {
-            background-color: #050b0c;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #0d2226;
-        }
 
-        .instruction-card h4 {
-            font-size: 14px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
+input, select{
 
-        .instruction-card p {
-            font-size: 13px;
-            color: #657e81;
-            line-height: 1.5;
-        }
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border-radius:10px;
+    border:none;
+    background:#222;
+    color:white;
 
-        .btn-submit {
-            width: 100%;
-            background-color: #00bcd4;
-            color: #000000;
-            border: none;
-            border-radius: 25px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.2);
-        }
+}
 
-        .btn-submit:hover {
-            background-color: #0097a7;
-        }
 
-        .flash-messages {
-            margin-bottom: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-        }
-        .flash-error { background-color: #721c24; color: #f8d7da; }
-        .flash-success { background-color: #155724; color: #d4edda; font-weight: bold; }
-    </style>
+button{
+
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    background:#e82127;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    cursor:pointer;
+
+}
+
+
+button:hover{
+    background:#b91c22;
+}
+
+
+
+.status{
+
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #e82127;
+    text-align:center;
+
+}
+
+
+.status span{
+
+    color:#e82127;
+    font-weight:bold;
+
+}
+
+
+
+/* Bottom Navigation */
+
+.bottom-nav{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    border-top:1px solid #333;
+
+}
+
+
+.nav{
+
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:13px;
+
+}
+
+
+.nav span{
+
+    display:block;
+    font-size:22px;
+
+}
+
+
+.nav:hover{
+
+    color:#e82127;
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="top-navbar">
-        <a href="{{ url_for('dashboard') }}" class="back-btn">‹</a>
-        <div class="page-title">Withdrawal</div>
-    </div>
 
-    <div class="container">
-        <div class="balance-banner">
-            <div class="balance-label">Withdrawable Balance</div>
-            <div class="balance-amount">{{ "%.2f"|format(user_balance) }} GHS</div>
-        </div>
+<div class="header">
+💸 WITHDRAW
+</div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-messages flash-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
 
-        <form action="{{ url_for('withdraw') }}" method="POST">
-            <div class="form-group">
-                <label for="amount">Withdrawal Amount (GHS)</label>
-                <input type="number" id="amount" name="amount" placeholder="Minimum 50 GHS" min="50" required oninput="updateFees(this.value)">
-                <div class="fee-calc-box">
-                    Processing Fee (19%): <span id="fee_display">0.00 GHS</span><br>
-                    Actual Receive Amount: <span id="receive_display">0.00 GHS</span>
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label for="network">Select Wallet Network</label>
-                <select id="network" name="network" required>
-                    <option value="" disabled selected>Choose network</option>
-                    <option value="MTN">MTN Mobile Money</option>
-                    <option value="Telecel">Telecel Cash</option>
-                    <option value="AT">AT Money</option>
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label for="wallet_number">Receiver Wallet Number</label>
-                <input type="text" id="wallet_number" name="wallet_number" placeholder="Enter mobile wallet phone number" required>
-            </div>
 
-            <div class="form-group">
-                <label for="withdraw_password">Withdrawal Password</label>
-                <input type="password" id="withdraw_password" name="withdraw_password" placeholder="Enter secure withdrawal password" required>
-            </div>
+<div class="card">
 
-            <div class="instruction-card">
-                <h4>Withdrawal Specifications</h4>
-                <p>• Minimum payout limit amount: GHS 60<br>
-                   • Standard processing tax rate fee: 19%<br>
-                   • Operational cashout schedule: 9:00 AM ~ 4:00 PM</p>
-            </div>
+<h3>
+Withdrawal Rules
+</h3>
 
-            <button type="submit" class="btn-submit">Confirm Withdrawal</button>
-        </form>
-    </div>
 
-    <script>
-        function updateFees(val) {
-            let amount = parseFloat(val) || 0;
-            let fee = amount * 0.19;
-            let receive = amount - fee;
-            if(receive < 0) receive = 0;
-            
-            document.getElementById('fee_display').innerText = fee.toFixed(2) + " GHS";
-            document.getElementById('receive_display').innerText = receive.toFixed(2) + " GHS";
-        }
-    </script>
+<div class="info">
+
+<p>
+Minimum Withdraw:
+<b>GHS 30</b>
+</p>
+
+
+<p>
+Withdrawal Fee:
+<b>18%</b>
+</p>
+
+
+<p>
+Arrival Time:
+<b>0 - 34 Minutes</b>
+</p>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+<h3>
+Bind Withdrawal Account
+</h3>
+
+
+<form method="POST" action="/save_account">
+
+
+<input
+type="text"
+name="account_name"
+placeholder="Account Name"
+required>
+
+
+
+<select name="network" required>
+
+<option value="">
+Select Network
+</option>
+
+<option value="MTN">
+MTN Mobile Money
+</option>
+
+<option value="Telecel">
+Telecel Cash
+</option>
+
+</select>
+
+
+
+<input
+type="number"
+name="account_number"
+placeholder="Mobile Money Number"
+required>
+
+
+
+<button type="submit">
+Save Account
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+<h3>
+Request Withdrawal
+</h3>
+
+
+<form method="POST" action="/withdraw">
+
+
+<input
+type="number"
+name="amount"
+placeholder="Enter Withdrawal Amount"
+min="30"
+required>
+
+
+
+<input
+type="password"
+name="withdraw_password"
+placeholder="Enter Withdrawal Password"
+required>
+
+
+
+<button type="submit">
+Submit Withdrawal
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="status">
+
+<h3>
+Withdrawal Status
+</h3>
+
+
+<p>
+Your withdrawal request is being reviewed.
+</p>
+
+
+<p>
+Status:
+<span>
+Processing (0 - 34 Minutes)
+</span>
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="bottom-nav">
+
+
+<a href="/dashboard" class="nav">
+<span>🏠</span>
+Home
+</a>
+
+
+<a href="/team" class="nav">
+<span>👥</span>
+Team
+</a>
+
+
+<a href="/my_plan" class="nav">
+<span>🚗</span>
+My Plans
+</a>
+
+
+<a href="/service" class="nav">
+<span>🛠</span>
+Service
+</a>
+
+
+<a href="/profile" class="nav">
+<span>👤</span>
+Profile
+</a>
+
+
+</div>
+
+
+
 </body>
+
 </html>
