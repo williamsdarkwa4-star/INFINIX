@@ -162,6 +162,7 @@ def register():
         phone = request.form["phone"]
         password = request.form["password"]
         confirm = request.form["confirm_password"]
+        withdraw_password = request.form["withdraw_password"]
         invite = request.form.get("invite_code")
 
 
@@ -171,7 +172,9 @@ def register():
 
 
         hashed_password = generate_password_hash(password)
-
+        hashed_withdraw_password = generate_password_hash(
+        withdraw_password
+        )
 
         conn = get_db()
         cur = conn.cursor()
