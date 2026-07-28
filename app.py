@@ -175,15 +175,19 @@ def register():
 
 
         hashed_password = generate_password_hash(password)
+
         hashed_withdraw_password = generate_password_hash(
-        withdraw_password
+            withdraw_password
         )
-                 referral_code = "TESLA" + ''.join(
+
+
+        referral_code = "TESLA" + ''.join(
             random.choices(
                 string.digits,
                 k=6
             )
         )
+        
         conn = get_db()
         cur = conn.cursor()
 
