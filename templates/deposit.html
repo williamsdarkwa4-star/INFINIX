@@ -34,34 +34,42 @@ body{
 
 
 .card{
+
     margin:20px;
     background:#111;
     padding:20px;
-    border-radius:15px;
+    border-radius:18px;
     border:1px solid #333;
+
 }
 
 
 .card h3{
+
     color:#e82127;
     margin-bottom:15px;
+
 }
 
 
 .info{
+
     background:#000;
     padding:15px;
-    border-radius:10px;
-    margin-top:10px;
+    border-radius:12px;
+
 }
 
 
 .info p{
-    margin:10px 0;
+
+    margin:12px 0;
+
 }
 
 
 input{
+
     width:100%;
     padding:14px;
     margin-top:15px;
@@ -69,39 +77,65 @@ input{
     border:none;
     background:#222;
     color:white;
+
 }
 
 
-button{
-    width:100%;
+input[type="file"]{
+
+    background:#111;
+}
+
+
+
+.amount-box{
+
     margin-top:15px;
+    color:#aaa;
+
+}
+
+
+
+button{
+
+    width:100%;
     padding:15px;
+    margin-top:15px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     background:#e82127;
     color:white;
     font-size:16px;
     cursor:pointer;
+
 }
 
 
 .status{
+
     margin:20px;
     padding:20px;
     background:#111;
     border-radius:15px;
     border:1px solid #e82127;
     text-align:center;
+
 }
 
 
 .status span{
+
     color:#e82127;
     font-weight:bold;
+
 }
 
 
+
+
 .bottom-nav{
+
     position:fixed;
     bottom:0;
     left:0;
@@ -111,21 +145,27 @@ button{
     display:flex;
     justify-content:space-around;
     align-items:center;
+
 }
 
 
 .nav{
+
     color:#aaa;
     text-decoration:none;
     text-align:center;
     font-size:13px;
+
 }
 
 
 .nav span{
+
     display:block;
     font-size:22px;
+
 }
+
 
 </style>
 
@@ -141,20 +181,31 @@ button{
 
 
 
+
 <div class="card">
 
 <h3>
-Deposit Rules
+Deposit Information
 </h3>
 
-<p>
-Minimum Deposit: <b>GHS 90</b>
-</p>
 
 <p>
-Payment confirmation time:
-<b>0 - 20 minutes</b>
+Minimum Deposit:
+<b>GHS 90</b>
 </p>
+
+
+<p>
+Maximum Investment:
+<b>GHS 1,500</b>
+</p>
+
+
+<p>
+Confirmation Time:
+<b>0 - 20 Minutes</b>
+</p>
+
 
 </div>
 
@@ -165,21 +216,21 @@ Payment confirmation time:
 <div class="card">
 
 <h3>
-Payment Numbers
+Send Payment To
 </h3>
 
 
 <div class="info">
 
 <p>
-MTN Mobile Money:
+MTN Mobile Money
 <br>
 <b>0257425844</b>
 </p>
 
 
 <p>
-Telecel Cash:
+Telecel Cash
 <br>
 <b>0204216188</b>
 </p>
@@ -187,8 +238,8 @@ Telecel Cash:
 
 </div>
 
-
 </div>
+
 
 
 
@@ -196,26 +247,53 @@ Telecel Cash:
 
 <div class="card">
 
+
 <h3>
 Submit Deposit
 </h3>
 
 
+
 <form method="POST" enctype="multipart/form-data">
+
+
+
+<label>
+Amount (GHS)
+</label>
 
 
 <input 
 type="number"
 name="amount"
-placeholder="Enter Amount"
+placeholder="Enter amount"
 min="90"
+max="1500"
 required>
+
+
+
+
+<div class="amount-box">
+
+Amount must be between GHS 90 and GHS 1,500
+
+</div>
+
+
 
 
 <button type="button">
 Continue
 </button>
 
+
+
+
+
+<label>
+Upload Payment Screenshot
+</label>
 
 
 <input 
@@ -225,9 +303,14 @@ accept="image/*"
 required>
 
 
+
+
 <button type="submit">
-Upload Screenshot & Submit
+
+Submit Deposit
+
 </button>
+
 
 
 </form>
@@ -239,15 +322,20 @@ Upload Screenshot & Submit
 
 
 
+
+
 <div class="status">
+
 
 <h3>
 Deposit Status
 </h3>
 
+
 <p>
-Your deposit is being reviewed.
+Your deposit will be reviewed after submission.
 </p>
+
 
 <p>
 Status:
@@ -256,13 +344,16 @@ Processing (0 - 20 Minutes)
 </span>
 </p>
 
+
 </div>
 
 
 
 
 
+
 <div class="bottom-nav">
+
 
 <a href="/dashboard" class="nav">
 <span>🏠</span>
@@ -292,6 +383,7 @@ Service
 <span>👤</span>
 Profile
 </a>
+
 
 </div>
 
