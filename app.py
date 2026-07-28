@@ -1135,36 +1135,26 @@ def admin_users():
 @app.route("/admin/deposits")
 def admin_deposits():
 
-
     if "admin_id" not in session:
         return redirect("/admin/login")
 
-
-
-    conn=get_db()
-    cur=conn.cursor()
-
-
+    conn = get_db()
+    cur = conn.cursor()
 
     cur.execute(
         """
         SELECT deposits.*, users.phone
         FROM deposits
         JOIN users
-        ON deposits.user_id=users.id
+        ON deposits.user_id = users.id
+        WHERE deposits.status = 'Processing'
         ORDER BY deposits.id DESC
         """
     )
 
-
-
-    deposits=cur.fetchall()
-
-
+    deposits = cur.fetchall()
 
     conn.close()
-
-
 
     return render_template(
         "admin_deposits.html",
@@ -1250,37 +1240,30 @@ def reject_deposit(id):
 @app.route("/admin/withdrawals")
 def admin_withdrawals():
 
-
     if "admin_id" not in session:
         return redirect("/admin/login")
 
-
-
-    conn=get_db()
-    cur=conn.cursor()
-
-
+    conn = get_db()
+    cur = conn.cursor()
 
     cur.execute(
         """
-        SELECT withdrawals.*, users.phone,
-        users.network,
-        users.account_number
+        SELECT
+            withdrawals.*,
+            users.phone,
+            users.network,
+            users.account_number
         FROM withdrawals
         JOIN users
-        ON withdrawals.user_id=users.id
+            ON withdrawals.user_id = users.id
+        WHERE withdrawals.status = 'Processing'
         ORDER BY withdrawals.id DESC
         """
     )
 
-
-    withdrawals=cur.fetchall()
-
-
+    withdrawals = cur.fetchall()
 
     conn.close()
-
-
 
     return render_template(
         "admin_withdrawals.html",
