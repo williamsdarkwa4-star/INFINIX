@@ -207,25 +207,31 @@ def register():
           )
            )
         cur.execute(
-            """
-            INSERT INTO users
-            (
-            phone,
-            password,
-            withdraw_password,
-            invite_code,
-            balance
-            )
-            VALUES
-            (%s,%s,%s,%s,%s)
-            """,
-            (
-            phone,
-            hashed_password,
-            hashed_withdraw_password,
-            invite,
-            10
-            )
+          """
+           INSERT INTO users
+          (
+             phone,
+             password,
+             withdraw_password,
+             invite_code,
+             balance,
+             referral_code,
+             invited_by,
+             income
+         )
+        VALUES
+         (%s,%s,%s,%s,%s,%s,%s,%s)
+          """,
+        (
+         phone,
+         hashed_password,
+         hashed_withdraw_password,
+         invite,
+         10,
+         referral_code,
+         invite,
+         0
+    )
         )
 
 
