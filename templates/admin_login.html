@@ -1,59 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Admin Login</title>
+
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Admin Login</title>
+
 <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
 body{
+    min-height:100vh;
     background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     color:white;
-    font-family:Arial;
-    padding:20px;
 }
 
-.box{
-    max-width:400px;
-    margin:auto;
+
+.container{
+
+    width:360px;
     background:#111;
-    padding:20px;
-    border-radius:15px;
+    padding:30px;
+    border-radius:20px;
+    border:1px solid #333;
+    box-shadow:0 0 25px rgba(255,0,0,0.3);
+
 }
 
-input,button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:8px;
+
+
+.logo{
+
+    text-align:center;
+    font-size:35px;
+    font-weight:bold;
+    color:#e82127;
+    margin-bottom:10px;
+
 }
+
+
+h2{
+
+    text-align:center;
+    margin-bottom:25px;
+
+}
+
+
+
+input{
+
+    width:100%;
+    padding:15px;
+    margin-bottom:15px;
+    background:#222;
+    border:none;
+    border-radius:10px;
+    color:white;
+
+}
+
+
 
 button{
-    background:#00bcd4;
+
+    width:100%;
+    padding:15px;
+    background:#e82127;
+    color:white;
     border:none;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+
 }
+
+
+
+button:hover{
+
+    background:#b91c22;
+
+}
+
+
+
+.back{
+
+    text-align:center;
+    margin-top:20px;
+
+}
+
+
+
+a{
+
+    color:#e82127;
+    text-decoration:none;
+
+}
+
+
 </style>
 
 </head>
 
+
 <body>
 
-<div class="box">
 
-<h2>Admin Login</h2>
+<div class="container">
 
-<form method="POST">
 
-<input name="username" placeholder="Username">
+<div class="logo">
+TESLA
+</div>
 
-<input name="password" type="password" placeholder="Password">
 
-<button>
+<h2>
+Admin Panel
+</h2>
+
+
+
+<form method="POST" action="/admin/login">
+
+
+<input
+type="text"
+name="username"
+placeholder="Admin Username"
+required>
+
+
+
+<input
+type="password"
+name="password"
+placeholder="Admin Password"
+required>
+
+
+
+<button type="submit">
 Login
 </button>
 
+
 </form>
+
+
+
+<div class="back">
+
+<a href="/login">
+Back to User Login
+</a>
 
 </div>
 
+
+
+</div>
+
+
 </body>
+
 </html>
