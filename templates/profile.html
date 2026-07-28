@@ -1,208 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile Dashboard</title>
-    <style>
-        /* Base Dark Theme Configuration */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
 
-        body {
-            background-color: #020710;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .profile-container {
-            max-width: 480px;
-            margin: 0 auto;
-            width: 100%;
-        }
+<title>Profile</title>
 
-        /* Balance & Account Number Cards */
-        .info-card {
-            background-color: #050f1e;
-            border: 1px solid #0d1e36;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
+<style>
 
-        .card-label {
-            color: #00bcd4;
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        .card-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-            font-family: sans-serif;
-        }
+body{
+    background:#000;
+    color:white;
+    padding-bottom:90px;
+}
 
-        .balance-amount {
-            color: #ffb703;
-            font-size: 32px;
-            margin-top: 4px;
-        }
 
-        /* Transaction Action Grid Buttons */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            margin-bottom: 20px;
-        }
+.header{
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+}
 
-        .grid-btn {
-            background-color: #050f1e;
-            border: 1px solid #0d1e36;
-            color: #ffffff;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: transform 0.1s, background-color 0.2s;
-        }
 
-        .grid-btn:active {
-            transform: scale(0.97);
-        }
+/* Profile Card */
 
-        /* Button Colors and Layout Modifiers */
-        .btn-withdraw {
-            border-left: 4px solid #e63946;
-        }
-        .btn-withdraw:hover { background-color: #141624; }
+.profile-card{
 
-        .btn-deposit {
-            border-left: 4px solid #2a9d8f;
-        }
-        .btn-deposit:hover { background-color: #0a1f24; }
+    margin:20px;
+    background:#111;
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    border:1px solid #333;
 
-        .btn-plan {
-            grid-column: span 2;
-            background-color: #118ab2;
-            border: none;
-            padding: 15px;
-            font-size: 15px;
-        }
-        .btn-plan:hover { background-color: #0077b6; }
+}
 
-        /* Core Execution Navigation Finish Button */
-        .btn-done {
-            width: 100%;
-            background-color: #00bcd4;
-            color: #020710;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-        }
-        .btn-done:hover {
-            opacity: 0.9;
-        }
-    </style>
+
+.avatar{
+
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:#e82127;
+    margin:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:35px;
+
+}
+
+
+.profile-card h2{
+
+    margin-top:15px;
+
+}
+
+
+
+/* Information */
+
+
+.info{
+
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #333;
+
+}
+
+
+.info p{
+
+    padding:12px 0;
+    border-bottom:1px solid #222;
+
+}
+
+
+.info span{
+
+    float:right;
+    color:#e82127;
+
+}
+
+
+
+/* Buttons */
+
+
+.button{
+
+    display:block;
+    margin:15px 20px;
+    background:#e82127;
+    color:white;
+    padding:15px;
+    text-align:center;
+    border-radius:12px;
+    text-decoration:none;
+
+}
+
+
+
+.button:hover{
+
+    background:#b91c22;
+
+}
+
+
+/* Bottom Navigation */
+
+
+.bottom-nav{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    border-top:1px solid #333;
+
+}
+
+
+.nav{
+
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:13px;
+
+}
+
+
+.nav span{
+
+    display:block;
+    font-size:22px;
+
+}
+
+
+.nav:hover{
+
+    color:#e82127;
+
+}
+
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="profile-container">
 
-        <!-- User Account Card -->
-        <div class="info-card">
-            <div class="card-label">User Account Number</div>
-            <div class="card-value" id="accountNoDisplay">Loading...</div>
-        </div>
+<div class="header">
 
-        <!-- Wallet Fund Balance Card -->
-        <div class="info-card">
-            <div class="card-label">Current Available Balance</div>
-            <div class="card-value balance-amount" id="balanceDisplay">GHS0.00</div>
-        </div>
+👤 PROFILE
 
-        <!-- Finance Utilities Dashboard Panel Operations Grid -->
-        <div class="action-grid">
-            <button class="grid-btn btn-withdraw" onclick="navigateTo('/withdraw')">
-                <span>💸</span> Withdraw
-            </button>
+</div>
 
-            <button class="grid-btn btn-deposit" onclick="navigateTo('/deposit')">
-                <span>💳</span> Deposit
-            </button>
 
-            <button class="grid-btn btn-plan" onclick="navigateTo('/plan')">
-                <span>📦</span> View Packages & Plans
-            </button>
-        </div>
 
-        <button class="btn-done" onclick="navigateTo('/login')">
-            logout
-        </button>
 
-    </div>
+<div class="profile-card">
 
-    <!-- UI Core Logic Controller Integration -->
-    <script>
-        function navigateTo(routePath) {
-            window.location.href = routePath;
-        }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/user/account-details')
-                .then(response => {
-                    if (!response.ok) throw new Error("Connection drop");
-                    return response.json();
-                })
-                .then(data => {
-                    if (!data.error) {
-                        // MAP PHONE NUMBER TO ACCOUNT NUMBER DISPLAY
-                        document.getElementById('accountNoDisplay').innerText = data.phone_number || data.account_number;
-                        
-                        // DISPLAY CURRENT BALANCE AMOUNT
-                        // Updated to check for current_balance first, falling back to balance.
-                        let currentBalance = data.current_balance !== undefined ? data.current_balance : data.balance;
-                        document.getElementById('balanceDisplay').innerText = "GHS" + currentBalance.toFixed(2);
-                    } else {
-                        fallbackUI();
-                    }
-                })
-                .catch(error => {
-                    console.error("Profile payload issue:", error);
-                    fallbackUI();
-                });
-        });
+<div class="avatar">
+👤
+</div>
 
-        function fallbackUI() {
-            document.getElementById('accountNoDisplay').innerText = "Unavailable";
-            document.getElementById('balanceDisplay').innerText = "GHS0.00";
-        }
-    </script>
+
+<h2>
+{{ user.phone }}
+</h2>
+
+
+<p>
+TESLA VIP Member
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="info">
+
+
+<p>
+Phone Number
+
+<span>
+{{ user.phone }}
+</span>
+
+</p>
+
+
+
+<p>
+Balance
+
+<span>
+GHS {{ user.balance }}
+</span>
+
+</p>
+
+
+
+
+<p>
+Active Plan
+
+<span>
+{{ user.plan }}
+</span>
+
+</p>
+
+
+
+
+<p>
+Registration Date
+
+<span>
+{{ user.created_at }}
+</span>
+
+</p>
+
+
+
+
+<p>
+Withdrawal Account
+
+<span>
+{{ user.account_number }}
+</span>
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<a href="/change_password" class="button">
+🔒 Change Password
+</a>
+
+
+
+<a href="/logout" class="button">
+🚪 Logout
+</a>
+
+
+
+
+
+
+
+<div class="bottom-nav">
+
+
+<a href="/dashboard" class="nav">
+<span>🏠</span>
+Home
+</a>
+
+
+<a href="/team" class="nav">
+<span>👥</span>
+Team
+</a>
+
+
+<a href="/my_plan" class="nav">
+<span>🚗</span>
+My Plans
+</a>
+
+
+<a href="/service" class="nav">
+<span>🛠</span>
+Service
+</a>
+
+
+<a href="/profile" class="nav">
+<span>👤</span>
+Profile
+</a>
+
+
+</div>
+
+
+
 </body>
+
 </html>
