@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Withdrawals</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+    background:#000;
+    color:white;
+    padding-bottom:40px;
+}
+
+
+.header{
+
+    background:#111;
+    padding:25px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    color:#e82127;
+
+}
+
+
+
+.withdraw-card{
+
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #333;
+
+}
+
+
+
+.withdraw-card h3{
+
+    color:#e82127;
+    margin-bottom:15px;
+
+}
+
+
+
+.info p{
+
+    margin:10px 0;
+    color:#ccc;
+
+}
+
+
+
+.info span{
+
+    color:white;
+    float:right;
+
+}
+
+
+
+
+.actions{
+
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+
+}
+
+
+
+.btn{
+
+    flex:1;
+    padding:13px;
+    text-align:center;
+    border-radius:10px;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+
+}
+
+
+
+.approve{
+
+    background:green;
+
+}
+
+
+
+.reject{
+
+    background:#e82127;
+
+}
+
+
+
+.back{
+
+    display:block;
+    margin:20px;
+    padding:15px;
+    background:#222;
+    color:white;
+    text-align:center;
+    border-radius:12px;
+    text-decoration:none;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+
+<div class="header">
+
+💸 WITHDRAWAL MANAGEMENT
+
+</div>
+
+
+
+
+
+{% for withdraw in withdrawals %}
+
+
+<div class="withdraw-card">
+
+
+<h3>
+Withdrawal #{{ withdraw.id }}
+</h3>
+
+
+
+<div class="info">
+
+
+<p>
+User Phone
+
+<span>
+{{ withdraw.phone }}
+</span>
+
+</p>
+
+
+
+<p>
+Amount
+
+<span>
+GHS {{ withdraw.amount }}
+</span>
+
+</p>
+
+
+
+<p>
+Fee (18%)
+
+<span>
+GHS {{ withdraw.fee }}
+</span>
+
+</p>
+
+
+
+<p>
+Receive Amount
+
+<span>
+GHS {{ withdraw.receive_amount }}
+</span>
+
+</p>
+
+
+
+
+<p>
+Network
+
+<span>
+{{ withdraw.network }}
+</span>
+
+</p>
+
+
+
+<p>
+Account Number
+
+<span>
+{{ withdraw.account_number }}
+</span>
+
+</p>
+
+
+
+
+<p>
+Status
+
+<span>
+{{ withdraw.status }}
+</span>
+
+</p>
+
+
+
+<p>
+Date
+
+<span>
+{{ withdraw.created_at }}
+</span>
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="actions">
+
+
+<a href="/admin/withdraw/approve/{{ withdraw.id }}" class="btn approve">
+Approve
+</a>
+
+
+<a href="/admin/withdraw/reject/{{ withdraw.id }}" class="btn reject">
+Reject
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+
+
+
+
+<a href="/admin/dashboard" class="back">
+
+⬅ Back To Dashboard
+
+</a>
+
+
+
+
+</body>
+
+</html>
