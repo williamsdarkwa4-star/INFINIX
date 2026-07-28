@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Users</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+    background:#000;
+    color:white;
+    padding-bottom:40px;
+}
+
+
+.header{
+
+    background:#111;
+    padding:25px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    color:#e82127;
+
+}
+
+
+
+.search{
+
+    padding:20px;
+
+}
+
+
+.search input{
+
+    width:100%;
+    padding:14px;
+    background:#222;
+    border:none;
+    border-radius:10px;
+    color:white;
+
+}
+
+
+
+
+.user-card{
+
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #333;
+
+}
+
+
+
+.user-card h3{
+
+    color:#e82127;
+    margin-bottom:15px;
+
+}
+
+
+
+.info p{
+
+    margin:10px 0;
+    color:#ccc;
+
+}
+
+
+
+.info span{
+
+    color:white;
+    float:right;
+
+}
+
+
+
+
+
+.actions{
+
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+
+}
+
+
+
+.btn{
+
+    flex:1;
+    padding:12px;
+    text-align:center;
+    border-radius:10px;
+    text-decoration:none;
+    color:white;
+    background:#e82127;
+
+}
+
+
+
+.btn:hover{
+
+    background:#b91c22;
+
+}
+
+
+
+.back{
+
+    display:block;
+    margin:20px;
+    padding:15px;
+    background:#222;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    border-radius:12px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+
+<div class="header">
+
+👥 USERS MANAGEMENT
+
+</div>
+
+
+
+
+
+<div class="search">
+
+<input 
+type="text"
+placeholder="Search user phone number">
+
+</div>
+
+
+
+
+
+
+{% for user in users %}
+
+
+<div class="user-card">
+
+
+<h3>
+User #{{ user.id }}
+</h3>
+
+
+
+<div class="info">
+
+
+<p>
+Phone
+<span>
+{{ user.phone }}
+</span>
+</p>
+
+
+
+<p>
+Balance
+<span>
+GHS {{ user.balance }}
+</span>
+</p>
+
+
+
+<p>
+Active Plan
+<span>
+{{ user.plan }}
+</span>
+</p>
+
+
+
+<p>
+Joined
+<span>
+{{ user.created_at }}
+</span>
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="actions">
+
+
+<a href="/admin/add_balance/{{ user.id }}" class="btn">
++ Add Funds
+</a>
+
+
+<a href="/admin/deduct_balance/{{ user.id }}" class="btn">
+- Deduct
+</a>
+
+
+</div>
+
+
+
+</div>
+
+
+{% endfor %}
+
+
+
+
+
+
+<a href="/admin/dashboard" class="back">
+⬅ Back To Dashboard
+</a>
+
+
+
+
+</body>
+
+</html>
