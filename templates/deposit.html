@@ -1,238 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recharge - LATEX FOAM</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
 
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 30px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .top-navbar {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #020708;
-            border-bottom: 1px solid #0c2024;
-        }
+<title>Deposit</title>
 
-        .back-btn {
-            text-decoration: none;
-            color: #00bcd4;
-            font-size: 20px;
-            margin-right: 15px;
-            font-weight: bold;
-        }
+<style>
 
-        .page-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        .container {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+body{
+    background:#000;
+    color:white;
+    padding-bottom:90px;
+}
 
-        .target-payment-box {
-            background: linear-gradient(135deg, #0e3338 0%, #05191c 100%);
-            border: 1px solid #143e44;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
 
-        .target-payment-box p {
-            font-size: 13px;
-            color: #9cb1b4;
-        }
+.header{
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+}
 
-        .target-number {
-            font-size: 22px;
-            font-weight: bold;
-            color: #e5c158;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
 
-        .limit-info {
-            background-color: #030a0b;
-            border: 1px solid #102a30;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 13px;
-            color: #8da4a7;
-            margin-bottom: 15px;
-        }
+.card{
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid #333;
+}
 
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
 
-        .quick-btn {
-            background-color: #111622;
-            border: 1px solid #1a2233;
-            border-radius: 6px;
-            padding: 14px;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-        }
+.card h3{
+    color:#e82127;
+    margin-bottom:15px;
+}
 
-        .form-group {
-            margin-bottom: 15px;
-        }
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #9cb1b4;
-        }
+.info{
+    background:#000;
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+}
 
-        .form-group input {
-            width: 100%;
-            background-color: #050f11;
-            border: 1px solid #102a30;
-            border-radius: 10px;
-            padding: 14px;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
-        }
 
-        .form-group input:focus {
-            border-color: #00bcd4;
-        }
+.info p{
+    margin:10px 0;
+}
 
-        .instruction-card {
-            background-color: #050b0c;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
-            margin-bottom: 25px;
-            border: 1px solid #0d2226;
-        }
 
-        .instruction-card h4 {
-            font-size: 14px;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
+input{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border-radius:10px;
+    border:none;
+    background:#222;
+    color:white;
+}
 
-        .instruction-card p {
-            font-size: 13px;
-            color: #657e81;
-            line-height: 1.5;
-        }
 
-        .btn-submit {
-            width: 100%;
-            background-color: #00bcd4;
-            color: #000000;
-            border: none;
-            border-radius: 25px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+button{
+    width:100%;
+    margin-top:15px;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#e82127;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
 
-        .flash-messages {
-            margin-bottom: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-        }
-        .flash-error { background-color: #721c24; color: #f8d7da; }
-        .flash-success { background-color: #155724; color: #d4edda; }
-    </style>
+
+.status{
+    margin:20px;
+    padding:20px;
+    background:#111;
+    border-radius:15px;
+    border:1px solid #e82127;
+    text-align:center;
+}
+
+
+.status span{
+    color:#e82127;
+    font-weight:bold;
+}
+
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+}
+
+
+.nav{
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:13px;
+}
+
+
+.nav span{
+    display:block;
+    font-size:22px;
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="top-navbar">
-        <a href="{{ url_for('dashboard') }}" class="back-btn">‹</a>
-        <div class="page-title">Recharge</div>
-    </div>
 
-    <div class="container">
-        <div class="target-payment-box">
-            <p>Send Funds Directly to MTN Mobile Money Number:</p>
-            <div class="target-number">0257425844</div>
-        </div>
+<div class="header">
+💳 DEPOSIT
+</div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-messages flash-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
 
-        <form action="{{ url_for('deposit') }}" method="POST" enctype="multipart/form-data">
-            <div class="limit-info">Recharge limit range: 50.00 ~ 9999999.00</div>
 
-            <div class="quick-grid">
-                <div class="quick-btn" onclick="setAmount(50)">50</div>
-                <div class="quick-btn" onclick="setAmount(150)">150</div>
-                <div class="quick-btn" onclick="setAmount(300)">300</div>
-                <div class="quick-btn" onclick="setAmount(600)">600</div>
-                <div class="quick-btn" onclick="setAmount(1000)">1,000</div>
-                <div class="quick-btn" onclick="setAmount(5000)">5,000</div>
-            </div>
+<div class="card">
 
-            <div class="form-group">
-                <label for="amount">Deposit Amount (GHS)</label>
-                <input type="number" id="amount" name="amount" placeholder="Please enter your amount" required>
-            </div>
+<h3>
+Deposit Rules
+</h3>
 
-            <div class="form-group">
-                <label for="reference">Reference Name</label>
-                <input type="text" id="reference" name="reference" placeholder="Enter transaction reference name" required>
-            </div>
+<p>
+Minimum Deposit: <b>GHS 90</b>
+</p>
 
-            <div class="form-group">
-                <label for="screenshot">Upload Payment Screenshot</label>
-                <input type="file" id="screenshot" name="screenshot" accept="image/*" required>
-            </div>
+<p>
+Payment confirmation time:
+<b>0 - 20 minutes</b>
+</p>
 
-            <div class="instruction-card">
-                <h4>Recharge request</h4>
-                <p>Minimum deposit is GHS 50<br>
-                   Deposit arrives between 0-3 minutes<br>
-                   Failure to receive your deposit within 3 minutes, kindly contact customer service for assistance.</p>
-            </div>
+</div>
 
-            <button type="submit" class="btn-submit">confirm</button>
-        </form>
-    </div>
 
-    <script>
-        function setAmount(val) {
-            document.getElementById('amount').value = val;
-        }
-    </script>
+
+
+
+<div class="card">
+
+<h3>
+Payment Numbers
+</h3>
+
+
+<div class="info">
+
+<p>
+MTN Mobile Money:
+<br>
+<b>0257425844</b>
+</p>
+
+
+<p>
+Telecel Cash:
+<br>
+<b>0204216188</b>
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+<h3>
+Submit Deposit
+</h3>
+
+
+<form method="POST" enctype="multipart/form-data">
+
+
+<input 
+type="number"
+name="amount"
+placeholder="Enter Amount"
+min="90"
+required>
+
+
+<button type="button">
+Continue
+</button>
+
+
+
+<input 
+type="file"
+name="screenshot"
+accept="image/*"
+required>
+
+
+<button type="submit">
+Upload Screenshot & Submit
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+
+
+<div class="status">
+
+<h3>
+Deposit Status
+</h3>
+
+<p>
+Your deposit is being reviewed.
+</p>
+
+<p>
+Status:
+<span>
+Processing (0 - 20 Minutes)
+</span>
+</p>
+
+</div>
+
+
+
+
+
+<div class="bottom-nav">
+
+<a href="/dashboard" class="nav">
+<span>🏠</span>
+Home
+</a>
+
+
+<a href="/team" class="nav">
+<span>👥</span>
+Team
+</a>
+
+
+<a href="/my_plan" class="nav">
+<span>🚗</span>
+My Plans
+</a>
+
+
+<a href="/service" class="nav">
+<span>🛠</span>
+Service
+</a>
+
+
+<a href="/profile" class="nav">
+<span>👤</span>
+Profile
+</a>
+
+</div>
+
+
+
 </body>
+
 </html>
