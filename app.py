@@ -1,6 +1,8 @@
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import random
+import string
 from flask import (
     Flask,
     render_template,
@@ -198,7 +200,12 @@ def register():
             return redirect("/register")
 
 
-
+          referral_code = "TESLA" + ''.join(
+          random.choices(
+              string.digits,
+                    k=6
+          )
+           )
         cur.execute(
             """
             INSERT INTO users
