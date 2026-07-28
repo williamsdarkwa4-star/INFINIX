@@ -66,7 +66,7 @@ def get_db():
 PLANS = [
 
     {
-        "id":1
+        "id":1,
         "name":"TESLA VIP 1",
         "investment":100,
         "daily":20,
@@ -76,7 +76,7 @@ PLANS = [
 
 
     {
-        "id":2
+        "id":2,
         "name":"TESLA VIP 2",
         "investment":300,
         "daily":40,
@@ -86,7 +86,7 @@ PLANS = [
 
 
     {
-        "id":3
+        "id":3,
         "name":"TESLA VIP 3",
         "investment":500,
         "daily":60,
@@ -96,7 +96,7 @@ PLANS = [
 
 
     {
-        "id":4
+        "id":4,
         "name":"TESLA VIP 4",
         "investment":700,
         "daily":80,
@@ -106,7 +106,7 @@ PLANS = [
 
 
     {
-        "id":5
+        "id":5,
         "name":"TESLA VIP 5",
         "investment":850,
         "daily":166,
@@ -116,6 +116,7 @@ PLANS = [
 
 
     {
+        "id"6,
         "name":"TESLA VIP 6",
         "investment":1500,
         "daily":280,
@@ -209,7 +210,7 @@ def register():
             balance
             )
             VALUES
-            (%s,%s,%s,%s)
+            (%s,%s,%s,%s,%s)
             """,
             (
             phone,
@@ -804,129 +805,115 @@ def save_account():
 # =========================
 
 
-@app.route("/withdraw", methods=["GET","POST"])
-def withdraw():
+# =========================
+# WITHDRAW
+# =========================
 
+@app.route("/withdraw", methods=["GET", "POST"])
+def withdraw():
 
     if "user_id" not in session:
         return redirect("/login")
 
+    conn = get_db()
+    cur = conn.cursor()
 
+    cur.execute(
+        "SELECT * FROM users WHERE id=%s",
+        (session["user_id"],)
+    )
 
-    if request.method=="POST":
+    user = cur.fetchone()
 
+    if not user:
+        conn.close()
+        session.clear()
+        return redirect("/login")
 
-        amount=float(
-            request.form["amount"]
-        )
+    if request.method == "POST":
 
-
-        withdraw_password=request.form[
-            "withdraw_password"
-        ]
-
-
-
-        if amount < 30:
-
-            flash("Minimum withdrawal is GHS 30")
-
+        try:
+            amount = float(request.form["amount"])
+        except ValueError:
+            conn.close()
+            flash("Enter a valid amount.")
             return redirect("/withdraw")
 
+        withdraw_password = request.form["withdraw_password"]
 
-
-        conn=get_db()
-        cur=conn.cursor()
-
-
-
-        cur.execute(
-            """
-            SELECT *
-            FROM users
-            WHERE id=%s
-            """,
-            (session["user_id"],)
-        )
-
-
-        user=cur.fetchone()
-
-
-
-        if not user:
-
+        if amount < 30:
             conn.close()
+            flash("Minimum withdrawal is GHS 30.")
+            return redirect("/withdraw")
 
-            return redirect("/login")
-
-
+        if not user["withdraw_password"]:
+            conn.close()
+            flash("Please create a withdrawal password first.")
+            return redirect("/profile")
 
         if not check_password_hash(
             user["withdraw_password"],
             withdraw_password
         ):
-
             conn.close()
-
-            flash("Incorrect withdrawal password")
-
+            flash("Incorrect withdrawal password.")
             return redirect("/withdraw")
 
+        if float(user["balance"]) < amount:
+            conn.close()
+            flash("Insufficient balance.")
+            return redirect("/withdraw")
 
+        if not user["account_number"] or not user["network"]:
+            conn.close()
+            flash("Please bind your withdrawal account first.")
+            return redirect("/withdraw")
 
+        fee = round(amount * 0.18, 2)
+        receive_amount = round(amount - fee, 2)
 
-
-        fee = amount * 0.18
-
-        receive_amount = amount - fee
-
-
-
-
+        cur.execute(
+            """
+            UPDATE users
+            SET balance = balance - %s
+            WHERE id = %s
+            """,
+            (amount, session["user_id"])
+        )
 
         cur.execute(
             """
             INSERT INTO withdrawals
             (
-            user_id,
-            amount,
-            fee,
-            receive_amount,
-            status
+                user_id,
+                amount,
+                fee,
+                receive_amount,
+                status
             )
             VALUES
-            (%s,%s,%s,%s,%s)
+            (%s, %s, %s, %s, %s)
             """,
             (
-            session["user_id"],
-            amount,
-            fee,
-            receive_amount,
-            "Processing"
+                session["user_id"],
+                amount,
+                fee,
+                receive_amount,
+                "Processing"
             )
         )
 
-
-
         conn.commit()
-
         conn.close()
 
-
-
-        flash(
-        "Withdrawal submitted. Arrives in 0-34 minutes."
-        )
-
-
+        flash("Withdrawal request submitted successfully. Processing time is 0–34 minutes.")
         return redirect("/withdraw")
 
-
-
+    conn.close()
 
     return render_template(
-        "withdraw.html"
+        "withdraw.html",
+        user=user
     )
 
 # =========================
