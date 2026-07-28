@@ -1,410 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - LATEX FOAM</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 70px; /* Space for bottom nav */
-        }
+<title>TESLA Dashboard</title>
 
-        /* Top Header Component */
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #020708;
-        }
+<style>
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        .header-logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: #e5c158;
-            font-style: italic;
-        }
+body{
+    background:#000;
+    color:white;
+    padding-bottom:90px;
+}
 
-        .user-meta .phone-num {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-        }
 
-        .user-meta .status-tag {
-            font-size: 12px;
-            color: #00bcd4;
-        }
+/* Header */
 
-        .top-icons {
-            display: flex;
-            gap: 15px;
-            color: #8fa0a3;
-            font-size: 18px;
-        }
+.header{
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+}
 
-        /* Balance Sphere Container */
-        .balance-container {
-            flex: 1;
-            display: flex;
-            flex-direction: center;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 40px 20px;
-            background: radial-gradient(circle at center, #072a2e 0%, #000000 70%);
-        }
 
-        .sphere-card {
-            text-align: center;
-        }
+/* Main Car */
 
-        .main-graphic {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 2px solid #00bcd4;
-            background: radial-gradient(circle, rgba(0,188,212,0.2) 0%, rgba(0,0,0,0) 75%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
-        }
+.main-car img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+}
 
-        .graphic-icon {
-            font-size: 50px;
-            font-weight: bold;
-            color: #e5c158;
-            font-style: italic;
-        }
 
-        .balance-display {
-            font-size: 26px;
-            font-weight: bold;
-            color: #00bcd4;
-            letter-spacing: 1px;
-        }
 
-        /* Action Menu Panel */
-        .action-panel {
-            background-color: #050b0c;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            padding: 30px 20px;
-            border-top: 1px solid #0d2226;
-        }
+/* Welcome */
 
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px 10px;
-            text-align: center;
-        }
+.welcome{
+    padding:20px;
+}
 
-        .grid-item {
-            text-decoration: none;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
+.welcome h2{
+    margin-bottom:8px;
+}
 
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background-color: #0a191c;
-            border: 1px solid #14353a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            color: #00bcd4;
-            transition: all 0.3s ease;
-        }
 
-        .grid-item:hover .icon-box {
-            background-color: #00bcd4;
-            color: #000000;
-        }
+/* Account Cards */
 
-        .grid-label {
-            font-size: 12px;
-            color: #9cb1b4;
-            white-space: nowrap;
-        }
+.cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    padding:20px;
+}
 
-        /* Bottom Fixed Navigation Bar */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background-color: #030a0b;
-            border-top: 1px solid #0c2024;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-        }
 
-        .nav-link {
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            color: #657e81;
-        }
+.card{
+    background:#111;
+    padding:18px;
+    border-radius:15px;
+    border:1px solid #333;
+}
 
-        .nav-link.active {
-            color: #00bcd4;
-        }
 
-        .nav-icon {
-            font-size: 20px;
-        }
+.card h4{
+    color:#aaa;
+}
 
-        .nav-text {
-            font-size: 11px;
-        }
-    </style>
+
+.card p{
+    color:#e82127;
+    font-size:22px;
+    margin-top:10px;
+}
+
+
+
+/* Gift */
+
+.gift{
+    margin:20px;
+    background:#111;
+    border:1px solid #e82127;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+}
+
+
+.gift span{
+    color:#e82127;
+    font-size:28px;
+    font-weight:bold;
+}
+
+
+
+/* Plans */
+
+.title{
+    padding:20px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+
+
+.plan{
+
+    background:#111;
+    margin:15px 20px;
+    border-radius:15px;
+    overflow:hidden;
+    border:1px solid #333;
+
+}
+
+
+.plan img{
+
+    width:100%;
+    height:180px;
+    object-fit:cover;
+
+}
+
+
+.plan-content{
+
+    padding:20px;
+
+}
+
+
+.plan h3{
+
+    color:#e82127;
+
+}
+
+
+.plan p{
+
+    margin-top:8px;
+
+}
+
+
+.buy{
+
+    display:block;
+    margin-top:15px;
+    background:#e82127;
+    padding:13px;
+    text-align:center;
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+
+}
+
+
+
+/* Action Buttons */
+
+.actions{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    padding:20px;
+
+}
+
+
+.btn{
+
+    background:#e82127;
+    padding:15px;
+    text-align:center;
+    border-radius:12px;
+    color:white;
+    text-decoration:none;
+
+}
+
+
+
+/* Bottom Navigation */
+
+
+.bottom-nav{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    border-top:1px solid #333;
+
+}
+
+
+
+.nav{
+
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:13px;
+
+}
+
+
+.nav span{
+
+    display:block;
+    font-size:22px;
+
+}
+
+
+.nav:hover{
+
+    color:#e82127;
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-    <!-- Top Status Header -->
-    <div class="top-header">
-        <div class="user-info">
-            <div class="header-logo">L</div>
-            <div class="user-meta">
-                <div class="phone-num">{{ user_phone }}</div>
-                <div class="status-tag">Home</div>
-            </div>
-        </div>
-        <div class="top-icons">
-            <span>💬</span>
-            <span>🌐</span>
-            <span>🎧</span>
-        </div>
-    </div>
 
-    <!-- Balance Sphere Graphic Display -->
-    <div class="balance-container">
-        <div class="sphere-card">
-            <div class="main-graphic">
-                <div class="graphic-icon">L</div>
-            </div>
-            <!-- Dynamic balance injected from user profile values -->
-            <div class="balance-display">{{ "%.2f"|format(user_balance) }} GHS</div>
-        </div>
-    </div>
+<div class="header">
+TESLA
+</div>
 
-    <!-- Action Shortcuts Grid Dashboard Core -->
-    <div class="action-panel">
-        <div class="action-grid">
-            <a href="{{ url_for('deposit') }}" class="grid-item">
-                <div class="icon-box">💵</div>
-                <div class="grid-label">Recharge</div>
-            </a>
-            <a href="{{ url_for('withdraw') }}" class="grid-item">
-                <div class="icon-box">📤</div>
-                <div class="grid-label">Withdrawal</div>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box">🔄</div>
-                <div class="grid-label">Exchange</div>
-            </a>
-            
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box">📥</div>
-                <div class="grid-label">Download</div>
-                <!-- History Page Navigation Anchor Link -->
-<a href="{{ url_for('history') }}" class="button" style="background-color: #9b4dca; color: white; margin: 5px; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-block;">
-    📊 Transaction History
+
+
+<div class="main-car">
+
+<img src="https://images.unsplash.com/photo-1560958089-b8a1929cea89">
+
+</div>
+
+
+
+<div class="welcome">
+
+<h2>
+Welcome {{user.phone}}
+</h2>
+
+<p>
+Your Tesla VIP Dashboard
+</p>
+
+</div>
+
+
+
+
+<div class="cards">
+
+
+<div class="card">
+<h4>Balance</h4>
+<p>GHS {{user.balance}}</p>
+</div>
+
+
+<div class="card">
+<h4>Daily Reward</h4>
+<p>GHS 1</p>
+</div>
+
+
+<div class="card">
+<h4>Total Income</h4>
+<p>GHS {{user.income}}</p>
+</div>
+
+
+<div class="card">
+<h4>Active Plan</h4>
+<p>{{user.plan}}</p>
+</div>
+
+
+</div>
+
+
+
+
+<div class="gift">
+
+🎁 Registration Gift
+
+<br>
+
+<span>GHS 10</span>
+
+</div>
+
+
+
+
+<div class="title">
+🚗 TESLA VIP Plans
+</div>
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 1</h3>
+
+<p>Investment: GHS 100</p>
+<p>Receive: GHS 20 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
 </a>
 
-            </a>
-            <!-- Update your team icon code block to look like this -->
-<a href="/team" class="text-center text-gray-500 text-[10px] font-medium block">
-    <div class="text-lg text-center mb-0.5">👥</div>
-    Team
+</div>
+
+</div>
+
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1617788138017-80ad40651399">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 2</h3>
+
+<p>Investment: GHS 300</p>
+<p>Receive: GHS 40 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
 </a>
 
-                
-                
-            </a>
-            <a href="{{ url_for('service') }}" class="grid-item">
-                <div class="icon-box">🎧</div>
-                <div class="grid-label">About</div>
-            </a>
-            <a href="#" class="grid-item">
-                <div class="icon-box">✈️</div>
-                <div class="grid-label">Support</div>
-            </a>
-        </div>
-    </div>
+</div>
 
-   
-    
-    
-    <!-- Persistent Lower App Navigation Dock -->
-    <nav class="bottom-nav">
-        <a href="{{ url_for('dashboard') }}" class="nav-link active">
-            <div class="nav-icon">🏠</div>
-            <div class="nav-text">Home</div>
-        </a>
-    
-    <!-- Plan Tab Button -->
-<a href="/plan" class="nav-item" style="display: flex; flex-direction: column; align-items: center; color: #4a5d78; font-size: 11px; text-decoration: none; font-family: sans-serif;">
-    <div class="nav-icon" style="font-size: 18px; margin-bottom: 4px;">📦</div>
-    <div>Plan</div>
+</div>
+
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1542362567-b07e54358753">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 3</h3>
+
+<p>Investment: GHS 500</p>
+<p>Receive: GHS 60 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 4</h3>
+
+<p>Investment: GHS 700</p>
+<p>Receive: GHS 80 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 5</h3>
+
+<p>Investment: GHS 850</p>
+<p>Receive: GHS 166 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+
+<div class="plan">
+
+<img src="https://images.unsplash.com/photo-1560958089-b8a1929cea89">
+
+<div class="plan-content">
+
+<h3>TESLA VIP 6</h3>
+
+<p>Investment: GHS 1,500</p>
+<p>Receive: GHS 280 Daily</p>
+<p>Duration: 100 Days</p>
+
+<a href="/my_plan" class="buy">
+Buy Now
+</a>
+
+</div>
+
+</div>
+
+
+
+
+
+
+<div class="actions">
+
+<a href="/deposit" class="btn">
+💳 Deposit
 </a>
 
 
-        
-    <a href="{{ url_for('plan') }}" class="nav-link">
-            <div class="nav-icon">🗄️</div>
-            <div class="nav-text">Cloud mining</div>
-        </a>
-       <!-- Team Tab Button -->
-<a href="/team" class="nav-item" style="display: flex; flex-direction: column; align-items: center; color: #4a5d78; font-size: 11px; text-decoration: none; font-family: sans-serif;">
-    <div class="nav-icon" style="font-size: 18px; margin-bottom: 4px;">👥</div>
-    <div>Team</div>
+<a href="/withdraw" class="btn">
+💸 Withdraw
 </a>
- 
-        
-    
-  <a href="{{ url_for('login') }}" class="nav-link">
-            <a href="{{ url_for('profile') }}" class="nav-link">
-    <div class="nav-icon">👤</div>
-    <div class="nav-text">Mine</div>
-      </a>
-  </div>
 
-         <!-- Logic Controller Scripts -->
-    <script>
-        function copyReferralLink() {
-            const linkBox = document.getElementById("linkBox");
-            const linkText = linkBox.innerText.trim();
-            const copyBtn = document.querySelector(".action-btn");
-            
-            if (linkText === "Loading link..." || linkText === "") {
-                alert("Your invitation link is still loading. Please wait.");
-                return;
-            }
 
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(linkText)
-                    .then(() => handleCopySuccess(copyBtn))
-                    .catch(err => handleCopyError(linkBox));
-            } else {
-                const textArea = document.createElement("textarea");
-                textArea.value = linkText;
-                textArea.style.position = "fixed"; 
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    handleCopySuccess(copyBtn);
-                } catch (err) {
-                    handleCopyError(linkBox);
-                }
-                document.body.removeChild(textArea);
-            }
-        }
+<a href="/daily_checkin" class="btn">
+🎁 Check In
+</a>
 
-        function handleCopySuccess(button) {
-            const originalText = button.innerText;
-            button.innerText = "✓ COPIED!";
-            button.style.backgroundColor = "#2a9d8f"; 
-            
-            setTimeout(() => {
-                button.innerText = originalText;
-                button.style.backgroundColor = "#118ab2"; 
-            }, 2000);
-        }
 
-        function handleCopyError(container) {
-            alert("Failed to copy automatically. Please copy the link text directly.");
-            container.style.border = "2px dashed #e63946";
-        }
+<a href="/team" class="btn">
+👥 Team
+</a>
 
-        // Gather server background stats and investment tracking ledgers
-        window.addEventListener('DOMContentLoaded', () => {
-            // 1. Load team counter metrics
-            fetch('/api/team/dashboard-data')
-                .then(response => {
-                    if (!response.ok) throw new Error('API server unreachable');
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById("statusMessage").style.display = "none";
-                    if(data.total_members !== undefined) document.getElementById("totalMembers").innerText = data.total_members;
-                    if(data.lvl1_count !== undefined) document.getElementById("lvl1Count").innerText = data.lvl1_count;
-                    if(data.lvl2_count !== undefined) document.getElementById("lvl2Count").innerText = data.lvl2_count;
-                    if(data.lvl3_count !== undefined) document.getElementById("lvl3Count").innerText = data.lvl3_count;
-                })
-                .catch(error => {
-                    console.log("Status update failed:", error);
-                    document.getElementById("statusMessage").innerText = "Unable to load team data";
-                });
+</div>
 
-            // 2. Load live downline activity ledger rows
-            fetch('/api/team/investment-ledger')
-                .then(res => res.json())
-                .then(data => {
-                    const container = document.getElementById('ledgerContainer');
-                    container.innerHTML = '';
-                    
-                    if (!data.ledger || data.ledger.length === 0) {
-                        container.innerHTML = '<div style="text-align:center; color:#4a5d78; font-size:13px; padding:10px;">No investment logs recorded in this network branch yet.</div>';
-                        return;
-                    }
 
-                    data.ledger.forEach(item => {
-                        const entry = document.createElement('div');
-                        entry.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 12px; background-color: #020710; border: 1px solid #0d1e36; border-radius: 8px; margin-bottom: 4px;";
-                        entry.innerHTML = `
-                            <div style="text-align: left; display: flex; flex-direction: column;">
-                                <span style="color: #ffffff; font-size: 14px; font-weight: bold;">User ${item.phone}</span>
-                                <span style="color: #4a5d78; font-size: 11px; margin-top: 2px;">Tier Level ${item.level} • ${item.date}</span>
-                            </div>
-                            <div style="color: #00bcd4; font-size: 15px; font-weight: bold; text-align: right;">
-                                GH₵ ${item.amount.toFixed(2)}
-                            </div>
-                        `;
-                        container.appendChild(entry);
-                    });
-                })
-                .catch(() => {
-                    document.getElementById('ledgerContainer').innerHTML = '<div style="text-align:center; color:#e63946; font-size:13px;">Failed to process live ledger feeds.</div>';
-                });
-        });
-    </script>
+
+
+
+<div class="bottom-nav">
+
+
+<a href="/dashboard" class="nav">
+<span>🏠</span>
+Home
+</a>
+
+
+<a href="/team" class="nav">
+<span>👥</span>
+Team
+</a>
+
+
+<a href="/my_plan" class="nav">
+<span>🚗</span>
+My Plans
+</a>
+
+
+<a href="/profile" class="nav">
+<span>👤</span>
+Profile
+</a>
+
+
+</div>
+
+
 </body>
-  </html>
-
-
+</html>
