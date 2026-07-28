@@ -639,7 +639,50 @@ def buy_plan(plan_id):
         )
     )
 
+# Referral commission 20%
 
+cur.execute(
+    """
+    SELECT invited_by
+    FROM users
+    WHERE id=%s
+    """,
+    (session["user_id"],)
+)
+
+buyer = cur.fetchone()
+
+
+if buyer and buyer["invited_by"]:
+
+    cur.execute(
+        """
+        SELECT id
+        FROM users
+        WHERE referral_code=%s
+        """,
+        (buyer["invited_by"],)
+    )
+
+    referrer = cur.fetchone()
+
+
+    if referrer:
+
+        commission = plan["investment"] * 0.20
+
+
+        cur.execute(
+            """
+            UPDATE users
+            SET income = income + %s
+            WHERE id=%s
+            """,
+            (
+            commission,
+            referrer["id"]
+            )
+        )
 
     conn.commit()
     conn.close()
