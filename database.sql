@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 
     balance NUMERIC(12,2) DEFAULT 10.00,
 
+    income NUMERIC(12,2) DEFAULT 0.00
 
     account_name VARCHAR(100),
 
