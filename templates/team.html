@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -9,81 +10,27 @@
 
 <style>
 
-*{
+body{
     margin:0;
-    padding:0;
-    box-sizing:border-box;
+    background:#000;
+    color:white;
     font-family:Arial,sans-serif;
 }
 
 
-body{
-    background:#000;
-    color:white;
-    padding-bottom:90px;
-}
-
-
-/* Header */
-
 .header{
+    background:#111;
+    padding:25px;
     text-align:center;
-    padding:20px;
-    font-size:30px;
+    font-size:28px;
     font-weight:bold;
     color:#e82127;
 }
 
 
-
-/* Referral Card */
-
-.referral{
-
-    margin:20px;
-    background:#111;
-    padding:20px;
-    border-radius:15px;
-    border:1px solid #e82127;
-
-}
-
-
-.referral h3{
-
-    color:#e82127;
-    margin-bottom:15px;
-
-}
-
-
-.code{
-
-    background:#000;
-    padding:15px;
-    border-radius:10px;
-    text-align:center;
-    color:white;
-
-}
-
-
-
-
-/* Stats */
-
-.cards{
-
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    padding:20px;
-
-}
-
-
 .card{
 
+    margin:20px;
     background:#111;
     padding:20px;
     border-radius:15px;
@@ -92,96 +39,61 @@ body{
 }
 
 
-.card h4{
-
-    color:#aaa;
-
-}
-
-
-.card p{
-
-    margin-top:10px;
-    font-size:22px;
+.card h3{
     color:#e82127;
+}
+
+
+.item{
+
+    padding:12px 0;
+    border-bottom:1px solid #333;
 
 }
 
 
+span{
 
-/* Levels */
-
-
-.level{
-
-    margin:15px 20px;
-    background:#111;
-    padding:18px;
-    border-radius:15px;
+    float:right;
+    color:white;
 
 }
 
 
-.level h3{
+.copy{
 
-    color:#e82127;
-
-}
-
-
-.level p{
-
-    margin-top:8px;
-
-}
-
-
-
-
-/* Bottom Navigation */
-
-
-.bottom-nav{
-
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:75px;
-    background:#111;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    border-top:1px solid #333;
-
-}
-
-
-
-.nav{
-
-    color:#aaa;
-    text-decoration:none;
+    background:#e82127;
+    color:white;
+    padding:12px;
+    border-radius:10px;
     text-align:center;
-    font-size:13px;
+    margin-top:15px;
 
 }
 
 
-.nav span{
+.member{
+
+    background:#222;
+    margin-top:10px;
+    padding:15px;
+    border-radius:10px;
+
+}
+
+
+.back{
 
     display:block;
-    font-size:22px;
+    margin:20px;
+    background:#e82127;
+    color:white;
+    text-align:center;
+    padding:15px;
+    border-radius:12px;
+    text-decoration:none;
 
 }
-
-
-.nav:hover{
-
-    color:#e82127;
-
-}
-
 
 </style>
 
@@ -197,180 +109,103 @@ body{
 
 
 
-
-<div class="referral">
-
-<h3>
-Your Referral Link
-</h3>
-
-<div class="code">
-
-{{ referral_link }}
-
-</div>
-
-</div>
-
-
-
-
-
-<div class="cards">
-
-
 <div class="card">
 
-<h4>
-Direct Team
-</h4>
+<h3>Team Summary</h3>
 
-<p>
-{{ direct_team }}
-</p>
+
+<div class="item">
+Team Members
+<span>{{ total_team }}</span>
+</div>
+
+
+<div class="item">
+Commission Earned
+<span>GHS {{ commission }}</span>
+</div>
+
+
+<div class="item">
+Referral Bonus
+<span>20%</span>
+</div>
+
 
 </div>
+
+
 
 
 
 <div class="card">
 
-<h4>
-Total Team
-</h4>
+<h3>Your Referral Code</h3>
+
 
 <p>
-{{ total_team }}
+{{ referral_code }}
 </p>
 
+
+<div class="copy">
+Copy Referral Link
 </div>
+
+
+</div>
+
+
+
 
 
 
 <div class="card">
 
-<h4>
-Team Income
-</h4>
-
-<p>
-GHS {{ team_income }}
-</p>
-
-</div>
+<h3>Invited Members</h3>
 
 
+{% for member in members %}
 
-<div class="card">
 
-<h4>
-Commission
-</h4>
+<div class="member">
 
-<p>
-GHS {{ commission }}
-</p>
+Phone:
+{{ member.phone }}
 
-</div>
+<br>
 
+Plan:
+{{ member.plan }}
+
+<br>
+
+Commission:
+GHS {{ member.commission }}
 
 </div>
 
 
-
-
-
-
-<div class="level">
-
-<h3>
-Level 1
-</h3>
+{% else %}
 
 <p>
-Members: {{ level1_members }}
+No team members yet.
 </p>
 
-<p>
-Income: GHS {{ level1_income }}
-</p>
+
+{% endfor %}
+
 
 </div>
 
 
 
 
-<div class="level">
-
-<h3>
-Level 2
-</h3>
-
-<p>
-Members: {{ level2_members }}
-</p>
-
-<p>
-Income: GHS {{ level2_income }}
-</p>
-
-</div>
-
-
-
-
-
-<div class="level">
-
-<h3>
-Level 3
-</h3>
-
-<p>
-Members: {{ level3_members }}
-</p>
-
-<p>
-Income: GHS {{ level3_income }}
-</p>
-
-</div>
-
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard" class="nav">
-<span>🏠</span>
-Home
+<a href="/dashboard" class="back">
+Back To Dashboard
 </a>
-
-
-<a href="/team" class="nav">
-<span>👥</span>
-Team
-</a>
-
-
-<a href="/my_plan" class="nav">
-<span>🚗</span>
-My Plans
-</a>
-
-
-<a href="/profile" class="nav">
-<span>👤</span>
-Profile
-</a>
-
-
-</div>
-
 
 
 </body>
+
 </html>
