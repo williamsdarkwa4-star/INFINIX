@@ -737,7 +737,7 @@ if buyer and buyer["invited_by"]:
     )
 
 
-    return redirect("/my_plan")
+         return redirect("/my_plan")
 # =========================
 # DEPOSIT
 # =========================
