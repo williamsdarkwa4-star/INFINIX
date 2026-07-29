@@ -54,16 +54,21 @@ ALLOWED_EXTENSIONS = {
 # =====================================
 # DATABASE CONNECTION
 # =====================================
-
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 def get_db():
 
+    if not DATABASE_URL:
+        raise Exception(
+            "DATABASE_URL is missing. Add Render PostgreSQL URL in Environment Variables."
+        )
+
     return psycopg2.connect(
         DATABASE_URL,
         cursor_factory=RealDictCursor
     )
+
 
 
 # =====================================
@@ -1242,46 +1247,7 @@ def claim_income(plan_id):
 
 
 
-# =====================================
-# MY PLAN UPDATED PAGE
-# =====================================
 
-@app.route("/my_plan")
-def my_plan():
-
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-
-
-    conn = get_db()
-    cur = conn.cursor()
-
-
-    cur.execute(
-        """
-        SELECT *
-
-        FROM user_plans
-
-        WHERE user_id=%s
-
-        ORDER BY id DESC
-        """,
-        (session["user_id"],)
-    )
-
-
-    plans = cur.fetchall()
-
-
-    conn.close()
-
-
-    return render_template(
-        "my_plan.html",
-        plans=plans
-    )
 # =====================================
 # SAVE WITHDRAWAL ACCOUNT
 # =====================================
