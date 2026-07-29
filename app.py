@@ -1971,7 +1971,129 @@ if not os.path.exists(
         UPLOAD_FOLDER
     )
 
+# =========================
+# TEMP DATABASE SETUP
+# REMOVE AFTER RUNNING ONCE
+# =========================
 
+@app.route("/setup_database")
+def setup_database():
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+
+        id SERIAL PRIMARY KEY,
+
+        phone VARCHAR(30) UNIQUE NOT NULL,
+
+        password TEXT NOT NULL,
+
+        withdraw_password TEXT,
+
+        balance NUMERIC DEFAULT 10,
+
+        income NUMERIC DEFAULT 0,
+
+        referral_code VARCHAR(50) UNIQUE,
+
+        invited_by VARCHAR(50),
+
+        account_name VARCHAR(100),
+
+        network VARCHAR(50),
+
+        account_number VARCHAR(50),
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    );
+    """)
+
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS user_plans (
+
+        id SERIAL PRIMARY KEY,
+
+        user_id INTEGER REFERENCES users(id),
+
+        plan_name VARCHAR(100),
+
+        investment NUMERIC,
+
+        daily_income NUMERIC,
+
+        duration INTEGER,
+
+        status VARCHAR(30),
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    );
+    """)
+
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS deposits (
+
+        id SERIAL PRIMARY KEY,
+
+        user_id INTEGER REFERENCES users(id),
+
+        amount NUMERIC,
+
+        screenshot TEXT,
+
+        status VARCHAR(30),
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    );
+    """)
+
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS withdrawals (
+
+        id SERIAL PRIMARY KEY,
+
+        user_id INTEGER REFERENCES users(id),
+
+        amount NUMERIC,
+
+        fee NUMERIC,
+
+        receive_amount NUMERIC,
+
+        status VARCHAR(30),
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    );
+    """)
+
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS admins (
+
+        id SERIAL PRIMARY KEY,
+
+        username VARCHAR(50) UNIQUE,
+
+        password TEXT NOT NULL
+
+    );
+    """)
+
+
+    conn.commit()
+    conn.close()
+
+
+    return "Database setup completed successfully"
 
 # =====================================
 # RUN APPLICATION
