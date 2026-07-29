@@ -1053,3 +1053,972 @@ def my_plan():
         "my_plan.html",
         plans=plans
     )
+# =====================================
+# CLAIM DAILY EARNINGS
+# =====================================
+
+from datetime import datetime, timedelta
+
+
+
+@app.route("/claim_income/<int:plan_id>")
+def claim_income(plan_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        SELECT *
+        FROM user_plans
+        WHERE id=%s
+        AND user_id=%s
+        """,
+        (
+            plan_id,
+            session["user_id"]
+        )
+    )
+
+
+    plan = cur.fetchone()
+
+
+
+    if not plan:
+
+        conn.close()
+
+        flash("Plan not found.")
+
+        return redirect(
+            url_for("my_plan")
+        )
+
+
+
+    # Check if plan is active
+
+    if plan["status"] != "Active":
+
+        conn.close()
+
+        flash("This plan has expired.")
+
+        return redirect(
+            url_for("my_plan")
+        )
+
+
+
+    now = datetime.now()
+
+
+
+    # First claim check
+
+    if plan["last_claim"]:
+
+        next_claim = (
+            plan["last_claim"]
+            +
+            timedelta(hours=24)
+        )
+
+
+        if now < next_claim:
+
+            remaining = next_claim - now
+
+            conn.close()
+
+            flash(
+                f"Come back after {remaining.seconds//3600} hours."
+            )
+
+            return redirect(
+                url_for("my_plan")
+            )
+
+
+
+    # Check days completed
+
+    if plan["days_completed"] >= plan["duration"]:
+
+        cur.execute(
+            """
+            UPDATE user_plans
+
+            SET status='Completed'
+
+            WHERE id=%s
+            """,
+            (plan_id,)
+        )
+
+
+        conn.commit()
+        conn.close()
+
+
+        flash(
+            "Investment period completed."
+        )
+
+        return redirect(
+            url_for("my_plan")
+        )
+
+
+
+    # Add daily income
+
+    daily = plan["daily_income"]
+
+
+
+    cur.execute(
+        """
+        UPDATE users
+
+        SET balance = balance + %s
+
+        WHERE id=%s
+        """,
+        (
+            daily,
+            session["user_id"]
+        )
+    )
+
+
+
+    # Update plan record
+
+    cur.execute(
+        """
+        UPDATE user_plans
+
+        SET
+
+        total_earned = total_earned + %s,
+
+        days_completed = days_completed + 1,
+
+        last_claim = %s
+
+        WHERE id=%s
+
+        """,
+        (
+            daily,
+            now,
+            plan_id
+        )
+    )
+
+
+
+    conn.commit()
+    conn.close()
+
+
+
+    flash(
+        "Daily income claimed successfully."
+    )
+
+
+    return redirect(
+        url_for("my_plan")
+    )
+
+
+
+# =====================================
+# MY PLAN UPDATED PAGE
+# =====================================
+
+@app.route("/my_plan")
+def my_plan():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+
+        FROM user_plans
+
+        WHERE user_id=%s
+
+        ORDER BY id DESC
+        """,
+        (session["user_id"],)
+    )
+
+
+    plans = cur.fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "my_plan.html",
+        plans=plans
+    )
+# =====================================
+# SAVE WITHDRAWAL ACCOUNT
+# =====================================
+
+@app.route("/save_account", methods=["POST"])
+def save_account():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    account_name = request.form["account_name"]
+
+    network = request.form["network"]
+
+    account_number = request.form["account_number"]
+
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        UPDATE users
+
+        SET
+            account_name=%s,
+            network=%s,
+            account_number=%s
+
+        WHERE id=%s
+
+        """,
+        (
+            account_name,
+            network,
+            account_number,
+            session["user_id"]
+        )
+    )
+
+
+    conn.commit()
+    conn.close()
+
+
+    flash(
+        "Withdrawal account saved."
+    )
+
+
+    return redirect(
+        url_for("withdraw")
+    )
+
+
+
+# =====================================
+# WITHDRAW
+# =====================================
+
+@app.route("/withdraw", methods=["GET","POST"])
+def withdraw():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        SELECT *
+
+        FROM users
+
+        WHERE id=%s
+
+        """,
+        (session["user_id"],)
+    )
+
+
+    user = cur.fetchone()
+
+
+
+    if request.method == "POST":
+
+
+        amount = float(
+            request.form["amount"]
+        )
+
+
+        withdraw_password = request.form[
+            "withdraw_password"
+        ]
+
+
+
+        if amount < 30:
+
+            conn.close()
+
+            flash(
+                "Minimum withdrawal is GHS 30."
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+
+
+        if not check_password_hash(
+            user["withdraw_password"],
+            withdraw_password
+        ):
+
+            conn.close()
+
+            flash(
+                "Incorrect withdrawal password."
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+
+
+        if float(user["balance"]) < amount:
+
+            conn.close()
+
+            flash(
+                "Insufficient balance."
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+
+
+        if not user["account_number"]:
+
+            conn.close()
+
+            flash(
+                "Please add your Mobile Money account first."
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+
+
+        fee = round(
+            amount * 0.18,
+            2
+        )
+
+
+        receive_amount = round(
+            amount - fee,
+            2
+        )
+
+
+
+        # Remove balance temporarily
+
+        cur.execute(
+            """
+            UPDATE users
+
+            SET balance = balance - %s
+
+            WHERE id=%s
+
+            """,
+            (
+                amount,
+                session["user_id"]
+            )
+        )
+
+
+
+        cur.execute(
+            """
+            INSERT INTO withdrawals
+            (
+                user_id,
+                amount,
+                fee,
+                receive_amount,
+                status
+            )
+
+            VALUES
+            (%s,%s,%s,%s,%s)
+
+            """,
+            (
+                session["user_id"],
+                amount,
+                fee,
+                receive_amount,
+                "Processing"
+            )
+        )
+
+
+        conn.commit()
+        conn.close()
+
+
+
+        flash(
+            "Withdrawal request submitted."
+        )
+
+
+        return redirect(
+            url_for("withdraw")
+        )
+
+
+
+    conn.close()
+
+
+
+    return render_template(
+        "withdraw.html",
+        user=user
+    )
+
+
+
+# =====================================
+# ADMIN WITHDRAWALS
+# =====================================
+
+@app.route("/admin/withdrawals")
+def admin_withdrawals():
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        SELECT
+
+            withdrawals.*,
+
+            users.phone,
+
+            users.network,
+
+            users.account_number
+
+
+        FROM withdrawals
+
+
+        JOIN users
+
+        ON withdrawals.user_id = users.id
+
+
+        WHERE withdrawals.status='Processing'
+
+
+        ORDER BY withdrawals.id DESC
+
+        """
+    )
+
+
+    withdrawals = cur.fetchall()
+
+
+    conn.close()
+
+
+
+    return render_template(
+        "admin_withdrawals.html",
+        withdrawals=withdrawals
+    )
+
+
+
+# =====================================
+# ADMIN APPROVE WITHDRAWAL
+# =====================================
+
+@app.route("/admin/withdraw/approve/<int:id>")
+def approve_withdraw(id):
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        UPDATE withdrawals
+
+        SET status='Approved'
+
+        WHERE id=%s
+
+        AND status='Processing'
+
+        """,
+        (id,)
+    )
+
+
+
+    conn.commit()
+    conn.close()
+
+
+    flash(
+        "Withdrawal approved."
+    )
+
+
+    return redirect(
+        "/admin/withdrawals"
+    )
+
+
+
+# =====================================
+# ADMIN REJECT WITHDRAWAL
+# =====================================
+
+@app.route("/admin/withdraw/reject/<int:id>")
+def reject_withdraw(id):
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        SELECT *
+
+        FROM withdrawals
+
+        WHERE id=%s
+
+        """,
+        (id,)
+    )
+
+
+    withdrawal = cur.fetchone()
+
+
+
+    if withdrawal:
+
+        # Return money to user
+
+        cur.execute(
+            """
+            UPDATE users
+
+            SET balance = balance + %s
+
+            WHERE id=%s
+
+            """,
+            (
+                withdrawal["amount"],
+                withdrawal["user_id"]
+            )
+        )
+
+
+
+        cur.execute(
+            """
+            UPDATE withdrawals
+
+            SET status='Rejected'
+
+            WHERE id=%s
+
+            """,
+            (id,)
+        )
+
+
+
+    conn.commit()
+    conn.close()
+
+
+
+    flash(
+        "Withdrawal rejected and balance refunded."
+    )
+
+
+    return redirect(
+        "/admin/withdrawals"
+    )
+# =====================================
+# ADMIN LOGIN
+# =====================================
+
+@app.route("/admin/login", methods=["GET","POST"])
+def admin_login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+
+        password = request.form["password"]
+
+
+        conn = get_db()
+        cur = conn.cursor()
+
+
+        cur.execute(
+            """
+            SELECT *
+            FROM admins
+            WHERE username=%s
+            """,
+            (username,)
+        )
+
+
+        admin = cur.fetchone()
+
+
+        conn.close()
+
+
+
+        if admin and check_password_hash(
+            admin["password"],
+            password
+        ):
+
+            session["admin_id"] = admin["id"]
+
+            return redirect(
+                "/admin/dashboard"
+            )
+
+
+        flash(
+            "Invalid admin login."
+        )
+
+
+    return render_template(
+        "admin_login.html"
+    )
+
+
+
+# =====================================
+# ADMIN LOGOUT
+# =====================================
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.pop(
+        "admin_id",
+        None
+    )
+
+    return redirect(
+        "/admin/login"
+    )
+
+
+
+# =====================================
+# ADMIN DASHBOARD
+# =====================================
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+
+    if "admin_id" not in session:
+        return redirect(
+            "/admin/login"
+        )
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        "SELECT COUNT(*) FROM users"
+    )
+
+    total_users = cur.fetchone()["count"]
+
+
+
+    cur.execute(
+        """
+        SELECT COALESCE(SUM(amount),0)
+
+        FROM deposits
+
+        WHERE status='Approved'
+        """
+    )
+
+    total_deposits = cur.fetchone()["coalesce"]
+
+
+
+    cur.execute(
+        """
+        SELECT COUNT(*)
+
+        FROM withdrawals
+
+        WHERE status='Processing'
+        """
+    )
+
+    pending_withdrawals = cur.fetchone()["count"]
+
+
+
+    cur.execute(
+        """
+        SELECT COUNT(*)
+
+        FROM user_plans
+        """
+    )
+
+    total_plans = cur.fetchone()["count"]
+
+
+
+    conn.close()
+
+
+
+    return render_template(
+        "admin_dashboard.html",
+
+        total_users=total_users,
+
+        total_deposits=total_deposits,
+
+        pending_withdrawals=pending_withdrawals,
+
+        total_plans=total_plans
+    )
+
+
+
+# =====================================
+# ADMIN USERS
+# =====================================
+
+@app.route("/admin/users")
+def admin_users():
+
+    if "admin_id" not in session:
+        return redirect(
+            "/admin/login"
+        )
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+
+        FROM users
+
+        ORDER BY id DESC
+        """
+    )
+
+
+    users = cur.fetchall()
+
+
+    conn.close()
+
+
+
+    return render_template(
+        "admin_users.html",
+        users=users
+    )
+
+
+
+# =====================================
+# ADMIN ALL DEPOSITS
+# =====================================
+
+@app.route("/admin/all_deposits")
+def admin_all_deposits():
+
+    if "admin_id" not in session:
+        return redirect(
+            "/admin/login"
+        )
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT
+
+        deposits.*,
+
+        users.phone
+
+
+        FROM deposits
+
+
+        JOIN users
+
+        ON deposits.user_id = users.id
+
+
+        ORDER BY deposits.id DESC
+
+        """
+    )
+
+
+    deposits = cur.fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "admin_all_deposits.html",
+        deposits=deposits
+    )
+
+
+
+# =====================================
+# ERROR HANDLER
+# =====================================
+
+@app.errorhandler(404)
+def not_found(error):
+
+    return "Page not found", 404
+
+
+
+@app.errorhandler(500)
+def server_error(error):
+
+    return "Server error", 500
+
+
+
+# =====================================
+# CREATE UPLOAD FOLDER
+# =====================================
+
+if not os.path.exists(
+    UPLOAD_FOLDER
+):
+
+    os.makedirs(
+        UPLOAD_FOLDER
+    )
+
+
+
+# =====================================
+# RUN APPLICATION
+# =====================================
+
+if __name__ == "__main__":
+
+    app.run(
+        host="0.0.0.0",
+        port=int(
+            os.environ.get(
+                "PORT",
+                5000
+            )
+        )
+    )
