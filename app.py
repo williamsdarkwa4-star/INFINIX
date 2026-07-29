@@ -209,12 +209,8 @@ def register():
             return redirect("/register")
 
 
-          referral_code = "TESLA" + ''.join(
-          random.choices(
-              string.digits,
-                    k=6
-          )
-           )
+          
+
         cur.execute(
           """
            INSERT INTO users
