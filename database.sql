@@ -1,12 +1,13 @@
--- ==================================
--- TESLA DEMO PLATFORM DATABASE
--- PostgreSQL / Render
--- ==================================
+-- =====================================
+-- TESLA INVESTMENT PLATFORM DATABASE
+-- PostgreSQL
+-- =====================================
 
 
 -- USERS TABLE
+-- =====================================
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
 
     id SERIAL PRIMARY KEY,
 
@@ -14,13 +15,23 @@ CREATE TABLE IF NOT EXISTS users (
 
     password TEXT NOT NULL,
 
-    withdraw_password TEXT,
+    withdraw_password TEXT NOT NULL,
 
-    invite_code VARCHAR(50),
 
-    balance NUMERIC(12,2) DEFAULT 10.00,
+    balance NUMERIC(12,2)
+    DEFAULT 10.00,
 
-    income NUMERIC(12,2) DEFAULT 0.00
+
+    income NUMERIC(12,2)
+    DEFAULT 0.00,
+
+
+    referral_code VARCHAR(20)
+    UNIQUE NOT NULL,
+
+
+    invited_by VARCHAR(20),
+
 
     account_name VARCHAR(100),
 
@@ -29,233 +40,207 @@ CREATE TABLE IF NOT EXISTS users (
     account_number VARCHAR(30),
 
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP
 
 );
 
 
 
+-- USER PLANS TABLE
+-- =====================================
 
-
--- ADMINS TABLE
-
-CREATE TABLE IF NOT EXISTS admins (
+CREATE TABLE user_plans (
 
     id SERIAL PRIMARY KEY,
 
-    username VARCHAR(50) UNIQUE NOT NULL,
 
-    password TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    plan_name VARCHAR(100) NOT NULL,
+
+
+    investment NUMERIC(12,2)
+    NOT NULL,
+
+
+    daily_income NUMERIC(12,2)
+    NOT NULL,
+
+
+    duration INTEGER
+    DEFAULT 100,
+
+
+    days_completed INTEGER
+    DEFAULT 0,
+
+
+    total_earned NUMERIC(12,2)
+    DEFAULT 0.00,
+
+
+    last_claim TIMESTAMP,
+
+
+    status VARCHAR(30)
+    DEFAULT 'Active',
+
+
+    created_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_user_plan
+
+    FOREIGN KEY(user_id)
+
+    REFERENCES users(id)
+
+    ON DELETE CASCADE
 
 );
-
-
 
 
 
 -- DEPOSITS TABLE
+-- =====================================
 
-CREATE TABLE IF NOT EXISTS deposits (
+CREATE TABLE deposits (
 
     id SERIAL PRIMARY KEY,
 
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 
-    amount NUMERIC(12,2) NOT NULL,
+    user_id INTEGER NOT NULL,
+
+
+    amount NUMERIC(12,2)
+    NOT NULL,
+
 
     screenshot TEXT,
 
-    status VARCHAR(30) DEFAULT 'Processing',
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    status VARCHAR(30)
+    DEFAULT 'Processing',
+
+
+    created_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+
+
+    FOREIGN KEY(user_id)
+
+    REFERENCES users(id)
+
+    ON DELETE CASCADE
 
 );
-
-
-
 
 
 
 -- WITHDRAWALS TABLE
+-- =====================================
 
-CREATE TABLE IF NOT EXISTS withdrawals (
+CREATE TABLE withdrawals (
 
     id SERIAL PRIMARY KEY,
 
 
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL,
 
 
-    amount NUMERIC(12,2) NOT NULL,
+    amount NUMERIC(12,2)
+    NOT NULL,
 
 
-    fee NUMERIC(12,2) DEFAULT 0,
+    fee NUMERIC(12,2)
+    DEFAULT 0,
 
 
-    receive_amount NUMERIC(12,2) DEFAULT 0,
+    receive_amount NUMERIC(12,2)
+    DEFAULT 0,
 
 
-    status VARCHAR(30) DEFAULT 'Processing',
+    status VARCHAR(30)
+    DEFAULT 'Processing',
 
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+
+
+    FOREIGN KEY(user_id)
+
+    REFERENCES users(id)
+
+    ON DELETE CASCADE
 
 );
 
 
 
+-- ADMINS TABLE
+-- =====================================
 
-
-
-
--- USER PURCHASED PLANS TABLE
-
-CREATE TABLE IF NOT EXISTS user_plans (
+CREATE TABLE admins (
 
     id SERIAL PRIMARY KEY,
 
 
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    username VARCHAR(50)
+    UNIQUE NOT NULL,
 
 
-    plan_name VARCHAR(100),
+    password TEXT NOT NULL,
 
 
-    investment NUMERIC(12,2),
-
-
-    daily_income NUMERIC(12,2),
-
-
-    duration INTEGER,
-
-
-    status VARCHAR(30) DEFAULT 'Active',
-
-
-    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
+    created_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP
 
 );
 
 
 
-
-
-
-
--- TESLA PLANS TABLE
-
-CREATE TABLE IF NOT EXISTS plans (
-
-    id SERIAL PRIMARY KEY,
-
-
-    name VARCHAR(100),
-
-
-    investment NUMERIC(12,2),
-
-
-    daily_income NUMERIC(12,2),
-
-
-    duration INTEGER,
-
-
-    image TEXT
-
-
-);
-
-
-
-
-
-
-
--- DEFAULT ADMIN ACCOUNT
--- Password is a placeholder hash.
--- Change it after creating your own admin.
+-- CREATE FIRST ADMIN
+-- Password should be generated using:
+-- generate_password_hash()
+-- from Python
 
 
 INSERT INTO admins
-(username,password)
-
-VALUES
-
 (
-'admin',
-'CHANGE_THIS_PASSWORD_HASH'
+    username,
+    password
 )
 
-ON CONFLICT(username) DO NOTHING;
-
-
-
-
-
-
-
--- TESLA VIP PLANS
-
-INSERT INTO plans
-(name,investment,daily_income,duration,image)
-
 VALUES
-
-
 (
-'TESLA VIP 1',
-100,
-20,
-100,
-'tesla1.jpg'
-),
-
-
-(
-'TESLA VIP 2',
-300,
-40,
-100,
-'tesla2.jpg'
-),
-
-
-(
-'TESLA VIP 3',
-500,
-60,
-100,
-'tesla3.jpg'
-),
-
-
-(
-'TESLA VIP 4',
-700,
-80,
-100,
-'tesla4.jpg'
-),
-
-
-(
-'TESLA VIP 5',
-850,
-166,
-100,
-'tesla5.jpg'
-),
-
-
-(
-'TESLA VIP 6',
-1500,
-280,
-100,
-'tesla6.jpg'
+    'admin',
+    'CHANGE_THIS_TO_HASHED_PASSWORD'
 );
+
+
+
+-- INDEXES FOR SPEED
+-- =====================================
+
+CREATE INDEX users_phone_index
+ON users(phone);
+
+
+CREATE INDEX users_referral_index
+ON users(referral_code);
+
+
+CREATE INDEX deposits_status_index
+ON deposits(status);
+
+
+CREATE INDEX withdrawals_status_index
+ON withdrawals(status);
+
+
+CREATE INDEX plans_user_index
+ON user_plans(user_id);
