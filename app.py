@@ -1,8 +1,8 @@
 import os
 import random
 import string
+
 import psycopg2
-from werkzeug.utils import secure_filename
 from psycopg2.extras import RealDictCursor
 
 from flask import (
@@ -10,6 +10,7 @@ from flask import (
     render_template,
     request,
     redirect,
+    url_for,
     session,
     flash
 )
@@ -19,22 +20,40 @@ from werkzeug.security import (
     check_password_hash
 )
 
+from werkzeug.utils import secure_filename
 
-# =========================
+
+# =====================================
 # FLASK CONFIGURATION
-# =========================
+# =====================================
 
 app = Flask(__name__)
 
 app.secret_key = os.environ.get(
     "SECRET_KEY",
-    "tesla-secret-key-change-this"
+    "tesla-investment-secret-key"
 )
 
 
-# =========================
+# =====================================
+# UPLOAD SETTINGS
+# =====================================
+
+UPLOAD_FOLDER = "static/uploads"
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+ALLOWED_EXTENSIONS = {
+    "png",
+    "jpg",
+    "jpeg"
+}
+
+
+# =====================================
 # DATABASE CONNECTION
-# =========================
+# =====================================
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
@@ -47,98 +66,131 @@ def get_db():
     )
 
 
+# =====================================
+# HELPER FUNCTIONS
+# =====================================
 
-# =========================
+def allowed_file(filename):
+
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower()
+        in ALLOWED_EXTENSIONS
+    )
+
+
+def create_referral_code():
+
+    while True:
+
+        code = "TESLA" + "".join(
+            random.choices(
+                string.digits,
+                k=6
+            )
+        )
+
+        conn = get_db()
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+            SELECT id
+            FROM users
+            WHERE referral_code=%s
+            """,
+            (code,)
+        )
+
+        exists = cur.fetchone()
+
+        conn.close()
+
+        if not exists:
+            return code
+
+
+# =====================================
 # TESLA VIP PLANS
-# =========================
+# =====================================
 
 PLANS = [
 
     {
         "id": 1,
         "name": "TESLA VIP 1",
-        "price": 100,
+        "investment": 100,
         "daily": 20,
-        "days": 100
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
     },
 
     {
         "id": 2,
         "name": "TESLA VIP 2",
-        "price": 300,
+        "investment": 300,
         "daily": 40,
-        "days": 100
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1617788138017-80ad40651399"
     },
 
     {
         "id": 3,
         "name": "TESLA VIP 3",
-        "price": 500,
+        "investment": 500,
         "daily": 60,
-        "days": 100
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1542362567-b07e54358753"
     },
 
     {
         "id": 4,
         "name": "TESLA VIP 4",
-        "price": 700,
+        "investment": 700,
         "daily": 80,
-        "days": 100
-    }
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
+    },
+
     {
-    "id": 5,
-    "name": "TESLA VIP 5",
-    "price": 850,
-    "daily": 166,
-    "days": 100
-},
+        "id": 5,
+        "name": "TESLA VIP 5",
+        "investment": 850,
+        "daily": 166,
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
+    },
 
-{
-    "id": 6,
-    "name": "TESLA VIP 6",
-    "price": 1500,
-    "daily": 280,
-    "days": 100
-}
+    {
+        "id": 6,
+        "name": "TESLA VIP 6",
+        "investment": 1500,
+        "daily": 280,
+        "duration": 100,
+        "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
+    }
+
 ]
-
-
-
-# =========================
-# GENERATE REFERRAL CODE
-# =========================
-
-def create_referral_code():
-
-    return "TESLA" + "".join(
-        random.choices(
-            string.digits,
-            k=6
-        )
-    )
-
-
-
-# =========================
+# =====================================
 # HOME
-# =========================
+# =====================================
 
 @app.route("/")
 def home():
-
-    return redirect("/login")
-
+    return redirect(url_for("login"))
 
 
-# =========================
+# =====================================
 # REGISTER
-# =========================
+# =====================================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
     if request.method == "POST":
 
         phone = request.form["phone"].strip()
+
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
 
@@ -149,82 +201,109 @@ def register():
 
         if password != confirm_password:
             flash("Login passwords do not match.")
-            return redirect("/register")
+            return redirect(url_for("register"))
 
         if withdraw_password != confirm_withdraw_password:
             flash("Withdrawal passwords do not match.")
-            return redirect("/register")
+            return redirect(url_for("register"))
 
         conn = get_db()
         cur = conn.cursor()
 
+        # Check if phone already exists
         cur.execute(
-            "SELECT id FROM users WHERE phone=%s",
+            """
+            SELECT id
+            FROM users
+            WHERE phone=%s
+            """,
             (phone,)
         )
 
         if cur.fetchone():
             conn.close()
             flash("Phone number already registered.")
-            return redirect("/register")
+            return redirect(url_for("register"))
+
+        # Validate referral code if entered
+        invited_by = None
+
+        if invite_code:
+
+            cur.execute(
+                """
+                SELECT referral_code
+                FROM users
+                WHERE referral_code=%s
+                """,
+                (invite_code,)
+            )
+
+            referrer = cur.fetchone()
+
+            if not referrer:
+                conn.close()
+                flash("Invalid invite code.")
+                return redirect(url_for("register"))
+
+            invited_by = invite_code
 
         hashed_password = generate_password_hash(password)
         hashed_withdraw_password = generate_password_hash(withdraw_password)
 
         referral_code = create_referral_code()
 
-        cur.execute("""
+        cur.execute(
+            """
             INSERT INTO users
             (
                 phone,
                 password,
                 withdraw_password,
                 balance,
+                income,
                 referral_code,
                 invited_by
             )
+
             VALUES
-            (%s,%s,%s,%s,%s,%s)
-        """,
-        (
-            phone,
-            hashed_password,
-            hashed_withdraw_password,
-            10,
-            referral_code,
-            invite_code if invite_code else None
-        ))
+            (%s,%s,%s,%s,%s,%s,%s)
+            """,
+            (
+                phone,
+                hashed_password,
+                hashed_withdraw_password,
+                10,
+                0,
+                referral_code,
+                invited_by
+            )
+        )
 
         conn.commit()
         conn.close()
 
         flash("Registration successful. GHS 10 welcome bonus added.")
 
-        return redirect("/login")
+        return redirect(url_for("login"))
 
     return render_template("register.html")
 
 
-
-
-
-# =========================
+# =====================================
 # LOGIN
-# =========================
+# =====================================
 
-@app.route("/login", methods=["GET","POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
 
     if request.method == "POST":
 
-        phone = request.form["phone"]
-
+        phone = request.form["phone"].strip()
         password = request.form["password"]
-
 
         conn = get_db()
         cur = conn.cursor()
-
 
         cur.execute(
             """
@@ -235,205 +314,38 @@ def login():
             (phone,)
         )
 
-
         user = cur.fetchone()
-
 
         conn.close()
 
+        if not user:
+            flash("Phone number not found.")
+            return redirect(url_for("login"))
 
-
-        if user and check_password_hash(
+        if not check_password_hash(
             user["password"],
             password
         ):
+            flash("Incorrect password.")
+            return redirect(url_for("login"))
 
-            session["user_id"] = user["id"]
+        session.clear()
+        session["user_id"] = user["id"]
 
-            return redirect("/dashboard")
+        return redirect(url_for("dashboard"))
 
-
-
-        flash("Invalid login")
-
-
-
-    return render_template(
-        "login.html"
-    )
+    return render_template("login.html")
 
 
-
-# =========================
+# =====================================
 # LOGOUT
-# =========================
+# =====================================
 
 @app.route("/logout")
 def logout():
 
     session.clear()
 
-    return redirect("/login")
+    flash("You have logged out successfully.")
 
-# =========================
-# DASHBOARD
-# =========================
-
-@app.route("/dashboard")
-def dashboard():
-
-    if "user_id" not in session:
-        return redirect("/login")
-
-
-    conn = get_db()
-    cur = conn.cursor()
-
-
-    cur.execute(
-        """
-        SELECT *
-        FROM users
-        WHERE id=%s
-        """,
-        (session["user_id"],)
-    )
-
-
-    user = cur.fetchone()
-
-
-    conn.close()
-
-
-    return render_template(
-        "dashboard.html",
-        user=user,
-        plans=PLANS
-    )
-
-
-
-# =========================
-# PROFILE
-# =========================
-
-@app.route("/profile")
-def profile():
-
-    if "user_id" not in session:
-        return redirect("/login")
-
-
-    conn = get_db()
-    cur = conn.cursor()
-
-
-    cur.execute(
-        """
-        SELECT *
-        FROM users
-        WHERE id=%s
-        """,
-        (session["user_id"],)
-    )
-
-
-    user = cur.fetchone()
-
-
-    conn.close()
-
-
-    return render_template(
-        "profile.html",
-        user=user
-    )
-
-
-
-# =========================
-# TEAM / REFERRAL PAGE
-# =========================
-
-@app.route("/team")
-def team():
-
-    if "user_id" not in session:
-        return redirect("/login")
-
-
-    conn = get_db()
-    cur = conn.cursor()
-
-
-    # Get user's referral code
-
-    cur.execute(
-        """
-        SELECT referral_code
-        FROM users
-        WHERE id=%s
-        """,
-        (session["user_id"],)
-    )
-
-
-    user = cur.fetchone()
-
-
-
-    # Find people invited by this user
-
-    cur.execute(
-        """
-        SELECT phone, created_at
-        FROM users
-        WHERE invited_by=%s
-        ORDER BY id DESC
-        """,
-        (user["referral_code"],)
-    )
-
-
-    members = cur.fetchall()
-
-
-    conn.close()
-
-
-    return render_template(
-        "team.html",
-        referral_code=user["referral_code"],
-        members=members,
-        total_team=len(members)
-    )
-
-
-
-# =========================
-# SERVICE PAGE
-# =========================
-
-@app.route("/service")
-def service():
-
-    return render_template(
-        "service.html"
-    )
-
-# =========================
-# RUN APP
-# =========================
-
-if __name__ == "__main__":
-
-    app.run(
-        host="0.0.0.0",
-        port=int(
-            os.environ.get(
-                "PORT",
-                5000
-            )
-        )
-    )
+    return redirect(url_for("login"))
