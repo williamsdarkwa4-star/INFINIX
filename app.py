@@ -85,7 +85,21 @@ PLANS = [
         "daily": 80,
         "days": 100
     }
+    {
+    "id": 5,
+    "name": "TESLA VIP 5",
+    "price": 850,
+    "daily": 166,
+    "days": 100
+},
 
+{
+    "id": 6,
+    "name": "TESLA VIP 6",
+    "price": 1500,
+    "daily": 280,
+    "days": 100
+}
 ]
 
 
@@ -119,97 +133,77 @@ def home():
 # =========================
 # REGISTER
 # =========================
-
-@app.route("/register", methods=["GET","POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
 
     if request.method == "POST":
 
-        phone = request.form["phone"]
+        phone = request.form["phone"].strip()
         password = request.form["password"]
-        confirm = request.form["confirm_password"]
+        confirm_password = request.form["confirm_password"]
 
         withdraw_password = request.form["withdraw_password"]
         confirm_withdraw_password = request.form["confirm_withdraw_password"]
 
+        invite_code = request.form.get("invite_code", "").strip()
 
-        if password != confirm:
-
-            flash("Passwords do not match")
+        if password != confirm_password:
+            flash("Login passwords do not match.")
             return redirect("/register")
 
-
+        if withdraw_password != confirm_withdraw_password:
+            flash("Withdrawal passwords do not match.")
+            return redirect("/register")
 
         conn = get_db()
         cur = conn.cursor()
 
-
         cur.execute(
-            """
-            SELECT id
-            FROM users
-            WHERE phone=%s
-            """,
+            "SELECT id FROM users WHERE phone=%s",
             (phone,)
         )
 
-
-        exists = cur.fetchone()
-
-
-        if exists:
-
+        if cur.fetchone():
             conn.close()
-
-            flash("Phone already registered")
+            flash("Phone number already registered.")
             return redirect("/register")
 
+        hashed_password = generate_password_hash(password)
+        hashed_withdraw_password = generate_password_hash(withdraw_password)
 
+        referral_code = create_referral_code()
 
-        hashed = generate_password_hash(password)
-
-        referral = create_referral_code()
-
-
-        cur.execute(
-            """
+        cur.execute("""
             INSERT INTO users
             (
                 phone,
                 password,
+                withdraw_password,
                 balance,
-                referral_code
+                referral_code,
+                invited_by
             )
-
             VALUES
-            (%s,%s,%s,%s)
-
-            """,
-            (
-                phone,
-                hashed,
-                10,
-                referral
-            )
-        )
-
+            (%s,%s,%s,%s,%s,%s)
+        """,
+        (
+            phone,
+            hashed_password,
+            hashed_withdraw_password,
+            10,
+            referral_code,
+            invite_code if invite_code else None
+        ))
 
         conn.commit()
         conn.close()
 
-
-        flash(
-            "Registration successful. Welcome bonus added."
-        )
-
+        flash("Registration successful. GHS 10 welcome bonus added.")
 
         return redirect("/login")
 
+    return render_template("register.html")
 
-
-    return render_template(
-        "register.html"
-    )
 
 
 
