@@ -734,14 +734,11 @@ if buyer and buyer["invited_by"]:
 
     flash(
     "TESLA plan activated successfully"
-    )
-
-
-         return redirect("/my_plan")
+)
+ return redirect("/my_plan")
 # =========================
 # DEPOSIT
 # =========================
-
 
 @app.route("/deposit", methods=["GET","POST"])
 def deposit():
