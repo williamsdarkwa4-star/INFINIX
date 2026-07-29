@@ -502,3 +502,320 @@ def service():
     return render_template(
         "service.html"
     )
+# =====================================
+# DEPOSIT
+# =====================================
+
+@app.route("/deposit", methods=["GET", "POST"])
+def deposit():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    if request.method == "POST":
+
+        try:
+            amount = float(request.form["amount"])
+        except:
+
+            flash("Enter a valid amount.")
+            return redirect(url_for("deposit"))
+
+
+        if amount < 90:
+            flash("Minimum deposit is GHS 90.")
+            return redirect(url_for("deposit"))
+
+
+        screenshot = request.files.get("screenshot")
+
+        filename = None
+
+
+        if screenshot and allowed_file(
+            screenshot.filename
+        ):
+
+            filename = secure_filename(
+                screenshot.filename
+            )
+
+            screenshot.save(
+                os.path.join(
+                    app.config["UPLOAD_FOLDER"],
+                    filename
+                )
+            )
+
+
+        conn = get_db()
+        cur = conn.cursor()
+
+
+        cur.execute(
+            """
+            INSERT INTO deposits
+            (
+                user_id,
+                amount,
+                screenshot,
+                status
+            )
+
+            VALUES
+            (%s,%s,%s,%s)
+            """,
+            (
+                session["user_id"],
+                amount,
+                filename,
+                "Processing"
+            )
+        )
+
+
+        conn.commit()
+        conn.close()
+
+
+        flash(
+            "Deposit submitted. Waiting for approval."
+        )
+
+        return redirect(
+            url_for("deposit")
+        )
+
+
+    return render_template(
+        "deposit.html"
+    )
+
+
+
+# =====================================
+# DEPOSIT HISTORY
+# =====================================
+
+@app.route("/deposit_history")
+def deposit_history():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+        FROM deposits
+        WHERE user_id=%s
+        ORDER BY id DESC
+        """,
+        (session["user_id"],)
+    )
+
+
+    deposits = cur.fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "deposit_history.html",
+        deposits=deposits
+    )
+
+
+
+# =====================================
+# ADMIN DEPOSITS
+# =====================================
+
+@app.route("/admin/deposits")
+def admin_deposits():
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT
+            deposits.*,
+            users.phone
+
+        FROM deposits
+
+        JOIN users
+        ON deposits.user_id = users.id
+
+        WHERE deposits.status='Processing'
+
+        ORDER BY deposits.id DESC
+        """
+    )
+
+
+    deposits = cur.fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "admin_deposits.html",
+        deposits=deposits
+    )
+
+
+
+# =====================================
+# ADMIN APPROVE DEPOSIT
+# =====================================
+
+@app.route("/admin/deposit/approve/<int:id>")
+def approve_deposit(id):
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+        FROM deposits
+        WHERE id=%s
+        """,
+        (id,)
+    )
+
+
+    deposit = cur.fetchone()
+
+
+    if not deposit:
+
+        conn.close()
+
+        flash("Deposit not found.")
+
+        return redirect(
+            "/admin/deposits"
+        )
+
+
+    if deposit["status"] != "Processing":
+
+        conn.close()
+
+        flash(
+            "Deposit already processed."
+        )
+
+        return redirect(
+            "/admin/deposits"
+        )
+
+
+
+    # Approve deposit
+
+    cur.execute(
+        """
+        UPDATE deposits
+
+        SET status='Approved'
+
+        WHERE id=%s
+        """,
+        (id,)
+    )
+
+
+    # Add balance to user
+
+    cur.execute(
+        """
+        UPDATE users
+
+        SET balance = balance + %s
+
+        WHERE id=%s
+        """,
+        (
+            deposit["amount"],
+            deposit["user_id"]
+        )
+    )
+
+
+    conn.commit()
+    conn.close()
+
+
+    flash(
+        "Deposit approved and balance updated."
+    )
+
+
+    return redirect(
+        "/admin/deposits"
+    )
+
+
+
+# =====================================
+# ADMIN REJECT DEPOSIT
+# =====================================
+
+@app.route("/admin/deposit/reject/<int:id>")
+def reject_deposit(id):
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        UPDATE deposits
+
+        SET status='Rejected'
+
+        WHERE id=%s
+
+        AND status='Processing'
+        """,
+        (id,)
+    )
+
+
+    conn.commit()
+    conn.close()
+
+
+    flash(
+        "Deposit rejected."
+    )
+
+
+    return redirect(
+        "/admin/deposits"
+    )
