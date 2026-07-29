@@ -712,27 +712,26 @@ if buyer and buyer["invited_by"]:
 
     if referrer:
 
-        commission = plan["investment"] * 0.20
+            commission = plan["investment"] * 0.20
 
-
-        cur.execute(
-            """
-            UPDATE users
-            SET income = income + %s
-            WHERE id=%s
-            """,
-            (
+    cur.execute(
+        """
+        UPDATE users
+        SET income = income + %s
+        WHERE id=%s
+        """,
+        (
             commission,
             referrer["id"]
-            )
         )
+    )
 
     conn.commit()
     conn.close()
-    flash(
-    "TESLA plan activated successfully"
-)
-   return redirect("/my_plan")
+    flash("TESLA plan activated successfully")
+    return redirect("/my_plan")
+
+   
      
 # =========================
 # DEPOSIT
