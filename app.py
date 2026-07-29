@@ -2,7 +2,7 @@ import os
 import random
 import string
 import psycopg2
-
+from werkzeug.utils import secure_filename
 from psycopg2.extras import RealDictCursor
 
 from flask import (
@@ -128,6 +128,9 @@ def register():
         phone = request.form["phone"]
         password = request.form["password"]
         confirm = request.form["confirm_password"]
+
+        withdraw_password = request.form["withdraw_password"]
+        confirm_withdraw_password = request.form["confirm_withdraw_password"]
 
 
         if password != confirm:
