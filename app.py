@@ -729,9 +729,6 @@ if buyer and buyer["invited_by"]:
 
     conn.commit()
     conn.close()
-
-
-
     flash(
     "TESLA plan activated successfully"
 )
