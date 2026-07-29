@@ -819,3 +819,237 @@ def reject_deposit(id):
     return redirect(
         "/admin/deposits"
     )
+# =====================================
+# BUY TESLA VIP PLAN
+# =====================================
+
+@app.route("/buy_plan/<int:plan_id>")
+def buy_plan(plan_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    # Find selected plan
+
+    selected_plan = None
+
+    for plan in PLANS:
+
+        if plan["id"] == plan_id:
+            selected_plan = plan
+            break
+
+
+
+    if not selected_plan:
+
+        flash("Plan not found.")
+        return redirect(url_for("dashboard"))
+
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    # Get user balance
+
+    cur.execute(
+        """
+        SELECT balance
+        FROM users
+        WHERE id=%s
+        """,
+        (session["user_id"],)
+    )
+
+
+    user = cur.fetchone()
+
+
+
+    if not user:
+
+        conn.close()
+
+        return redirect(url_for("login"))
+
+
+
+    if float(user["balance"]) < selected_plan["investment"]:
+
+        conn.close()
+
+        flash(
+            "Insufficient balance. Please deposit first."
+        )
+
+        return redirect(
+            url_for("deposit")
+        )
+
+
+
+    # Deduct investment amount
+
+    cur.execute(
+        """
+        UPDATE users
+
+        SET balance = balance - %s
+
+        WHERE id=%s
+        """,
+        (
+            selected_plan["investment"],
+            session["user_id"]
+        )
+    )
+
+
+
+    # Create active plan
+
+    cur.execute(
+        """
+        INSERT INTO user_plans
+        (
+            user_id,
+            plan_name,
+            investment,
+            daily_income,
+            duration,
+            status
+        )
+
+        VALUES
+        (%s,%s,%s,%s,%s,%s)
+        """,
+        (
+            session["user_id"],
+            selected_plan["name"],
+            selected_plan["investment"],
+            selected_plan["daily"],
+            selected_plan["duration"],
+            "Active"
+        )
+    )
+
+
+
+    # Referral commission
+
+    cur.execute(
+        """
+        SELECT invited_by
+        FROM users
+        WHERE id=%s
+        """,
+        (session["user_id"],)
+    )
+
+
+    buyer = cur.fetchone()
+
+
+
+    if buyer and buyer["invited_by"]:
+
+
+        cur.execute(
+            """
+            SELECT id
+            FROM users
+            WHERE referral_code=%s
+            """,
+            (buyer["invited_by"],)
+        )
+
+
+        referrer = cur.fetchone()
+
+
+
+        if referrer:
+
+            commission = (
+                selected_plan["investment"]
+                * 0.20
+            )
+
+
+            cur.execute(
+                """
+                UPDATE users
+
+                SET income = income + %s
+
+                WHERE id=%s
+                """,
+                (
+                    commission,
+                    referrer["id"]
+                )
+            )
+
+
+
+    conn.commit()
+    conn.close()
+
+
+
+    flash(
+        "Tesla VIP plan activated successfully."
+    )
+
+
+    return redirect(
+        url_for("my_plan")
+    )
+
+
+
+# =====================================
+# MY ACTIVE PLANS
+# =====================================
+
+@app.route("/my_plan")
+def my_plan():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+
+    cur.execute(
+        """
+        SELECT *
+
+        FROM user_plans
+
+        WHERE user_id=%s
+
+        ORDER BY id DESC
+        """,
+        (session["user_id"],)
+    )
+
+
+    plans = cur.fetchall()
+
+
+    conn.close()
+
+
+
+    return render_template(
+        "my_plan.html",
+        plans=plans
+    )
