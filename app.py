@@ -278,7 +278,152 @@ def logout():
 
     return redirect("/login")
 
+# =========================
+# DASHBOARD
+# =========================
 
+@app.route("/dashboard")
+def dashboard():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+        FROM users
+        WHERE id=%s
+        """,
+        (session["user_id"],)
+    )
+
+
+    user = cur.fetchone()
+
+
+    conn.close()
+
+
+    return render_template(
+        "dashboard.html",
+        user=user,
+        plans=PLANS
+    )
+
+
+
+# =========================
+# PROFILE
+# =========================
+
+@app.route("/profile")
+def profile():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    cur.execute(
+        """
+        SELECT *
+        FROM users
+        WHERE id=%s
+        """,
+        (session["user_id"],)
+    )
+
+
+    user = cur.fetchone()
+
+
+    conn.close()
+
+
+    return render_template(
+        "profile.html",
+        user=user
+    )
+
+
+
+# =========================
+# TEAM / REFERRAL PAGE
+# =========================
+
+@app.route("/team")
+def team():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    conn = get_db()
+    cur = conn.cursor()
+
+
+    # Get user's referral code
+
+    cur.execute(
+        """
+        SELECT referral_code
+        FROM users
+        WHERE id=%s
+        """,
+        (session["user_id"],)
+    )
+
+
+    user = cur.fetchone()
+
+
+
+    # Find people invited by this user
+
+    cur.execute(
+        """
+        SELECT phone, created_at
+        FROM users
+        WHERE invited_by=%s
+        ORDER BY id DESC
+        """,
+        (user["referral_code"],)
+    )
+
+
+    members = cur.fetchall()
+
+
+    conn.close()
+
+
+    return render_template(
+        "team.html",
+        referral_code=user["referral_code"],
+        members=members,
+        total_team=len(members)
+    )
+
+
+
+# =========================
+# SERVICE PAGE
+# =========================
+
+@app.route("/service")
+def service():
+
+    return render_template(
+        "service.html"
+    )
 
 # =========================
 # RUN APP
