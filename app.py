@@ -450,50 +450,44 @@ def team():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-
     conn = get_db()
     cur = conn.cursor()
 
-
-    cur.execute(
-        """
+    cur.execute("""
         SELECT referral_code
         FROM users
         WHERE id=%s
-        """,
-        (session["user_id"],)
-    )
-
+    """, (session["user_id"],))
 
     user = cur.fetchone()
 
+    referral_link = (
+        request.host_url.rstrip("/")
+        + url_for("register")
+        + "?invite_code="
+        + user["referral_code"]
+    )
 
-    cur.execute(
-        """
+    cur.execute("""
         SELECT
             phone,
             created_at
         FROM users
         WHERE invited_by=%s
         ORDER BY id DESC
-        """,
-        (user["referral_code"],)
-    )
-
+    """, (user["referral_code"],))
 
     members = cur.fetchall()
 
-
     conn.close()
-
 
     return render_template(
         "team.html",
         referral_code=user["referral_code"],
+        referral_link=referral_link,
         members=members,
         total_team=len(members)
     )
-
 
 
 # =====================================
