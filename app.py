@@ -944,7 +944,7 @@ def buy_plan(plan_id):
 
 
 
-    if float(user["balance"]) < selected_plan["investment"]:
+    if float(user["balance"]) < selected_plan["price"]:
 
         conn.close()
 
@@ -969,7 +969,7 @@ def buy_plan(plan_id):
         WHERE id=%s
         """,
         (
-            selected_plan["investment"],
+            selected_plan["price"],
             session["user_id"]
         )
     )
@@ -984,7 +984,7 @@ def buy_plan(plan_id):
         (
             user_id,
             plan_name,
-            investment,
+            price,
             daily_income,
             duration,
             status
@@ -996,7 +996,7 @@ def buy_plan(plan_id):
         (
             session["user_id"],
             selected_plan["name"],
-            selected_plan["investment"],
+            selected_plan["price"],
             selected_plan["daily"],
             selected_plan["duration"],
             "Active"
@@ -1041,7 +1041,7 @@ def buy_plan(plan_id):
         if referrer:
 
             commission = (
-                selected_plan["investment"]
+                selected_plan["price"]
                 * 0.20
             )
 
