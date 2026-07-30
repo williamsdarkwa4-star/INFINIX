@@ -9,12 +9,16 @@ Transaction History
 
 <style>
 
+body{
+    background:#000;
+    color:white;
+}
+
+
 .history-page{
     padding-bottom:100px;
 }
 
-
-/* Header */
 
 .logo{
     text-align:center;
@@ -26,11 +30,9 @@ Transaction History
 
 
 
-/* Main Box */
-
 .container{
 
-    margin:20px;
+    margin:15px;
     background:#111;
     padding:20px;
     border-radius:20px;
@@ -49,26 +51,25 @@ Transaction History
 }
 
 
+
 h2{
 
-    margin-top:20px;
     color:white;
+    margin-top:20px;
 
 }
 
 
-
-/* Sections */
 
 .section-title{
 
-    margin-top:25px;
+    margin-top:30px;
     margin-bottom:15px;
     color:#e82127;
     font-size:20px;
+    font-weight:bold;
 
 }
-
 
 
 
@@ -76,10 +77,11 @@ h2{
 
     background:#1a1a1a;
     padding:15px;
-    border-radius:12px;
+    border-radius:15px;
     margin-bottom:12px;
     display:flex;
     justify-content:space-between;
+    align-items:center;
     border:1px solid #333;
 
 }
@@ -105,8 +107,9 @@ h2{
 
 .main-text{
 
-    font-weight:bold;
     font-size:16px;
+    font-weight:bold;
+    color:white;
 
 }
 
@@ -125,9 +128,7 @@ h2{
 .status{
 
     font-weight:bold;
-
 }
-
 
 
 .pending{
@@ -145,6 +146,7 @@ h2{
 }
 
 
+
 .rejected{
 
     color:#e82127;
@@ -155,11 +157,12 @@ h2{
 
 .claim{
 
-    color:#00c853;
-    font-weight:bold;
+    background:#e82127;
+    color:white;
     border:none;
-    background:none;
-
+    padding:8px 15px;
+    border-radius:10px;
+    font-weight:bold;
 }
 
 
@@ -173,8 +176,7 @@ h2{
 
 
 
-/* Bottom Navigation */
-
+/* Bottom Menu */
 
 .bottom-nav{
 
@@ -212,8 +214,9 @@ h2{
 }
 
 
-.nav.active,
-.nav:hover{
+
+.nav:hover,
+.nav.active{
 
     color:#e82127;
 
@@ -236,7 +239,7 @@ TESLA HISTORY
 <div class="container">
 
 
-<a href="/dashboard" class="back">
+<a href="{{url_for('dashboard')}}" class="back">
 ← Back To Dashboard
 </a>
 
@@ -248,10 +251,7 @@ Account Logs
 
 
 
-
-
 <!-- ACTIVE PLANS -->
-
 
 <div class="section-title">
 My Active Plans
@@ -263,18 +263,25 @@ My Active Plans
 
 {% for plan in plans %}
 
+
 <div class="row">
 
 
 <div class="left">
 
+
 <span class="main-text">
-VIP Plan {{plan.plan_id}}
+{{plan.plan_name}}
 </span>
 
 
 <span class="sub-text">
-Daily Profit: GHS {{plan.daily_profit}}
+Daily Income: GHS {{plan.daily_income}}
+</span>
+
+
+<span class="sub-text">
+Earned: GHS {{plan.total_earned}}
 </span>
 
 
@@ -286,9 +293,8 @@ Daily Profit: GHS {{plan.daily_profit}}
 
 
 <span class="main-text">
-GHS {{plan.price}}
+GHS {{plan.investment}}
 </span>
-
 
 
 <br>
@@ -296,10 +302,11 @@ GHS {{plan.price}}
 
 {% if plan.can_claim %}
 
-<form action="{{url_for('claim_profit',user_plan_id=plan.id)}}" method="POST">
+
+<form action="{{url_for('claim_income', id=plan.id)}}" method="GET">
 
 <button class="claim">
-Claim Profit
+Claim
 </button>
 
 </form>
@@ -333,15 +340,7 @@ No active plans found.
 </p>
 
 {% endif %}
-
-
-
-
-
-
-
-
-<!-- DEPOSITS -->
+<!-- DEPOSIT HISTORY -->
 
 
 <div class="section-title">
@@ -352,6 +351,7 @@ Deposit History
 
 {% if deposits %}
 
+
 {% for deposit in deposits %}
 
 
@@ -360,13 +360,19 @@ Deposit History
 
 <div class="left">
 
+
 <span class="main-text">
 GHS {{deposit.amount}}
 </span>
 
 
 <span class="sub-text">
-Ref: {{deposit.reference}}
+Deposit ID: #{{deposit.id}}
+</span>
+
+
+<span class="sub-text">
+{{deposit.created_at.strftime('%Y-%m-%d %H:%M')}}
 </span>
 
 
@@ -376,22 +382,15 @@ Ref: {{deposit.reference}}
 
 <div class="right">
 
-<span class="sub-text">
-{{deposit.date.strftime('%Y-%m-%d')}}
-</span>
 
-
-<br>
-
-
-{% if deposit.status=="Pending" %}
+{% if deposit.status == "Pending" %}
 
 <span class="status pending">
 Pending
 </span>
 
 
-{% elif deposit.status=="Approved" %}
+{% elif deposit.status == "Approved" %}
 
 <span class="status approved">
 Approved
@@ -417,10 +416,12 @@ Rejected
 {% endfor %}
 
 
+
 {% else %}
 
+
 <p class="sub-text">
-No deposit history.
+No deposit history found.
 </p>
 
 
@@ -433,8 +434,7 @@ No deposit history.
 
 
 
-
-<!-- WITHDRAWALS -->
+<!-- WITHDRAWAL HISTORY -->
 
 
 <div class="section-title">
@@ -443,7 +443,9 @@ Withdrawal History
 
 
 
+
 {% if withdrawals %}
+
 
 
 {% for w in withdrawals %}
@@ -454,13 +456,19 @@ Withdrawal History
 
 <div class="left">
 
+
 <span class="main-text">
 GHS {{w.amount}}
 </span>
 
 
 <span class="sub-text">
-{{w.network}} - {{w.wallet_number}}
+Withdrawal ID: #{{w.id}}
+</span>
+
+
+<span class="sub-text">
+{{w.created_at.strftime('%Y-%m-%d %H:%M')}}
 </span>
 
 
@@ -470,6 +478,7 @@ GHS {{w.amount}}
 
 <div class="right">
 
+
 <span class="sub-text">
 Fee: GHS {{w.fee}}
 </span>
@@ -478,14 +487,25 @@ Fee: GHS {{w.fee}}
 <br>
 
 
-{% if w.status=="Completed" %}
+<span class="sub-text">
+Receive: GHS {{w.receive_amount}}
+</span>
+
+
+<br>
+
+
+
+{% if w.status == "Completed" %}
+
 
 <span class="status completed">
 Completed
 </span>
 
 
-{% elif w.status=="Bank Processing" %}
+{% elif w.status == "Processing" %}
+
 
 <span class="status pending">
 Processing
@@ -493,6 +513,7 @@ Processing
 
 
 {% else %}
+
 
 <span class="status rejected">
 Rejected
@@ -502,10 +523,12 @@ Rejected
 {% endif %}
 
 
+
 </div>
 
 
 </div>
+
 
 
 {% endfor %}
@@ -516,23 +539,12 @@ Rejected
 
 
 <p class="sub-text">
-No withdrawal history.
+No withdrawal history found.
 </p>
 
 
 {% endif %}
-
-
-
-
-</div>
-
-
-
-
-
-
-<!-- SAME BOTTOM MENU -->
+<!-- BOTTOM NAVIGATION -->
 
 
 <div class="bottom-nav">
@@ -541,7 +553,6 @@ No withdrawal history.
 <a href="/dashboard" class="nav">
 
 <span>⌂</span>
-
 Home
 
 </a>
@@ -551,7 +562,6 @@ Home
 <a href="/team" class="nav">
 
 <span>♟</span>
-
 Team
 
 </a>
@@ -559,8 +569,10 @@ Team
 
 
 <a href="/service" class="nav">
-<i>⚙</i>
+
+<span>⚙</span>
 Service
+
 </a>
 
 
@@ -568,7 +580,6 @@ Service
 <a href="/my_plan" class="nav">
 
 <span>▣</span>
-
 Plans
 
 </a>
@@ -578,69 +589,81 @@ Plans
 <a href="/profile" class="nav">
 
 <span>◎</span>
-
 Profile
 
 </a>
 
 
-
 </div>
 
 
 
 </div>
-
 
 
 
 
 <script>
 
-document.querySelectorAll(".timer").forEach(timer=>{
+
+document.querySelectorAll(".timer").forEach(timer => {
 
 
-let seconds=parseInt(timer.dataset.seconds);
+let seconds = parseInt(timer.dataset.seconds || 0);
 
 
-function count(){
 
-if(seconds<=0){
+function updateTimer(){
 
-timer.innerHTML="Ready";
+
+if(seconds <= 0){
+
+timer.innerHTML = "Ready";
 
 return;
 
 }
 
 
-let h=Math.floor(seconds/3600);
 
-let m=Math.floor((seconds%3600)/60);
+let hours = Math.floor(seconds / 3600);
 
-let s=seconds%60;
+let minutes = Math.floor((seconds % 3600) / 60);
+
+let secs = seconds % 60;
 
 
-timer.innerHTML=
-h.toString().padStart(2,'0')+":"+
-m.toString().padStart(2,'0')+":"+
-s.toString().padStart(2,'0');
+
+timer.innerHTML =
+
+hours.toString().padStart(2,'0') + ":" +
+
+minutes.toString().padStart(2,'0') + ":" +
+
+secs.toString().padStart(2,'0');
+
 
 
 seconds--;
 
+
 }
 
 
-count();
 
-setInterval(count,1000);
+updateTimer();
+
+
+setInterval(updateTimer,1000);
+
 
 
 });
 
 
+
 </script>
+
 
 
 {% endblock %}
