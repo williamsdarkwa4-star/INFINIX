@@ -1971,7 +1971,73 @@ if not os.path.exists(
         UPLOAD_FOLDER
     )
 
+@app.route("/setup_database")
+def setup_database():
 
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        phone VARCHAR(30) UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        withdraw_password TEXT NOT NULL,
+        balance DECIMAL(12,2) DEFAULT 10.00,
+        income DECIMAL(12,2) DEFAULT 0.00,
+        referral_code VARCHAR(20) UNIQUE NOT NULL,
+        invited_by VARCHAR(20),
+        account_name VARCHAR(100),
+        network VARCHAR(50),
+        account_number VARCHAR(50),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS deposits (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        amount DECIMAL(12,2),
+        screenshot TEXT,
+        status VARCHAR(30) DEFAULT 'Processing',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS withdrawals (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        amount DECIMAL(12,2),
+        fee DECIMAL(12,2),
+        receive_amount DECIMAL(12,2),
+        status VARCHAR(30) DEFAULT 'Processing',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS user_plans (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        plan_name VARCHAR(100),
+        investment DECIMAL(12,2),
+        daily_income DECIMAL(12,2),
+        duration INTEGER,
+        total_earned DECIMAL(12,2) DEFAULT 0,
+        days_completed INTEGER DEFAULT 0,
+        last_claim TIMESTAMP,
+        status VARCHAR(30) DEFAULT 'Active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS admins (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE,
+        password TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    """)
+
+    conn.commit()
+    conn.close()
+
+    return "Database created successfully!"
 
 # =====================================
 # RUN APPLICATION
