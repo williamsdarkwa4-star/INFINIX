@@ -307,16 +307,43 @@ border:1px solid #333;
 margin-top:10px;
 ">
 
+<div class="referral-code">
+{{ referral_code }}
+</div>
+
+<input 
+id="refLink"
+value="{{ referral_link }}"
+readonly
+style="
+width:100%;
+background:#222;
+color:white;
+padding:12px;
+border-radius:10px;
+border:1px solid #333;
+margin-top:10px;
+">
+
+
 <div class="copy" onclick="copyReferral()">
 Copy Referral Link
 </div>
 
 
-</div>
+<script>
+function copyReferral(){
 
+    var link = document.getElementById("refLink");
 
-</div>
+    link.select();
 
+    navigator.clipboard.writeText(link.value);
+
+    alert("Referral link copied!");
+
+}
+</script>
 
 
 
