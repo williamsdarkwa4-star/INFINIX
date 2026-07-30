@@ -984,7 +984,7 @@ def buy_plan(plan_id):
         (
             user_id,
             plan_name,
-            price,
+            investment,
             daily_income,
             duration,
             status
