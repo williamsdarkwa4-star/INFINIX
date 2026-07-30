@@ -217,7 +217,7 @@ INSERT INTO admins
 
 VALUES
 (
-    'admin',
+    'Williams12',
     'CHANGE_THIS_TO_HASHED_PASSWORD'
 );
 
