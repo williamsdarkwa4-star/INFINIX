@@ -1,78 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}
+Service
+{% endblock %}
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Service</title>
+{% block content %}
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
+.service-page{
     background:#000;
+    min-height:100vh;
     color:white;
-    padding-bottom:90px;
+    padding-bottom:100px;
 }
 
+
+/* Header */
 
 .header{
+
     text-align:center;
-    padding:20px;
+    padding:25px;
     font-size:30px;
     font-weight:bold;
     color:#e82127;
+
+}
+
+
+
+/* Flash */
+
+.flash{
+
+    margin:15px 20px;
+    padding:15px;
+    background:#111;
+    border:1px solid #e82127;
+    border-radius:12px;
+    text-align:center;
+
 }
 
 
 
 /* Service Cards */
 
-.service{
+.service-card{
 
     margin:20px;
     background:#111;
-    padding:20px;
-    border-radius:15px;
+    padding:22px;
+    border-radius:18px;
     border:1px solid #333;
 
 }
 
 
-.service h3{
+
+.service-card h3{
 
     color:#e82127;
-    margin-bottom:10px;
+    margin-bottom:12px;
 
 }
 
 
-.service p{
+
+.service-card p{
 
     color:#ccc;
-    line-height:1.5;
+    line-height:1.6;
 
 }
 
+
+
+/* Buttons */
 
 .button{
 
     display:block;
-    margin-top:15px;
-    background:#e82127;
+    margin-top:18px;
+    padding:15px;
+    background:linear-gradient(135deg,#e82127,#800000);
     color:white;
     text-align:center;
-    padding:12px;
-    border-radius:10px;
     text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+
+}
+
+
+
+.button:hover{
+
+    opacity:.8;
 
 }
 
@@ -88,12 +113,13 @@ body{
     width:100%;
     height:75px;
     background:#111;
+    border-top:1px solid #333;
     display:flex;
     justify-content:space-around;
     align-items:center;
-    border-top:1px solid #333;
 
 }
+
 
 
 .nav{
@@ -106,12 +132,15 @@ body{
 }
 
 
-.nav span{
+
+.nav i{
 
     display:block;
     font-size:22px;
+    margin-bottom:5px;
 
 }
+
 
 
 .nav:hover{
@@ -120,37 +149,62 @@ body{
 
 }
 
+
 </style>
 
-</head>
 
 
-<body>
+<div class="service-page">
+
 
 
 <div class="header">
-🛠 SERVICE
+TESLA SERVICE
 </div>
 
 
 
 
-<div class="service">
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+
+<div class="flash">
+{{message}}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+
+
+
+
+
+<div class="service-card">
+
 
 <h3>
 Customer Support
 </h3>
 
+
 <p>
-<a href="https://t.me/+6s2ad60Ce-o1Mjc0" class="btn" target="_blank">
-    Contact Customer Service
-</a>
+Need help with your account, deposit, or withdrawal?
+Contact our support team.
 </p>
 
 
-<a href="#" class="button">
+
+<a href="https://t.me/+6s2ad60Ce-o1Mjc0"
+target="_blank"
+class="button">
+
 Contact Support
+
 </a>
+
 
 </div>
 
@@ -158,19 +212,28 @@ Contact Support
 
 
 
-<div class="service">
+
+
+<div class="service-card">
+
 
 <h3>
 Deposit Help
 </h3>
 
+
 <p>
-Learn how to make deposits and check your payment status.
+Learn how to complete deposits and check your payment status.
 </p>
 
+
+
 <a href="/deposit" class="button">
-Go To Deposit
+
+Open Deposit
+
 </a>
+
 
 </div>
 
@@ -178,19 +241,28 @@ Go To Deposit
 
 
 
-<div class="service">
+
+
+<div class="service-card">
+
 
 <h3>
 Withdrawal Help
 </h3>
 
+
 <p>
-Get assistance with withdrawal requests and account details.
+Get assistance with withdrawal requests and account information.
 </p>
 
+
+
 <a href="/withdraw" class="button">
-Go To Withdraw
+
+Open Withdrawal
+
 </a>
+
 
 </div>
 
@@ -199,15 +271,19 @@ Go To Withdraw
 
 
 
-<div class="service">
+
+<div class="service-card">
+
 
 <h3>
 Announcements
 </h3>
 
+
 <p>
-Latest platform updates will appear here.
+Latest TESLA platform updates and important notices will appear here.
 </p>
+
 
 </div>
 
@@ -221,39 +297,45 @@ Latest platform updates will appear here.
 
 
 <a href="/dashboard" class="nav">
-<span>🏠</span>
+<i>⌂</i>
 Home
 </a>
 
 
+
 <a href="/team" class="nav">
-<span>👥</span>
+<i>♟</i>
 Team
 </a>
 
 
+
 <a href="/my_plan" class="nav">
-<span>🚗</span>
-My Plans
+<i>▣</i>
+Plans
 </a>
 
 
+
 <a href="/service" class="nav">
-<span>🛠</span>
+<i>⚙</i>
 Service
 </a>
 
 
+
 <a href="/profile" class="nav">
-<span>👤</span>
+<i>●</i>
 Profile
 </a>
+
 
 
 </div>
 
 
 
-</body>
+</div>
 
-</html>
+
+{% endblock %}
