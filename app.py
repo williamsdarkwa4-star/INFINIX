@@ -393,7 +393,7 @@ def dashboard():
     return render_template(
         "dashboard.html",
         user=user,
-        plans=PLAN_CATALOG
+        plans=PLANS_CATALOG
     )
 
 
