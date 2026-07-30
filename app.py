@@ -646,7 +646,54 @@ def deposit():
         "deposit.html"
     )
 
+@app.route("/history")
+def history():
 
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    user_id = session["user_id"]
+
+    cur.execute("""
+        SELECT * FROM user_plans 
+        WHERE user_id=%s
+        ORDER BY id DESC
+    """,(user_id,))
+
+    plans = cur.fetchall()
+
+
+    cur.execute("""
+        SELECT * FROM deposits
+        WHERE user_id=%s
+        ORDER BY id DESC
+    """,(user_id,))
+
+    deposits = cur.fetchall()
+
+
+    cur.execute("""
+        SELECT * FROM withdrawals
+        WHERE user_id=%s
+        ORDER BY id DESC
+    """,(user_id,))
+
+    withdrawals = cur.fetchall()
+
+
+    cur.close()
+    conn.close()
+
+
+    return render_template(
+        "history.html",
+        plans=plans,
+        deposits=deposits,
+        withdrawals=withdrawals
+    )
 
 # =====================================
 # DEPOSIT HISTORY
