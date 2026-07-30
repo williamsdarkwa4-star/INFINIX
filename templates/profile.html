@@ -1,3 +1,185 @@
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">Balance</div>
+        <div class="stat-value">
+            GHS {{ user.balance }}
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-label">Income</div>
+        <div class="stat-value">
+            GHS {{ user.income }}
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-label">Current Plan</div>
+        <div class="stat-value">
+            {{ user.plan or "None" }}
+        </div>
+    </div>
+
+
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-label">Referral Code</div>
+        <div class="stat-value">
+            {{ user.referral_code }}
+        </div>
+    </div>
+
+</div>
+<!-- ACCOUNT INFORMATION -->
+
+<div class="section-title">
+    Account Information
+</div>
+
+<div class="account-card glass-card">
+
+    <div class="account-row">
+        <div class="account-left">
+            <span class="account-icon">📱</span>
+            <div>
+                <small>Phone Number</small>
+                <p>{{ user.phone }}</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="account-row">
+        <div class="account-left">
+            <span class="account-icon">🏦</span>
+            <div>
+                <small>Withdrawal Account</small>
+                <p>
+                {{ user.account_number or "Not Added" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="account-row">
+        <div class="account-left">
+            <span class="account-icon">📅</span>
+            <div>
+                <small>Registration Date</small>
+                <p>
+                {{ user.created_at }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- PROFILE ACTIONS -->
+
+<div class="action-section">
+
+    <a href="/history" class="profile-action">
+        <div class="action-icon">📊</div>
+        <div>
+            <strong>Transaction History</strong>
+            <small>View your account activities</small>
+        </div>
+        <span>›</span>
+    </a>
+
+
+    <a href="/change_password" class="profile-action">
+        <div class="action-icon">🔐</div>
+        <div>
+            <strong>Change Password</strong>
+            <small>Update your security settings</small>
+        </div>
+        <span>›</span>
+    </a>
+
+
+    <a href="/logout" class="profile-action logout">
+        <div class="action-icon">🚪</div>
+        <div>
+            <strong>Logout</strong>
+            <small>Sign out of your account</small>
+        </div>
+        <span>›</span>
+    </a>
+
+</div>
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+
+    <a href="/dashboard" class="nav-item">
+        <span class="nav-icon">⌂</span>
+        <small>Home</small>
+    </a>
+
+
+    <a href="/team" class="nav-item">
+        <span class="nav-icon">♟</span>
+        <small>Team</small>
+    </a>
+
+
+    <a href="/service" class="nav-item">
+        <span class="nav-icon">⚙</span>
+        <small>Service</small>
+    </a>
+
+
+    <a href="/my_plan" class="nav-item">
+        <span class="nav-icon">▣</span>
+        <small>Plans</small>
+    </a>
+
+
+    <a href="/profile" class="nav-item active">
+        <span class="nav-icon">◎</span>
+        <small>Profile</small>
+    </a>
+
+</nav>
+
+.profile-page{
+    animation:fadeIn .7s ease;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.vip-badge{
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+50%{
+box-shadow:0 0 20px rgba(232,33,39,.5);
+}
+
+}
 <style>
 :root{
     --tesla-red:#e82127;
@@ -35,7 +217,23 @@ body{
     text-shadow:
     0 0 20px rgba(232,33,39,.5);
 }
+<div class="profile-header glass-card">
 
+    <div class="avatar-ring">
+        <img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=000000&color=ffffff&size=300">
+    </div>
+
+    <h2>{{ user.phone }}</h2>
+
+    <div class="vip-badge">
+        ⚡ TESLA VIP MEMBER
+    </div>
+
+    <div class="status">
+        <span></span> Active Account
+    </div>
+
+</div>
 
 /* GLASS CARD */
 
@@ -505,155 +703,36 @@ body{
 }
 
 }
-<div class="stats-grid">
+{% extends "base.html" %}
 
-    <div class="stat-card">
-        <div class="stat-icon">💰</div>
-        <div class="stat-label">Balance</div>
-        <div class="stat-value">
-            GHS {{ user.balance }}
-        </div>
-    </div>
+{% block title %}
+TESLA Profile
+{% endblock %}
 
+{% block content %}
 
-    <div class="stat-card">
-        <div class="stat-icon">📈</div>
-        <div class="stat-label">Income</div>
-        <div class="stat-value">
-            GHS {{ user.income }}
-        </div>
-    </div>
+<style>
+
+ALL CSS HERE
+
+</style>
 
 
-    <div class="stat-card">
-        <div class="stat-icon">⚡</div>
-        <div class="stat-label">Current Plan</div>
-        <div class="stat-value">
-            {{ user.plan or "None" }}
-        </div>
-    </div>
+<div class="profile-page">
 
+TESLA LOGO
 
-    <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-label">Referral Code</div>
-        <div class="stat-value">
-            {{ user.referral_code }}
-        </div>
-    </div>
+PROFILE HEADER
+
+STATS
+
+ACCOUNT INFORMATION
+
+ACTION BUTTONS
+
+BOTTOM NAVIGATION
 
 </div>
-<!-- ACCOUNT INFORMATION -->
-
-<div class="section-title">
-    Account Information
-</div>
-
-<div class="account-card glass-card">
-
-    <div class="account-row">
-        <div class="account-left">
-            <span class="account-icon">📱</span>
-            <div>
-                <small>Phone Number</small>
-                <p>{{ user.phone }}</p>
-            </div>
-        </div>
-    </div>
 
 
-    <div class="account-row">
-        <div class="account-left">
-            <span class="account-icon">🏦</span>
-            <div>
-                <small>Withdrawal Account</small>
-                <p>
-                {{ user.account_number or "Not Added" }}
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="account-row">
-        <div class="account-left">
-            <span class="account-icon">📅</span>
-            <div>
-                <small>Registration Date</small>
-                <p>
-                {{ user.created_at }}
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-</div>
-<!-- PROFILE ACTIONS -->
-
-<div class="action-section">
-
-    <a href="/history" class="profile-action">
-        <div class="action-icon">📊</div>
-        <div>
-            <strong>Transaction History</strong>
-            <small>View your account activities</small>
-        </div>
-        <span>›</span>
-    </a>
-
-
-    <a href="/change_password" class="profile-action">
-        <div class="action-icon">🔐</div>
-        <div>
-            <strong>Change Password</strong>
-            <small>Update your security settings</small>
-        </div>
-        <span>›</span>
-    </a>
-
-
-    <a href="/logout" class="profile-action logout">
-        <div class="action-icon">🚪</div>
-        <div>
-            <strong>Logout</strong>
-            <small>Sign out of your account</small>
-        </div>
-        <span>›</span>
-    </a>
-
-</div>
-<!-- BOTTOM NAVIGATION -->
-
-<nav class="bottom-nav">
-
-    <a href="/dashboard" class="nav-item">
-        <span class="nav-icon">⌂</span>
-        <small>Home</small>
-    </a>
-
-
-    <a href="/team" class="nav-item">
-        <span class="nav-icon">♟</span>
-        <small>Team</small>
-    </a>
-
-
-    <a href="/service" class="nav-item">
-        <span class="nav-icon">⚙</span>
-        <small>Service</small>
-    </a>
-
-
-    <a href="/my_plan" class="nav-item">
-        <span class="nav-icon">▣</span>
-        <small>Plans</small>
-    </a>
-
-
-    <a href="/profile" class="nav-item active">
-        <span class="nav-icon">◎</span>
-        <small>Profile</small>
-    </a>
-
-</nav>
+{% endblock %}
