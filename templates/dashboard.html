@@ -172,28 +172,35 @@ body{
 
 
 
-/* Action Buttons */
+/* Top Action Buttons */
 
 .actions{
-
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    padding:20px;
-
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    padding:15px 20px;
 }
 
 
 .btn{
-
-    background:#e82127;
-    padding:15px;
+    background:linear-gradient(135deg,#e82127,#8b0000);
+    padding:15px 8px;
     text-align:center;
-    border-radius:12px;
+    border-radius:15px;
     color:white;
     text-decoration:none;
-
+    font-weight:bold;
+    font-size:14px;
+    box-shadow:0 5px 15px rgba(232,33,39,0.3);
+    transition:0.3s;
 }
+
+
+.btn:hover{
+    transform:translateY(-3px);
+    background:#e82127;
+}
+
 
 
 
@@ -305,22 +312,24 @@ Your Tesla VIP Dashboard
 </div>
 
 
-</div>
 <div class="actions">
 
 <a href="/deposit" class="btn">
-💳 Deposit
+💳<br>
+Deposit
 </a>
-
 
 <a href="/withdraw" class="btn">
-💸 Withdraw
+💸<br>
+Withdraw
 </a>
-
 
 <a href="/daily_checkin" class="btn">
-🎁 Check In
+🎁<br>
+Daily Check In
 </a>
+
+</div>
 
 
 
