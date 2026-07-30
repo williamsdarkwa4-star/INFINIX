@@ -1,162 +1,153 @@
 {% extends "base.html" %}
 
-{% block title %}
-TESLA Profile
-{% endblock %}
-
+{% block title %}TESLA Profile{% endblock %}
 
 {% block content %}
 
 <style>
 
+body{
+    background:#0b0b0b;
+    color:#fff;
+}
+
 .profile-page{
     padding-bottom:100px;
 }
 
-
-/* Header */
-
 .logo{
     text-align:center;
-    padding:25px;
-    font-size:32px;
+    padding:25px 0 10px;
+    font-size:34px;
     font-weight:900;
     color:#e82127;
-    letter-spacing:2px;
+    letter-spacing:3px;
 }
-
 
 /* Profile Card */
 
 .profile-card{
-
     margin:20px;
+    background:linear-gradient(180deg,#181818,#101010);
+    border-radius:24px;
     padding:30px 20px;
-    background:#111;
-    border-radius:22px;
-    border:1px solid #333;
     text-align:center;
-    box-shadow:0 0 20px rgba(232,33,39,0.15);
-
+    border:1px solid rgba(232,33,39,.25);
+    box-shadow:0 10px 35px rgba(0,0,0,.45);
 }
 
-
-/* Profile Photo */
-
 .avatar{
-
-    width:95px;
-    height:95px;
+    width:110px;
+    height:110px;
     margin:auto;
     border-radius:50%;
     overflow:hidden;
-    border:3px solid #e82127;
-    background:#222;
-
+    border:4px solid #e82127;
+    box-shadow:0 0 18px rgba(232,33,39,.45);
 }
 
-
 .avatar img{
-
     width:100%;
     height:100%;
     object-fit:cover;
-
 }
-
-
 
 .profile-card h2{
-
-    margin-top:15px;
-    font-size:22px;
-
+    margin-top:18px;
+    font-size:24px;
+    font-weight:bold;
 }
 
-
-.profile-card p{
-
-    color:#aaa;
+.member{
+    color:#ff4545;
+    font-weight:bold;
     margin-top:8px;
-
+    letter-spacing:1px;
 }
 
+/* Balance Card */
 
+.balance-card{
+    margin:20px;
+    padding:22px;
+    background:linear-gradient(135deg,#e82127,#7a0d11);
+    border-radius:20px;
+    text-align:center;
+}
 
-/* Account Information */
+.balance-title{
+    font-size:15px;
+    opacity:.9;
+}
+
+.balance{
+    margin-top:10px;
+    font-size:34px;
+    font-weight:bold;
+}
+
+/* Information */
 
 .info-box{
-
     margin:20px;
-    padding:20px;
-    background:#111;
+    background:#141414;
     border-radius:20px;
-    border:1px solid #333;
-
+    overflow:hidden;
+    border:1px solid #262626;
 }
-
-
 
 .info-title{
-
-    color:#e82127;
+    padding:18px;
     font-size:20px;
     font-weight:bold;
-    margin-bottom:15px;
-
+    color:#e82127;
+    border-bottom:1px solid #222;
 }
-
-
 
 .info-row{
-
     display:flex;
     justify-content:space-between;
-    padding:15px 0;
+    align-items:center;
+    padding:18px;
     border-bottom:1px solid #222;
-    color:white;
-
 }
-
 
 .info-row:last-child{
-
-    border:none;
-
+    border-bottom:none;
 }
 
-
+.label{
+    color:#aaa;
+}
 
 .value{
-
-    color:#e82127;
+    color:#fff;
     font-weight:bold;
-
 }
-
-
 
 /* Buttons */
 
 .action-btn{
-
     display:block;
     margin:15px 20px;
-    padding:15px;
+    padding:16px;
     text-align:center;
     text-decoration:none;
-    color:white;
-    background:linear-gradient(135deg,#e82127,#800000);
-    border-radius:14px;
+    color:#fff;
     font-weight:bold;
-
+    border-radius:15px;
+    background:linear-gradient(135deg,#e82127,#8b1015);
+    transition:.3s;
 }
 
+.action-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(232,33,39,.35);
+}
 
-/* Bottom Navigation */
+/* Bottom Navigation (UNCHANGED) */
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
@@ -168,229 +159,136 @@ TESLA Profile
     justify-content:space-around;
     align-items:center;
     z-index:999;
-
 }
 
-
-
 .nav{
-
     color:#888;
     text-decoration:none;
     text-align:center;
     font-size:12px;
-
 }
-
-
 
 .nav span{
-
     display:block;
     font-size:22px;
-
 }
-
-
 
 .nav.active,
 .nav:hover{
-
     color:#e82127;
-
 }
-
 
 </style>
 
-
-
 <div class="profile-page">
-
 
 <div class="logo">
 TESLA
 </div>
 
-
-
 <div class="profile-card">
 
-
 <div class="avatar">
+<img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=111111&color=ffffff&size=200">
+</div>
 
-<img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=random&size=150"
-     width="150"
-     height="150"
-     style="border-radius:50%;">
+<h2>{{ user.phone }}</h2>
+
+<p class="member">TESLA VIP MEMBER</p>
 
 </div>
 
+<div class="balance-card">
 
-
-<h2>
-{{ user.phone }}
-</h2>
-
-
-<p>
-TESLA VIP MEMBER
-</p>
-
-
+<div class="balance-title">
+Available Balance
 </div>
 
+<div class="balance">
+GHS {{ user.balance }}
+</div>
 
-
-
+</div>
 
 <div class="info-box">
-
 
 <div class="info-title">
 Account Information
 </div>
 
-
+<div class="info-row">
+<span class="label">Phone Number</span>
+<span class="value">{{ user.phone }}</span>
+</div>
 
 <div class="info-row">
-Phone Number
-
-<span class="value">
-{{ user.phone }}
-</span>
-
+<span class="label">Income</span>
+<span class="value">GHS {{ user.income }}</span>
 </div>
-
-
 
 <div class="info-row">
-
-Balance
-
-<span class="value">
-GHS {{ user.balance }}
-</span>
-
+<span class="label">Active Plan</span>
+<span class="value">{{ user.plan or "No Active Plan" }}</span>
 </div>
-
-
 
 <div class="info-row">
-
-Active Plan
-
-<span class="value">
-{{ user.plan or "No Plan" }}
-</span>
-
+<span class="label">Referral Code</span>
+<span class="value">{{ user.referral_code }}</span>
 </div>
-
-
 
 <div class="info-row">
-
-Registration Date
-
-<span class="value">
-{{ user.created_at }}
-</span>
-
+<span class="label">Withdrawal Account</span>
+<span class="value">{{ user.account_number or "Not Added" }}</span>
 </div>
-
-
 
 <div class="info-row">
-
-Withdrawal Account
-
-<span class="value">
-{{ user.account_number or "Not Added" }}
-</span>
-
+<span class="label">Registered</span>
+<span class="value">{{ user.created_at }}</span>
 </div>
 
-
-
 </div>
-
-
-
-
 
 <a href="/history" class="action-btn">
-Transaction History
+📄 Transaction History
 </a>
-
-
 
 <a href="/change_password" class="action-btn">
-Change Password
+🔒 Change Password
 </a>
-
-
 
 <a href="/logout" class="action-btn">
-Logout
+🚪 Logout
 </a>
-
-
-
-
-
 
 <div class="bottom-nav">
 
-
 <a href="/dashboard" class="nav">
-
 <span>⌂</span>
 Home
-
 </a>
-
-
 
 <a href="/team" class="nav">
-
 <span>♟</span>
 Team
-
 </a>
-
-
 
 <a href="/service" class="nav">
-
 <span>⚙</span>
 Service
-
 </a>
-
-
 
 <a href="/my_plan" class="nav">
-
 <span>▣</span>
 Plans
-
 </a>
-
-
 
 <a href="/profile" class="nav active">
-
 <span>◎</span>
 Profile
-
 </a>
 
-
-
 </div>
 
-
 </div>
-
 
 {% endblock %}
