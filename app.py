@@ -1822,84 +1822,65 @@ def approve_withdraw(id):
 # =====================================
 # ADMIN REJECT WITHDRAWAL
 # =====================================
-
-@app.route("/admin/withdraw/reject/<int:id>")
+@app.route('/admin/withdraw/reject/<int:id>')
 def reject_withdraw(id):
 
-    if "admin_id" not in session:
-        return redirect("/admin/login")
+    if 'admin' not in session:
+        return redirect('/admin/login')
 
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    conn = get_db()
-    cur = conn.cursor()
-
-
-
-    cur.execute(
-        """
-        SELECT *
-
+    # Get withdrawal details
+    cur.execute("""
+        SELECT user_id, amount, status
         FROM withdrawals
-
         WHERE id=%s
-
-        """,
-        (id,)
-    )
-
+    """, (id,))
 
     withdrawal = cur.fetchone()
 
+    if not withdrawal:
+        cur.close()
+        conn.close()
+        flash("Withdrawal not found")
+        return redirect('/admin/withdrawals')
 
 
-    if withdrawal:
+    # Only refund if it is still processing
+    if withdrawal['status'] == 'Processing':
 
-        # Return money to user
-
-        cur.execute(
-            """
+        # Refund user balance
+        cur.execute("""
             UPDATE users
-
             SET balance = balance + %s
-
             WHERE id=%s
-
-            """,
-            (
-                withdrawal["amount"],
-                withdrawal["user_id"]
-            )
-        )
+        """,
+        (
+            withdrawal['amount'],
+            withdrawal['user_id']
+        ))
 
 
-
-        cur.execute(
-            """
+        # Update withdrawal status
+        cur.execute("""
             UPDATE withdrawals
-
             SET status='Rejected'
-
             WHERE id=%s
-
-            """,
-            (id,)
-        )
+        """,
+        (id,))
 
 
+        conn.commit()
 
-    conn.commit()
+
+    cur.close()
     conn.close()
 
+    flash("Withdrawal rejected and money refunded")
 
+    return redirect('/admin/withdrawals')
 
-    flash(
-        "Withdrawal rejected and balance refunded."
-    )
-
-
-    return redirect(
-        "/admin/withdrawals"
-    )
 @app.route("/create_admin")
 def create_admin():
 
