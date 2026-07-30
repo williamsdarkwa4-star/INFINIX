@@ -1189,204 +1189,111 @@ def my_plan():
 
 from datetime import datetime, timedelta
 
-
 @app.route("/claim_income/<int:plan_id>")
 def claim_income(plan_id):
 
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-
     conn = get_db()
     cur = conn.cursor()
 
-
-    # Get plan
-    cur.execute(
-        """
-        SELECT
-            id,
-            user_id,
-           plan_name,
-           investment,
-           daily_income,
-           duration,
-           last_claim,
-           status
-)
-         VALUES
-            (%s,%s,%s,%s,%s,%s,%s)
-            COALESCE(days_completed,0) AS days_completed,
-            COALESCE(total_earned,0) AS total_earned,
-            last_claim,
-            status
-
+    cur.execute("""
+        SELECT *
         FROM user_plans
-
         WHERE id=%s
         AND user_id=%s
-        """,
-        (
-            plan_id,
-            session["user_id"]
-        )
-    )
-
+    """, (plan_id, session["user_id"]))
 
     plan = cur.fetchone()
 
-
     if not plan:
-
         conn.close()
-
         flash("Plan not found.")
-
-        return redirect(
-            url_for("my_plan")
-        )
-
+        return redirect(url_for("my_plan"))
 
     if plan["status"] != "Active":
-
         conn.close()
-
-        flash("This plan is already completed.")
-
-        return redirect(
-            url_for("my_plan")
-        )
-
+        flash("This plan has already completed.")
+        return redirect(url_for("my_plan"))
 
     now = datetime.now()
 
+    # First claim: 24 hours after purchase
+    if plan["last_claim"] is None:
+        next_claim = plan["created_at"] + timedelta(hours=24)
+    else:
+        next_claim = plan["last_claim"] + timedelta(hours=24)
 
-    # 24 hour check
+    if now < next_claim:
+        remaining = next_claim - now
 
-    if plan["last_claim"]:
+        hours = remaining.days * 24 + remaining.seconds // 3600
+        minutes = (remaining.seconds % 3600) // 60
 
-        next_claim = (
-            plan["last_claim"]
-            +
-            timedelta(hours=24)
+        conn.close()
+
+        flash(
+            f"Next claim available in {hours}h {minutes}m."
         )
 
-
-        if now < next_claim:
-
-            remaining = next_claim - now
-
-            hours = remaining.seconds // 3600
-
-
-            conn.close()
-
-
-            flash(
-                f"Please wait {hours} hours before claiming again."
-            )
-
-
-            return redirect(
-                url_for("my_plan")
-            )
-
-
-
-    # Check completed days
+        return redirect(url_for("my_plan"))
 
     if plan["days_completed"] >= plan["duration"]:
 
-
-        cur.execute(
-            """
+        cur.execute("""
             UPDATE user_plans
-
             SET status='Completed'
-
             WHERE id=%s
-            """,
-            (plan_id,)
-        )
-
+        """, (plan_id,))
 
         conn.commit()
         conn.close()
 
+        flash("This investment plan has completed.")
 
-        flash(
-            "Your plan has completed."
-        )
+        return redirect(url_for("my_plan"))
 
+    income = float(plan["daily_income"])
 
-        return redirect(
-            url_for("my_plan")
-        )
-
-
-
-    daily_income = plan["daily_income"]
-
-
-
-    # Add income to user balance
-
-    cur.execute(
-        """
+    cur.execute("""
         UPDATE users
-
-        SET balance = balance + %s,
-            income = income + %s
-
-        WHERE id=%s
-        """,
-        (
-            daily_income,
-            daily_income,
-            session["user_id"]
-        )
-    )
-
-
-
-    # Update plan
-
-    cur.execute(
-        """
-        UPDATE user_plans
-
         SET
-            total_earned = COALESCE(total_earned,0) + %s,
-            days_completed = COALESCE(days_completed,0) + 1,
-            last_claim = %s
-
+            balance = balance + %s,
+            income = income + %s
         WHERE id=%s
+    """, (
+        income,
+        income,
+        session["user_id"]
+    ))
 
-        """,
-        (
-            daily_income,
-            now,
-            plan_id
-        )
-    )
+    new_days = plan["days_completed"] + 1
 
+    status = "Completed" if new_days >= plan["duration"] else "Active"
 
+    cur.execute("""
+        UPDATE user_plans
+        SET
+            total_earned = total_earned + %s,
+            days_completed = days_completed + 1,
+            last_claim = %s,
+            status = %s
+        WHERE id=%s
+    """, (
+        income,
+        now,
+        status,
+        plan_id
+    ))
 
     conn.commit()
     conn.close()
 
+    flash(f"GHS {income:.2f} credited successfully.")
 
+    return redirect(url_for("my_plan"))
 
-    flash(
-        "Daily income claimed successfully."
-    )
-
-
-    return redirect(
-        url_for("my_plan")
-    )
-
- 
 
 
 @app.route("/change_password", methods=["GET","POST"])
