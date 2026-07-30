@@ -145,7 +145,22 @@ CREATE TABLE withdrawals (
 
 );
 
+ALTER TABLE user_plans
+ADD COLUMN IF NOT EXISTS days_completed INTEGER DEFAULT 0;
 
+ALTER TABLE user_plans
+ADD COLUMN IF NOT EXISTS total_earned NUMERIC(12,2) DEFAULT 0.00;
+
+ALTER TABLE user_plans
+ADD COLUMN IF NOT EXISTS last_claim TIMESTAMP;
+
+UPDATE user_plans
+SET days_completed = 0
+WHERE days_completed IS NULL;
+
+UPDATE user_plans
+SET total_earned = 0
+WHERE total_earned IS NULL;
 
 -- ADMINS TABLE
 CREATE TABLE admins (
