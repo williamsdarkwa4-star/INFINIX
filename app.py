@@ -900,7 +900,7 @@ def buy_plan(plan_id):
 
     selected_plan = None
 
-    for plan in PLANS:
+    for plan in PLANS_CATALOG:
 
         if plan["id"] == plan_id:
             selected_plan = plan
