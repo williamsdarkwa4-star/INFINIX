@@ -1115,7 +1115,31 @@ def buy_plan(plan_id):
         url_for("my_plan")
     )
 
+@app.route("/admin/delete_plan/<int:plan_id>")
+def admin_delete_plan(plan_id):
 
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        DELETE FROM user_plans
+        WHERE id=%s
+        """,
+        (plan_id,)
+    )
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    flash("Plan deleted successfully", "success")
+
+    return redirect(url_for("admin_plans"))
 
 # =====================================
 # MY ACTIVE PLANS
