@@ -311,8 +311,17 @@ CREATE TABLE deposits (
 
 );
 
+SELECT column_name
+FROM information_schema.columns
+WHERE table_name = 'user_plans';
+ALTER TABLE user_plans 
+ADD COLUMN days_completed INTEGER DEFAULT 0;
 
+ALTER TABLE user_plans 
+ADD COLUMN total_earned NUMERIC(12,2) DEFAULT 0.00;
 
+ALTER TABLE user_plans 
+ADD COLUMN last_claim TIMESTAMP;
 -- WITHDRAWALS TABLE
 -- =====================================
 
