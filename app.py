@@ -1176,11 +1176,23 @@ def claim_income(plan_id):
     cur = conn.cursor()
 
 
-    # Get user plan
+    # Get plan
     cur.execute(
         """
-        SELECT *
+        SELECT
+            id,
+            user_id,
+            plan_name,
+            investment,
+            daily_income,
+            duration,
+            COALESCE(days_completed,0) AS days_completed,
+            COALESCE(total_earned,0) AS total_earned,
+            last_claim,
+            status
+
         FROM user_plans
+
         WHERE id=%s
         AND user_id=%s
         """,
@@ -1189,6 +1201,7 @@ def claim_income(plan_id):
             session["user_id"]
         )
     )
+
 
     plan = cur.fetchone()
 
@@ -1204,12 +1217,11 @@ def claim_income(plan_id):
         )
 
 
-    # Check active status
     if plan["status"] != "Active":
 
         conn.close()
 
-        flash("This plan is not active.")
+        flash("This plan is already completed.")
 
         return redirect(
             url_for("my_plan")
@@ -1219,12 +1231,14 @@ def claim_income(plan_id):
     now = datetime.now()
 
 
-    # Check 24 hour claim limit
-    if plan.get("last_claim"):
+    # 24 hour check
+
+    if plan["last_claim"]:
 
         next_claim = (
             plan["last_claim"]
-            + timedelta(hours=24)
+            +
+            timedelta(hours=24)
         )
 
 
@@ -1234,18 +1248,23 @@ def claim_income(plan_id):
 
             hours = remaining.seconds // 3600
 
+
             conn.close()
 
+
             flash(
-                f"Your next claim is available after {hours} hours."
+                f"Please wait {hours} hours before claiming again."
             )
+
 
             return redirect(
                 url_for("my_plan")
             )
 
 
+
     # Check completed days
+
     if plan["days_completed"] >= plan["duration"]:
 
 
@@ -1266,8 +1285,9 @@ def claim_income(plan_id):
 
 
         flash(
-            "Investment period completed."
+            "Your plan has completed."
         )
+
 
         return redirect(
             url_for("my_plan")
@@ -1275,9 +1295,11 @@ def claim_income(plan_id):
 
 
 
-    # Add daily income
     daily_income = plan["daily_income"]
 
+
+
+    # Add income to user balance
 
     cur.execute(
         """
@@ -1298,13 +1320,14 @@ def claim_income(plan_id):
 
 
     # Update plan
+
     cur.execute(
         """
         UPDATE user_plans
 
         SET
-            total_earned = total_earned + %s,
-            days_completed = days_completed + 1,
+            total_earned = COALESCE(total_earned,0) + %s,
+            days_completed = COALESCE(days_completed,0) + 1,
             last_claim = %s
 
         WHERE id=%s
@@ -1332,9 +1355,6 @@ def claim_income(plan_id):
     return redirect(
         url_for("my_plan")
     )
-
-
-
 
  
 
