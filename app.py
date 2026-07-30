@@ -1,4 +1,4 @@
-bimport os
+import os
 import random
 import string
 
