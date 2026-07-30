@@ -17,91 +17,69 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
     background:#000;
     color:white;
     padding-bottom:40px;
 }
 
-
 .header{
-
     background:#111;
     padding:25px;
     text-align:center;
     font-size:28px;
     font-weight:bold;
     color:#e82127;
-
 }
 
-
-
 .deposit-card{
-
     margin:20px;
     background:#111;
     padding:20px;
     border-radius:15px;
     border:1px solid #333;
-
 }
-
-
 
 .deposit-card h3{
-
     color:#e82127;
     margin-bottom:15px;
-
 }
-
-
 
 .info p{
-
     margin:10px 0;
     color:#ccc;
-
 }
-
-
 
 .info span{
-
     color:white;
     float:right;
-
 }
 
-
-
 .screenshot{
-
     width:100%;
-    height:220px;
+    height:250px;
     margin-top:15px;
     border-radius:12px;
     object-fit:cover;
-
+    border:1px solid #444;
 }
 
-
-
+.no-image{
+    margin-top:15px;
+    padding:20px;
+    background:#222;
+    color:#aaa;
+    text-align:center;
+    border-radius:10px;
+}
 
 .actions{
-
     display:flex;
     gap:10px;
     margin-top:20px;
-
 }
 
-
-
 .btn{
-
     flex:1;
     padding:13px;
     text-align:center;
@@ -109,29 +87,17 @@ body{
     text-decoration:none;
     color:white;
     font-weight:bold;
-
 }
-
-
 
 .approve{
-
     background:#008000;
-
 }
-
-
 
 .reject{
-
     background:#e82127;
-
 }
 
-
-
 .back{
-
     display:block;
     margin:20px;
     padding:15px;
@@ -140,9 +106,7 @@ body{
     text-align:center;
     border-radius:12px;
     text-decoration:none;
-
 }
-
 
 </style>
 
@@ -152,17 +116,13 @@ body{
 <body>
 
 
-
 <div class="header">
-
 💳 DEPOSIT MANAGEMENT
-
 </div>
 
 
 
-
-
+{% if deposits %}
 
 {% for deposit in deposits %}
 
@@ -175,84 +135,74 @@ Deposit #{{ deposit.id }}
 </h3>
 
 
-
 <div class="info">
-
 
 <p>
 User Phone
-
 <span>
 {{ deposit.phone }}
 </span>
-
 </p>
-
 
 
 <p>
 Amount
-
 <span>
 GHS {{ deposit.amount }}
 </span>
-
 </p>
-
 
 
 <p>
 Status
-
 <span>
 {{ deposit.status }}
 </span>
-
 </p>
-
 
 
 <p>
 Date
-
 <span>
 {{ deposit.created_at }}
 </span>
-
 </p>
-
 
 
 </div>
 
 
 
-
-
 {% if deposit.screenshot %}
 
 <img 
-src="{{ deposit.screenshot }}" 
-class="screenshot">
+src="{{ url_for('static', filename='uploads/' + deposit.screenshot) }}"
+class="screenshot"
+alt="Deposit Screenshot">
+
+
+{% else %}
+
+<div class="no-image">
+No Screenshot Uploaded
+</div>
 
 {% endif %}
-
-
-
-
 
 
 
 <div class="actions">
 
 
-<a href="/admin/deposit/approve/{{ deposit.id }}" class="btn approve">
+<a href="{{ url_for('approve_deposit', id=deposit.id) }}" 
+class="btn approve">
 Approve
 </a>
 
 
 
-<a href="/admin/deposit/reject/{{ deposit.id }}" class="btn reject">
+<a href="{{ url_for('reject_deposit', id=deposit.id) }}" 
+class="btn reject">
 Reject
 </a>
 
@@ -261,25 +211,28 @@ Reject
 </div>
 
 
-
 </div>
-
 
 
 {% endfor %}
 
 
+{% else %}
+
+
+<div class="deposit-card">
+<h3>No Pending Deposits</h3>
+</div>
+
+
+{% endif %}
 
 
 
 
-
-<a href="/admin/dashboard" class="back">
-
+<a href="{{ url_for('admin_dashboard') }}" class="back">
 ⬅ Back To Dashboard
-
 </a>
-
 
 
 
