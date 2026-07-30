@@ -1683,7 +1683,45 @@ def admin_withdrawals():
         withdrawals=withdrawals
     )
 
+@app.route("/admin/withdraw/approve/<int:id>")
+def approve_withdraw(id):
 
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT *
+        FROM withdrawals
+        WHERE id=%s
+    """, (id,))
+
+    withdrawal = cur.fetchone()
+
+    if not withdrawal:
+        conn.close()
+        flash("Withdrawal not found.")
+        return redirect("/admin/withdrawals")
+
+    if withdrawal["status"] != "Processing":
+        conn.close()
+        flash("Withdrawal already processed.")
+        return redirect("/admin/withdrawals")
+
+    cur.execute("""
+        UPDATE withdrawals
+        SET status='Approved'
+        WHERE id=%s
+    """, (id,))
+
+    conn.commit()
+    conn.close()
+
+    flash("Withdrawal approved successfully.")
+
+    return redirect("/admin/withdrawals")
 
 # =====================================
 # ADMIN REJECT WITHDRAWAL
