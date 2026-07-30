@@ -1,273 +1,649 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction & Plan History</title>
-    <style>
-        /* Base Deep Dark Backdrop Setup */
-        body { 
-            padding: 15px; 
-            background: #060606; 
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-        }
-        
-        /* Main Container Card Box */
-        .container { 
-            max-width: 500px; 
-            background: #121212; 
-            padding: 20px; 
-            border-radius: 16px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
-            margin: 10px auto;
-            border: 1px solid #1f1f1f;
-        }
+{% extends "base.html" %}
 
-        /* Clean Minimal Navigation Link */
-        .nav-btn { 
-            display: inline-block;
-            margin-bottom: 25px; 
-            color: #a0a0a0;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s ease;
-        }
-        .nav-btn:hover {
-            color: #00e5ff;
-        }
-
-        h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: #ffffff;
-        }
-
-        /* Teal Section Headings Matching the Screenshot */
-        .section-title { 
-            color: #00e5ff; 
-            font-size: 1.15rem; 
-            font-weight: 600; 
-            margin-top: 30px; 
-            margin-bottom: 14px;
-        }
-
-        /* Row Items Container Layout */
-        .data-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        /* Inner Content Component Card */
-        .data-row {
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #242424;
-        }
-
-        /* Clean Structured Text Labels */
-        .left-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .right-info {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-        }
-
-        .primary-text {
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .secondary-text {
-            color: #888888;
-            font-size: 0.8rem;
-        }
-
-        /* Status Colors Adjusted for Dark Design Mode */
-        .badge { 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-            color: #ffffff; 
-        }
-        .status-pending { color: #f0ad4e; }
-        .status-approved, .status-completed { color: #5cb85c; }
-        .status-rejected { color: #d9534f; }
-        .status-processing { color: #00e5ff; }
-
-        .timer-box { font-weight: bold; color: #ff9800; font-variant-numeric: tabular-nums; font-size: 0.85rem; }
-        
-        /* Flash Notification Messaging Styles */
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 20px; }
-        .flash-success { background: rgba(92, 184, 92, 0.15); color: #5cb85c; padding: 12px; border-radius: 8px; border: 1px solid rgba(92, 184, 92, 0.3); font-size: 0.9rem; }
-        .flash-error { background: rgba(217, 83, 79, 0.15); color: #d9534f; padding: 12px; border-radius: 8px; border: 1px solid rgba(217, 83, 79, 0.3); font-size: 0.9rem; }
-
-        .claim-btn {
-            background: none;
-            border: none;
-            color: #5cb85c;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            padding: 0;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <a href="{{ url_for('dashboard') }}" class="nav-btn">← Back to Dashboard</a>
-    
-    <h2>Account Logs & Histories</h2>
-
-    <!-- Flash message alerts -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flash-messages">
-                {% for category, message in messages %}
-                    <li class="flash-{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-
-    <!-- 1. ACTIVE INVESTMENT PLANS SECTION -->
-    <h4 class="section-title">My Active Packages</h4>
-    <div class="data-list">
-        {% if plans %}
-            {% for plan in plans %}
-            <div class="data-row">
-                <div class="left-info">
-                    <span class="primary-text">Plan {{ plan.plan_id }}</span>
-                    <span class="secondary-text">Daily Profit: +{{ plan.daily_profit }} GHS</span>
-                </div>
-                <div class="right-info">
-                    <span class="primary-text">{{ plan.price }} GHS</span>
-                    <div style="margin-top: 2px;">
-                        {% if plan.can_claim %}
-                            <form action="{{ url_for('claim_profit', user_plan_id=plan.id) }}" method="POST" style="margin:0;">
-                                <button type="submit" class="claim-btn">Claim Profit</button>
-                            </form>
-                        {% else %}
-                            <span class="timer-box" data-seconds="{{ plan.time_left_seconds }}">Calculating...</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="secondary-text">You have not purchased any active investment packages yet.</p>
-        {% endif %}
-    </div>
+{% block title %}
+Transaction History
+{% endblock %}
 
 
-    <!-- 2. DEPOSIT HISTORY SECTION -->
-    <h4 class="section-title">Deposit Records</h4>
-    <div class="data-list">
-        {% if deposits %}
-            {% for deposit in deposits %}
-            <div class="data-row">
-                <div class="left-info">
-                    <span class="primary-text">{{ deposit.amount }} GHS</span>
-                    <span class="secondary-text">Ref: {{ deposit.reference }}</span>
-                </div>
-                <div class="right-info">
-                    <span class="secondary-text">{{ deposit.date.strftime('%Y-%m-%d %H:%M') }}</span>
-                    <div>
-                        {% if deposit.status == 'Pending' %}
-                            <span class="badge status-pending">Pending</span>
-                        {% elif deposit.status == 'Approved' %}
-                            <span class="badge status-approved">Approved</span>
-                        {% else %}
-                            <span class="badge status-rejected">Rejected</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="secondary-text">No deposit logs found.</p>
-        {% endif %}
-    </div>
+{% block content %}
+
+<style>
+
+.history-page{
+    padding-bottom:100px;
+}
 
 
-    <!-- 3. WITHDRAWAL HISTORY SECTION -->
-    <h4 class="section-title">Withdrawal Records</h4>
-    <div class="data-list">
-        {% if withdrawals %}
-            {% for w in withdrawals %}
-            <div class="data-row">
-                <div class="left-info">
-                    <span class="primary-text">{{ w.amount }} GHS</span>
-                    <span class="secondary-text">{{ w.network }} ({{ w.wallet_number }})</span>
-                </div>
-                <div class="right-info">
-                    <span class="secondary-text">Fee: {{ w.fee }} GHS</span>
-                    <div>
-                        {% if w.status == 'Bank Processing' %}
-                            <span class="badge status-processing">Processing</span>
-                        {% elif w.status == 'Completed' %}
-                            <span class="badge status-completed">Completed</span>
-                        {% else %}
-                            <span class="badge status-rejected">Rejected</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="secondary-text">No withdrawal logs found.</p>
-        {% endif %}
-    </div>
+/* Header */
+
+.logo{
+    text-align:center;
+    padding:25px;
+    font-size:30px;
+    font-weight:bold;
+    color:#e82127;
+}
+
+
+
+/* Main Box */
+
+.container{
+
+    margin:20px;
+    background:#111;
+    padding:20px;
+    border-radius:20px;
+    border:1px solid #333;
+
+}
+
+
+
+.back{
+
+    color:#aaa;
+    text-decoration:none;
+    font-size:14px;
+
+}
+
+
+h2{
+
+    margin-top:20px;
+    color:white;
+
+}
+
+
+
+/* Sections */
+
+.section-title{
+
+    margin-top:25px;
+    margin-bottom:15px;
+    color:#e82127;
+    font-size:20px;
+
+}
+
+
+
+
+.row{
+
+    background:#1a1a1a;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    border:1px solid #333;
+
+}
+
+
+
+.left{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+
+
+.right{
+
+    text-align:right;
+
+}
+
+
+
+.main-text{
+
+    font-weight:bold;
+    font-size:16px;
+
+}
+
+
+
+.sub-text{
+
+    color:#aaa;
+    font-size:13px;
+    margin-top:5px;
+
+}
+
+
+
+.status{
+
+    font-weight:bold;
+
+}
+
+
+
+.pending{
+
+    color:#ff9800;
+
+}
+
+
+.approved,
+.completed{
+
+    color:#00c853;
+
+}
+
+
+.rejected{
+
+    color:#e82127;
+
+}
+
+
+
+.claim{
+
+    color:#00c853;
+    font-weight:bold;
+    border:none;
+    background:none;
+
+}
+
+
+
+.timer{
+
+    color:#ff9800;
+    font-weight:bold;
+
+}
+
+
+
+/* Bottom Navigation */
+
+
+.bottom-nav{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    border-top:1px solid #333;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+
+}
+
+
+
+.nav{
+
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:12px;
+
+}
+
+
+
+.nav span{
+
+    display:block;
+    font-size:22px;
+
+}
+
+
+.nav.active,
+.nav:hover{
+
+    color:#e82127;
+
+}
+
+
+</style>
+
+
+
+<div class="history-page">
+
+
+<div class="logo">
+TESLA HISTORY
 </div>
 
-<!-- REAL-TIME JAVASCRIPT COUNTDOWN TIMERS ENGINE -->
+
+
+<div class="container">
+
+
+<a href="/dashboard" class="back">
+← Back To Dashboard
+</a>
+
+
+
+<h2>
+Account Logs
+</h2>
+
+
+
+
+
+<!-- ACTIVE PLANS -->
+
+
+<div class="section-title">
+My Active Plans
+</div>
+
+
+
+{% if plans %}
+
+{% for plan in plans %}
+
+<div class="row">
+
+
+<div class="left">
+
+<span class="main-text">
+VIP Plan {{plan.plan_id}}
+</span>
+
+
+<span class="sub-text">
+Daily Profit: GHS {{plan.daily_profit}}
+</span>
+
+
+</div>
+
+
+
+<div class="right">
+
+
+<span class="main-text">
+GHS {{plan.price}}
+</span>
+
+
+
+<br>
+
+
+{% if plan.can_claim %}
+
+<form action="{{url_for('claim_profit',user_plan_id=plan.id)}}" method="POST">
+
+<button class="claim">
+Claim Profit
+</button>
+
+</form>
+
+
+{% else %}
+
+
+<span class="timer"
+data-seconds="{{plan.time_left_seconds}}">
+Loading...
+</span>
+
+
+{% endif %}
+
+
+</div>
+
+
+</div>
+
+
+{% endfor %}
+
+
+{% else %}
+
+<p class="sub-text">
+No active plans found.
+</p>
+
+{% endif %}
+
+
+
+
+
+
+
+
+<!-- DEPOSITS -->
+
+
+<div class="section-title">
+Deposit History
+</div>
+
+
+
+{% if deposits %}
+
+{% for deposit in deposits %}
+
+
+<div class="row">
+
+
+<div class="left">
+
+<span class="main-text">
+GHS {{deposit.amount}}
+</span>
+
+
+<span class="sub-text">
+Ref: {{deposit.reference}}
+</span>
+
+
+</div>
+
+
+
+<div class="right">
+
+<span class="sub-text">
+{{deposit.date.strftime('%Y-%m-%d')}}
+</span>
+
+
+<br>
+
+
+{% if deposit.status=="Pending" %}
+
+<span class="status pending">
+Pending
+</span>
+
+
+{% elif deposit.status=="Approved" %}
+
+<span class="status approved">
+Approved
+</span>
+
+
+{% else %}
+
+<span class="status rejected">
+Rejected
+</span>
+
+
+{% endif %}
+
+
+</div>
+
+
+</div>
+
+
+{% endfor %}
+
+
+{% else %}
+
+<p class="sub-text">
+No deposit history.
+</p>
+
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+<!-- WITHDRAWALS -->
+
+
+<div class="section-title">
+Withdrawal History
+</div>
+
+
+
+{% if withdrawals %}
+
+
+{% for w in withdrawals %}
+
+
+<div class="row">
+
+
+<div class="left">
+
+<span class="main-text">
+GHS {{w.amount}}
+</span>
+
+
+<span class="sub-text">
+{{w.network}} - {{w.wallet_number}}
+</span>
+
+
+</div>
+
+
+
+<div class="right">
+
+<span class="sub-text">
+Fee: GHS {{w.fee}}
+</span>
+
+
+<br>
+
+
+{% if w.status=="Completed" %}
+
+<span class="status completed">
+Completed
+</span>
+
+
+{% elif w.status=="Bank Processing" %}
+
+<span class="status pending">
+Processing
+</span>
+
+
+{% else %}
+
+<span class="status rejected">
+Rejected
+</span>
+
+
+{% endif %}
+
+
+</div>
+
+
+</div>
+
+
+{% endfor %}
+
+
+
+{% else %}
+
+
+<p class="sub-text">
+No withdrawal history.
+</p>
+
+
+{% endif %}
+
+
+
+
+</div>
+
+
+
+
+
+
+<!-- SAME BOTTOM MENU -->
+
+
+<div class="bottom-nav">
+
+
+<a href="/dashboard" class="nav">
+
+<span>⌂</span>
+
+Home
+
+</a>
+
+
+
+<a href="/team" class="nav">
+
+<span>♟</span>
+
+Team
+
+</a>
+
+
+
+<a href="/service" class="nav">
+
+<span>🛠</span>
+
+Service
+
+</a>
+
+
+
+<a href="/my_plan" class="nav">
+
+<span>▣</span>
+
+Plans
+
+</a>
+
+
+
+<a href="/profile" class="nav">
+
+<span>◎</span>
+
+Profile
+
+</a>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const timerBoxes = document.querySelectorAll(".timer-box");
-        
-        timerBoxes.forEach(box => {
-            let timeLeft = parseInt(box.getAttribute("data-seconds"), 10);
-            
-            function updateTimer() {
-                if (timeLeft <= 0) {
-                    box.innerHTML = `<span style="color:#5cb85c; font-weight:bold;">Ready! Refresh</span>`;
-                    clearInterval(intervalId);
-                    return;
-                }
-                
-                const hours = Math.floor(timeLeft / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                const seconds = timeLeft % 60;
-                
-                const displayHours = hours.toString().padStart(2, '0');
-                const displayMinutes = minutes.toString().padStart(2, '0');
-                const displaySeconds = seconds.toString().padStart(2, '0');
-                
-                box.textContent = `${displayHours}:${displayMinutes}:${displaySeconds}`;
-                timeLeft--;
-            }
-            
-            updateTimer();
-            const intervalId = setInterval(updateTimer, 1000);
-        });
-    });
+
+document.querySelectorAll(".timer").forEach(timer=>{
+
+
+let seconds=parseInt(timer.dataset.seconds);
+
+
+function count(){
+
+if(seconds<=0){
+
+timer.innerHTML="Ready";
+
+return;
+
+}
+
+
+let h=Math.floor(seconds/3600);
+
+let m=Math.floor((seconds%3600)/60);
+
+let s=seconds%60;
+
+
+timer.innerHTML=
+h.toString().padStart(2,'0')+":"+
+m.toString().padStart(2,'0')+":"+
+s.toString().padStart(2,'0');
+
+
+seconds--;
+
+}
+
+
+count();
+
+setInterval(count,1000);
+
+
+});
+
+
 </script>
 
-</body>
-</html>
+
+{% endblock %}
