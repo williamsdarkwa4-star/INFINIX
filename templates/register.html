@@ -115,7 +115,23 @@ TESLA
 <br>
 <span>GHS 10</span>
 </div>
-
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div style="
+                background:#2b0b0b;
+                color:#ffb3b3;
+                border:1px solid #e82127;
+                padding:12px;
+                margin-bottom:15px;
+                border-radius:10px;
+                text-align:center;
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 <form method="POST">
 
