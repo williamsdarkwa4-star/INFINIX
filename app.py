@@ -393,7 +393,7 @@ def dashboard():
     return render_template(
         "dashboard.html",
         user=user,
-        plans=PLANS
+        plans=PLAN_CATALOG
     )
 
 
@@ -1710,7 +1710,7 @@ def admin_login():
             FROM admins
             WHERE username=%s
             """,
-            (username,)
+            (Williams,)
         )
 
 
@@ -1722,7 +1722,7 @@ def admin_login():
 
 
         if admin and check_password_hash(
-            admin["password"],
+            admin["Williams12"],
             password
         ):
 
