@@ -1970,27 +1970,7 @@ def admin_login():
 
     return render_template("admin_login.html")
 
-def fix_database():
-    conn = get_db_connection()
-    cur = conn.cursor()
 
-    cur.execute("""
-        ALTER TABLE user_plans
-        ADD COLUMN IF NOT EXISTS days_completed INTEGER DEFAULT 0;
-
-        ALTER TABLE user_plans
-        ADD COLUMN IF NOT EXISTS total_earned NUMERIC(12,2) DEFAULT 0.00;
-
-        ALTER TABLE user_plans
-        ADD COLUMN IF NOT EXISTS last_claim TIMESTAMP;
-    """)
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-fix_database()
 # =====================================
 # ADMIN LOGOUT
 # =====================================
@@ -2007,7 +1987,38 @@ def admin_logout():
         "/admin/login"
     )
 
+def get_db_connection():
+    return psycopg2.connect(
+        os.environ.get("DATABASE_URL")
+    )
 
+
+def fix_database():
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        ALTER TABLE user_plans
+        ADD COLUMN IF NOT EXISTS days_completed INTEGER DEFAULT 0
+    """)
+
+    cur.execute("""
+        ALTER TABLE user_plans
+        ADD COLUMN IF NOT EXISTS total_earned NUMERIC(12,2) DEFAULT 0
+    """)
+
+    cur.execute("""
+        ALTER TABLE user_plans
+        ADD COLUMN IF NOT EXISTS last_claim TIMESTAMP
+    """)
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+fix_database()
 
 # =====================================
 # ADMIN DASHBOARD
