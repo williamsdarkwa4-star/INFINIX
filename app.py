@@ -1773,82 +1773,37 @@ def admin_withdrawals():
 
 
 # =====================================
-# ADMIN APPROVE WITHDRAWAL
+# ADMIN REJECT WITHDRAWAL
 # =====================================
 
-@app.route("/admin/withdraw/approve/<int:id>")
-def approve_withdraw(id):
+@app.route('/admin/withdraw/reject/<int:id>')
+def reject_withdraw(id):
 
     if "admin_id" not in session:
-        return redirect("/admin/login")
+        return redirect('/admin/login')
 
 
     conn = get_db()
     cur = conn.cursor()
 
 
-
-    cur.execute(
-        """
-        UPDATE withdrawals
-
-        SET status='Approved'
-
-        WHERE id=%s
-
-        AND status='Processing'
-
-        """,
-        (id,)
-    )
-
-
-
-    conn.commit()
-    conn.close()
-
-
-    flash(
-        "Withdrawal approved."
-    )
-
-
-    return redirect(
-        "/admin/withdrawals"
-    )
-
-
-
-# =====================================
-# ADMIN REJECT WITHDRAWAL
-# =====================================
-@app.route('/admin/withdraw/reject/<int:id>')
-def reject_withdraw(id):
-
-    if 'admin' not in session:
-        return redirect('/admin/login')
-
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    # Get withdrawal details
     cur.execute("""
         SELECT user_id, amount, status
         FROM withdrawals
         WHERE id=%s
     """, (id,))
 
+
     withdrawal = cur.fetchone()
 
+
     if not withdrawal:
-        cur.close()
         conn.close()
-        flash("Withdrawal not found")
+        flash("Withdrawal not found.")
         return redirect('/admin/withdrawals')
 
 
-    # Only refund if it is still processing
-    if withdrawal['status'] == 'Processing':
+    if withdrawal["status"] == "Processing":
 
         # Refund user balance
         cur.execute("""
@@ -1857,12 +1812,12 @@ def reject_withdraw(id):
             WHERE id=%s
         """,
         (
-            withdrawal['amount'],
-            withdrawal['user_id']
+            withdrawal["amount"],
+            withdrawal["user_id"]
         ))
 
 
-        # Update withdrawal status
+        # Change withdrawal status
         cur.execute("""
             UPDATE withdrawals
             SET status='Rejected'
@@ -1873,13 +1828,20 @@ def reject_withdraw(id):
 
         conn.commit()
 
+        flash("Withdrawal rejected and refunded successfully.")
 
-    cur.close()
+    else:
+
+        flash("This withdrawal was already processed.")
+
+
     conn.close()
 
-    flash("Withdrawal rejected and money refunded")
-
     return redirect('/admin/withdrawals')
+
+
+
+
 
 @app.route("/create_admin")
 def create_admin():
