@@ -1,294 +1,51 @@
 {% extends "base.html" %}
-
 {% block title %}TESLA Profile{% endblock %}
-
 {% block content %}
-
 <style>
-
-body{
-    background:#0b0b0b;
-    color:#fff;
-}
-
-.profile-page{
-    padding-bottom:100px;
-}
-
-.logo{
-    text-align:center;
-    padding:25px 0 10px;
-    font-size:34px;
-    font-weight:900;
-    color:#e82127;
-    letter-spacing:3px;
-}
-
-/* Profile Card */
-
-.profile-card{
-    margin:20px;
-    background:linear-gradient(180deg,#181818,#101010);
-    border-radius:24px;
-    padding:30px 20px;
-    text-align:center;
-    border:1px solid rgba(232,33,39,.25);
-    box-shadow:0 10px 35px rgba(0,0,0,.45);
-}
-
-.avatar{
-    width:110px;
-    height:110px;
-    margin:auto;
-    border-radius:50%;
-    overflow:hidden;
-    border:4px solid #e82127;
-    box-shadow:0 0 18px rgba(232,33,39,.45);
-}
-
-.avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.profile-card h2{
-    margin-top:18px;
-    font-size:24px;
-    font-weight:bold;
-}
-
-.member{
-    color:#ff4545;
-    font-weight:bold;
-    margin-top:8px;
-    letter-spacing:1px;
-}
-
-/* Balance Card */
-
-.balance-card{
-    margin:20px;
-    padding:22px;
-    background:linear-gradient(135deg,#e82127,#7a0d11);
-    border-radius:20px;
-    text-align:center;
-}
-
-.balance-title{
-    font-size:15px;
-    opacity:.9;
-}
-
-.balance{
-    margin-top:10px;
-    font-size:34px;
-    font-weight:bold;
-}
-
-/* Information */
-
-.info-box{
-    margin:20px;
-    background:#141414;
-    border-radius:20px;
-    overflow:hidden;
-    border:1px solid #262626;
-}
-
-.info-title{
-    padding:18px;
-    font-size:20px;
-    font-weight:bold;
-    color:#e82127;
-    border-bottom:1px solid #222;
-}
-
-.info-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:18px;
-    border-bottom:1px solid #222;
-}
-
-.info-row:last-child{
-    border-bottom:none;
-}
-
-.label{
-    color:#aaa;
-}
-
-.value{
-    color:#fff;
-    font-weight:bold;
-}
-
-/* Buttons */
-
-.action-btn{
-    display:block;
-    margin:15px 20px;
-    padding:16px;
-    text-align:center;
-    text-decoration:none;
-    color:#fff;
-    font-weight:bold;
-    border-radius:15px;
-    background:linear-gradient(135deg,#e82127,#8b1015);
-    transition:.3s;
-}
-
-.action-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 18px rgba(232,33,39,.35);
-}
-
-/* Bottom Navigation (UNCHANGED) */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:75px;
-    background:#111;
-    border-top:1px solid #333;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    z-index:999;
-}
-
-.nav{
-    color:#888;
-    text-decoration:none;
-    text-align:center;
-    font-size:12px;
-}
-
-.nav span{
-    display:block;
-    font-size:22px;
-}
-
-.nav.active,
-.nav:hover{
-    color:#e82127;
-}
-
+body{background:#0b0b0b;color:#fff}
+.profile-page{padding:20px 18px 100px}
+.logo{text-align:center;font-size:34px;font-weight:900;color:#e82127;letter-spacing:3px;margin:10px 0 20px}
+.profile-card{background:linear-gradient(180deg,#1b1b1b,#101010);border:1px solid #2e2e2e;border-radius:24px;padding:28px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.avatar{width:110px;height:110px;border-radius:50%;overflow:hidden;border:4px solid #e82127;margin:auto;box-shadow:0 0 18px rgba(232,33,39,.4)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.profile-card h2{margin:15px 0 6px}.member{color:#ff6b6b}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.stat{background:#141414;border:1px solid #2a2a2a;border-radius:18px;padding:16px}
+.stat .t{color:#999;font-size:13px}.stat .v{font-size:20px;font-weight:bold;color:#e82127;margin-top:6px}
+.info-box{background:#141414;border-radius:22px;border:1px solid #2a2a2a;overflow:hidden}
+.info-head{padding:18px;background:linear-gradient(135deg,#e82127,#8d1115);font-weight:bold;font-size:20px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid #252525}
+.row:last-child{border-bottom:none}.l{color:#aaa}.r{font-weight:bold}
+.action-btn{display:block;margin:15px 0;padding:16px;text-align:center;text-decoration:none;color:#fff;background:linear-gradient(135deg,#e82127,#8d1115);border-radius:14px;font-weight:bold}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;height:75px;background:#111;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center}
+.nav{color:#888;text-decoration:none;text-align:center;font-size:12px}.nav span{display:block;font-size:22px}.nav.active{color:#e82127}
 </style>
-
 <div class="profile-page">
-
-<div class="logo">
-TESLA
-</div>
-
+<div class="logo">TESLA</div>
 <div class="profile-card">
-
-<div class="avatar">
-<img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=111111&color=ffffff&size=200">
+<div class="avatar"><img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=111111&color=ffffff&size=200"></div>
+<h2>{{ user.phone }}</h2><div class="member">TESLA VIP MEMBER</div>
 </div>
-
-<h2>{{ user.phone }}</h2>
-
-<p class="member">TESLA VIP MEMBER</p>
-
+<div class="stats">
+<div class="stat"><div class="t">Balance</div><div class="v">GHS {{ user.balance }}</div></div>
+<div class="stat"><div class="t">Income</div><div class="v">GHS {{ user.income }}</div></div>
+<div class="stat"><div class="t">Plan</div><div class="v">{{ user.plan or "None" }}</div></div>
+<div class="stat"><div class="t">Referral</div><div class="v">{{ user.referral_code }}</div></div>
 </div>
-
-<div class="balance-card">
-
-<div class="balance-title">
-Available Balance
-</div>
-
-<div class="balance">
-GHS {{ user.balance }}
-</div>
-
-</div>
-
 <div class="info-box">
-
-<div class="info-title">
-Account Information
+<div class="info-head">Account Information</div>
+<div class="row"><span class="l">Phone</span><span class="r">{{ user.phone }}</span></div>
+<div class="row"><span class="l">Withdrawal Account</span><span class="r">{{ user.account_number or "Not Added" }}</span></div>
+<div class="row"><span class="l">Registered</span><span class="r">{{ user.created_at }}</span></div>
 </div>
-
-<div class="info-row">
-<span class="label">Phone Number</span>
-<span class="value">{{ user.phone }}</span>
-</div>
-
-<div class="info-row">
-<span class="label">Income</span>
-<span class="value">GHS {{ user.income }}</span>
-</div>
-
-<div class="info-row">
-<span class="label">Active Plan</span>
-<span class="value">{{ user.plan or "No Active Plan" }}</span>
-</div>
-
-<div class="info-row">
-<span class="label">Referral Code</span>
-<span class="value">{{ user.referral_code }}</span>
-</div>
-
-<div class="info-row">
-<span class="label">Withdrawal Account</span>
-<span class="value">{{ user.account_number or "Not Added" }}</span>
-</div>
-
-<div class="info-row">
-<span class="label">Registered</span>
-<span class="value">{{ user.created_at }}</span>
-</div>
-
-</div>
-
-<a href="/history" class="action-btn">
-📄 Transaction History
-</a>
-
-<a href="/change_password" class="action-btn">
-🔒 Change Password
-</a>
-
-<a href="/logout" class="action-btn">
-🚪 Logout
-</a>
-
+<a href="/history" class="action-btn">Transaction History</a>
+<a href="/change_password" class="action-btn">Change Password</a>
+<a href="/logout" class="action-btn">Logout</a>
 <div class="bottom-nav">
-
-<a href="/dashboard" class="nav">
-<span>⌂</span>
-Home
-</a>
-
-<a href="/team" class="nav">
-<span>♟</span>
-Team
-</a>
-
-<a href="/service" class="nav">
-<span>⚙</span>
-Service
-</a>
-
-<a href="/my_plan" class="nav">
-<span>▣</span>
-Plans
-</a>
-
-<a href="/profile" class="nav active">
-<span>◎</span>
-Profile
-</a>
-
-</div>
-
-</div>
-
+<a href="/dashboard" class="nav"><span>⌂</span>Home</a>
+<a href="/team" class="nav"><span>♟</span>Team</a>
+<a href="/service" class="nav"><span>⚙</span>Service</a>
+<a href="/my_plan" class="nav"><span>▣</span>Plans</a>
+<a href="/profile" class="nav active"><span>◎</span>Profile</a>
+</div></div>
 {% endblock %}
