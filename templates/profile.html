@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Profile</title>
+<title>TESLA Profile</title>
 
 <style>
 
@@ -14,50 +14,57 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:'Arial',sans-serif;
 }
 
+
 body{
-    background:#000;
+    background:#050505;
     color:white;
     padding-bottom:90px;
 }
 
 
+/* Header */
+
 .header{
+
     text-align:center;
-    padding:20px;
+    padding:25px;
     font-size:30px;
-    font-weight:bold;
+    font-weight:900;
     color:#e82127;
+    letter-spacing:2px;
+
 }
 
 
-/* Profile Card */
+/* Profile */
 
 .profile-card{
 
     margin:20px;
-    background:#111;
-    padding:25px;
-    border-radius:20px;
+    padding:30px 20px;
+    background:linear-gradient(145deg,#111,#1a1a1a);
+    border-radius:25px;
     text-align:center;
     border:1px solid #333;
+    box-shadow:0 0 20px rgba(232,33,39,0.2);
 
 }
 
 
 .avatar{
 
-    width:80px;
-    height:80px;
-    border-radius:50%;
-    background:#e82127;
+    width:90px;
+    height:90px;
     margin:auto;
+    border-radius:50%;
+    background:linear-gradient(135deg,#e82127,#700000);
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:35px;
+    font-size:40px;
 
 }
 
@@ -65,6 +72,15 @@ body{
 .profile-card h2{
 
     margin-top:15px;
+    font-size:22px;
+
+}
+
+
+.profile-card p{
+
+    margin-top:8px;
+    color:#aaa;
 
 }
 
@@ -77,53 +93,75 @@ body{
 
     margin:20px;
     background:#111;
+    border-radius:20px;
     padding:20px;
-    border-radius:15px;
     border:1px solid #333;
 
 }
 
 
-.info p{
+.info-title{
 
-    padding:12px 0;
-    border-bottom:1px solid #222;
-
-}
-
-
-.info span{
-
-    float:right;
+    font-size:20px;
+    font-weight:bold;
     color:#e82127;
+    margin-bottom:15px;
+
+}
+
+
+.info-item{
+
+    display:flex;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #222;
+    font-size:15px;
+
+}
+
+
+.info-item:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.info-item span{
+
+    color:#e82127;
+    font-weight:bold;
 
 }
 
 
 
-/* Buttons */
+/* Action Buttons */
 
 
 .button{
 
     display:block;
     margin:15px 20px;
-    background:#e82127;
-    color:white;
-    padding:15px;
+    padding:16px;
     text-align:center;
-    border-radius:12px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#e82127,#8b0000);
+    color:white;
     text-decoration:none;
+    font-weight:bold;
+    box-shadow:0 5px 15px rgba(232,33,39,0.3);
 
 }
-
 
 
 .button:hover{
 
-    background:#b91c22;
+    transform:scale(1.02);
 
 }
+
 
 
 /* Bottom Navigation */
@@ -141,16 +179,18 @@ body{
     justify-content:space-around;
     align-items:center;
     border-top:1px solid #333;
+    z-index:100;
 
 }
 
 
+
 .nav{
 
-    color:#aaa;
+    color:#888;
     text-decoration:none;
     text-align:center;
-    font-size:13px;
+    font-size:12px;
 
 }
 
@@ -159,6 +199,7 @@ body{
 
     display:block;
     font-size:22px;
+    margin-bottom:3px;
 
 }
 
@@ -179,16 +220,12 @@ body{
 
 
 <div class="header">
-
-👤 PROFILE
-
+🚗 TESLA PROFILE
 </div>
 
 
 
-
 <div class="profile-card">
-
 
 <div class="avatar">
 👤
@@ -210,72 +247,59 @@ TESLA VIP Member
 
 
 
-
-
 <div class="info">
 
 
-<p>
-Phone Number
-
-<span>
-{{ user.phone }}
-</span>
-
-</p>
-
-
-
-<p>
-Balance
-
-<span>
-GHS {{ user.balance }}
-</span>
-
-</p>
-
-
-
-
-<p>
-Active Plan
-
-<span>
-{{ user.plan }}
-</span>
-
-</p>
-
-
-
-
-<p>
-Registration Date
-
-<span>
-{{ user.created_at }}
-</span>
-
-</p>
-
-
-
-
-<p>
-Withdrawal Account
-
-<span>
-{{ user.account_number }}
-</span>
-
-</p>
-
-
-
+<div class="info-title">
+Account Information
 </div>
 
 
+<div class="info-item">
+Phone Number
+<span>
+{{ user.phone }}
+</span>
+</div>
+
+
+
+<div class="info-item">
+Balance
+<span>
+GHS {{ user.balance }}
+</span>
+</div>
+
+
+
+<div class="info-item">
+Active Plan
+<span>
+{{ user.plan or "No Plan" }}
+</span>
+</div>
+
+
+
+<div class="info-item">
+Registration Date
+<span>
+{{ user.created_at }}
+</span>
+</div>
+
+
+
+<div class="info-item">
+Withdrawal Account
+<span>
+{{ user.account_number or "Not Added" }}
+</span>
+</div>
+
+
+</div>
 
 
 
@@ -296,7 +320,6 @@ Withdrawal Account
 
 
 
-
 <div class="bottom-nav">
 
 
@@ -306,16 +329,19 @@ Home
 </a>
 
 
+
 <a href="/team" class="nav">
 <span>👥</span>
 Team
 </a>
 
 
+
 <a href="/my_plan" class="nav">
 <span>🚗</span>
-My Plans
+Plans
 </a>
+
 
 
 <a href="/service" class="nav">
@@ -324,10 +350,12 @@ Service
 </a>
 
 
+
 <a href="/profile" class="nav">
 <span>👤</span>
 Profile
 </a>
+
 
 
 </div>
