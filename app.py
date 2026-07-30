@@ -658,16 +658,8 @@ def history():
     user_id = session["user_id"]
 
     cur.execute("""
-        SELECT * FROM user_plans 
-        WHERE user_id=%s
-        ORDER BY id DESC
-    """,(user_id,))
-
-    plans = cur.fetchall()
-
-
-    cur.execute("""
-        SELECT * FROM deposits
+        SELECT *
+        FROM deposits
         WHERE user_id=%s
         ORDER BY id DESC
     """,(user_id,))
@@ -676,12 +668,23 @@ def history():
 
 
     cur.execute("""
-        SELECT * FROM withdrawals
+        SELECT *
+        FROM withdrawals
         WHERE user_id=%s
         ORDER BY id DESC
     """,(user_id,))
 
     withdrawals = cur.fetchall()
+
+
+    cur.execute("""
+        SELECT *
+        FROM user_plans
+        WHERE user_id=%s
+        ORDER BY id DESC
+    """,(user_id,))
+
+    plans = cur.fetchall()
 
 
     cur.close()
@@ -690,9 +693,9 @@ def history():
 
     return render_template(
         "history.html",
-        plans=plans,
         deposits=deposits,
-        withdrawals=withdrawals
+        withdrawals=withdrawals,
+        plans=plans
     )
 
 # =====================================
@@ -1812,58 +1815,65 @@ def reject_withdraw(id):
 # ADMIN LOGIN
 # =====================================
 
-@app.route("/admin/login", methods=["GET","POST"])
+@app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
 
     if request.method == "POST":
 
-        username = request.form["username"]
-
-        password = request.form["password"]
+        username = request.form.get("username")
+        password = request.form.get("password")
 
 
         conn = get_db()
-        cur = conn.cursor()
+
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
 
         cur.execute(
             """
-            SELECT *
+            SELECT id, username, password
             FROM admins
-            WHERE username=%s
+            WHERE username = %s
             """,
-            ("Williams",)
+            (username,)
         )
 
 
         admin = cur.fetchone()
 
 
+        cur.close()
         conn.close()
 
 
 
-        if admin and check_password_hash(
-            admin["Williams12"],
-            password
-        ):
+        if admin:
 
-            session["admin_id"] = admin["id"]
+            if check_password_hash(
+                admin["password"],
+                password
+            ):
 
-            return redirect(
-                "/admin/dashboard"
-            )
+                session["admin_id"] = admin["id"]
+                session["Williams"] = admin["Williams12"]
+
+                flash("Login successful.")
+
+                return redirect(
+                    url_for("admin_dashboard")
+                )
+
 
 
         flash(
-            "Invalid admin login."
+            "Invalid admin username or password."
         )
+
 
 
     return render_template(
         "admin_login.html"
     )
-
 
 
 # =====================================
