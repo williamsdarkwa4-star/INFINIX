@@ -1431,7 +1431,58 @@ def save_account():
         url_for("withdraw")
     )
 
+@app.route("/admin/edit_balance/<int:user_id>", methods=["GET", "POST"])
+def edit_balance(user_id):
 
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+
+        amount = float(request.form["amount"])
+        action = request.form["action"]
+
+        if action == "add":
+            cur.execute("""
+                UPDATE users
+                SET balance = balance + %s
+                WHERE id=%s
+            """, (amount, user_id))
+
+            flash("Balance added successfully.")
+
+        elif action == "subtract":
+            cur.execute("""
+                UPDATE users
+                SET balance = balance - %s
+                WHERE id=%s
+            """, (amount, user_id))
+
+            flash("Balance deducted successfully.")
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("admin_users"))
+
+    cur.execute("""
+        SELECT phone, balance
+        FROM users
+        WHERE id=%s
+    """, (user_id,))
+
+    user = cur.fetchone()
+
+    conn.close()
+
+    return render_template(
+        "edit_balance.html",
+        user=user,
+        user_id=user_id
+    )
 
 # =====================================
 # WITHDRAW
