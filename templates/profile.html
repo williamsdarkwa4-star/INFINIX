@@ -20,10 +20,10 @@ TESLA Profile
     text-align:center;
     padding:25px;
     font-size:32px;
-    font-weight:bold;
+    font-weight:900;
     color:#e82127;
+    letter-spacing:2px;
 }
-
 
 
 /* Profile Card */
@@ -33,24 +33,25 @@ TESLA Profile
     margin:20px;
     padding:30px 20px;
     background:#111;
-    border-radius:20px;
+    border-radius:22px;
     border:1px solid #333;
     text-align:center;
+    box-shadow:0 0 20px rgba(232,33,39,0.15);
 
 }
 
 
-/* Profile Image */
+/* Profile Photo */
 
 .avatar{
 
-    width:90px;
-    height:90px;
+    width:95px;
+    height:95px;
     margin:auto;
     border-radius:50%;
     overflow:hidden;
-    background:linear-gradient(135deg,#e82127,#700000);
     border:3px solid #e82127;
+    background:#222;
 
 }
 
@@ -68,9 +69,9 @@ TESLA Profile
 .profile-card h2{
 
     margin-top:15px;
+    font-size:22px;
 
 }
-
 
 
 .profile-card p{
@@ -82,9 +83,7 @@ TESLA Profile
 
 
 
-
-
-/* Information Box */
+/* Account Information */
 
 .info-box{
 
@@ -115,14 +114,14 @@ TESLA Profile
     justify-content:space-between;
     padding:15px 0;
     border-bottom:1px solid #222;
+    color:white;
 
 }
 
 
-
 .info-row:last-child{
 
-    border-bottom:none;
+    border:none;
 
 }
 
@@ -137,8 +136,6 @@ TESLA Profile
 
 
 
-
-
 /* Buttons */
 
 .action-btn{
@@ -146,17 +143,14 @@ TESLA Profile
     display:block;
     margin:15px 20px;
     padding:15px;
-    background:linear-gradient(135deg,#e82127,#800000);
-    color:white;
     text-align:center;
     text-decoration:none;
-    border-radius:12px;
+    color:white;
+    background:linear-gradient(135deg,#e82127,#800000);
+    border-radius:14px;
     font-weight:bold;
 
 }
-
-
-
 
 
 /* Bottom Navigation */
@@ -181,7 +175,7 @@ TESLA Profile
 
 .nav{
 
-    color:#aaa;
+    color:#888;
     text-decoration:none;
     text-align:center;
     font-size:12px;
@@ -194,7 +188,6 @@ TESLA Profile
 
     display:block;
     font-size:22px;
-    margin-bottom:3px;
 
 }
 
@@ -212,7 +205,6 @@ TESLA Profile
 
 
 
-
 <div class="profile-page">
 
 
@@ -222,15 +214,13 @@ TESLA
 
 
 
-
-
 <div class="profile-card">
 
 
 <div class="avatar">
 
-<img src="{{ <img src="https://your-image-link.com/profile.png"> }}" 
-alt="Profile Photo">
+<img src="{{ url_for('static', filename='images/profile.png') }}" 
+alt="Profile">
 
 </div>
 
@@ -252,9 +242,6 @@ TESLA VIP MEMBER
 
 
 
-
-
-
 <div class="info-box">
 
 
@@ -265,7 +252,6 @@ Account Information
 
 
 <div class="info-row">
-
 Phone Number
 
 <span class="value">
@@ -273,7 +259,6 @@ Phone Number
 </span>
 
 </div>
-
 
 
 
@@ -289,22 +274,6 @@ GHS {{ user.balance }}
 
 
 
-
-
-<div class="info-row">
-
-Total Income
-
-<span class="value">
-GHS {{ user.income }}
-</span>
-
-</div>
-
-
-
-
-
 <div class="info-row">
 
 Active Plan
@@ -317,8 +286,6 @@ Active Plan
 
 
 
-
-
 <div class="info-row">
 
 Registration Date
@@ -328,8 +295,6 @@ Registration Date
 </span>
 
 </div>
-
-
 
 
 
@@ -351,17 +316,14 @@ Withdrawal Account
 
 
 
+<a href="/history" class="action-btn">
+Transaction History
+</a>
 
 
 
 <a href="/change_password" class="action-btn">
 Change Password
-</a>
-
-
-
-<a href="/history" class="action-btn">
-History
 </a>
 
 
@@ -375,10 +337,7 @@ Logout
 
 
 
-
-
 <div class="bottom-nav">
-
 
 
 <a href="/dashboard" class="nav">
@@ -387,7 +346,6 @@ Logout
 Home
 
 </a>
-
 
 
 
@@ -400,7 +358,6 @@ Team
 
 
 
-
 <a href="/service" class="nav">
 
 <span>⚙</span>
@@ -410,14 +367,12 @@ Service
 
 
 
-
 <a href="/my_plan" class="nav">
 
 <span>▣</span>
 Plans
 
 </a>
-
 
 
 
@@ -431,7 +386,6 @@ Profile
 
 
 </div>
-
 
 
 </div>
