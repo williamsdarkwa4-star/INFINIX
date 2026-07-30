@@ -1823,57 +1823,39 @@ def admin_login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-
         conn = get_db()
-
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-
+        cur = conn.cursor()
 
         cur.execute(
             """
-            SELECT id, username, password
+            SELECT *
             FROM admins
-            WHERE username = %s
+            WHERE username=%s
             """,
             (username,)
         )
 
-
         admin = cur.fetchone()
 
-
-        cur.close()
         conn.close()
 
 
+        if admin and check_password_hash(
+            admin["password"],
+            password
+        ):
 
-        if admin:
+            session["admin_id"] = admin["id"]
 
-            if check_password_hash(
-                admin["password"],
-                password
-            ):
-
-                session["admin_id"] = admin["id"]
-                session["Williams"] = admin["Williams12"]
-
-                flash("Login successful.")
-
-                return redirect(
-                    url_for("admin_dashboard")
-                )
+            return redirect(
+                url_for("admin_dashboard")
+            )
 
 
-
-        flash(
-            "Invalid admin username or password."
-        )
+        flash("Invalid admin login")
 
 
-
-    return render_template(
-        "admin_login.html"
-    )
+    return render_template("admin_login.html")
 
 
 # =====================================
