@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+{% block title %}TESLA VIP{% endblock %}
+</title>
+
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+body{
+
+    background:#000;
+    color:white;
+    min-height:100vh;
+    animation:fadePage 0.5s ease;
+
+}
+
+
+
+/* LOADER */
+
+#loader{
+
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+
+}
+
+
+.loader-logo{
+
+    font-size:45px;
+    font-weight:900;
+    color:#e82127;
+    letter-spacing:5px;
+
+}
+
+
+.spinner{
+
+    width:45px;
+    height:45px;
+    margin-top:20px;
+    border-radius:50%;
+    border:5px solid #333;
+    border-top:5px solid #e82127;
+    animation:spin 1s linear infinite;
+
+}
+
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+
+@keyframes fadePage{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+
+
+
+/* FLASH MESSAGES */
+
+
+.message-box{
+
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:400px;
+    z-index:9999;
+
+}
+
+
+.alert{
+
+    padding:16px;
+    border-radius:15px;
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:10px;
+    animation:slideDown .5s ease;
+
+}
+
+
+.success{
+
+    background:#087830;
+
+}
+
+
+.error{
+
+    background:#b00020;
+
+}
+
+
+.warning{
+
+    background:#806600;
+
+}
+
+
+
+@keyframes slideDown{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-40px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+
+/* MAIN CONTENT */
+
+.container{
+
+    width:100%;
+    max-width:500px;
+    margin:auto;
+
+}
+
+
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<!-- LOADING SCREEN -->
+
+<div id="loader">
+
+<div class="loader-logo">
+TESLA
+</div>
+
+
+<div class="spinner"></div>
+
+
+</div>
+
+
+
+
+
+<!-- FLASH MESSAGE -->
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+<div class="message-box">
+
+
+{% for category, message in messages %}
+
+<div class="alert {{category}}">
+
+{{message}}
+
+</div>
+
+{% endfor %}
+
+
+</div>
+
+{% endif %}
+
+{% endwith %}
+
+
+
+
+
+
+<div class="container">
+
+
+{% block content %}
+
+{% endblock %}
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+window.addEventListener("load",function(){
+
+let loader=document.getElementById("loader");
+
+if(loader){
+
+loader.style.display="none";
+
+}
+
+});
+
+
+
+setTimeout(function(){
+
+let message=document.querySelector(".message-box");
+
+if(message){
+
+message.style.display="none";
+
+}
+
+},4000);
+
+
+
+</script>
+
+
+
+</body>
+
+
+</html>
