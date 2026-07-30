@@ -1,159 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Plans</title>
 
-    <style>
-        body{
-            margin:0;
-            font-family:Arial,sans-serif;
-            background:#000;
-            color:#fff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container{
-            width:90%;
-            max-width:700px;
-            margin:20px auto;
-        }
+<title>My Plans</title>
 
-        h2{
-            text-align:center;
-            color:#e82127;
-        }
+<style>
 
-        .card{
-            background:#111;
-            border-radius:15px;
-            margin:20px 0;
-            overflow:hidden;
-            box-shadow:0 0 10px rgba(255,0,0,.3);
-        }
+*{
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-        .card img{
-            width:100%;
-            height:200px;
-            object-fit:cover;
-        }
 
-        .content{
-            padding:15px;
-        }
+body{
 
-        .content p{
-            margin:8px 0;
-        }
+    margin:0;
+    background:#000;
+    color:#fff;
+    padding-bottom:90px;
 
-        .btn{
-            display:block;
-            width:100%;
-            padding:12px;
-            background:#e82127;
-            color:#fff;
-            text-align:center;
-            text-decoration:none;
-            border-radius:8px;
-            margin-top:15px;
-        }
+}
 
-        .btn:hover{
-            background:#c81d22;
-        }
 
-        .empty{
-            text-align:center;
-            margin-top:50px;
-            color:#999;
-        }
-    </style>
+/* Main area */
+
+.container{
+
+    width:92%;
+    max-width:700px;
+    margin:20px auto;
+
+}
+
+
+/* Title */
+
+.title{
+
+    text-align:center;
+    color:#e82127;
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:25px;
+
+}
+
+
+/* Plan card */
+
+.card{
+
+    background:#111;
+    border-radius:20px;
+    margin-bottom:20px;
+    padding:20px;
+
+    border:1px solid #222;
+
+    box-shadow:
+    0 0 15px rgba(232,33,39,0.35);
+
+}
+
+
+
+.card h3{
+
+    color:#e82127;
+    font-size:22px;
+    margin-top:0;
+
+}
+
+
+
+.info{
+
+    background:#181818;
+    border-radius:12px;
+    padding:15px;
+
+}
+
+
+
+.info p{
+
+    margin:10px 0;
+    color:#ddd;
+    font-size:15px;
+
+}
+
+
+
+.info b{
+
+    color:#fff;
+
+}
+
+
+/* Claim button */
+
+.claim-btn{
+
+    display:block;
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:14px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:#e82127;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+
+
+.claim-btn:hover{
+
+    background:#b91c22;
+
+}
+
+
+
+/* Empty plans */
+
+.empty{
+
+    text-align:center;
+    color:#999;
+    margin-top:60px;
+
+}
+
+
+
+/* Bottom navigation */
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+
+    left:0;
+
+    width:100%;
+
+    background:#111;
+
+    border-top:1px solid #333;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    padding:10px 0;
+
+    z-index:1000;
+
+}
+
+
+
+.nav{
+
+    text-decoration:none;
+
+    color:#fff;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    font-size:12px;
+
+}
+
+
+
+.nav i{
+
+    font-style:normal;
+
+    font-size:22px;
+
+    margin-bottom:4px;
+
+}
+
+
+
+.nav.active{
+
+    color:#e82127;
+
+}
+
+
+
+.nav:hover{
+
+    color:#e82127;
+
+}
+
+
+
+</style>
 
 </head>
+
+
 <body>
+
 
 <div class="container">
 
-<h2>My Tesla Plans</h2>
+
+<h2 class="title">
+My Tesla Plans
+</h2>
+
+
 
 {% if plans %}
 
+
+
 {% for plan in plans %}
+
+
 
 <div class="card">
 
-    <div class="content">
 
-        <h3>{{ plan.plan_name }}</h3>
+<h3>
+{{ plan.plan_name }}
+</h3>
 
-        <p><b>Investment:</b> GHS {{ plan.investment }}</p>
 
-        <p><b>Daily Income:</b> GHS {{ plan.daily_income }}</p>
 
-        <p><b>Duration:</b> {{ plan.duration }} Days</p>
+<div class="info">
 
-        <p><b>Days Completed:</b> {{ plan.days_completed }}</p>
 
-        <p><b>Total Earned:</b> GHS {{ plan.total_earned }}</p>
+<p>
+<b>Investment:</b>
+GHS {{ plan.investment }}
+</p>
 
-        <p><b>Status:</b> {{ plan.status }}</p>
 
-        {% if plan.status == "Active" %}
-        <a class="btn" href="/claim_income/{{ plan.id }}">
-            Claim Daily Income
-        </a>
-        {% endif %}
 
-    </div>
+<p>
+<b>Daily Income:</b>
+GHS {{ plan.daily_income }}
+</p>
+
+
+
+<p>
+<b>Duration:</b>
+{{ plan.duration }} Days
+</p>
+
+
+
+<p>
+<b>Days Completed:</b>
+{{ plan.days_completed }}
+</p>
+
+
+
+<p>
+<b>Total Earned:</b>
+GHS {{ plan.total_earned }}
+</p>
+
+
+
+<p>
+<b>Status:</b>
+{{ plan.status }}
+</p>
+
+
 
 </div>
 
-{% endfor %}
 
-{% else %}
 
-<div class="empty">
-    <h3>No active plans found.</h3>
-</div>
+
+{% if plan.status == "Active" %}
+
+
+<a class="claim-btn"
+href="/claim_income/{{ plan.id }}">
+
+Claim Daily Income
+
+</a>
+
 
 {% endif %}
 
-</div>
-<a href="/dashboard" class="nav">
-<i>⌂</i>
-Home
-</a>
 
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+
+{% else %}
+
+
+
+<div class="empty">
+
+<h3>
+No active plans found.
+</h3>
+
+</div>
+
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+<!-- Bottom Menu -->
 
 <div class="bottom-nav">
 
+
 <a href="/dashboard" class="nav">
+
 <i>⌂</i>
+
 <span>Home</span>
+
 </a>
+
+
 
 <a href="/team" class="nav">
+
 <i>👥</i>
+
 <span>Team</span>
+
 </a>
 
-<a href="/my_plan" class="nav">
+
+
+<a href="/my_plan" class="nav active">
+
 <i>▣</i>
+
 <span>Plans</span>
+
 </a>
+
+
 
 <a href="/service" class="nav">
+
 <i>⚙</i>
+
 <span>Service</span>
+
 </a>
 
+
+
 <a href="/profile" class="nav">
+
 <i>👤</i>
+
 <span>Profile</span>
+
 </a>
+
+
 
 </div>
 
 
+
 </body>
+
 </html>
