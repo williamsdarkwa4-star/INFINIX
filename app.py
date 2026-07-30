@@ -1094,8 +1094,9 @@ def buy_plan(plan_id):
                 WHERE id=%s
                 """,
                 (
-                    commission,
-                    referrer["id"]
+                  commission,
+                  commission,
+                  referrer["id"]
                 )
             )
 
@@ -1206,10 +1207,15 @@ def claim_income(plan_id):
         SELECT
             id,
             user_id,
-            plan_name,
-            investment,
-            daily_income,
-            duration,
+           plan_name,
+           investment,
+           daily_income,
+           duration,
+           last_claim,
+           status
+)
+         VALUES
+            (%s,%s,%s,%s,%s,%s,%s)
             COALESCE(days_completed,0) AS days_completed,
             COALESCE(total_earned,0) AS total_earned,
             last_claim,
