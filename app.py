@@ -1228,7 +1228,10 @@ def claim_income(plan_id):
 
     # First claim check
 
-    if plan["last_claim"]:
+      SELECT id, user_id, plan_name, investment, daily_income,
+      duration, days_completed, total_earned, last_claim, status
+     FROM user_plans
+     WHERE id=%s
 
         next_claim = (
             plan["last_claim"]
