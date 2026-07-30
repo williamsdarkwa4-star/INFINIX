@@ -17,14 +17,13 @@ TESLA Profile
 /* Header */
 
 .logo{
-
     text-align:center;
     padding:25px;
     font-size:32px;
     font-weight:bold;
     color:#e82127;
-
 }
+
 
 
 /* Profile Card */
@@ -41,21 +40,29 @@ TESLA Profile
 }
 
 
+/* Profile Image */
+
 .avatar{
 
     width:90px;
     height:90px;
     margin:auto;
     border-radius:50%;
+    overflow:hidden;
     background:linear-gradient(135deg,#e82127,#700000);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    font-size:28px;
-    font-weight:bold;
+    border:3px solid #e82127;
 
 }
+
+
+.avatar img{
+
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+}
+
 
 
 .profile-card h2{
@@ -63,6 +70,7 @@ TESLA Profile
     margin-top:15px;
 
 }
+
 
 
 .profile-card p{
@@ -74,7 +82,9 @@ TESLA Profile
 
 
 
-/* Information */
+
+
+/* Information Box */
 
 .info-box{
 
@@ -87,6 +97,7 @@ TESLA Profile
 }
 
 
+
 .info-title{
 
     color:#e82127;
@@ -95,6 +106,7 @@ TESLA Profile
     margin-bottom:15px;
 
 }
+
 
 
 .info-row{
@@ -107,11 +119,13 @@ TESLA Profile
 }
 
 
+
 .info-row:last-child{
 
-    border:none;
+    border-bottom:none;
 
 }
+
 
 
 .value{
@@ -120,6 +134,8 @@ TESLA Profile
     font-weight:bold;
 
 }
+
+
 
 
 
@@ -141,8 +157,9 @@ TESLA Profile
 
 
 
-/* Bottom Navigation */
 
+
+/* Bottom Navigation */
 
 .bottom-nav{
 
@@ -161,6 +178,7 @@ TESLA Profile
 }
 
 
+
 .nav{
 
     color:#aaa;
@@ -169,6 +187,7 @@ TESLA Profile
     font-size:12px;
 
 }
+
 
 
 .nav span{
@@ -180,16 +199,17 @@ TESLA Profile
 }
 
 
-.nav:hover,
-.nav.active{
+
+.nav.active,
+.nav:hover{
 
     color:#e82127;
 
 }
 
 
-
 </style>
+
 
 
 
@@ -202,12 +222,18 @@ TESLA
 
 
 
+
+
 <div class="profile-card">
 
 
 <div class="avatar">
-USER
+
+<img src="{{ user.profile_image or '/static/images/profile.png' }}" 
+alt="Profile Photo">
+
 </div>
+
 
 
 <h2>
@@ -221,6 +247,9 @@ TESLA VIP MEMBER
 
 
 </div>
+
+
+
 
 
 
@@ -247,6 +276,7 @@ Phone Number
 
 
 
+
 <div class="info-row">
 
 Balance
@@ -256,6 +286,22 @@ GHS {{ user.balance }}
 </span>
 
 </div>
+
+
+
+
+
+<div class="info-row">
+
+Total Income
+
+<span class="value">
+GHS {{ user.income }}
+</span>
+
+</div>
+
+
 
 
 
@@ -271,6 +317,8 @@ Active Plan
 
 
 
+
+
 <div class="info-row">
 
 Registration Date
@@ -280,6 +328,8 @@ Registration Date
 </span>
 
 </div>
+
+
 
 
 
@@ -301,9 +351,19 @@ Withdrawal Account
 
 
 
+
+
+
 <a href="/change_password" class="action-btn">
 Change Password
 </a>
+
+
+
+<a href="/history" class="action-btn">
+History
+</a>
+
 
 
 <a href="/logout" class="action-btn">
@@ -314,51 +374,56 @@ Logout
 
 
 
-<!-- Same Bottom Menu As Dashboard -->
+
+
 
 <div class="bottom-nav">
+
 
 
 <a href="/dashboard" class="nav">
 
 <span>⌂</span>
-
 Home
 
 </a>
 
 
 
+
 <a href="/team" class="nav">
 
 <span>♟</span>
-
 Team
 
 </a>
 
 
 
+
 <a href="/service" class="nav">
+
 <span>⚙</span>
 Service
+
 </a>
+
+
 
 
 <a href="/my_plan" class="nav">
 
 <span>▣</span>
-
 Plans
 
 </a>
 
 
 
+
 <a href="/profile" class="nav active">
 
 <span>◎</span>
-
 Profile
 
 </a>
