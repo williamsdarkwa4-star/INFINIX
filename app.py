@@ -1785,7 +1785,7 @@ def admin_login():
             FROM admins
             WHERE username=%s
             """,
-            (Williams,)
+            ("Williams",)
         )
 
 
