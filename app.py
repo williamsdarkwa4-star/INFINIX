@@ -168,63 +168,8 @@ def create_referral_code():
 # TESLA VIP PLANS
 # =====================================
 
-PLANS = [
 
-    {
-        "id": 1,
-        "name": "TESLA VIP 1",
-        "investment": 100,
-        "daily": 20,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
-    },
 
-    {
-        "id": 2,
-        "name": "TESLA VIP 2",
-        "investment": 300,
-        "daily": 40,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1617788138017-80ad40651399"
-    },
-
-    {
-        "id": 3,
-        "name": "TESLA VIP 3",
-        "investment": 500,
-        "daily": 60,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1542362567-b07e54358753"
-    },
-
-    {
-        "id": 4,
-        "name": "TESLA VIP 4",
-        "investment": 700,
-        "daily": 80,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
-    },
-
-    {
-        "id": 5,
-        "name": "TESLA VIP 5",
-        "investment": 850,
-        "daily": 166,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
-    },
-
-    {
-        "id": 6,
-        "name": "TESLA VIP 6",
-        "investment": 1500,
-        "daily": 280,
-        "duration": 100,
-        "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
-    }
-
-]
 # =====================================
 # HOME
 # =====================================
@@ -240,6 +185,11 @@ def home():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "GET":
+        invite_code = request.args.get("invite_code", "")
+        return render_template("register.html", invite_code=invite_code)
+
+    # existing POST registration logic...
 
     if request.method == "POST":
 
