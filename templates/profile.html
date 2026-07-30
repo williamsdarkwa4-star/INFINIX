@@ -4,6 +4,7 @@
 TESLA Profile
 {% endblock %}
 
+
 {% block content %}
 
 <style>
@@ -13,53 +14,73 @@ TESLA Profile
 }
 
 
-.profile-header{
+/* Header */
+
+.logo{
+
     text-align:center;
     padding:25px;
-    font-size:30px;
-    font-weight:900;
+    font-size:32px;
+    font-weight:bold;
     color:#e82127;
+
 }
 
 
+/* Profile Card */
+
 .profile-card{
+
     margin:20px;
     padding:30px 20px;
-    background:linear-gradient(145deg,#111,#1b1b1b);
-    border-radius:25px;
-    text-align:center;
+    background:#111;
+    border-radius:20px;
     border:1px solid #333;
+    text-align:center;
+
 }
 
 
 .avatar{
+
     width:90px;
     height:90px;
     margin:auto;
     border-radius:50%;
-    background:#e82127;
+    background:linear-gradient(135deg,#e82127,#700000);
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:35px;
+    color:white;
+    font-size:28px;
+    font-weight:bold;
+
 }
 
 
 .profile-card h2{
+
     margin-top:15px;
+
 }
 
 
 .profile-card p{
+
     color:#aaa;
+    margin-top:8px;
+
 }
 
+
+
+/* Information */
 
 .info-box{
 
     margin:20px;
-    background:#111;
     padding:20px;
+    background:#111;
     border-radius:20px;
     border:1px solid #333;
 
@@ -67,10 +88,12 @@ TESLA Profile
 
 
 .info-title{
+
     color:#e82127;
     font-size:20px;
     font-weight:bold;
     margin-bottom:15px;
+
 }
 
 
@@ -85,39 +108,98 @@ TESLA Profile
 
 
 .info-row:last-child{
+
     border:none;
+
 }
 
 
 .value{
+
     color:#e82127;
     font-weight:bold;
+
 }
 
+
+
+/* Buttons */
 
 .action-btn{
 
     display:block;
     margin:15px 20px;
-    padding:16px;
+    padding:15px;
     background:linear-gradient(135deg,#e82127,#800000);
     color:white;
     text-align:center;
     text-decoration:none;
-    border-radius:15px;
+    border-radius:12px;
     font-weight:bold;
 
 }
 
+
+
+/* Bottom Navigation */
+
+
+.bottom-nav{
+
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:75px;
+    background:#111;
+    border-top:1px solid #333;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:999;
+
+}
+
+
+.nav{
+
+    color:#aaa;
+    text-decoration:none;
+    text-align:center;
+    font-size:12px;
+
+}
+
+
+.nav span{
+
+    display:block;
+    font-size:22px;
+    margin-bottom:3px;
+
+}
+
+
+.nav:hover,
+.nav.active{
+
+    color:#e82127;
+
+}
+
+
+
 </style>
+
 
 
 <div class="profile-page">
 
 
-<div class="profile-header">
-TESLA PROFILE
+<div class="logo">
+TESLA
 </div>
+
 
 
 <div class="profile-card">
@@ -142,6 +224,8 @@ TESLA VIP MEMBER
 
 
 
+
+
 <div class="info-box">
 
 
@@ -150,47 +234,71 @@ Account Information
 </div>
 
 
+
 <div class="info-row">
-Phone
+
+Phone Number
+
 <span class="value">
 {{ user.phone }}
 </span>
+
 </div>
 
 
+
 <div class="info-row">
+
 Balance
+
 <span class="value">
 GHS {{ user.balance }}
 </span>
+
 </div>
 
 
+
 <div class="info-row">
-Plan
+
+Active Plan
+
 <span class="value">
 {{ user.plan or "No Plan" }}
 </span>
+
 </div>
 
 
+
 <div class="info-row">
-Joined
+
+Registration Date
+
 <span class="value">
 {{ user.created_at }}
 </span>
+
 </div>
+
 
 
 <div class="info-row">
+
 Withdrawal Account
+
 <span class="value">
 {{ user.account_number or "Not Added" }}
 </span>
+
 </div>
 
 
+
 </div>
+
+
+
 
 
 <a href="/change_password" class="action-btn">
@@ -203,6 +311,69 @@ Logout
 </a>
 
 
+
+
+
+<!-- Same Bottom Menu As Dashboard -->
+
+<div class="bottom-nav">
+
+
+<a href="/dashboard" class="nav">
+
+<span>⌂</span>
+
+Home
+
+</a>
+
+
+
+<a href="/team" class="nav">
+
+<span>♟</span>
+
+Team
+
+</a>
+
+
+
+<a href="/service" class="nav">
+
+<span>?</span>
+
+Service
+
+</a>
+
+
+
+<a href="/my_plan" class="nav">
+
+<span>▣</span>
+
+Plans
+
+</a>
+
+
+
+<a href="/profile" class="nav active">
+
+<span>◎</span>
+
+Profile
+
+</a>
+
+
+
 </div>
+
+
+
+</div>
+
 
 {% endblock %}
