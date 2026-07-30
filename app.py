@@ -652,7 +652,8 @@ def history():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    conn = get_db_connection()
+    conn = get_db()
+    cur = conn.cursor()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     user_id = session["user_id"]
@@ -2007,7 +2008,50 @@ def admin_dashboard():
     )
 
 
+@app.route("/admin/add_balance/<int:user_id>")
+def add_balance(user_id):
 
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE users
+        SET balance = balance + 100
+        WHERE id=%s
+    """, (user_id,))
+
+    conn.commit()
+    conn.close()
+
+    flash("GHS 100 added to user balance.")
+
+    return redirect("/admin/users")
+
+
+@app.route("/admin/deduct_balance/<int:user_id>")
+def deduct_balance(user_id):
+
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE users
+        SET balance = balance - 100
+        WHERE id=%s
+    """, (user_id,))
+
+    conn.commit()
+    conn.close()
+
+    flash("GHS 100 deducted from user balance.")
+
+    return redirect("/admin/users")
 # =====================================
 # ADMIN USERS
 # =====================================
@@ -2048,7 +2092,29 @@ def admin_users():
         users=users
     )
 
+@app.route("/admin/plans")
+def admin_plans():
 
+    if "admin_id" not in session:
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT *
+        FROM user_plans
+        ORDER BY id DESC
+    """)
+
+    plans = cur.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "admin_plans.html",
+        plans=plans
+    )
 
 # =====================================
 # ADMIN ALL DEPOSITS
