@@ -1,109 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}
+Withdraw
+{% endblock %}
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Withdraw</title>
+{% block content %}
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
+.withdraw-page{
     background:#000;
+    min-height:100vh;
     color:white;
-    padding-bottom:90px;
+    padding-bottom:100px;
 }
 
+
+/* Header */
 
 .header{
     text-align:center;
-    padding:20px;
+    padding:25px;
     font-size:30px;
     font-weight:bold;
     color:#e82127;
 }
 
 
+
+/* Flash */
+
+.flash{
+
+    margin:15px 20px;
+    padding:15px;
+    background:#111;
+    border:1px solid #e82127;
+    border-radius:12px;
+    text-align:center;
+
+}
+
+
+
+/* Cards */
+
 .card{
+
     margin:20px;
     background:#111;
-    padding:20px;
+    padding:22px;
     border-radius:18px;
     border:1px solid #333;
+
 }
 
 
 .card h3{
+
     color:#e82127;
     margin-bottom:15px;
+
 }
 
 
+
 .info{
+
     background:#000;
     padding:15px;
     border-radius:12px;
+
 }
 
 
 .info p{
-    margin:10px 0;
+
+    margin:12px 0;
+    color:#ddd;
+
 }
 
 
-input, select{
+.info b{
+
+    color:#e82127;
+
+}
+
+
+
+/* Form */
+
+input,select{
 
     width:100%;
-    padding:14px;
-    margin-top:15px;
-    border-radius:10px;
-    border:none;
+    padding:15px;
+    margin-top:12px;
+    border-radius:12px;
+    border:1px solid #333;
     background:#222;
     color:white;
+    outline:none;
 
 }
+
+
+
+input:focus,
+select:focus{
+
+    border-color:#e82127;
+
+}
+
 
 
 button{
 
     width:100%;
     padding:15px;
-    margin-top:15px;
-    background:#e82127;
+    margin-top:18px;
+    background:linear-gradient(135deg,#e82127,#800000);
     color:white;
     border:none;
     border-radius:12px;
     font-size:16px;
-    cursor:pointer;
+    font-weight:bold;
 
 }
+
 
 
 button:hover{
-    background:#b91c22;
+
+    opacity:.8;
+
 }
 
 
+
+/* Status */
 
 .status{
 
     margin:20px;
-    background:#111;
     padding:20px;
-    border-radius:15px;
+    background:#111;
+    border-radius:18px;
     border:1px solid #e82127;
     text-align:center;
 
 }
+
 
 
 .status span{
@@ -125,12 +174,13 @@ button:hover{
     width:100%;
     height:75px;
     background:#111;
+    border-top:1px solid #333;
     display:flex;
     justify-content:space-around;
     align-items:center;
-    border-top:1px solid #333;
 
 }
+
 
 
 .nav{
@@ -138,17 +188,20 @@ button:hover{
     color:#aaa;
     text-decoration:none;
     text-align:center;
-    font-size:13px;
+    font-size:12px;
 
 }
 
 
-.nav span{
+
+.nav i{
 
     display:block;
     font-size:22px;
+    margin-bottom:5px;
 
 }
+
 
 
 .nav:hover{
@@ -159,21 +212,35 @@ button:hover{
 
 </style>
 
-</head>
 
 
-<body>
+<div class="withdraw-page">
 
 
 <div class="header">
-💸 WITHDRAW
+TESLA WITHDRAW
 </div>
+
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+
+<div class="flash">
+{{message}}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
 
 
 
 
 
 <div class="card">
+
 
 <h3>
 Withdrawal Rules
@@ -182,28 +249,29 @@ Withdrawal Rules
 
 <div class="info">
 
+
 <p>
-Minimum Withdraw:
+Minimum Withdrawal
 <b>GHS 30</b>
 </p>
 
 
 <p>
-Withdrawal Fee:
+Withdrawal Fee
 <b>18%</b>
 </p>
 
 
 <p>
-Arrival Time:
+Processing Time
 <b>0 - 34 Minutes</b>
 </p>
 
 
 </div>
 
-</div>
 
+</div>
 
 
 
@@ -212,8 +280,9 @@ Arrival Time:
 
 <div class="card">
 
+
 <h3>
-Bind Withdrawal Account
+Withdrawal Account
 </h3>
 
 
@@ -238,11 +307,14 @@ Select Network
 MTN Mobile Money
 </option>
 
+
 <option value="Telecel">
 Telecel Cash
 </option>
 
+
 </select>
+
 
 
 
@@ -251,6 +323,7 @@ type="number"
 name="account_number"
 placeholder="Mobile Money Number"
 required>
+
 
 
 
@@ -272,9 +345,11 @@ Save Account
 
 <div class="card">
 
+
 <h3>
 Request Withdrawal
 </h3>
+
 
 
 <form method="POST" action="/withdraw">
@@ -283,7 +358,7 @@ Request Withdrawal
 <input
 type="number"
 name="amount"
-placeholder="Enter Withdrawal Amount"
+placeholder="Enter Amount"
 min="30"
 required>
 
@@ -292,14 +367,16 @@ required>
 <input
 type="password"
 name="withdraw_password"
-placeholder="Enter Withdrawal Password"
+placeholder="Withdrawal Password"
 required>
+
 
 
 
 <button type="submit">
 Submit Withdrawal
 </button>
+
 
 
 </form>
@@ -315,20 +392,27 @@ Submit Withdrawal
 
 <div class="status">
 
+
 <h3>
 Withdrawal Status
 </h3>
 
 
+<br>
+
+
 <p>
-Your withdrawal request is being reviewed.
+Your request will be reviewed by TESLA team.
 </p>
+
+
+<br>
 
 
 <p>
 Status:
 <span>
-Processing (0 - 34 Minutes)
+Processing
 </span>
 </p>
 
@@ -345,31 +429,31 @@ Processing (0 - 34 Minutes)
 
 
 <a href="/dashboard" class="nav">
-<span>🏠</span>
+<i>⌂</i>
 Home
 </a>
 
 
 <a href="/team" class="nav">
-<span>👥</span>
+<i>♟</i>
 Team
 </a>
 
 
 <a href="/my_plan" class="nav">
-<span>🚗</span>
-My Plans
+<i>▣</i>
+Plans
 </a>
 
 
 <a href="/service" class="nav">
-<span>🛠</span>
+<i>⚙</i>
 Service
 </a>
 
 
 <a href="/profile" class="nav">
-<span>👤</span>
+<i>●</i>
 Profile
 </a>
 
@@ -378,6 +462,7 @@ Profile
 
 
 
-</body>
+</div>
 
-</html>
+
+{% endblock %}
