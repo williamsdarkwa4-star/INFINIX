@@ -1,4 +1,4 @@
-import os
+bimport os
 import random
 import string
 
@@ -1088,9 +1088,9 @@ def buy_plan(plan_id):
             cur.execute(
                 """
                 UPDATE users
-
-                SET income = income + %s
-
+                 SET
+                balance = balance + %s,
+                income = income + %s
                 WHERE id=%s
                 """,
                 (
