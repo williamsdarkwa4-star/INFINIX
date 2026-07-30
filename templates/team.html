@@ -427,6 +427,21 @@ Profile
 
 
 </div>
+<script>
 
+function copyReferral(){
+
+    var link = document.getElementById("referralLink");
+
+    link.select();
+    link.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(link.value);
+
+    alert("Referral link copied!");
+
+}
+
+</script>
 
 {% endblock %}
