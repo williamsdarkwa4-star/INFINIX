@@ -1159,11 +1159,10 @@ def my_plan():
         plans=plans
     )
 # =====================================
-# CLAIM DAILY EARNINGS
+# CLAIM DAILY INCOME
 # =====================================
 
 from datetime import datetime, timedelta
-
 
 
 @app.route("/claim_income/<int:plan_id>")
@@ -1177,7 +1176,7 @@ def claim_income(plan_id):
     cur = conn.cursor()
 
 
-
+    # Get user plan
     cur.execute(
         """
         SELECT *
@@ -1191,9 +1190,7 @@ def claim_income(plan_id):
         )
     )
 
-
     plan = cur.fetchone()
-
 
 
     if not plan:
@@ -1207,38 +1204,27 @@ def claim_income(plan_id):
         )
 
 
-
-    # Check if plan is active
-
+    # Check active status
     if plan["status"] != "Active":
 
         conn.close()
 
-        flash("This plan has expired.")
+        flash("This plan is not active.")
 
         return redirect(
             url_for("my_plan")
         )
 
 
-
     now = datetime.now()
 
 
-
-    # First claim check
-
-      cursor.execute("""
-    SELECT id, user_id, plan_name, investment, daily_income,
-           duration, days_completed, total_earned, last_claim, status
-    FROM user_plans
-    WHERE id=%s
-""", (plan_id,))
+    # Check 24 hour claim limit
+    if plan.get("last_claim"):
 
         next_claim = (
             plan["last_claim"]
-            +
-            timedelta(hours=24)
+            + timedelta(hours=24)
         )
 
 
@@ -1246,10 +1232,12 @@ def claim_income(plan_id):
 
             remaining = next_claim - now
 
+            hours = remaining.seconds // 3600
+
             conn.close()
 
             flash(
-                f"Come back after {remaining.seconds//3600} hours."
+                f"Your next claim is available after {hours} hours."
             )
 
             return redirect(
@@ -1257,10 +1245,9 @@ def claim_income(plan_id):
             )
 
 
-
-    # Check days completed
-
+    # Check completed days
     if plan["days_completed"] >= plan["duration"]:
+
 
         cur.execute(
             """
@@ -1289,46 +1276,42 @@ def claim_income(plan_id):
 
 
     # Add daily income
-
-    daily = plan["daily_income"]
-
+    daily_income = plan["daily_income"]
 
 
     cur.execute(
         """
         UPDATE users
 
-        SET balance = balance + %s
+        SET balance = balance + %s,
+            income = income + %s
 
         WHERE id=%s
         """,
         (
-            daily,
+            daily_income,
+            daily_income,
             session["user_id"]
         )
     )
 
 
 
-    # Update plan record
-
+    # Update plan
     cur.execute(
         """
         UPDATE user_plans
 
         SET
-
-        total_earned = total_earned + %s,
-
-        days_completed = days_completed + 1,
-
-        last_claim = %s
+            total_earned = total_earned + %s,
+            days_completed = days_completed + 1,
+            last_claim = %s
 
         WHERE id=%s
 
         """,
         (
-            daily,
+            daily_income,
             now,
             plan_id
         )
@@ -1349,6 +1332,11 @@ def claim_income(plan_id):
     return redirect(
         url_for("my_plan")
     )
+
+
+
+
+ 
 
 
 @app.route("/change_password", methods=["GET","POST"])
