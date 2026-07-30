@@ -292,9 +292,22 @@ Your Referral Code
 {{ referral_code }}
 </div>
 
+<input 
+id="referralLink"
+type="text"
+value="{{ referral_link }}"
+readonly
+style="
+width:100%;
+padding:12px;
+border-radius:10px;
+background:#222;
+color:white;
+border:1px solid #333;
+margin-top:10px;
+">
 
-
-<div class="copy">
+<div class="copy" onclick="copyReferral()">
 Copy Referral Link
 </div>
 
