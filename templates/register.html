@@ -7,6 +7,7 @@ Register
 
 {% block content %}
 
+
 <style>
 
 .register-page{
@@ -20,14 +21,16 @@ Register
 }
 
 
+
 .register-box{
 
-    width:360px;
+    width:100%;
+    max-width:380px;
     background:#111;
     padding:30px;
-    border-radius:20px;
+    border-radius:25px;
     border:1px solid #333;
-    box-shadow:0 0 25px rgba(232,33,39,0.3);
+    box-shadow:0 0 30px rgba(232,33,39,0.25);
 
 }
 
@@ -36,42 +39,75 @@ Register
 .logo{
 
     text-align:center;
-    font-size:32px;
-    font-weight:bold;
     color:#e82127;
+    font-size:36px;
+    font-weight:900;
+    letter-spacing:3px;
+    margin-bottom:10px;
+
+}
+
+
+
+.subtitle{
+
+    text-align:center;
+    color:#aaa;
+    margin-bottom:25px;
+
+}
+
+
+
+
+.bonus-card{
+
+    background:#1a1a1a;
+    border:1px solid #e82127;
+    border-radius:15px;
+    padding:18px;
+    text-align:center;
+    margin-bottom:20px;
+
+}
+
+
+
+.bonus-card i{
+
+    color:#e82127;
+    font-size:25px;
+
+}
+
+
+
+.bonus-card strong{
+
+    display:block;
+    color:#e82127;
+    font-size:26px;
+    margin-top:8px;
+
+}
+
+
+
+.input-box{
+
+    position:relative;
     margin-bottom:15px;
 
 }
 
 
 
-h2{
+.input-box i{
 
-    text-align:center;
-    margin-bottom:20px;
-
-}
-
-
-
-.gift{
-
-    background:#1a1a1a;
-    border:1px solid #e82127;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    margin-bottom:20px;
-
-}
-
-
-
-.gift span{
-
+    position:absolute;
+    left:15px;
+    top:15px;
     color:#e82127;
-    font-size:25px;
-    font-weight:bold;
 
 }
 
@@ -80,9 +116,8 @@ h2{
 input{
 
     width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border-radius:10px;
+    padding:14px 14px 14px 45px;
+    border-radius:12px;
     border:1px solid #333;
     background:#222;
     color:white;
@@ -103,13 +138,14 @@ input:focus{
 button{
 
     width:100%;
-    padding:14px;
-    background:#e82127;
-    color:white;
+    padding:15px;
     border:none;
-    border-radius:10px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#e82127,#8b0000);
+    color:white;
     font-size:16px;
     font-weight:bold;
+    cursor:pointer;
 
 }
 
@@ -117,17 +153,18 @@ button{
 
 button:hover{
 
-    background:#b91c22;
+    opacity:.9;
 
 }
+
 
 
 
 .login{
 
     text-align:center;
-    margin-top:20px;
     color:#aaa;
+    margin-top:20px;
 
 }
 
@@ -137,12 +174,13 @@ button:hover{
 
     color:#e82127;
     text-decoration:none;
+    font-weight:bold;
 
 }
 
 
-</style>
 
+</style>
 
 
 
@@ -157,21 +195,20 @@ TESLA
 </div>
 
 
-<h2>
-Create Account
-</h2>
+<div class="subtitle">
+Create your VIP account
+</div>
 
 
 
-<div class="gift">
 
-🎁 Welcome Registration Gift
+<div class="bonus-card">
 
-<br>
+<i class="fa-solid fa-gift"></i>
 
-<span>
-GHS 10
-</span>
+<strong>GHS 10</strong>
+
+Registration Bonus
 
 </div>
 
@@ -181,13 +218,25 @@ GHS 10
 <form method="POST">
 
 
+
+<div class="input-box">
+
+<i class="fa-solid fa-phone"></i>
+
 <input 
 type="text"
 name="phone"
 placeholder="Phone Number"
 required>
 
+</div>
 
+
+
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
 
 <input 
 type="password"
@@ -195,7 +244,14 @@ name="password"
 placeholder="Password"
 required>
 
+</div>
 
+
+
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
 
 <input 
 type="password"
@@ -203,33 +259,59 @@ name="confirm_password"
 placeholder="Confirm Password"
 required>
 
+</div>
 
 
-<input
+
+
+<div class="input-box">
+
+<i class="fa-solid fa-key"></i>
+
+<input 
 type="password"
 name="withdraw_password"
 placeholder="Withdrawal Password"
 required>
 
+</div>
 
 
-<input
+
+
+<div class="input-box">
+
+<i class="fa-solid fa-key"></i>
+
+<input 
 type="password"
 name="confirm_withdraw_password"
 placeholder="Confirm Withdrawal Password"
 required>
 
+</div>
 
+
+
+
+<div class="input-box">
+
+<i class="fa-solid fa-user-plus"></i>
 
 <input 
 type="text"
 name="invite_code"
 placeholder="Invite Code (Optional)">
 
+</div>
+
+
 
 
 <button type="submit">
-Register
+
+Create Account
+
 </button>
 
 
@@ -239,22 +321,27 @@ Register
 
 
 
+
 <div class="login">
 
 Already have an account?
 
 <a href="/login">
+
 Login
+
 </a>
 
-</div>
-
-
 
 </div>
 
 
+
 </div>
+
+
+</div>
+
 
 
 {% endblock %}
