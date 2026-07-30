@@ -1970,6 +1970,15 @@ if not os.path.exists(
     os.makedirs(
         UPLOAD_FOLDER
     )
+@app.route("/daily_checkin")
+def daily_checkin():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    flash("Daily check-in is not available yet.")
+
+    return redirect(url_for("dashboard"))
 
 @app.route("/setup_database")
 def setup_database():
