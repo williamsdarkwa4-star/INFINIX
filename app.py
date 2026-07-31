@@ -453,14 +453,12 @@ def team():
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute(
-        """
+    # Get current user's referral code
+    cur.execute("""
         SELECT referral_code
         FROM users
         WHERE id=%s
-        """,
-        (session["user_id"],)
-    )
+    """, (session["user_id"],))
 
     user = cur.fetchone()
 
@@ -468,34 +466,38 @@ def team():
         conn.close()
         return redirect(url_for("login"))
 
-
     referral_code = user["referral_code"]
 
-    # Create full invite link
-    site_url = request.host_url.rstrip("/")
-
+    # Referral link
     referral_link = (
-        f"{site_url}/register?invite_code={referral_code}"
+        request.host_url.rstrip("/")
+        + "/register?invite_code="
+        + referral_code
     )
 
-
-    cur.execute(
-        """
+    # Team members
+    cur.execute("""
         SELECT
             phone,
             created_at
         FROM users
         WHERE invited_by=%s
-        ORDER BY id DESC
-        """,
-        (referral_code,)
-    )
+        ORDER BY created_at DESC
+    """, (referral_code,))
 
     members = cur.fetchall()
 
+    # Total commission earned
+    cur.execute("""
+        SELECT COALESCE(income,0) AS commission
+        FROM users
+        WHERE id=%s
+    """, (session["user_id"],))
+
+    result = cur.fetchone()
+    commission = result["commission"]
 
     conn.close()
-
 
     return render_template(
         "team.html",
@@ -503,9 +505,8 @@ def team():
         referral_link=referral_link,
         members=members,
         total_team=len(members),
-        commission=0
+        commission=commission
     )
-
 
 # =====================================
 # SERVICE PAGE
