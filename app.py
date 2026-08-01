@@ -40,7 +40,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 1",
         "price": 100,
         "daily": 20,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
     },
     {
@@ -48,7 +48,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 2",
         "price": 300,
         "daily": 40,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1617788138017-80ad40651399"
     },
     {
@@ -56,7 +56,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 3",
         "price": 500,
         "daily": 60,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1542362567-b07e54358753"
     },
     {
@@ -64,7 +64,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 4",
         "price": 700,
         "daily": 80,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
     },
     {
@@ -72,7 +72,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 5",
         "price": 850,
         "daily": 166,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
     },
     {
@@ -80,7 +80,7 @@ PLANS_CATALOG = [
         "name": "TESLA VIP 6",
         "price": 1500,
         "daily": 260,
-        "duration": 100,
+        "duration": 180,
         "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
     }
 ]
