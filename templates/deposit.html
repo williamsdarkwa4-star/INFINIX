@@ -253,7 +253,7 @@ Minimum Deposit:
 
 <p>
 Maximum Deposit:
-<b>GHS 1,500</b>
+<b>GHS 10,000</b>
 </p>
 
 
@@ -316,7 +316,7 @@ type="number"
 name="amount"
 placeholder="Enter amount"
 min="90"
-max="1500"
+max="10000"
 required>
 
 
@@ -371,6 +371,69 @@ Processing
 
 
 </div>
+<!-- Deposit Bonus Promotion -->
+<div class="deposit-promo">
+    <h2>💰 Deposit Bonus Promotion</h2>
+
+    <div class="promo-item">
+        <span>Deposit GHS 1,000</span>
+        <strong>Receive GHS 100 Bonus</strong>
+    </div>
+
+    <div class="promo-item">
+        <span>Deposit GHS 2,000</span>
+        <strong>Receive GHS 200 Bonus</strong>
+    </div>
+
+    <div class="promo-item">
+        <span>Deposit GHS 3,000</span>
+        <strong>Receive GHS 300 Bonus</strong>
+    </div>
+
+    <div class="promo-item">
+        <span>Deposit GHS 5,000</span>
+        <strong>Receive GHS 500 Bonus</strong>
+    </div>
+
+    <div class="promo-item">
+        <span>Deposit GHS 10,000</span>
+        <strong>Receive GHS 1,000 Bonus</strong>
+    </div>
+</div>
+
+<style>
+.deposit-promo{
+    margin-top:30px;
+    background:#111;
+    border:2px solid #e00000;
+    border-radius:15px;
+    padding:20px;
+    color:#fff;
+    box-shadow:0 0 15px rgba(255,0,0,.3);
+}
+
+.deposit-promo h2{
+    text-align:center;
+    color:#ff2b2b;
+    margin-bottom:20px;
+}
+
+.promo-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 15px;
+    margin-bottom:10px;
+    background:#1b1b1b;
+    border-radius:10px;
+    border-left:4px solid #ff0000;
+}
+
+.promo-item strong{
+    color:#00ff66;
+    font-size:17px;
+}
+</style>
 
 
 
