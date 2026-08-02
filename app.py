@@ -82,40 +82,39 @@ PLANS_CATALOG = [
         "daily": 260,
         "duration": 180,
         "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
+    },
+    {
+        "id": 7,
+        "name": "TESLA VIP 7",
+        "price": 2000,
+        "daily": 380,
+        "duration": 180,
+        "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
+    },
+    {
+        "id": 8,
+        "name": "TESLA VIP 8",
+        "price": 3000,
+        "daily": 580,
+        "duration": 180,
+        "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
+    },
+    {
+        "id": 9,
+        "name": "TESLA VIP 9",
+        "price": 5000,
+        "daily": 940,
+        "duration": 180,
+        "image": "https://images.unsplash.com/photo-1542362567-b07e54358753"
+    },
+    {
+        "id": 10,
+        "name": "TESLA VIP 10",
+        "price": 10000,
+        "daily": 1900,
+        "duration": 180,
+        "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
     }
-         {
-    "id": 7,
-    "name": "TESLA VIP 7",
-    "investment": 2000,
-    "daily": 380,
-    "duration": 100,
-    "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
-},
-{
-    "id": 8,
-    "name": "TESLA VIP 8",
-    "investment": 3000,
-    "daily": 580,
-    "duration": 100,
-    "image": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
-},
-{
-    "id": 9,
-    "name": "TESLA VIP 9",
-    "investment": 5000,
-    "daily": 940,
-    "duration": 100,
-    "image": "https://images.unsplash.com/photo-1542362567-b07e54358753"
-},
-{
-    "id": 10,
-    "name": "TESLA VIP 10",
-    "investment": 10000,
-    "daily": 1900,
-    "duration": 100,
-    "image": "https://images.unsplash.com/photo-1560958089-b8a1929cea89"
-}
-         
 ]
 # =====================================
 # UPLOAD SETTINGS
