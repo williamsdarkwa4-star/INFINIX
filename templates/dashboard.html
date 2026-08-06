@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FUTURE LEADERS Dashboard</title>
+<title>Zenith Capital Dashboard</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
@@ -16,176 +16,397 @@
 }
 
 body{
-    background:#f4f8ff;
+    background:#f4f7fb;
+    padding-bottom:80px;
 }
 
-.navbar{
-    background:linear-gradient(135deg,#2563eb,#4f46e5);
+
+/* Top Image */
+
+.top-banner{
+    height:230px;
+    position:relative;
+    overflow:hidden;
+    border-radius:0 0 30px 30px;
+}
+
+
+.top-banner img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(15,23,42,0.55);
     color:white;
-    padding:18px 20px;
     display:flex;
-    justify-content:space-between;
+    flex-direction:column;
+    justify-content:center;
     align-items:center;
 }
 
-.logo{
-    font-size:24px;
-    font-weight:bold;
+
+.overlay h1{
+    font-size:32px;
 }
 
-.menu{
-    font-size:28px;
+
+.overlay p{
+    margin-top:10px;
 }
+
+
+
+/* Container */
 
 .container{
     padding:20px;
 }
 
-.welcome{
-    background:linear-gradient(135deg,#2563eb,#60a5fa);
-    color:white;
-    padding:25px;
-    border-radius:20px;
-    margin-bottom:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
 
-.welcome h2{
-    margin-bottom:10px;
-}
 
-.grid{
+/* Accounts */
+
+.accounts{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:15px;
+    margin-top:-20px;
 }
 
-.card{
+
+.account-card{
     background:white;
     padding:20px;
     border-radius:18px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    text-decoration:none;
-    color:black;
-    transition:.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
-.card:hover{
-    transform:translateY(-5px);
-}
 
-.card h3{
-    color:#2563eb;
-    margin-bottom:10px;
-}
-
-.card p{
-    color:#666;
+.account-card h3{
+    color:#64748b;
     font-size:14px;
 }
 
-.news{
-    margin-top:20px;
-    background:white;
-    padding:20px;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+.amount{
+    margin-top:10px;
+    color:#2563eb;
+    font-size:22px;
+    font-weight:bold;
 }
 
-button{
-    margin-top:15px;
+
+
+/* Buttons */
+
+.action{
+    display:flex;
+    gap:15px;
+    margin:25px 0;
+}
+
+
+.action a{
+    flex:1;
+    padding:15px;
+    text-align:center;
+    color:white;
+    text-decoration:none;
+    border-radius:15px;
+    font-weight:bold;
+}
+
+
+.deposit{
+    background:#10b981;
+}
+
+
+.withdraw{
+    background:#2563eb;
+}
+
+
+
+/* Plans */
+
+.title{
+    color:#0f172a;
+    margin-bottom:15px;
+}
+
+
+.plan{
+    background:white;
+    padding:20px;
+    margin-bottom:15px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+
+.plan h3{
+    color:#2563eb;
+}
+
+
+.plan p{
+    margin-top:8px;
+    color:#475569;
+}
+
+
+.plan button{
+
     width:100%;
-    padding:14px;
+    margin-top:15px;
+    padding:13px;
     border:none;
     border-radius:12px;
-    background:linear-gradient(45deg,#2563eb,#4f46e5);
+    background:#2563eb;
     color:white;
-    font-size:16px;
+    font-weight:bold;
+
 }
+
+
+.lock{
+    opacity:.5;
+}
+
+
+.lock button{
+    background:#64748b;
+}
+
+
+
+/* Bottom Menu */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    padding:15px;
+    box-shadow:0 -5px 15px rgba(0,0,0,.1);
+}
+
+
+.bottom-nav a{
+    text-decoration:none;
+    color:#2563eb;
+    text-align:center;
+    font-weight:bold;
+}
+
 
 </style>
 
 </head>
 
+
 <body>
 
-<div class="navbar">
 
-<div class="logo">
-FUTURE LEADERS
+<div class="top-banner">
+
+<img src="https://images.unsplash.com/photo-1559526324-593bc073d938">
+
+<div class="overlay">
+
+<h1>Zenith Capital</h1>
+
+<p>Welcome to your dashboard</p>
+
 </div>
 
-<div class="menu">
-☰
 </div>
 
-</div>
 
 
 <div class="container">
 
-<div class="welcome">
 
-<h2>
-Welcome Back, {{ session["username"] }} 👋
+<div class="accounts">
+
+
+<div class="account-card">
+<h3>Deposit Account</h3>
+<div class="amount">GHS 0.00</div>
+</div>
+
+
+<div class="account-card">
+<h3>Withdraw Account</h3>
+<div class="amount">GHS 0.00</div>
+</div>
+
+
+<div class="account-card">
+<h3>Income Account</h3>
+<div class="amount">GHS 0.00</div>
+</div>
+
+
+<div class="account-card">
+<h3>Referral Account</h3>
+<div class="amount">GHS 0.00</div>
+</div>
+
+
+</div>
+
+
+
+<div class="action">
+
+<a href="/deposit" class="deposit">
+Deposit
+</a>
+
+
+<a href="/withdraw" class="withdraw">
+Withdraw
+</a>
+
+</div>
+
+
+
+<h2 class="title">
+Investment Plans
 </h2>
 
-<p>
-Continue your learning journey today.
-</p>
+
+
+<div class="plan">
+<h3>Plan 1</h3>
+<p>Invest GHS 50</p>
+<p>Receive GHS 8 Daily</p>
+<button onclick="invest('GHS 50')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 2</h3>
+<p>Invest GHS 100</p>
+<p>Receive GHS 20 Daily</p>
+<button onclick="invest('GHS 100')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 3</h3>
+<p>Invest GHS 200</p>
+<p>Receive GHS 40 Daily</p>
+<button onclick="invest('GHS 200')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 4</h3>
+<p>Invest GHS 300</p>
+<p>Receive GHS 65 Daily</p>
+<button onclick="invest('GHS 300')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 5</h3>
+<p>Invest GHS 500</p>
+<p>Receive GHS 100 Daily</p>
+<button onclick="invest('GHS 500')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 6</h3>
+<p>Invest GHS 600</p>
+<p>Receive GHS 200 Daily</p>
+<button onclick="invest('GHS 600')">Invest</button>
+</div>
+
+
+
+<div class="plan">
+<h3>Plan 7</h3>
+<p>Invest GHS 1000</p>
+<p>Receive GHS 360 Daily</p>
+<button onclick="invest('GHS 1000')">Invest</button>
+</div>
+
+
+
+<div class="plan lock">
+<h3>🔒 Locked</h3>
+<p>Invest GHS 2000</p>
+<p>Receive GHS 500 Daily</p>
+<button disabled>Locked</button>
+</div>
+
+
+
+<div class="plan lock">
+<h3>🔒 Locked</h3>
+<p>Invest GHS 4000</p>
+<p>Receive GHS 800 Daily</p>
+<button disabled>Locked</button>
+</div>
+
 
 </div>
 
 
-<div class="grid">
 
 
-<a href="/lessons" class="card">
-<h3>📚 Lessons</h3>
-<p>Study SHS lessons.</p>
+<div class="bottom-nav">
+
+<a href="/">
+🏠<br>Home
 </a>
 
-
-<a href="#" class="card">
-<h3>📝 Quizzes</h3>
-<p>Test your knowledge.</p>
+<a href="/team">
+👥<br>Team
 </a>
 
-
-<a href="#" class="card">
-<h3>💬 Discussions</h3>
-<p>Chat with students.</p>
+<a href="/profile">
+👤<br>Profile
 </a>
-
-
-<a href="#" class="card">
-<h3>🏆 Leaderboard</h3>
-<p>See top performers.</p>
-</a>
-
 
 </div>
 
 
-<div class="news">
-
-<h3>📢 Announcements</h3>
-
-<p>
-Welcome to FUTURE LEADERS. New lessons are available.
-</p>
 
 
-<button>
-Continue Learning
-</button>
+<script>
 
+function invest(amount){
 
-</div>
+let confirmBox = confirm(
+"Are you sure you want to invest " + amount + "?"
+);
 
+if(confirmBox){
+alert("Investment request submitted");
+}
 
-</div>
+}
+
+</script>
 
 
 </body>
