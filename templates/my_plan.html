@@ -36,34 +36,27 @@ body{
 
 
 .card{
-
     background:white;
     padding:22px;
     border-radius:20px;
     margin-bottom:18px;
     box-shadow:0 5px 15px rgba(0,0,0,.08);
-
 }
 
 
 .card h2{
-
     color:#2563eb;
     margin-bottom:15px;
-
 }
 
 
 .info{
-
     color:#475569;
     margin:12px 0;
-
 }
 
 
 .timer{
-
     background:#0f172a;
     color:white;
     padding:20px;
@@ -75,10 +68,8 @@ body{
 
 
 .timer p{
-
     font-size:15px;
     margin-bottom:10px;
-
 }
 
 
@@ -95,7 +86,6 @@ body{
     font-weight:bold;
 
 }
-
 
 
 .status{
@@ -159,7 +149,6 @@ body{
 
 <div class="card">
 
-
 <h2>Zenith VIP 1</h2>
 
 
@@ -195,7 +184,6 @@ Active
 
 <div class="card">
 
-
 <h2>Next Income</h2>
 
 
@@ -208,7 +196,7 @@ Active
 </div>
 
 
-<button class="claim">
+<button class="claim" onclick="claimIncome()">
 Claim Income
 </button>
 
@@ -217,8 +205,8 @@ Claim Income
 
 
 
-<div class="card">
 
+<div class="card">
 
 <h2>Account Summary</h2>
 
@@ -264,6 +252,27 @@ Profile
 
 
 </div>
+
+
+
+<script>
+
+function claimIncome(){
+
+let confirmClaim = confirm(
+"Are you sure you want to claim your daily income?"
+);
+
+
+if(confirmClaim){
+
+alert("Daily income claim request submitted");
+
+}
+
+}
+
+</script>
 
 
 
