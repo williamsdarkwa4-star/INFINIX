@@ -1,233 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Plan - Zenith Capital</title>
 
-<title>My Plans</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
-
 
 body{
-
-    margin:0;
-    background:#000;
-    color:#fff;
-    padding-bottom:90px;
-
+    background:#f4f7fb;
+    padding-bottom:80px;
 }
 
 
-/* Main area */
+.header{
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    color:white;
+    padding:30px;
+    text-align:center;
+    border-radius:0 0 30px 30px;
+}
+
 
 .container{
-
-    width:92%;
-    max-width:700px;
-    margin:20px auto;
-
+    padding:20px;
 }
 
-
-/* Title */
-
-.title{
-
-    text-align:center;
-    color:#e82127;
-    font-size:28px;
-    font-weight:bold;
-    margin-bottom:25px;
-
-}
-
-
-/* Plan card */
 
 .card{
 
-    background:#111;
+    background:white;
+    padding:22px;
     border-radius:20px;
-    margin-bottom:20px;
-    padding:20px;
-
-    border:1px solid #222;
-
-    box-shadow:
-    0 0 15px rgba(232,33,39,0.35);
+    margin-bottom:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 
 }
 
 
+.card h2{
 
-.card h3{
-
-    color:#e82127;
-    font-size:22px;
-    margin-top:0;
+    color:#2563eb;
+    margin-bottom:15px;
 
 }
-
 
 
 .info{
 
-    background:#181818;
-    border-radius:12px;
-    padding:15px;
+    color:#475569;
+    margin:12px 0;
 
 }
 
 
+.timer{
 
-.info p{
+    background:#0f172a;
+    color:white;
+    padding:20px;
+    border-radius:18px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+}
 
-    margin:10px 0;
-    color:#ddd;
+
+.timer p{
+
     font-size:15px;
+    margin-bottom:10px;
 
 }
 
 
-
-.info b{
-
-    color:#fff;
-
-}
-
-
-/* Claim button */
-
-.claim-btn{
-
-    display:block;
+.claim{
 
     width:100%;
-
-    margin-top:18px;
-
+    margin-top:15px;
     padding:14px;
-
-    text-align:center;
-
-    text-decoration:none;
-
+    border:none;
+    border-radius:15px;
+    background:#2563eb;
     color:white;
-
-    background:#e82127;
-
-    border-radius:12px;
-
+    font-size:16px;
     font-weight:bold;
 
-    transition:.3s;
+}
+
+
+
+.status{
+
+    display:inline-block;
+    background:#10b981;
+    color:white;
+    padding:8px 15px;
+    border-radius:20px;
 
 }
 
 
 
-.claim-btn:hover{
-
-    background:#b91c22;
-
-}
-
-
-
-/* Empty plans */
-
-.empty{
-
-    text-align:center;
-    color:#999;
-    margin-top:60px;
-
-}
-
-
-
-/* Bottom navigation */
+/* Bottom Navigation */
 
 .bottom-nav{
 
     position:fixed;
-
     bottom:0;
-
     left:0;
-
     width:100%;
-
-    background:#111;
-
-    border-top:1px solid #333;
-
+    background:white;
     display:flex;
-
     justify-content:space-around;
-
-    padding:10px 0;
-
-    z-index:1000;
+    padding:15px;
+    box-shadow:0 -5px 15px rgba(0,0,0,.1);
 
 }
 
 
-
-.nav{
+.bottom-nav a{
 
     text-decoration:none;
-
-    color:#fff;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    font-size:12px;
+    color:#2563eb;
+    text-align:center;
+    font-weight:bold;
 
 }
-
-
-
-.nav i{
-
-    font-style:normal;
-
-    font-size:22px;
-
-    margin-bottom:4px;
-
-}
-
-
-
-.nav.active{
-
-    color:#e82127;
-
-}
-
-
-
-.nav:hover{
-
-    color:#e82127;
-
-}
-
-
 
 </style>
 
@@ -237,74 +144,96 @@ body{
 <body>
 
 
+<div class="header">
+
+<h1>My Plan</h1>
+
+<p>Active Investment</p>
+
+</div>
+
+
+
 <div class="container">
 
 
-<h2 class="title">
-My Tesla Plans
-</h2>
+<div class="card">
 
 
-
-{% if plans %}
-
+<h2>Zenith VIP 1</h2>
 
 
-{% for plan in plans %}
+<div class="info">
+Investment: GHS 50
+</div>
+
+
+<div class="info">
+Daily Income: GHS 8
+</div>
+
+
+<div class="info">
+Duration: 100 Days
+</div>
+
+
+<div class="info">
+Remaining Days: 100
+</div>
+
+
+<div class="status">
+Active
+</div>
+
+
+</div>
+
 
 
 
 <div class="card">
 
 
-<h3>
-{{ plan.plan_name }}
-</h3>
+<h2>Next Income</h2>
 
+
+<div class="timer">
+
+<p>Next credit in</p>
+
+23:59:59
+
+</div>
+
+
+<button class="claim">
+Claim Income
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>Account Summary</h2>
 
 
 <div class="info">
+Total Earned: GHS 0.00
+</div>
 
 
-<p>
-<b>Investment:</b>
-GHS {{ plan.investment }}
-</p>
+<div class="info">
+Today Income: GHS 0.00
+</div>
 
 
-
-<p>
-<b>Daily Income:</b>
-GHS {{ plan.daily_income }}
-</p>
-
-
-
-<p>
-<b>Duration:</b>
-{{ plan.duration }} Days
-</p>
-
-
-
-<p>
-<b>Days Completed:</b>
-{{ plan.days_completed }}
-</p>
-
-
-
-<p>
-<b>Total Earned:</b>
-GHS {{ plan.total_earned }}
-</p>
-
-
-
-<p>
-<b>Status:</b>
-{{ plan.status }}
-</p>
+</div>
 
 
 
@@ -312,107 +241,26 @@ GHS {{ plan.total_earned }}
 
 
 
-
-{% if plan.status == "Active" %}
-
-
-<a class="claim-btn"
-href="/claim_income/{{ plan.id }}">
-
-Claim Daily Income
-
-</a>
-
-
-{% endif %}
-
-
-
-</div>
-
-
-
-{% endfor %}
-
-
-
-
-{% else %}
-
-
-
-<div class="empty">
-
-<h3>
-No active plans found.
-</h3>
-
-</div>
-
-
-
-{% endif %}
-
-
-
-</div>
-
-
-
-
-<!-- Bottom Menu -->
 
 <div class="bottom-nav">
 
 
-<a href="/dashboard" class="nav">
-
-<i>⌂</i>
-
-<span>Home</span>
-
+<a href="/dashboard">
+🏠<br>
+Home
 </a>
 
 
-
-<a href="/team" class="nav">
-
-<i>👥</i>
-
-<span>Team</span>
-
+<a href="/my_plan">
+💼<br>
+My Plan
 </a>
 
 
-
-<a href="/my_plan" class="nav active">
-
-<i>▣</i>
-
-<span>Plans</span>
-
+<a href="/profile">
+👤<br>
+Profile
 </a>
-
-
-
-<a href="/service" class="nav">
-
-<i>⚙</i>
-
-<span>Service</span>
-
-</a>
-
-
-
-<a href="/profile" class="nav">
-
-<i>👤</i>
-
-<span>Profile</span>
-
-</a>
-
 
 
 </div>
@@ -420,5 +268,4 @@ No active plans found.
 
 
 </body>
-
 </html>
