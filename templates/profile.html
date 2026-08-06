@@ -1,323 +1,201 @@
-{% extends "base.html" %}
-{% block title %}TESLA Profile{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Profile - Zenith Capital</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
-body{
-    background:#050505;
-    color:white;
-}
-
-.profile-page{
-    padding:20px 16px 100px;
-}
-
-
-/* HEADER */
-
-.profile-header{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.avatar{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    overflow:hidden;
-    border:3px solid #e82127;
-}
-
-.avatar img{
-    width:100%;
-    height:100%;
-}
-
-
-.profile-name h2{
+*{
     margin:0;
-    font-size:22px;
-}
-
-.vip{
-    color:#e82127;
-    font-weight:bold;
-    margin-top:5px;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
 
-
-/* WALLET CARD */
-
-.wallet-card{
-
-    background:linear-gradient(135deg,#e82127,#720000);
-    border-radius:25px;
-    padding:22px;
-    box-shadow:0 10px 30px rgba(232,33,39,.35);
-
+body{
+    background:#f4f7fb;
+    padding-bottom:80px;
 }
 
 
-.wallet-title{
-    font-size:18px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
+/* Header */
 
+.header{
 
-.wallet-item{
-
-    display:flex;
-    justify-content:space-between;
-    margin:14px 0;
-    font-size:16px;
-
-}
-
-
-.wallet-item span:last-child{
-    font-weight:bold;
-}
-
-
-
-/* QUICK BUTTONS */
-
-.quick-actions{
-
-    background:rgba(0,0,0,.25);
-    border-radius:20px;
-    margin-top:20px;
-    padding:15px;
-    display:flex;
-    justify-content:space-around;
-
-}
-
-
-.quick a{
-
-    text-decoration:none;
+    background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
+    padding:35px 20px;
     text-align:center;
-    font-size:13px;
+    border-radius:0 0 30px 30px;
 
 }
 
 
-.quick-icon{
+.profile-image{
 
-    width:55px;
-    height:55px;
+    width:90px;
+    height:90px;
     background:white;
-    color:#e82127;
-    border-radius:18px;
+    color:#2563eb;
+    border-radius:50%;
+    margin:auto;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:25px;
-    margin:auto;
-    margin-bottom:8px;
-
-}
-
-
-
-/* INCOME */
-
-.income-card{
-
-    margin-top:18px;
-    background:#151515;
-    border-radius:25px;
-    padding:25px;
-    text-align:center;
-    border:1px solid #252525;
-
-}
-
-
-.income-title{
-    color:#aaa;
-    font-size:17px;
-}
-
-
-.income-value{
-    color:#e82127;
-    font-size:30px;
+    font-size:35px;
     font-weight:bold;
-    margin-top:10px;
-}
-
-
-
-/* MENU */
-
-.menu{
-
-    margin-top:20px;
-    background:#111;
-    border-radius:22px;
-    overflow:hidden;
 
 }
 
 
-.menu a{
+.header h1{
 
-    display:flex;
-    justify-content:space-between;
+    margin-top:15px;
+
+}
+
+
+
+/* Content */
+
+.container{
+
     padding:20px;
+
+}
+
+
+.card{
+
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+
+.card h3{
+
+    color:#2563eb;
+    margin-bottom:15px;
+
+}
+
+
+.info{
+
+    padding:12px 0;
+    color:#475569;
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+/* Buttons */
+
+.btn{
+
+    display:block;
+    width:100%;
+    padding:15px;
+    margin-top:12px;
+    border-radius:15px;
+    background:#2563eb;
     color:white;
+    text-align:center;
     text-decoration:none;
-    border-bottom:1px solid #222;
-    font-size:16px;
+    font-weight:bold;
 
 }
 
 
-.menu a:last-child{
-    border:none;
+.logout{
+
+    background:#ef4444;
+
 }
 
 
-.menu span:first-child{
-    color:#e82127;
-}
 
-
-/* KEEP BOTTOM NAV SAME */
+/* Bottom Navigation */
 
 .bottom-nav{
+
     position:fixed;
     bottom:0;
     left:0;
     width:100%;
-    height:75px;
-    background:#111;
-    border-top:1px solid #333;
+    background:white;
     display:flex;
     justify-content:space-around;
-    align-items:center;
+    padding:15px;
+    box-shadow:0 -5px 15px rgba(0,0,0,.1);
+
 }
 
 
-.nav{
-    color:#888;
+.bottom-nav a{
+
     text-decoration:none;
+    color:#2563eb;
     text-align:center;
-    font-size:12px;
+    font-weight:bold;
+
 }
 
-
-.nav span{
-    display:block;
-    font-size:22px;
-}
-
-
-.nav.active{
-    color:#e82127;
-}
 
 </style>
 
+</head>
 
 
-<div class="profile-page">
+<body>
 
 
-<!-- PROFILE -->
+<div class="header">
 
-<div class="profile-header">
-
-<div class="avatar">
-<img src="https://ui-avatars.com/api/?name={{ user.phone }}&background=111111&color=ffffff">
+<div class="profile-image">
+{{ user.username[0]|upper }}
 </div>
 
-
-<div class="profile-name">
-
-<h2>{{ user.phone }}</h2>
-
-<div class="vip">
-⚡ TESLA VIP MEMBER
-</div>
-
-</div>
+<h1>My Profile</h1>
 
 </div>
 
 
 
-
-<!-- WALLET -->
-
-<div class="wallet-card">
+<div class="container">
 
 
-<div class="wallet-title">
-My Assets (GHS)
+<div class="card">
+
+<h3>Account Information</h3>
+
+
+<div class="info">
+Full Name: {{ user.fullname }}
 </div>
 
 
-<div class="wallet-item">
-<span>Total Assets</span>
-<span>GHS {{ user.balance }}</span>
+<div class="info">
+Username: {{ user.username }}
 </div>
 
 
-<div class="wallet-item">
-<span>Total Income</span>
-<span>GHS {{ user.income }}</span>
+<div class="info">
+Phone: {{ user.phone }}
 </div>
 
 
-<div class="wallet-item">
-<span>Plan</span>
-<span>{{ user.plan or "None" }}</span>
-</div>
-
-
-<div class="wallet-item">
-<span>Referral</span>
-<span>{{ user.referral_code }}</span>
-</div>
-
-
-
-<div class="quick-actions">
-
-
-<div class="quick">
-<a href="/deposit">
-<div class="quick-icon">💰</div>
-Deposit
-</a>
-</div>
-
-
-<div class="quick">
-<a href="/withdraw">
-<div class="quick-icon">👛</div>
-Withdraw
-</a>
-</div>
-
-
-<div class="quick">
-<a href="/history">
-<div class="quick-icon">📋</div>
-Details
-</a>
-</div>
-
-
+<div class="info">
+Balance: GHS {{ user.balance }}
 </div>
 
 
@@ -326,52 +204,18 @@ Details
 
 
 
+<div class="card">
 
-<!-- INCOME -->
-
-<div class="income-card">
-
-<div class="income-title">
-Total Income
-</div>
+<h3>Security</h3>
 
 
-<div class="income-value">
-GHS {{ user.income }}
-</div>
-
-
-</div>
-
-
-
-
-
-<!-- MENU -->
-
-<div class="menu">
-
-<a href="/service">
-<span>🎧 TESLA CUSTOMER SUPPORT</span>
-<span>›</span>
+<a href="/bind_account" class="btn">
+🔐 Bind Account
 </a>
 
 
-<a href="/history">
-<span>📜 Transaction History</span>
-<span>›</span>
-</a>
-
-
-<a href="/change_password">
-<span>🔐 Change Password</span>
-<span>›</span>
-</a>
-
-
-<a href="/logout">
-<span> Logout</span>
-<span>›</span>
+<a href="/change_password" class="btn">
+🔑 Change Password
 </a>
 
 
@@ -380,35 +224,45 @@ GHS {{ user.income }}
 
 
 
+<div class="card">
 
-<!-- SAME BOTTOM NAV -->
+<a href="/logout" class="btn logout">
+Logout
+</a>
+
+</div>
+
+
+
+</div>
+
+
+
 
 <div class="bottom-nav">
 
-<a href="/dashboard" class="nav">
-<span>⌂</span>Home
+
+<a href="/dashboard">
+🏠<br>
+Home
 </a>
 
-<a href="/team" class="nav">
-<span>♟</span>Team
+
+<a href="/team">
+👥<br>
+Team
 </a>
 
-<a href="/service" class="nav">
-<span>⚙</span>Service
-</a>
 
-<a href="/my_plan" class="nav">
-<span>▣</span>Plans
+<a href="/profile">
+👤<br>
+Profile
 </a>
-
-<a href="/profile" class="nav active">
-<span>◎</span>Profile
-</a>
-
-</div>
 
 
 </div>
 
 
-{% endblock %}
+
+</body>
+</html>
