@@ -1,495 +1,185 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}
-Dashboard
-{% endblock %}
-
-
-{% block content %}
+<title>FUTURE LEADERS Dashboard</title>
 
 <style>
 
-.dashboard{
-    padding-bottom:100px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
+body{
+    background:#f4f8ff;
+}
 
-/* Header */
+.navbar{
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    color:white;
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
 .logo{
-    text-align:center;
-    padding:20px;
-    font-size:32px;
+    font-size:24px;
     font-weight:bold;
-    color:#e82127;
 }
 
-
-/* Flash message */
-
-.alert{
-    margin:15px 20px;
-    padding:12px;
-    background:#111;
-    border-left:4px solid #e82127;
-    border-radius:8px;
+.menu{
+    font-size:28px;
 }
 
-
-
-/* Banner */
-
-.banner img{
-    width:100%;
-    height:220px;
-    object-fit:cover;
+.container{
+    padding:20px;
 }
-
-
-
-/* Welcome */
 
 .welcome{
-    padding:20px;
+    background:linear-gradient(135deg,#2563eb,#60a5fa);
+    color:white;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
 .welcome h2{
-    font-size:24px;
+    margin-bottom:10px;
 }
 
-.welcome p{
-    color:#aaa;
-}
-
-
-
-/* Top buttons */
-
-.top-buttons{
-
+.grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    padding:0 20px;
-
-}
-
-
-.top-btn{
-
-    background:linear-gradient(135deg,#e82127,#800000);
-    color:white;
-    text-decoration:none;
-    text-align:center;
-    padding:15px 5px;
-    border-radius:15px;
-    font-weight:bold;
-    font-size:13px;
-
-}
-
-
-.top-btn span{
-
-    display:block;
-    font-size:20px;
-    margin-bottom:5px;
-
-}
-
-
-
-/* Account cards */
-
-
-.cards{
-
-    display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
     gap:15px;
-    padding:20px;
-
 }
-
 
 .card{
-
-    background:#111;
-    border:1px solid #333;
-    padding:18px;
-    border-radius:15px;
-
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    text-decoration:none;
+    color:black;
+    transition:.3s;
 }
 
-
-.card h4{
-
-    color:#aaa;
-    font-size:14px;
-
+.card:hover{
+    transform:translateY(-5px);
 }
 
+.card h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
 
 .card p{
-
-    color:#e82127;
-    font-size:22px;
-    margin-top:10px;
-
+    color:#666;
+    font-size:14px;
 }
 
-
-
-/* Bonus */
-
-.bonus{
-
-    margin:20px;
+.news{
+    margin-top:20px;
+    background:white;
     padding:20px;
-    text-align:center;
-    background:#111;
-    border:1px solid #e82127;
-    border-radius:15px;
-
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
-
-.bonus strong{
-
-    display:block;
-    color:#e82127;
-    font-size:30px;
-
-}
-
-
-
-/* Plans */
-
-
-.title{
-
-    padding:20px;
-    font-size:25px;
-    font-weight:bold;
-
-}
-
-
-
-.plan{
-
-    margin:15px 20px;
-    background:#111;
-    border-radius:15px;
-    overflow:hidden;
-    border:1px solid #333;
-
-}
-
-
-
-.plan img{
-
-    width:100%;
-    height:180px;
-    object-fit:cover;
-
-}
-
-
-
-.plan-body{
-
-    padding:20px;
-
-}
-
-
-
-.plan-body h3{
-
-    color:#e82127;
-
-}
-
-
-
-.buy{
-
-    display:block;
+button{
     margin-top:15px;
-    background:#e82127;
-    color:white;
-    text-decoration:none;
-    text-align:center;
-    padding:13px;
-    border-radius:10px;
-    font-weight:bold;
-
-}
-
-
-
-/* Bottom menu */
-
-
-.bottom-nav{
-
-    position:fixed;
-    bottom:0;
-    left:0;
     width:100%;
-    height:75px;
-    background:#111;
-    border-top:1px solid #333;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(45deg,#2563eb,#4f46e5);
+    color:white;
+    font-size:16px;
 }
-
-
-
-.nav{
-
-    color:#aaa;
-    text-decoration:none;
-    text-align:center;
-    font-size:12px;
-
-}
-
-
-
-.nav span{
-
-    display:block;
-    font-size:22px;
-    margin-bottom:3px;
-
-}
-
-
-.nav:hover{
-
-    color:#e82127;
-
-}
-
 
 </style>
 
+</head>
 
+<body>
 
-<div class="dashboard">
-
+<div class="navbar">
 
 <div class="logo">
-TESLA
+FUTURE LEADERS
 </div>
 
-
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-
-{% for message in messages %}
-
-<div class="alert">
-{{message}}
+<div class="menu">
+☰
 </div>
-
-{% endfor %}
-
-{% endif %}
-{% endwith %}
-
-
-
-
-<div class="banner">
-
-<img src="https://images.unsplash.com/photo-1560958089-b8a1929cea89">
 
 </div>
 
 
-
+<div class="container">
 
 <div class="welcome">
 
 <h2>
-Welcome {{user.phone}}
+Welcome Back, {{ session["username"] }} 👋
 </h2>
 
 <p>
-Your Tesla VIP Dashboard
+Continue your learning journey today.
 </p>
 
 </div>
 
 
+<div class="grid">
 
 
-<div class="top-buttons">
-
-
-<a href="/deposit" class="top-btn">
-
-<span>Deposit</span>
-Payment
-
+<a href="/lessons" class="card">
+<h3>📚 Lessons</h3>
+<p>Study SHS lessons.</p>
 </a>
 
 
-
-<a href="/withdraw" class="top-btn">
-
-<span>Withdraw</span>
-Request
-
+<a href="#" class="card">
+<h3>📝 Quizzes</h3>
+<p>Test your knowledge.</p>
 </a>
 
 
+<a href="#" class="card">
+<h3>💬 Discussions</h3>
+<p>Chat with students.</p>
+</a>
 
-<a href="/daily_checkin" class="top-btn">
 
-<span>Check In</span>
-Reward
-
+<a href="#" class="card">
+<h3>🏆 Leaderboard</h3>
+<p>See top performers.</p>
 </a>
 
 
 </div>
 
 
+<div class="news">
 
-
-
-<div class="cards">
-
-
-<div class="card">
-
-<h4>
-Balance
-</h4>
+<h3>📢 Announcements</h3>
 
 <p>
-GHS {{user.balance}}
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h4>
-Total Income
-</h4>
-
-<p>
-GHS {{user.income}}
-</p>
-
-</div>
-
-
-
-
-<div class="card">
-
-<h4>
-Daily Reward
-</h4>
-
-<p>
-GHS 1
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h4>
-Account Status
-</h4>
-
-<p>
-Active
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<div class="bonus">
-
-Registration Bonus
-
-<strong>
-GHS 10
-</strong>
-
-</div>
-
-
-
-
-<div class="title">
-TESLA VIP Plans
-</div>
-
-
-
-
-
-{% for plan in plans %}
-
-
-<div class="plan">
-
-
-<img src="{{plan.image}}">
-
-
-<div class="plan-body">
-
-
-<h3>
-{{plan.name}}
-</h3>
-
-
-<p>
-Investment: GHS {{plan.price}}
+Welcome to FUTURE LEADERS. New lessons are available.
 </p>
 
 
-<p>
-Daily Income: GHS {{plan.daily}}
-</p>
-
-
-<p>
-Duration: {{plan.duration}} Days
-</p>
-
-
-
-<a href="/buy_plan/{{plan.id}}" class="buy">
-Buy Plan
-</a>
+<button>
+Continue Learning
+</button>
 
 
 </div>
@@ -498,54 +188,5 @@ Buy Plan
 </div>
 
 
-{% endfor %}
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard" class="nav">
-<span>⌂</span>
-Home
-</a>
-
-
-
-<a href="/team" class="nav">
-<span>♟</span>
-Team
-</a>
-
-
-<a href="/service" class="nav">
-<span>⚙</span>
-Service
-</a>
-
-
-
-<a href="/my_plan" class="nav">
-<span>▣</span>
-Plans
-</a>
-
-
-
-<a href="/profile" class="nav">
-<span>◎</span>
-Profile
-</a>
-
-
-
-</div>
-
-
-
-</div>
-
-
-{% endblock %}
+</body>
+</html>
