@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
 
-<meta charset="UTF-8">
+<title>Admin Login - Zenith Capital</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Login</title>
 
 <style>
 
@@ -19,23 +18,25 @@
 
 
 body{
+
+    background:#f4f7fb;
     min-height:100vh;
-    background:#000;
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
+
 }
 
 
-.container{
 
-    width:360px;
-    background:#111;
+.login-box{
+
+    width:90%;
+    max-width:400px;
+    background:white;
     padding:30px;
-    border-radius:20px;
-    border:1px solid #333;
-    box-shadow:0 0 25px rgba(255,0,0,0.3);
+    border-radius:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.1);
 
 }
 
@@ -43,19 +44,20 @@ body{
 
 .logo{
 
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    color:white;
+    padding:25px;
     text-align:center;
-    font-size:35px;
-    font-weight:bold;
-    color:#e82127;
-    margin-bottom:10px;
+    border-radius:20px;
+    margin-bottom:25px;
 
 }
 
 
-h2{
 
-    text-align:center;
-    margin-bottom:25px;
+.logo h1{
+
+    font-size:28px;
 
 }
 
@@ -65,11 +67,10 @@ input{
 
     width:100%;
     padding:15px;
-    margin-bottom:15px;
-    background:#222;
-    border:none;
-    border-radius:10px;
-    color:white;
+    margin:10px 0;
+    border-radius:15px;
+    border:1px solid #ddd;
+    outline:none;
 
 }
 
@@ -79,38 +80,23 @@ button{
 
     width:100%;
     padding:15px;
-    background:#e82127;
-    color:white;
+    margin-top:15px;
     border:none;
-    border-radius:10px;
+    border-radius:15px;
+    background:#2563eb;
+    color:white;
     font-size:16px;
-    cursor:pointer;
+    font-weight:bold;
 
 }
 
 
 
-button:hover{
-
-    background:#b91c22;
-
-}
-
-
-
-.back{
+p{
 
     text-align:center;
-    margin-top:20px;
-
-}
-
-
-
-a{
-
-    color:#e82127;
-    text-decoration:none;
+    color:#64748b;
+    margin-top:15px;
 
 }
 
@@ -123,61 +109,60 @@ a{
 <body>
 
 
-<div class="container">
+
+<div class="login-box">
+
 
 
 <div class="logo">
-TESLA
+
+<h1>Admin Panel</h1>
+
+<p style="color:white;">
+Zenith Capital
+</p>
+
 </div>
 
 
-<h2>
-Admin Panel
-</h2>
 
 
-
-<form method="POST" action="/admin/login">
-
-
-<input
+<input 
 type="text"
-name="username"
 placeholder="Admin Username"
-required>
+>
 
 
 
-<input
+
+<input 
 type="password"
-name="password"
 placeholder="Admin Password"
-required>
+>
 
 
 
-<button type="submit">
+
+<button>
+
 Login
+
 </button>
 
 
-</form>
 
 
+<p>
 
-<div class="back">
+Authorized administrators only
 
-<a href="/login">
-Back to User Login
-</a>
-
-</div>
+</p>
 
 
 
 </div>
+
 
 
 </body>
-
 </html>
