@@ -1,349 +1,193 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}
-Register
-{% endblock %}
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block content %}
-
+<title>FUTURE LEADERS - Register</title>
 
 <style>
 
-.register-page{
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
+body{
+    background:#eef5ff;
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:20px;
-
 }
 
 
+.container{
+    width:360px;
+}
 
-.register-box{
 
-    width:100%;
-    max-width:380px;
-    background:#111;
+.card{
+
+    background:#cfd8dc;
     padding:30px;
-    border-radius:25px;
-    border:1px solid #333;
-    box-shadow:0 0 30px rgba(232,33,39,0.25);
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
 
 }
 
 
+.navbar{
 
-.logo{
-
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#0d6efd;
+    color:white;
+    padding:18px;
     text-align:center;
-    color:#e82127;
-    font-size:36px;
-    font-weight:900;
-    letter-spacing:3px;
-    margin-bottom:10px;
+    font-size:22px;
+    font-weight:bold;
 
 }
 
 
-
-.subtitle{
+h2{
 
     text-align:center;
-    color:#aaa;
+    color:#0d6efd;
     margin-bottom:25px;
 
 }
 
 
-
-
-.bonus-card{
-
-    background:#1a1a1a;
-    border:1px solid #e82127;
-    border-radius:15px;
-    padding:18px;
-    text-align:center;
-    margin-bottom:20px;
-
-}
-
-
-
-.bonus-card i{
-
-    color:#e82127;
-    font-size:25px;
-
-}
-
-
-
-.bonus-card strong{
-
-    display:block;
-    color:#e82127;
-    font-size:26px;
-    margin-top:8px;
-
-}
-
-
-
-.input-box{
-
-    position:relative;
-    margin-bottom:15px;
-
-}
-
-
-
-.input-box i{
-
-    position:absolute;
-    left:15px;
-    top:15px;
-    color:#e82127;
-
-}
-
-
-
 input{
 
     width:100%;
-    padding:14px 14px 14px 45px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#222;
-    color:white;
+    padding:14px;
+    margin-bottom:15px;
+    border:1px solid #cfd8dc;
+    border-radius:10px;
     outline:none;
+    font-size:15px;
 
 }
-
 
 
 input:focus{
 
-    border-color:#e82127;
+    border-color:#0d6efd;
 
 }
-
 
 
 button{
 
     width:100%;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(135deg,#e82127,#8b0000);
+    padding:14px;
+    background:#0d6efd;
     color:white;
+    border:none;
+    border-radius:10px;
     font-size:16px;
-    font-weight:bold;
     cursor:pointer;
 
 }
 
 
-
 button:hover{
 
-    opacity:.9;
+    background:#084298;
 
 }
 
 
-
-
-.login{
+p{
 
     text-align:center;
-    color:#aaa;
     margin-top:20px;
+    color:#555;
 
 }
 
 
+a{
 
-.login a{
-
-    color:#e82127;
+    color:#0d6efd;
     text-decoration:none;
     font-weight:bold;
 
 }
 
 
-
 </style>
 
+</head>
 
 
-<div class="register-page">
+<body>
 
 
-<div class="register-box">
-
-
-<div class="logo">
-TESLA
+<div class="navbar">
+FUTURE LEADERS
 </div>
 
 
-<div class="subtitle">
-Create your VIP account
-</div>
+<div class="container">
+
+<div class="card">
 
 
-
-
-<div class="bonus-card">
-
-<i class="fa-solid fa-gift"></i>
-
-<strong>GHS 10</strong>
-
-Registration Bonus
-
-</div>
-
-
+<h2>Create Account</h2>
 
 
 <form method="POST">
 
 
-
-<div class="input-box">
-
-<i class="fa-solid fa-phone"></i>
-
 <input 
-type="text"
-name="phone"
-placeholder="Phone Number"
+type="text" 
+name="username" 
+placeholder="User Name"
 required>
 
-</div>
-
-
-
-
-<div class="input-box">
-
-<i class="fa-solid fa-lock"></i>
 
 <input 
-type="password"
-name="password"
+type="password" 
+name="index number" 
+placeholder="Index Number"
+required>
+
+
+<input 
+type="password" 
+name="password" 
 placeholder="Password"
 required>
 
-</div>
 
-
-
-
-<div class="input-box">
-
-<i class="fa-solid fa-lock"></i>
-
-<input 
-type="password"
-name="confirm_password"
-placeholder="Confirm Password"
-required>
-
-</div>
-
-
-
-
-<div class="input-box">
-
-<i class="fa-solid fa-key"></i>
-
-<input 
-type="password"
-name="withdraw_password"
-placeholder="Withdrawal Password"
-required>
-
-</div>
-
-
-
-
-<div class="input-box">
-
-<i class="fa-solid fa-key"></i>
-
-<input 
-type="password"
-name="confirm_withdraw_password"
-placeholder="Confirm Withdrawal Password"
-required>
-
-</div>
-
-
-
-
-<div class="input-box">
-
-<i class="fa-solid fa-user-plus"></i>
-
-<input
-type="text"
-name="invite_code"
-placeholder="Invite Code (Optional)"
-value="{{ invite_code }}"
-readonly>
-
-</div>
-
-
-
-
-<button type="submit">
-
-Create Account
-
+<button type="Submit">
+Register
 </button>
-
 
 
 </form>
 
 
-
-
-
-<div class="login">
-
+<p>
 Already have an account?
-
-<a href="/login">
-
-Login
-
-</a>
+<a href="/login">login</a>
+</p>
 
 
 </div>
 
-
-
 </div>
 
 
-</div>
+</body>
 
-
-
-{% endblock %}
+</html>
