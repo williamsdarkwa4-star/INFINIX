@@ -5,7 +5,7 @@ from functools import wraps
 import sqlite3
 import secrets
 from datetime import datetime, timedelta
-
+from database import get_db, create_tables
 
 app = Flask(__name__)
 
