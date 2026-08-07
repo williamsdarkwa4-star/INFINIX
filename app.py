@@ -42,7 +42,7 @@ def register():
         username = request.form.get("username", "").strip()
         phone = request.form.get("phone", "").strip()
         password = request.form.get("password", "")
-        withdrawal_password = request.form.get("withdraw_password", "")
+        withdraw_password = request.form.get("withdraw_password", "")
         referred_by = request.form.get("referred_by", "").strip()
 
         # Check required fields
@@ -52,7 +52,7 @@ def register():
         # Hash passwords
         login_hash = generate_password_hash(password)
 
-        withdrawal_hash = generate_password_hash(
+        withdraw_hash = generate_password_hash(
             withdraw_password
         )
 
