@@ -1,152 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Users</title>
+<title>Admin Users - Zenith Capital</title>
+
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 
 body{
-    background:#000;
-    color:white;
-    padding-bottom:40px;
+
+background:#f4f7fb;
+padding-bottom:80px;
+
 }
+
 
 
 .header{
 
-    background:#111;
-    padding:25px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-    color:#e82127;
+background:linear-gradient(135deg,#0f172a,#2563eb);
+color:white;
+padding:30px;
+text-align:center;
+border-radius:0 0 30px 30px;
 
 }
 
 
 
-.search{
+.container{
 
-    padding:20px;
+padding:20px;
+
+}
+
+
+
+.search-box{
+
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+margin-bottom:20px;
 
 }
 
 
-.search input{
 
-    width:100%;
-    padding:14px;
-    background:#222;
-    border:none;
-    border-radius:10px;
-    color:white;
+input{
+
+width:100%;
+padding:15px;
+border-radius:15px;
+border:1px solid #ddd;
+outline:none;
 
 }
-
 
 
 
 .user-card{
 
-    margin:20px;
-    background:#111;
-    padding:20px;
-    border-radius:15px;
-    border:1px solid #333;
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
 
 }
 
 
 
-.user-card h3{
+.user-card h2{
 
-    color:#e82127;
-    margin-bottom:15px;
-
-}
-
-
-
-.info p{
-
-    margin:10px 0;
-    color:#ccc;
+color:#2563eb;
+margin-bottom:15px;
 
 }
 
 
 
-.info span{
+.info{
 
-    color:white;
-    float:right;
+line-height:28px;
+color:#475569;
+
+}
+
+
+
+button{
+
+width:100%;
+padding:14px;
+border:none;
+border-radius:15px;
+background:#2563eb;
+color:white;
+font-weight:bold;
+margin-top:15px;
 
 }
 
 
 
 
+.bottom-nav{
 
-.actions{
-
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-
-}
-
-
-
-.btn{
-
-    flex:1;
-    padding:12px;
-    text-align:center;
-    border-radius:10px;
-    text-decoration:none;
-    color:white;
-    background:#e82127;
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px;
+box-shadow:0 -5px 15px rgba(0,0,0,.1);
 
 }
 
 
 
-.btn:hover{
+.bottom-nav a{
 
-    background:#b91c22;
-
-}
-
-
-
-.back{
-
-    display:block;
-    margin:20px;
-    padding:15px;
-    background:#222;
-    color:white;
-    text-align:center;
-    text-decoration:none;
-    border-radius:12px;
+text-decoration:none;
+color:#2563eb;
+text-align:center;
+font-weight:bold;
 
 }
 
 
 </style>
+
 
 </head>
 
@@ -155,9 +154,12 @@ body{
 
 
 
+
 <div class="header">
 
-👥 USERS MANAGEMENT
+<h1>All Users</h1>
+
+<p>Search and manage users</p>
 
 </div>
 
@@ -165,11 +167,20 @@ body{
 
 
 
-<div class="search">
+<div class="container">
+
+
+
+
+
+<div class="search-box">
+
 
 <input 
 type="text"
-placeholder="Search user phone number">
+placeholder="Search username or phone number"
+>
+
 
 </div>
 
@@ -177,59 +188,54 @@ placeholder="Search user phone number">
 
 
 
-
-{% for user in users %}
 
 
 <div class="user-card">
 
 
-<h3>
-User #{{ user.id }}
-</h3>
+<h2>
+Example User
+</h2>
 
 
 
 <div class="info">
 
 
-<p>
-Phone
-<span>
-{{ user.phone }}
-</span>
-</p>
+Username: example123
+
+<br>
+
+Phone: 024 XXXXXXX
+
+<br>
+
+User ID: 001
+
+<br>
+
+Deposit Account: GHS 100
+
+<br>
+
+Withdrawal Account: GHS 50
+
+<br>
+
+Status: Active
+
+
+</div>
 
 
 
-<p>
-Balance
-<span>
-GHS {{ user.balance }}
-</span>
-</p>
+<button>
+
+Manage User
+
+</button>
 
 
-
-<p>
-Active Plan
-<span>
-{{ user.plan }}
-</span>
-</p>
-
-
-
-<p>
-Joined
-<span>
-{{ user.created_at }}
-</span>
-</p>
-
-<a href="{{ url_for('edit_balance', user_id=user.id) }}">
-    Edit Balance
-</a>
 
 </div>
 
@@ -237,36 +243,71 @@ Joined
 
 
 
-<div class="actions">
 
 
-<a href="/admin/add_balance/{{ user.id }}" class="btn">
-+ Add Funds
-</a>
+
+<div class="user-card">
 
 
-<a href="/admin/deduct_balance/{{ user.id }}" class="btn">
-- Deduct
-</a>
+<h2>
+No More Users
+</h2>
+
+
+<div class="info">
+
+Users will appear here.
+
+</div>
 
 
 </div>
 
 
 
+
+
+
 </div>
 
 
-{% endfor %}
 
 
 
 
 
 
-<a href="/admin/dashboard" class="back">
-⬅ Back To Dashboard
+<div class="bottom-nav">
+
+
+<a href="/admin_dashboard">
+
+🏠<br>
+Dashboard
+
 </a>
+
+
+
+<a href="/admin_users">
+
+👥<br>
+Users
+
+</a>
+
+
+
+<a href="/admin_withdraw">
+
+💸<br>
+Withdraw
+
+</a>
+
+
+</div>
+
 
 
 
