@@ -1977,46 +1977,6 @@ def change_user_password(user_id):
     return redirect("/admin/users")
 
 
-# =========================
-# ADMIN USER MANAGEMENT
-# =========================
-
-
-@app.route("/admin/users", methods=["GET","POST"])
-@admin_required
-def admin_users():
-
-
-    db = get_db()
-
-
-    search = request.args.get("search","")
-
-
-    users = db.execute("""
-    SELECT *
-
-    FROM users
-
-    WHERE username LIKE ?
-
-    OR phone LIKE ?
-
-    ORDER BY id DESC
-
-    """,
-    (
-    "%" + search + "%",
-    "%" + search + "%"
-    )).fetchall()
-
-
-
-    return render_template(
-        "admin_users.html",
-        users=users,
-        search=search
-    )
 
 
 
