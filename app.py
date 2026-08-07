@@ -1,160 +1,345 @@
-from flask import Flask, render_template
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, session
+from database import get_db, create_tables
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import secrets
+
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+
+app.secret_key = "change_this_secret_key"
 
 
-conn = sqlite3.connect("database.db")
-cursor = conn.cursor()
-def get_db_connection():
-    conn = sqlite3.connect("database.db")
-    conn.row_factory = sqlite3.Row
-    return conn
 
+# Create database automatically
+create_tables()
+
+
+
+
+
+# Home
 
 @app.route("/")
 def home():
-    return render_template("index.html")
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        username = request.form["username"].strip()
-        password = request.form["password"]
+    return redirect("/login")
 
-        conn = get_db_connection()
-        user = conn.execute(
-            "SELECT * FROM users WHERE username = ?",
-           (username,)
-        ).fetchone()
-        conn.close()
 
-        if user and check_password_hash(user["password"], password):
-            session["user_id"] = user["id"]
-            session["username"] = user["username"]
 
-            flash("Login successful!")
-            return redirect(url_for("dashboard"))
 
-        flash("Invalid username or password.")
-        return redirect(url_for("login"))
 
-    return render_template("login.html")
-    
-@app.route("/register", methods=["GET", "POST"])
+
+
+# Register
+
+@app.route("/register", methods=["GET","POST"])
 def register():
+
+    invite_code = request.args.get("ref","")
+
+
     if request.method == "POST":
-        username = request.form["username"].strip()
+
+
+        username = request.form["username"]
+        phone = request.form["phone"]
         password = request.form["password"]
+        withdrawal_password = request.form["withdrawal_password"]
 
-        hashed_password = generate_password_hash(password)
+        referred_by = request.form.get("referred_by")
 
-        conn = get_db_connection()
+
+
+        # Hash passwords
+
+        login_password_hash = generate_password_hash(password)
+
+        withdrawal_password_hash = generate_password_hash(
+            withdrawal_password
+        )
+
+
+
+        # Generate referral code
+
+        referral_code = secrets.token_hex(4).upper()
+
+
+
+        db = get_db()
+        cursor = db.cursor()
+
+
 
         try:
-            conn.execute(
-                "INSERT INTO users (username, password) VALUES (?, ?)",
-                (username, hashed_password)
+
+
+            cursor.execute("""
+            INSERT INTO users
+            (
+            username,
+            phone,
+            login_password,
+            withdrawal_password,
+            referral_code,
+            referred_by
             )
-            conn.commit()
-            flash("Registration successful! Please log in.")
-            return redirect(url_for("login"))
+
+            VALUES(?,?,?,?,?,?)
+
+            """,
+            (
+            username,
+            phone,
+            login_password_hash,
+            withdrawal_password_hash,
+            referral_code,
+            referred_by
+            ))
+
+
+
+            user_id = cursor.lastrowid
+
+
+
+            # Create accounts
+
+            cursor.execute("""
+            INSERT INTO accounts(user_id)
+            VALUES(?)
+
+            """,
+            (user_id,))
+
+
+
+            db.commit()
+
+
+
+            return redirect("/login")
+
+
 
         except sqlite3.IntegrityError:
-            flash("This user already exists.")
 
-        finally:
-            conn.close()
+            return "Username or phone already exists"
 
-    return render_template("register.html")
+
+
+
+
+    return render_template(
+        "register.html",
+        invite_code=invite_code
+    )
+
+
+
+
+
+
+
+
+
+# Login
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+
+    if request.method == "POST":
+
+
+        phone = request.form["phone"]
+        password = request.form["password"]
+
+
+
+        db = get_db()
+
+
+
+        user = db.execute("""
+
+        SELECT *
+
+        FROM users
+
+        WHERE phone=?
+
+        """,
+        (phone,)).fetchone()
+
+
+
+        if user:
+
+
+
+            if check_password_hash(
+                user["login_password"],
+                password
+            ):
+
+
+                session["user_id"] = user["id"]
+
+
+                return redirect("/dashboard")
+
+
+
+        return "Invalid login details"
+
+
+
+
+
+    return render_template("login.html")
+
+
+
+
+
+
+
+
+
+# Dashboard
 
 @app.route("/dashboard")
 def dashboard():
+
+
     if "user_id" not in session:
-        return redirect(url_for("login"))
 
-    return render_template("dashboard.html")
-
-@app.route("/lessons")
-def lessons():
-	return render_template("lessons.html")
-
-@app.route("/mathematics")
-def mathematics():
-	return render_template("mathematics.html")
-@app.route("/math_quiz")
-def math_quiz():
-    return render_template("math_quiz.html")
+        return redirect("/login")
 
 
-@app.route("/math_result", methods=["POST"])
-def math_result():
 
-    score = 0
+    db = get_db()
 
-    answers = {
-        "q1": "B",
-        "q2": "D",
-        "q3": "C",
-        "q4": "A",
-        "q5": "B"
-    }
 
-    for question, correct_answer in answers.items():
-        if request.form.get(question) == correct_answer:
-            score += 1
 
-    return render_template(
-        "math_result.html",
-        score=score,
-        total=len(answers)
-    )
+    user = db.execute("""
 
-@app.route("/science")
-def science():
-	return render_template("science.html")
+    SELECT *
 
-@app.route("/english_language")
-def english_language():
-	return render_template("english_language.html")
+    FROM users
 
-@app.route("/english_quiz")
-def english_quiz():
-    return render_template("english_quiz.html")
+    WHERE id=?
 
-@app.route("/english_result", methods=["POST"])
-def english_result():
+    """,
+    (session["user_id"],)).fetchone()
 
-    score = 0
 
-    answers = {
-        "q1": "A",
-        "q2": "A",
-        "q3": "B",
-        "q4": "D",
-        "q5": "A"
-    }
 
-    for question, correct_answer in answers.items():
-        if request.form.get(question) == correct_answer:
-            score += 1
+    accounts = db.execute("""
+
+    SELECT *
+
+    FROM accounts
+
+    WHERE user_id=?
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
 
     return render_template(
-        "english_result.html",
-        score=score,
-        total=len(answers)
+        "dashboard.html",
+        user=user,
+        accounts=accounts
     )
 
-@app.route("/ict")
-def ict():
-	return render_template("ict.html")
 
-@app.route("/social_studies")
-def social_studies():
-	return render_template("social_studies.html")
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+
+
+
+
+# Profile
+
+@app.route("/profile")
+def profile():
+
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+
+    db=get_db()
+
+
+
+    user=db.execute("""
+
+    SELECT *
+
+    FROM users
+
+    WHERE id=?
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
+
+    accounts=db.execute("""
+
+    SELECT *
+
+    FROM accounts
+
+    WHERE user_id=?
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
+
+    return render_template(
+        "profile.html",
+        user=user,
+        accounts=accounts
+    )
+
+
+
+
+
+
+
+
+
+# Logout
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect("/login")
+
+
+
+
+
+
+
+
+if __name__=="__main__":
+
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
