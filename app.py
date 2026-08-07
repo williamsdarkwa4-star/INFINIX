@@ -156,56 +156,37 @@ def register():
 # =========================
 # LOGIN
 # =========================
-
-@app.route("/login", methods=["GET","POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-
 
     if request.method == "POST":
 
-
         phone = request.form["phone"]
-
         password = request.form["password"]
-
-
 
         db = get_db()
 
-
-
-        user = db.execute("""
-        SELECT *
-
-        FROM users
-
-        WHERE phone=?
-
-        """,
-        (phone,)).fetchone()
-
-
+        user = db.execute_one("""
+            SELECT *
+            FROM users
+            WHERE phone = %s
+        """, (phone,))
 
         if user:
-
 
             if check_password_hash(
                 user["login_password"],
                 password
             ):
 
-
                 session["user_id"] = user["id"]
 
                 return redirect("/dashboard")
 
-
-
         return "Invalid login details"
 
-
-
     return render_template("login.html")
+
 # =========================
 # USER DASHBOARD
 # =========================
