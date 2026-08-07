@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Dashboard - Zenith Capital</title>
+
 
 <style>
 
@@ -17,152 +18,245 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+
 body{
 background:#f4f7fb;
 padding:20px;
-padding-bottom:100px;
 }
+
+
 
 .header{
-background:linear-gradient(135deg,#0f172a,#2563eb);
+
+background:linear-gradient(135deg,#0F172A,#2563EB);
 color:white;
-padding:30px;
-text-align:center;
+padding:25px;
 border-radius:20px;
-margin-bottom:20px;
+text-align:center;
+
 }
 
-.grid{
+
+
+.container{
+
+margin-top:20px;
+
+}
+
+
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+}
+
+
+
+.stats{
+
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr 1fr;
 gap:15px;
-margin-bottom:20px;
+
 }
 
-.box{
-background:white;
-padding:20px;
-border-radius:18px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
 
-.box h2{
-color:#2563eb;
-margin-bottom:8px;
-}
 
-.box p{
-font-size:22px;
-font-weight:bold;
-}
+.stat{
 
-.menu{
-background:white;
-border-radius:20px;
-padding:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
-
-.menu a{
-display:block;
-text-decoration:none;
-color:#111827;
-padding:16px;
-margin-bottom:12px;
 background:#f8fafc;
+padding:20px;
 border-radius:15px;
-font-weight:bold;
-transition:.3s;
+text-align:center;
+
 }
 
-.menu a:hover{
-background:#2563eb;
-color:white;
+
+
+.stat h2{
+
+color:#2563EB;
+
 }
+
+
+
+.buttons{
+
+display:grid;
+gap:15px;
+
+}
+
+
+
+.buttons a{
+
+text-decoration:none;
+background:#2563EB;
+color:white;
+padding:15px;
+border-radius:12px;
+text-align:center;
+font-weight:bold;
+
+}
+
+
 
 .logout{
+
 background:#ef4444 !important;
-color:white !important;
+
 }
+
+
 
 </style>
 
 </head>
 
+
 <body>
+
+
 
 <div class="header">
 
-<h1>Zenith Capital</h1>
+<h1>
+Zenith Capital Admin
+</h1>
 
-<h3>Admin Dashboard</h3>
-
-</div>
-
-<div class="grid">
-
-<div class="box">
-<h2>Total Users</h2>
-<p>0</p>
-</div>
-
-<div class="box">
-<h2>Total Deposits</h2>
-<p>GHS 0.00</p>
-</div>
-
-<div class="box">
-<h2>Total Withdrawals</h2>
-<p>GHS 0.00</p>
-</div>
-
-<div class="box">
-<h2>Active Plans</h2>
-<p>0</p>
-</div>
+<p>
+Admin Control Panel
+</p>
 
 </div>
 
-<div class="menu">
 
-<a href="/admin_deposit">
-💳 Deposit Management
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+
+<div class="stats">
+
+
+<div class="stat">
+
+<h2>
+{{total_users}}
+</h2>
+
+<p>
+Users
+</p>
+
+</div>
+
+
+
+<div class="stat">
+
+<h2>
+{{pending_deposits}}
+</h2>
+
+<p>
+Pending Deposits
+</p>
+
+</div>
+
+
+
+<div class="stat">
+
+<h2>
+{{pending_withdrawals}}
+</h2>
+
+<p>
+Pending Withdrawals
+</p>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+Management
+</h2>
+
+<br>
+
+
+<div class="buttons">
+
+
+<a href="/admin/users">
+👥 Manage Users
 </a>
 
-<a href="/admin_withdraw">
-💸 Withdrawal Management
+
+
+<a href="/admin/deposits">
+💰 Manage Deposits
 </a>
 
-<a href="/admin_users">
-👥 View All Users
+
+
+<a href="/admin/withdrawals">
+💸 Manage Withdrawals
 </a>
 
-<a href="/admin_manage_user">
-⚙️ Manage User Accounts
+
+
+<a href="/admin/bind_accounts">
+📱 Bind Accounts
 </a>
 
-<a href="/admin_plans">
-📈 Active User Plans
-</a>
 
-<a href="/admin_transactions">
-📜 Transaction History
-</a>
 
-<a href="/admin_support">
-🎧 Customer Support
-</a>
-
-<a href="/admin_settings">
-⚙️ Platform Settings
-</a>
-
-<a href="/admin_logout" class="logout">
+<a href="/admin/logout" class="logout">
 🚪 Logout
 </a>
 
+
+
 </div>
+
+
+</div>
+
+
+
+</div>
+
 
 </body>
 
