@@ -1,231 +1,277 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>My Plan - Zenith Capital</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
+
 body{
-    background:#f4f7fb;
-    padding-bottom:80px;
+
+background:#f4f7fb;
+padding-bottom:90px;
+
 }
+
 
 
 .header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    color:white;
-    padding:30px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
+
+background:linear-gradient(135deg,#0F172A,#2563EB);
+color:white;
+padding:30px;
+text-align:center;
+border-radius:0 0 30px 30px;
+
 }
+
 
 
 .container{
-    padding:20px;
+
+padding:20px;
+
 }
+
 
 
 .card{
-    background:white;
-    padding:22px;
-    border-radius:20px;
-    margin-bottom:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
 }
+
 
 
 .card h2{
-    color:#2563eb;
-    margin-bottom:15px;
+
+color:#2563EB;
+margin-bottom:15px;
+
 }
+
 
 
 .info{
-    color:#475569;
-    margin:12px 0;
-}
 
-
-.timer{
-    background:#0f172a;
-    color:white;
-    padding:20px;
-    border-radius:18px;
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-}
-
-
-.timer p{
-    font-size:15px;
-    margin-bottom:10px;
-}
-
-
-.claim{
-
-    width:100%;
-    margin-top:15px;
-    padding:14px;
-    border:none;
-    border-radius:15px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-
-}
-
-
-.status{
-
-    display:inline-block;
-    background:#10b981;
-    color:white;
-    padding:8px 15px;
-    border-radius:20px;
+line-height:32px;
+color:#475569;
 
 }
 
 
 
-/* Bottom Navigation */
+button{
+
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+background:#2563EB;
+color:white;
+font-weight:bold;
+font-size:16px;
+
+}
+
+
+
+button:disabled{
+
+background:#94a3b8;
+
+}
+
+
 
 .bottom-nav{
 
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px;
+box-shadow:0 -5px 15px rgba(0,0,0,.1);
 
 }
+
 
 
 .bottom-nav a{
 
-    text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
+text-decoration:none;
+color:#2563EB;
+font-weight:bold;
+text-align:center;
 
 }
 
+
 </style>
+
 
 </head>
 
 
+
 <body>
+
 
 
 <div class="header">
 
 <h1>My Plan</h1>
 
-<p>Active Investment</p>
+<p>Your active investment plan</p>
 
 </div>
+
+
 
 
 
 <div class="container">
 
 
+
+{% if plan %}
+
+
+
 <div class="card">
 
-<h2>Zenith VIP 1</h2>
+
+<h2>{{ plan.plan_name }}</h2>
 
 
 <div class="info">
-Investment: GHS 50
-</div>
 
+Daily Income:
+GHS {{ plan.daily_income }}
 
-<div class="info">
-Daily Income: GHS 8
-</div>
+<br>
 
+Duration:
+{{ plan.duration }} Days
 
-<div class="info">
-Duration: 100 Days
-</div>
+<br>
 
-
-<div class="info">
-Remaining Days: 100
-</div>
-
-
-<div class="status">
+Status:
 Active
+
+
 </div>
 
 
 </div>
+
 
 
 
 
 <div class="card">
 
-<h2>Next Income</h2>
+
+<h2>Daily Income Claim</h2>
 
 
-<div class="timer">
+<div class="info">
 
-<p>Next credit in</p>
+Next claim:
 
-23:59:59
+<span id="timer">
+
+24:00:00
+
+</span>
+
 
 </div>
 
 
-<button class="claim" onclick="claimIncome()">
+<br>
+
+
+<form method="POST"
+onsubmit="return confirm('Are you sure you want to claim your daily income?');">
+
+
+{% if can_claim %}
+
+<button type="submit">
+
 Claim Income
+
 </button>
 
 
+{% else %}
+
+
+<button disabled>
+
+Waiting For Next Claim
+
+</button>
+
+
+{% endif %}
+
+
+</form>
+
+
+
 </div>
 
+
+
+
+{% else %}
 
 
 
 <div class="card">
 
-<h2>Account Summary</h2>
+<h2>No Active Plan</h2>
 
-
-<div class="info">
-Total Earned: GHS 0.00
-</div>
-
-
-<div class="info">
-Today Income: GHS 0.00
-</div>
+<p>
+You do not have an active plan.
+</p>
 
 
 </div>
 
 
 
+{% endif %}
+
+
+
+
 </div>
+
+
 
 
 
@@ -234,20 +280,30 @@ Today Income: GHS 0.00
 
 
 <a href="/dashboard">
-🏠<br>
-Home
+
+🏠
+<br>
+Dashboard
+
 </a>
 
 
 <a href="/my_plan">
-💼<br>
+
+📈
+<br>
 My Plan
+
 </a>
 
 
+
 <a href="/profile">
-👤<br>
+
+👤
+<br>
 Profile
+
 </a>
 
 
@@ -255,26 +311,44 @@ Profile
 
 
 
+
+
 <script>
 
-function claimIncome(){
-
-let confirmClaim = confirm(
-"Are you sure you want to claim your daily income?"
-);
+let seconds = 86400;
 
 
-if(confirmClaim){
+function countdown(){
 
-alert("Daily income claim request submitted");
+let h = Math.floor(seconds / 3600);
+
+let m = Math.floor((seconds % 3600)/60);
+
+let s = seconds % 60;
+
+
+document.getElementById("timer").innerHTML =
+
+h + ":" + m + ":" + s;
+
+
+
+if(seconds > 0){
+
+seconds--;
 
 }
 
+
 }
+
+
+setInterval(countdown,1000);
+
 
 </script>
 
 
-
 </body>
+
 </html>
