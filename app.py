@@ -76,7 +76,7 @@ def register():
                 username,
                 phone,
                 login_password,
-                withdrawal_password,
+                withdraw_password,
                 referral_code,
                 referred_by
             )
@@ -89,7 +89,7 @@ def register():
                 username,
                 phone,
                 login_hash,
-                withdrawal_hash,
+                withdraw_hash,
                 referral_code,
                 referred_by
             ))
