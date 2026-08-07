@@ -244,24 +244,19 @@ def login():
 
 
 
-# DASHBOARD
+# DASHBOARD - SHOW PLANS
 
 @app.route("/dashboard")
 def dashboard():
 
-
     if "user_id" not in session:
-
         return redirect("/login")
-
 
 
     db = get_db()
 
 
-
     user = db.execute("""
-
     SELECT *
 
     FROM users
@@ -274,7 +269,6 @@ def dashboard():
 
 
     accounts = db.execute("""
-
     SELECT *
 
     FROM accounts
@@ -286,11 +280,139 @@ def dashboard():
 
 
 
+    plans = db.execute("""
+    SELECT *
+
+    FROM plans
+
+    WHERE status='Active'
+
+    """).fetchall()
+
+
+
     return render_template(
         "dashboard.html",
         user=user,
-        accounts=accounts
+        accounts=accounts,
+        plans=plans
     )
+
+
+
+# BUY PLAN
+
+@app.route("/buy_plan/<int:plan_id>", methods=["POST"])
+def buy_plan(plan_id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+    plan = db.execute("""
+    SELECT *
+
+    FROM plans
+
+    WHERE id=?
+
+    """,
+    (plan_id,)).fetchone()
+
+
+
+    if not plan:
+        return "Plan not found"
+
+
+
+    account = db.execute("""
+    SELECT *
+
+    FROM accounts
+
+    WHERE user_id=?
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
+
+    if account["deposit_account"] < plan["investment_amount"]:
+        return "Insufficient deposit balance"
+
+
+
+    # Deduct amount
+
+    db.execute("""
+    UPDATE accounts
+
+    SET deposit_account = deposit_account - ?
+
+    WHERE user_id=?
+
+    """,
+    (
+    plan["investment_amount"],
+    session["user_id"]
+    ))
+
+
+
+    # Create active plan
+
+    db.execute("""
+    INSERT INTO user_plans
+
+    (
+    user_id,
+    plan_id
+    )
+
+    VALUES(?,?)
+
+    """,
+    (
+    session["user_id"],
+    plan_id
+    ))
+
+
+
+    # Transaction record
+
+    db.execute("""
+    INSERT INTO transactions
+
+    (
+    user_id,
+    transaction_type,
+    amount,
+    description,
+    status
+    )
+
+    VALUES(?,?,?,?,?)
+
+    """,
+    (
+    session["user_id"],
+    "Plan Purchase",
+    plan["investment_amount"],
+    "Plan purchased",
+    "Successful"
+    ))
+
+
+
+    db.commit()
+
+
+    return redirect("/my_plan")
 
 
 
