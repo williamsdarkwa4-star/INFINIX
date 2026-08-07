@@ -2,267 +2,245 @@
 <html>
 <head>
 
-<title>Profile - Zenith Capital</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile - Zenith Capital</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
-
 
 body{
-    background:#f4f7fb;
-    padding-bottom:80px;
+background:#f4f7fb;
+padding-bottom:90px;
 }
-
-
-/* Header */
 
 .header{
-
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    color:white;
-    padding:35px 20px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
-
+background:linear-gradient(135deg,#0f172a,#2563eb);
+padding:35px 20px;
+color:white;
+text-align:center;
+border-radius:0 0 30px 30px;
 }
 
-
-.profile-image{
-
-    width:90px;
-    height:90px;
-    background:white;
-    color:#2563eb;
-    border-radius:50%;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:35px;
-    font-weight:bold;
-
+.avatar{
+width:90px;
+height:90px;
+border-radius:50%;
+background:white;
+margin:15px auto;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:40px;
+color:#2563eb;
 }
-
-
-.header h1{
-
-    margin-top:15px;
-
-}
-
-
-
-/* Content */
 
 .container{
-
-    padding:20px;
-
+padding:20px;
 }
-
 
 .card{
-
-    background:white;
-    padding:20px;
-    border-radius:20px;
-    margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
-
-.card h3{
-
-    color:#2563eb;
-    margin-bottom:15px;
-
+.card h2{
+color:#2563eb;
+margin-bottom:15px;
 }
-
 
 .info{
-
-    padding:12px 0;
-    color:#475569;
-    border-bottom:1px solid #eee;
-
+display:flex;
+justify-content:space-between;
+padding:12px 0;
+border-bottom:1px solid #eee;
 }
 
-
-
-/* Buttons */
-
-.btn{
-
-    display:block;
-    width:100%;
-    padding:15px;
-    margin-top:12px;
-    border-radius:15px;
-    background:#2563eb;
-    color:white;
-    text-align:center;
-    text-decoration:none;
-    font-weight:bold;
-
+.balance-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
 }
 
+.balance-box{
+background:#f8fafc;
+padding:18px;
+border-radius:15px;
+text-align:center;
+}
+
+.balance-box h3{
+color:#2563eb;
+margin-bottom:10px;
+font-size:15px;
+}
+
+.amount{
+font-size:22px;
+font-weight:bold;
+color:#16a34a;
+}
+
+.menu{
+display:block;
+padding:15px;
+margin-bottom:12px;
+background:#f8fafc;
+border-radius:15px;
+text-decoration:none;
+color:#0f172a;
+font-weight:bold;
+}
 
 .logout{
-
-    background:#ef4444;
-
+background:#ef4444;
+color:white;
 }
-
-
-
-/* Bottom Navigation */
 
 .bottom-nav{
-
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 15px rgba(0,0,0,.1);
 }
-
 
 .bottom-nav a{
-
-    text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
-
+text-decoration:none;
+color:#2563eb;
+font-size:14px;
+font-weight:bold;
+text-align:center;
 }
-
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <div class="header">
 
-<div class="profile-image">
-{{ user.username[0]|upper }}
-</div>
+<div class="avatar">
 
-<h1>My Profile</h1>
+👤
 
 </div>
 
+<h2>{{ user.username }}</h2>
 
+<p>{{ user.phone }}</p>
+
+</div>
 
 <div class="container">
 
+<div class="card">
+
+<h2>Account Information</h2>
+
+<div class="info">
+<span>User ID</span>
+<span>{{ user.id }}</span>
+</div>
+
+<div class="info">
+<span>Referral Code</span>
+<span>{{ user.referral_code }}</span>
+</div>
+
+<div class="info">
+<span>Phone Number</span>
+<span>{{ user.phone }}</span>
+</div>
+
+</div>
 
 <div class="card">
 
-<h3>Account Information</h3>
+<h2>Account Balances</h2>
 
+<div class="balance-grid">
 
-<div class="info">
-Full Name: {{ user.fullname }}
+<div class="balance-box">
+<h3>Deposit Account</h3>
+<div class="amount">GHS {{ deposit_balance }}</div>
 </div>
 
-
-<div class="info">
-Username: {{ user.username }}
+<div class="balance-box">
+<h3>Withdrawal Account</h3>
+<div class="amount">GHS {{ withdraw_balance }}</div>
 </div>
 
-
-<div class="info">
-Phone: {{ user.phone }}
+<div class="balance-box">
+<h3>Income Account</h3>
+<div class="amount">GHS {{ income_balance }}</div>
 </div>
 
-
-<div class="info">
-Balance: GHS {{ user.balance }}
+<div class="balance-box">
+<h3>Referral Account</h3>
+<div class="amount">GHS {{ referral_balance }}</div>
 </div>
 
-
 </div>
 
-
-
+</div>
 
 <div class="card">
 
-<h3>Security</h3>
+<h2>Account Settings</h2>
 
+<a class="menu" href="/bind_account">🏦 Bind Account</a>
 
-<a href="/bind_account" class="btn">
-🔐 Bind Account
-</a>
+<a class="menu" href="/deposit">💳 Deposit</a>
 
+<a class="menu" href="/withdraw">💸 Withdraw</a>
 
-<a href="/change_password" class="btn">
-🔑 Change Password
-</a>
+<a class="menu" href="/transaction_history">📜 Transaction History</a>
 
+<a class="menu" href="/team">👥 My Team</a>
 
-</div>
+<a class="menu" href="/support">🎧 Support Center</a>
 
+<a class="menu" href="/change_login_password">🔒 Change Login Password</a>
 
+<a class="menu" href="/change_withdraw_password">🔑 Change Withdrawal Password</a>
 
-
-<div class="card">
-
-<a href="/logout" class="btn logout">
-Logout
-</a>
+<a class="menu logout" href="/logout">🚪 Logout</a>
 
 </div>
 
-
-
 </div>
-
-
-
 
 <div class="bottom-nav">
 
-
 <a href="/dashboard">
-🏠<br>
-Home
+🏠<br>Home
 </a>
 
-
-<a href="/team">
-👥<br>
-Team
+<a href="/my_plan">
+💼<br>My Plan
 </a>
-
 
 <a href="/profile">
-👤<br>
-Profile
+👤<br>Profile
 </a>
 
-
 </div>
-
-
 
 </body>
 </html>
