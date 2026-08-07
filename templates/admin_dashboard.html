@@ -1,315 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Dashboard</title>
+<title>Admin Dashboard - Zenith Capital</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
-
 
 body{
-    background:#000;
-    color:white;
-    padding-bottom:30px;
+background:#f4f7fb;
+padding:20px;
+padding-bottom:100px;
 }
-
-
-/* Header */
 
 .header{
-
-    background:#111;
-    padding:25px;
-    text-align:center;
-    font-size:30px;
-    font-weight:bold;
-    color:#e82127;
-
+background:linear-gradient(135deg,#0f172a,#2563eb);
+color:white;
+padding:30px;
+text-align:center;
+border-radius:20px;
+margin-bottom:20px;
 }
 
-
-
-/* Welcome */
-
-.welcome{
-
-    padding:20px;
-
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:20px;
 }
 
-
-
-/* Stats */
-
-.stats{
-
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    padding:20px;
-
+.box{
+background:white;
+padding:20px;
+border-radius:18px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
-
-
-.card{
-
-    background:#111;
-    padding:20px;
-    border-radius:15px;
-    border:1px solid #333;
-
+.box h2{
+color:#2563eb;
+margin-bottom:8px;
 }
 
-
-
-.card h4{
-
-    color:#aaa;
-
+.box p{
+font-size:22px;
+font-weight:bold;
 }
-
-
-
-.card p{
-
-    margin-top:10px;
-    font-size:25px;
-    color:#e82127;
-
-}
-
-
-
-/* Menu */
-
 
 .menu{
-
-    padding:20px;
-
+background:white;
+border-radius:20px;
+padding:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
-
-
 
 .menu a{
-
-    display:block;
-    background:#e82127;
-    color:white;
-    text-decoration:none;
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:12px;
-    text-align:center;
-    font-weight:bold;
-
+display:block;
+text-decoration:none;
+color:#111827;
+padding:16px;
+margin-bottom:12px;
+background:#f8fafc;
+border-radius:15px;
+font-weight:bold;
+transition:.3s;
 }
-
-
 
 .menu a:hover{
-
-    background:#b91c22;
-
+background:#2563eb;
+color:white;
 }
-
-
 
 .logout{
-
-    background:#222 !important;
-
+background:#ef4444 !important;
+color:white !important;
 }
-
 
 </style>
 
 </head>
 
-
 <body>
-
-
 
 <div class="header">
 
-TESLA ADMIN
+<h1>Zenith Capital</h1>
+
+<h3>Admin Dashboard</h3>
 
 </div>
 
+<div class="grid">
 
-
-
-<div class="welcome">
-
-<h2>
-Welcome Admin
-</h2>
-
-<p>
-Manage your platform from here
-</p>
-
+<div class="box">
+<h2>Total Users</h2>
+<p>0</p>
 </div>
 
-
-
-
-
-
-<div class="stats">
-
-
-<div class="card">
-
-<h4>
-Total Users
-</h4>
-
-<p>
-{{ total_users }}
-</p>
-
+<div class="box">
+<h2>Total Deposits</h2>
+<p>GHS 0.00</p>
 </div>
 
-
-
-
-<div class="card">
-
-<h4>
-Total Deposits
-</h4>
-
-<p>
-GHS {{ total_deposits }}
-</p>
-
+<div class="box">
+<h2>Total Withdrawals</h2>
+<p>GHS 0.00</p>
 </div>
 
-
-
-
-
-<div class="card">
-
-<h4>
-Pending Deposits
-</h4>
-
-<p>
-{{ pending_deposits }}
-</p>
-
+<div class="box">
+<h2>Active Plans</h2>
+<p>0</p>
 </div>
 
-
-
-
-
-<div class="card">
-
-<h4>
-Pending Withdrawals
-</h4>
-
-<p>
-{{ pending_withdrawals }}
-</p>
-
 </div>
-
-
-
-
-
-<div class="card">
-
-<h4>
-Plans Purchased
-</h4>
-
-<p>
-{{ total_plans }}
-</p>
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h4>
-Total Balance
-</h4>
-
-<p>
-GHS {{ total_balance }}
-</p>
-
-</div>
-
-
-</div>
-
-
-
-
-
-
 
 <div class="menu">
 
-
-<a href="/admin/users">
-👥 Manage Users
+<a href="/admin_deposit">
+💳 Deposit Management
 </a>
 
-
-
-<a href="/admin/deposits">
-💳 Manage Deposits
+<a href="/admin_withdraw">
+💸 Withdrawal Management
 </a>
 
-
-
-<a href="/admin/withdrawals">
-💸 Manage Withdrawals
+<a href="/admin_users">
+👥 View All Users
 </a>
 
-
-
-<a href="/admin/plans">
-🚗 Manage Plans
+<a href="/admin_manage_user">
+⚙️ Manage User Accounts
 </a>
 
+<a href="/admin_plans">
+📈 Active User Plans
+</a>
 
+<a href="/admin_transactions">
+📜 Transaction History
+</a>
 
-<a href="/admin/logout" class="logout">
+<a href="/admin_support">
+🎧 Customer Support
+</a>
+
+<a href="/admin_settings">
+⚙️ Platform Settings
+</a>
+
+<a href="/admin_logout" class="logout">
 🚪 Logout
 </a>
 
-
-
 </div>
-
-
-
-
 
 </body>
 
