@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Login - Zenith Capital</title>
+
 
 <style>
 
@@ -16,99 +18,206 @@
     font-family:Arial,sans-serif;
 }
 
+
 body{
+
     background:linear-gradient(135deg,#0F172A,#2563EB);
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
+
 }
 
+
 .card{
+
     width:90%;
     max-width:400px;
     background:white;
     padding:30px;
     border-radius:25px;
     box-shadow:0 15px 35px rgba(0,0,0,.2);
+
 }
 
+
+
 .logo{
+
     text-align:center;
     font-size:30px;
     font-weight:bold;
     color:#2563EB;
     margin-bottom:20px;
+
 }
+
+
 
 h2{
+
     text-align:center;
-    color:#0F172A;
     margin-bottom:20px;
+    color:#0F172A;
+
 }
 
+
+
 input{
+
     width:100%;
     padding:14px;
     margin-bottom:15px;
     border:1px solid #ddd;
     border-radius:12px;
+    outline:none;
+
 }
+
+
+
+input:focus{
+
+    border-color:#2563EB;
+
+}
+
+
 
 button{
+
     width:100%;
     padding:15px;
-    background:#10B981;
-    color:white;
     border:none;
     border-radius:12px;
-    font-weight:bold;
+    background:#2563EB;
+    color:white;
     font-size:16px;
+    font-weight:bold;
+
 }
+
+
+
+button:hover{
+
+    background:#1D4ED8;
+
+}
+
+
 
 p{
+
     text-align:center;
     margin-top:20px;
+
 }
 
+
+
 a{
+
     color:#2563EB;
-    font-weight:bold;
     text-decoration:none;
+    font-weight:bold;
+
 }
+
+
 
 </style>
 
+
 </head>
+
 
 <body>
 
+
 <div class="card">
 
+
 <div class="logo">
+
 ZC
+
 </div>
 
-<h2>Welcome Back</h2>
+
+
+<h2>
+
+Welcome Back
+
+</h2>
+
+
+
 
 <form method="POST">
 
-<input type="text" name="username" placeholder="Username" required>
 
-<input type="password" name="password" placeholder="Password" required>
+
+<input
+
+type="text"
+
+name="phone"
+
+placeholder="Phone Number"
+
+required>
+
+
+
+<input
+
+type="password"
+
+name="password"
+
+placeholder="Login Password"
+
+required>
+
+
+
 
 <button type="submit">
+
 Login
+
 </button>
+
+
 
 </form>
 
+
+
+
+
 <p>
+
 Don't have an account?
-<a href="/register">Register</a>
+
+<a href="/register">
+
+Register
+
+</a>
+
+
 </p>
+
+
 
 </div>
 
+
 </body>
+
 </html>
