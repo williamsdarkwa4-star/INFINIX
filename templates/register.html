@@ -82,42 +82,104 @@ a{
     font-weight:bold;
 }
 
+.note{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:15px;
+    text-align:center;
+}
+
 </style>
 
 </head>
 
+
 <body>
 
+
 <div class="card">
+
 
 <div class="logo">
 ZC
 </div>
 
+
 <h2>Create Account</h2>
+
+
+<div class="note">
+Create your Zenith Capital account
+</div>
+
+
 
 <form method="POST">
 
-<input type="text" name="fullname" placeholder="Full Name" required>
 
-<input type="text" name="username" placeholder="Username" required>
 
-<input type="text" name="phone" placeholder="Phone Number" required>
+<input 
+type="text" 
+name="username" 
+placeholder="Username"
+required>
 
-<input type="password" name="password" placeholder="Password" required>
+
+
+<input 
+type="text" 
+name="phone" 
+placeholder="Phone Number"
+required>
+
+
+
+<input 
+type="password" 
+name="password" 
+placeholder="Login Password"
+required>
+
+
+
+<input 
+type="password" 
+name="withdrawal_password" 
+placeholder="Withdrawal Password"
+required>
+
+
+
+<input 
+type="text"
+name="referred_by"
+placeholder="Referral Code"
+value="{{ invite_code }}"
+readonly>
+
+
 
 <button type="submit">
+
 Register
+
 </button>
 
+
+
 </form>
+
+
 
 <p>
 Already have an account?
 <a href="/login">Login</a>
 </p>
 
+
+
 </div>
+
 
 </body>
 </html>
