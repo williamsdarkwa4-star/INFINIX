@@ -2144,6 +2144,87 @@ def change_user_password(user_id):
 
     return redirect("/admin/users")
 
+
+# =========================
+# ADMIN BIND ACCOUNTS
+# =========================
+
+
+@app.route("/admin/bind_accounts")
+@admin_required
+def admin_bind_accounts():
+
+
+    db = get_db()
+
+
+    accounts = db.execute("""
+    SELECT
+
+    bind_accounts.*,
+
+    users.username,
+
+    users.phone
+
+
+    FROM bind_accounts
+
+
+    JOIN users
+
+    ON bind_accounts.user_id = users.id
+
+
+    ORDER BY bind_accounts.id DESC
+
+
+    """).fetchall()
+
+
+
+    return render_template(
+        "admin_bind_accounts.html",
+        accounts=accounts
+    )
+
+
+
+
+
+
+
+# DELETE BIND ACCOUNT
+
+
+@app.route("/admin/bind_account/delete/<int:id>")
+@admin_required
+def delete_bind_account(id):
+
+
+    db = get_db()
+
+
+
+    db.execute("""
+    DELETE FROM bind_accounts
+
+    WHERE id=?
+
+    """,
+    (id,))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/bind_accounts")
+
+
+
+
 @app.route("/admin/logout")
 def admin_logout():
 
