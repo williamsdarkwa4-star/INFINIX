@@ -842,6 +842,238 @@ def my_plan():
     )
 
 
+
+# DEPOSIT PAGE
+
+@app.route("/deposit")
+def deposit():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    return render_template("deposit.html")
+
+
+# PAYSTACK SUCCESS
+
+@app.route("/deposit_success")
+def deposit_success():
+
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+
+    reference = request.args.get("reference")
+
+    amount = request.args.get("amount")
+
+    phone = request.args.get("phone")
+
+
+
+    db = get_db()
+
+
+
+    # Save deposit as pending
+
+    db.execute("""
+    INSERT INTO deposits
+
+    (
+    user_id,
+    amount,
+    phone,
+    payment_reference,
+    payment_method,
+    status
+    )
+
+    VALUES(?,?,?,?,?,?)
+
+    """,
+    (
+    session["user_id"],
+    float(amount),
+    phone,
+    reference,
+    "Paystack",
+    "Pending"
+    ))
+
+
+
+    # Add transaction history
+
+    db.execute("""
+    INSERT INTO transactions
+
+    (
+    user_id,
+    transaction_type,
+    amount,
+    description,
+    status
+    )
+
+    VALUES(?,?,?,?,?)
+
+    """,
+    (
+    session["user_id"],
+    "Deposit",
+    float(amount),
+    "Deposit payment submitted",
+    "Pending"
+    ))
+
+
+
+    db.commit()
+
+
+
+    return """
+    <h2>
+    Deposit submitted successfully
+    </h2>
+
+    <p>
+    Your deposit is waiting for approval.
+    </p>
+
+    <a href="/dashboard">
+    Back to Dashboard
+    </a>
+    """
+
+# TEAM PAGE
+
+@app.route("/team")
+def team():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+    user = db.execute("""
+    SELECT *
+
+    FROM users
+
+    WHERE id=?
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
+
+    # Level 1
+
+    level1 = db.execute("""
+    SELECT *
+
+    FROM users
+
+    WHERE referred_by=?
+
+    """,
+    (user["referral_code"],)).fetchall()
+
+
+
+    level1_count = len(level1)
+
+
+
+    # Level 2
+
+    level2 = []
+
+
+    for member in level1:
+
+
+        second = db.execute("""
+        SELECT *
+
+        FROM users
+
+        WHERE referred_by=?
+
+        """,
+        (member["referral_code"],)).fetchall()
+
+
+
+        level2.extend(second)
+
+
+
+
+    level2_count = len(level2)
+
+
+
+
+
+    # Level 3
+
+    level3 = []
+
+
+    for member in level2:
+
+
+        third = db.execute("""
+        SELECT *
+
+        FROM users
+
+        WHERE referred_by=?
+
+        """,
+        (member["referral_code"],)).fetchall()
+
+
+
+        level3.extend(third)
+
+
+
+    level3_count = len(level3)
+
+
+
+
+
+    return render_template(
+        "team.html",
+
+        level1=level1,
+
+        level2=level2,
+
+        level3=level3,
+
+        level1_count=level1_count,
+
+        level2_count=level2_count,
+
+        level3_count=level3_count
+
+    )
+
+    
+
 # LOGOUT
 
 @app.route("/logout")
@@ -853,7 +1085,65 @@ def logout():
 
 
 
+# SERVICE / SUPPORT
 
+@app.route("/support", methods=["GET","POST"])
+def support():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+    if request.method == "POST":
+
+        message = request.form["message"]
+
+
+        db.execute("""
+        INSERT INTO support_messages
+        (
+        user_id,
+        message
+        )
+
+        VALUES(?,?)
+
+        """,
+        (
+        session["user_id"],
+        message
+        ))
+
+
+        db.commit()
+
+
+        return redirect("/service")
+
+
+
+    messages = db.execute("""
+    SELECT *
+
+    FROM support_messages
+
+    WHERE user_id=?
+
+    ORDER BY id DESC
+
+    """,
+    (session["user_id"],)).fetchall()
+
+
+
+    return render_template(
+        "service.html",
+        messages=messages
+    )
 
 
 
