@@ -1643,3 +1643,9 @@ def admin_logout():
     session.pop("admin_id",None)
 
     return redirect("/admin/login")
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
