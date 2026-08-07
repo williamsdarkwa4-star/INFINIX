@@ -116,7 +116,7 @@ def register():
 
             if referred_by:
 
-                inviter = cursor.execute("""
+                inviter = cursor.execute_one("""
                 SELECT id
 
                 FROM users
@@ -256,7 +256,7 @@ def dashboard():
 
 
 
-    plans = db.execute("""
+    plans = db.execute_all("""
     SELECT *
     FROM plans
     WHERE status='Active'
@@ -293,7 +293,7 @@ def buy_plan(plan_id):
 
 
 
-    plan = db.execute("""
+    plan = db.execute_one("""
     SELECT *
     FROM plans
     WHERE id=?
@@ -307,7 +307,7 @@ def buy_plan(plan_id):
 
 
 
-    account = db.execute("""
+    account = db.execute_one("""
     SELECT *
     FROM accounts
     WHERE user_id=?
@@ -422,7 +422,7 @@ def profile():
 
 
 
-    user=db.execute("""
+    user=db.execute_one("""
     SELECT *
     FROM users
     WHERE id=?
@@ -431,7 +431,7 @@ def profile():
 
 
 
-    account=db.execute("""
+    account=db.execute_one("""
     SELECT *
     FROM accounts
     WHERE user_id=?
@@ -511,7 +511,7 @@ def bind_account():
 
 
 
-    accounts=db.execute("""
+    accounts=db.execute_all("""
     SELECT *
     FROM bind_accounts
     WHERE user_id=?
@@ -559,7 +559,7 @@ def withdraw():
 
 
 
-        user=db.execute("""
+        user=db.execute_one("""
         SELECT *
         FROM users
         WHERE id=?
@@ -589,7 +589,7 @@ def withdraw():
 
 
 
-        account=db.execute("""
+        account=db.execute_one("""
         SELECT *
         FROM accounts
         WHERE user_id=?
@@ -652,7 +652,7 @@ def withdraw():
 
 
 
-    accounts=db.execute("""
+    accounts=db.execute_all("""
     SELECT *
     FROM bind_accounts
     WHERE user_id=?
@@ -679,7 +679,7 @@ def my_plan():
     db = get_db()
 
 
-    plan = db.execute("""
+    plan = db.execute_one("""
     SELECT
 
     user_plans.*,
@@ -965,7 +965,7 @@ def team():
 
 
 
-    user = db.execute("""
+    user = db.execute_one("""
     SELECT *
     FROM users
     WHERE id=?
@@ -974,7 +974,7 @@ def team():
 
 
 
-    level1 = db.execute("""
+    level1 = db.execute_one("""
     SELECT *
     FROM users
     WHERE referred_by=?
@@ -989,7 +989,7 @@ def team():
     for member in level1:
 
 
-        users = db.execute("""
+        users = db.execute_all("""
         SELECT *
         FROM users
         WHERE referred_by=?
@@ -1008,7 +1008,7 @@ def team():
     for member in level2:
 
 
-        users = db.execute("""
+        users = db.execute_all("""
         SELECT *
         FROM users
         WHERE referred_by=?
@@ -1178,7 +1178,7 @@ def admin_login():
         db = get_db()
 
 
-        admin = db.execute("""
+        admin = db.execute_one("""
         SELECT *
         FROM admins
         WHERE username=?
@@ -1241,14 +1241,14 @@ def admin_dashboard():
     db=get_db()
 
 
-    users=db.execute("""
+    users=db.execute_all("""
     SELECT COUNT(*) AS total
     FROM users
     """).fetchone()["total"]
 
 
 
-    deposits=db.execute("""
+    deposits=db.execute_all("""
     SELECT COUNT(*) AS total
     FROM deposits
     WHERE status='Pending'
@@ -1256,7 +1256,7 @@ def admin_dashboard():
 
 
 
-    withdrawals=db.execute("""
+    withdrawals=db.execute_all("""
     SELECT COUNT(*) AS total
     FROM withdrawals
     WHERE status='Pending'
@@ -1288,7 +1288,7 @@ def admin_deposits():
     db=get_db()
 
 
-    deposits=db.execute("""
+    deposits=db.execute_all("""
     SELECT
 
     deposits.*,
@@ -1334,7 +1334,7 @@ def approve_deposit(id):
 
 
 
-    deposit=db.execute("""
+    deposit=db.execute_one("""
     SELECT *
     FROM deposits
     WHERE id=?
@@ -1422,7 +1422,7 @@ def admin_withdrawals():
     db=get_db()
 
 
-    withdrawals=db.execute("""
+    withdrawals=db.execute_all("""
     SELECT
 
     withdrawals.*,
@@ -1534,7 +1534,7 @@ def admin_users():
 
 
 
-    users=db.execute("""
+    users=db.execute_all("""
     SELECT *
 
     FROM users
@@ -1577,7 +1577,7 @@ def admin_bind_accounts():
     db=get_db()
 
 
-    accounts=db.execute("""
+    accounts=db.execute_all("""
     SELECT
 
     bind_accounts.*,
