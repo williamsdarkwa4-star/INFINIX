@@ -607,6 +607,42 @@ def withdraw():
 
 
 
+
+
+# TRANSACTION HISTORY
+
+@app.route("/transaction_history")
+def transaction_history():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+    transactions = db.execute("""
+
+    SELECT *
+
+    FROM transactions
+
+    WHERE user_id=?
+
+    ORDER BY id DESC
+
+    """,
+    (session["user_id"],)).fetchall()
+
+
+
+    return render_template(
+        "transaction_history.html",
+        transactions=transactions
+    )
+
+
 # LOGOUT
 
 @app.route("/logout")
