@@ -25,8 +25,6 @@ def create_tables():
 
 
 
-    # USERS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
 
@@ -56,9 +54,6 @@ def create_tables():
 
 
 
-
-    # USER ACCOUNTS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS accounts (
 
@@ -81,9 +76,6 @@ def create_tables():
 
 
 
-
-
-    # BIND WITHDRAWAL ACCOUNTS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS bind_accounts (
@@ -108,9 +100,6 @@ def create_tables():
 
 
 
-
-    # INVESTMENT PLANS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS plans (
 
@@ -131,9 +120,6 @@ def create_tables():
 
 
 
-
-
-    # USER ACTIVE PLANS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_plans (
@@ -162,9 +148,6 @@ def create_tables():
 
 
 
-
-    # DEPOSITS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS deposits (
 
@@ -191,9 +174,6 @@ def create_tables():
 
 
 
-
-
-    # WITHDRAWALS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS withdrawals (
@@ -222,9 +202,6 @@ def create_tables():
 
 
 
-
-    # ALL TRANSACTIONS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS transactions (
 
@@ -240,18 +217,13 @@ def create_tables():
 
         status TEXT,
 
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY(user_id) REFERENCES users(id)
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     )
     """)
 
 
 
-
-
-    # REFERRAL SYSTEM
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS referrals (
@@ -274,9 +246,6 @@ def create_tables():
 
 
 
-
-    # DAILY INCOME CLAIM HISTORY
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS claim_history (
 
@@ -288,18 +257,13 @@ def create_tables():
 
         amount REAL,
 
-        claim_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY(user_id) REFERENCES users(id)
+        claim_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     )
     """)
 
 
 
-
-
-    # ADMIN ACCOUNTS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS admins (
@@ -315,9 +279,6 @@ def create_tables():
 
 
 
-
-
-    # ADMIN ACTION LOG
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS admin_actions (
@@ -338,9 +299,6 @@ def create_tables():
 
 
 
-
-    # SUPPORT
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS support_messages (
 
@@ -360,9 +318,6 @@ def create_tables():
 
 
 
-
-    # PLATFORM SETTINGS
-
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS settings (
 
@@ -377,6 +332,51 @@ def create_tables():
 
 
 
+    conn.commit()
+
+    conn.close()
+
+
+
+
+
+def create_plans():
+
+    conn = get_db()
+
+    cursor = conn.cursor()
+
+
+    plans = [
+
+        ("Plan 1",50,8,30),
+        ("Plan 2",100,20,30),
+        ("Plan 3",200,40,30),
+        ("Plan 4",300,65,30),
+        ("Plan 5",500,100,30),
+        ("Plan 6",600,200,30),
+        ("Plan 7",1000,360,30),
+        ("Locked Plan 8",2000,500,30),
+        ("Locked Plan 9",4000,800,30)
+
+    ]
+
+
+    for plan in plans:
+
+        cursor.execute("""
+        INSERT INTO plans
+        (
+        plan_name,
+        investment_amount,
+        daily_income,
+        duration
+        )
+
+        VALUES(?,?,?,?)
+
+        """, plan)
+
 
 
     conn.commit()
@@ -387,9 +387,10 @@ def create_tables():
 
 
 
-
 if __name__ == "__main__":
 
     create_tables()
+
+    create_plans()
 
     print("Zenith Capital database created successfully!")
