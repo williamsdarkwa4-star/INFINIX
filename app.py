@@ -3,7 +3,7 @@ from database import get_db, create_tables
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import secrets
-
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -640,6 +640,205 @@ def transaction_history():
     return render_template(
         "transaction_history.html",
         transactions=transactions
+    )
+
+
+
+
+# MY PLAN
+
+@app.route("/my_plan", methods=["GET","POST"])
+def my_plan():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+
+    plan = db.execute("""
+
+    SELECT 
+
+    user_plans.*,
+
+    plans.plan_name,
+
+    plans.daily_income,
+
+    plans.duration
+
+    FROM user_plans
+
+    JOIN plans
+
+    ON user_plans.plan_id = plans.id
+
+    WHERE user_plans.user_id=?
+
+    AND user_plans.status='Active'
+
+    """,
+    (session["user_id"],)).fetchone()
+
+
+
+    can_claim = False
+
+
+
+    if plan:
+
+
+        if plan["last_claim_time"]:
+
+
+            last_claim = datetime.fromisoformat(
+                plan["last_claim_time"]
+            )
+
+
+            if datetime.now() >= last_claim + timedelta(hours=24):
+
+                can_claim = True
+
+
+
+        else:
+
+            can_claim = True
+
+
+
+
+
+    if request.method == "POST":
+
+
+        if not plan:
+
+            return "No active plan"
+
+
+
+        if can_claim is False:
+
+            return "Please wait until your next claim time"
+
+
+
+
+
+        amount = plan["daily_income"]
+
+
+
+
+        # Add income to account
+
+        db.execute("""
+        UPDATE accounts
+
+        SET income_account = income_account + ?
+
+        WHERE user_id=?
+
+        """,
+        (
+        amount,
+        session["user_id"]
+        ))
+
+
+
+
+
+        # Update claim time
+
+        db.execute("""
+        UPDATE user_plans
+
+        SET last_claim_time=?
+
+        WHERE id=?
+
+        """,
+        (
+        datetime.now(),
+        plan["id"]
+        ))
+
+
+
+
+
+        # Claim history
+
+        db.execute("""
+        INSERT INTO claim_history
+
+        (
+        user_id,
+        plan_id,
+        amount
+        )
+
+        VALUES(?,?,?)
+
+        """,
+        (
+        session["user_id"],
+        plan["plan_id"],
+        amount
+        ))
+
+
+
+
+
+        # Transaction history
+
+        db.execute("""
+        INSERT INTO transactions
+
+        (
+        user_id,
+        transaction_type,
+        amount,
+        description,
+        status
+        )
+
+        VALUES(?,?,?,?,?)
+
+        """,
+        (
+        session["user_id"],
+        "Income",
+        amount,
+        "Daily plan income claimed",
+        "Successful"
+        ))
+
+
+
+        db.commit()
+
+
+
+        return redirect("/my_plan")
+
+
+
+
+
+    return render_template(
+        "my_plan.html",
+        plan=plan,
+        can_claim=can_claim
     )
 
 
