@@ -31,141 +31,123 @@ def home():
 # =========================
 # REGISTER
 # =========================
-
-@app.route("/register", methods=["GET","POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
 
-    invite_code = request.args.get("ref","")
-
+    invite_code = request.args.get("ref", "")
 
     if request.method == "POST":
 
-        fullname = request.form["fullname"]
-        username = request.form["username"]
-        phone = request.form["phone"]
+        fullname = request.form.get("fullname", "").strip()
+        username = request.form.get("username", "").strip()
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "")
+        withdrawal_password = request.form.get("withdraw_password", "")
+        referred_by = request.form.get("referred_by", "").strip()
 
-        password = request.form["password"]
-        withdrawal_password = request.form["withdrawal_password"]
+        # Check required fields
+        if not fullname or not username or not phone or not password or not withdraw_password:
+            return "Please fill in all required fields"
 
-        referred_by = request.form.get("referred_by")
-
-
-
+        # Hash passwords
         login_hash = generate_password_hash(password)
 
         withdrawal_hash = generate_password_hash(
-            withdrawal_password
+            withdraw_password
         )
 
+        # Generate referral code
         referral_code = secrets.token_hex(4).upper()
-
-
 
         db = get_db()
 
-        cursor = db.cursor()
-
-
-
         try:
 
-            cursor.execute("""
-            INSERT INTO users
-            (
-                fullname,
-                username,
-                phone,
-                login_password,
-                withdraw_password,
-                referral_code,
-                referred_by
-            )
-
-            VALUES (?,?,?,?,?,?,?)
-
-            """,
-            (
+            # Create user
+            db.execute("""
+                INSERT INTO users
+                (
+                    fullname,
+                    username,
+                    phone,
+                    login_password,
+                    withdraw_password,
+                    referral_code,
+                    referred_by
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
                 fullname,
                 username,
                 phone,
                 login_hash,
                 withdraw_hash,
                 referral_code,
-                referred_by
+                referred_by or None
             ))
 
+            # Get newly created user
+            user = db.execute_one("""
+                SELECT id
+                FROM users
+                WHERE username=?
+            """, (username,)).fetchone()
 
+            if not user:
+                raise Exception("User was not created")
 
-            user_id = cursor.lastrowid
+            user_id = user["id"]
 
+            # Create wallet/account
+            db.execute("""
+                INSERT INTO accounts(user_id)
+                VALUES(?)
+            """, (user_id,))
 
-
-            # CREATE WALLET
-
-            cursor.execute("""
-            INSERT INTO accounts(user_id)
-
-            VALUES(?)
-
-            """,
-            (user_id,))
-
-
-
-            # SAVE REFERRAL
-
+            # Save referral
             if referred_by:
 
-                inviter = cursor.execute_one("""
-                SELECT id
-
-                FROM users
-
-                WHERE referral_code=?
-
-                """,
-                (referred_by,)).fetchone()
-
-
+                inviter = db.execute_one("""
+                    SELECT id
+                    FROM users
+                    WHERE referral_code=?
+                """, (referred_by,)).fetchone()
 
                 if inviter:
 
-                    cursor.execute("""
-                    INSERT INTO referrals
-                    (
-                    user_id,
-                    referred_user_id,
-                    level
-                    )
-
-                    VALUES(?,?,?)
-
-                    """,
-                    (
-                    inviter["id"],
-                    user_id,
-                    1
+                    db.execute("""
+                        INSERT INTO referrals
+                        (
+                            user_id,
+                            referred_user_id,
+                            level
+                        )
+                        VALUES (?, ?, ?)
+                    """, (
+                        inviter["id"],
+                        user_id,
+                        1
                     ))
-
-
 
             db.commit()
 
-
             return redirect("/login")
-
-
 
         except sqlite3.IntegrityError:
 
             return "Username or phone already exists"
 
+        except Exception as e:
 
+            db.rollback()
+
+            return f"Registration error: {str(e)}"
 
     return render_template(
         "register.html",
         invite_code=invite_code
     )
+
 
 
 
