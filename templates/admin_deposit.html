@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Deposit - Zenith Capital</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f7fb;
+padding-bottom:80px;
+}
+
+
+.header{
+
+background:linear-gradient(135deg,#0f172a,#2563eb);
+color:white;
+padding:30px;
+text-align:center;
+border-radius:0 0 30px 30px;
+
+}
+
+
+.container{
+
+padding:20px;
+
+}
+
+
+
+.search{
+
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+background:white;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+
+
+.card h2{
+
+color:#2563eb;
+margin-bottom:15px;
+
+}
+
+
+
+.info{
+
+line-height:30px;
+color:#475569;
+
+}
+
+
+
+.status{
+
+font-weight:bold;
+color:#f59e0b;
+
+}
+
+
+
+.buttons{
+
+display:flex;
+gap:10px;
+margin-top:15px;
+
+}
+
+
+
+button{
+
+flex:1;
+padding:13px;
+border:none;
+border-radius:15px;
+color:white;
+font-weight:bold;
+
+}
+
+
+
+.approve{
+
+background:#16a34a;
+
+}
+
+
+
+.reject{
+
+background:#dc2626;
+
+}
+
+
+
+.bottom-nav{
+
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px;
+box-shadow:0 -5px 15px rgba(0,0,0,.1);
+
+}
+
+
+.bottom-nav a{
+
+text-decoration:none;
+color:#2563eb;
+text-align:center;
+font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<h1>Deposit Management</h1>
+
+<p>Review user payments</p>
+
+</div>
+
+
+
+
+<div class="container">
+
+
+<input 
+class="search"
+placeholder="Search username or phone number"
+>
+
+
+
+
+<div class="card">
+
+
+<h2>Deposit Request</h2>
+
+
+<div class="info">
+
+
+Username: Example User
+
+<br>
+
+Phone: 024 XXXXXXX
+
+<br>
+
+Amount: GHS 100
+
+<br>
+
+Payment Method: Paystack
+
+<br>
+
+Reference: PAY_123456
+
+<br>
+
+Date: 04/08/2026
+
+<br>
+
+Status:
+
+<span class="status">
+Pending
+</span>
+
+
+</div>
+
+
+
+
+<div class="buttons">
+
+
+<button class="approve">
+
+Approve
+
+</button>
+
+
+<button class="reject">
+
+Reject
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>No More Deposits</h2>
+
+
+<div class="info">
+
+New deposits will appear here.
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="bottom-nav">
+
+
+<a href="/admin_dashboard">
+
+🏠<br>
+Dashboard
+
+</a>
+
+
+<a href="/admin_users">
+
+👥<br>
+Users
+
+</a>
+
+
+<a href="/admin_deposit">
+
+💳<br>
+Deposit
+
+</a>
+
+
+</div>
+
+
+
+</body>
+
+</html>
