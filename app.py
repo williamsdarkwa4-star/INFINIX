@@ -352,6 +352,261 @@ def profile():
 
 
 
+# BIND ACCOUNT
+
+@app.route("/bind_account", methods=["GET","POST"])
+def bind_account():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+    if request.method == "POST":
+
+        account_name = request.form["account_name"]
+
+        phone_number = request.form["phone_number"]
+
+        network = request.form["network"]
+
+
+
+        db.execute("""
+        INSERT INTO bind_accounts
+        (
+        user_id,
+        account_name,
+        phone_number,
+        network
+        )
+
+        VALUES(?,?,?,?)
+
+        """,
+        (
+        session["user_id"],
+        account_name,
+        phone_number,
+        network
+        ))
+
+
+
+        db.commit()
+
+
+        return redirect("/bind_account")
+
+
+
+
+    accounts = db.execute("""
+    SELECT *
+
+    FROM bind_accounts
+
+    WHERE user_id=?
+
+    """,
+    (session["user_id"],)).fetchall()
+
+
+
+    return render_template(
+        "bind_account.html",
+        accounts=accounts
+    )
+
+
+
+
+
+# WITHDRAW
+
+@app.route("/withdraw", methods=["GET","POST"])
+def withdraw():
+
+    if "user_id" not in session:
+
+        return redirect("/login")
+
+
+    db = get_db()
+
+
+
+    if request.method == "POST":
+
+
+        amount = float(request.form["amount"])
+
+        withdrawal_password = request.form["withdrawal_password"]
+
+        account_id = request.form["account_id"]
+
+
+
+
+        user = db.execute("""
+        SELECT *
+
+        FROM users
+
+        WHERE id=?
+
+        """,
+        (session["user_id"],)).fetchone()
+
+
+
+
+        # Check withdrawal password
+
+        if not check_password_hash(
+            user["withdrawal_password"],
+            withdrawal_password
+        ):
+
+            return "Invalid withdrawal password"
+
+
+
+
+
+        # Minimum withdrawal check
+
+        if amount < 30:
+
+            return "Minimum withdrawal is GHS 30"
+
+
+
+
+
+        account = db.execute("""
+        SELECT *
+
+        FROM accounts
+
+        WHERE user_id=?
+
+        """,
+        (session["user_id"],)).fetchone()
+
+
+
+        if account["income_account"] < amount:
+
+            return "Insufficient balance"
+
+
+
+
+
+
+        # Withdrawal fee 16%
+
+        fee = amount * 0.16
+
+
+        final_amount = amount - fee
+
+
+
+
+
+        # Create withdrawal request
+
+        db.execute("""
+        INSERT INTO withdrawals
+
+        (
+        user_id,
+        amount,
+        account_id,
+        withdrawal_fee
+        )
+
+        VALUES(?,?,?,?)
+
+        """,
+        (
+        session["user_id"],
+        final_amount,
+        account_id,
+        fee
+        ))
+
+
+
+
+
+
+        # Transaction history
+
+        db.execute("""
+        INSERT INTO transactions
+
+        (
+        user_id,
+        transaction_type,
+        amount,
+        description,
+        status
+        )
+
+        VALUES(?,?,?,?,?)
+
+        """,
+        (
+        session["user_id"],
+        "Withdrawal",
+        final_amount,
+        "Withdrawal request submitted",
+        "Pending"
+        ))
+
+
+
+
+
+        db.commit()
+
+
+
+        return "Withdrawal request submitted"
+
+
+
+
+
+
+
+    accounts = db.execute("""
+    SELECT *
+
+    FROM bind_accounts
+
+    WHERE user_id=?
+
+    """,
+    (session["user_id"],)).fetchall()
+
+
+
+
+    return render_template(
+        "withdraw.html",
+        accounts=accounts
+    )
+
+
+
+
 # LOGOUT
 
 @app.route("/logout")
