@@ -1267,6 +1267,168 @@ def support():
         messages=messages
     )
 
+# =========================
+# ADMIN SYSTEM
+# =========================
+
+from functools import wraps
+
+
+
+# ADMIN LOGIN
+
+@app.route("/admin/login", methods=["GET","POST"])
+def admin_login():
+
+
+    if request.method == "POST":
+
+
+        username = request.form["username"]
+
+        password = request.form["password"]
+
+
+
+        db = get_db()
+
+
+
+        admin = db.execute("""
+        SELECT *
+
+        FROM admins
+
+        WHERE username=?
+
+        """,
+        (username,)).fetchone()
+
+
+
+        if admin:
+
+
+            if check_password_hash(
+                admin["password"],
+                password
+            ):
+
+
+                session["admin_id"] = admin["id"]
+
+                return redirect("/admin/dashboard")
+
+
+
+        return "Invalid admin username or password"
+
+
+
+    return render_template("admin_login.html")
+
+
+
+
+
+
+# ADMIN CHECK
+
+def admin_required(route):
+
+    @wraps(route)
+
+    def check(*args, **kwargs):
+
+
+        if "admin_id" not in session:
+
+            return redirect("/admin/login")
+
+
+
+        return route(*args, **kwargs)
+
+
+    return check
+
+
+
+
+
+
+# ADMIN DASHBOARD
+
+@app.route("/admin/dashboard")
+@admin_required
+def admin_dashboard():
+
+
+    db = get_db()
+
+
+
+    total_users = db.execute("""
+    SELECT COUNT(*) AS count
+
+    FROM users
+
+    """).fetchone()["count"]
+
+
+
+
+    pending_deposits = db.execute("""
+    SELECT COUNT(*) AS count
+
+    FROM deposits
+
+    WHERE status='Pending'
+
+    """).fetchone()["count"]
+
+
+
+
+
+    pending_withdrawals = db.execute("""
+    SELECT COUNT(*) AS count
+
+    FROM withdrawals
+
+    WHERE status='Pending'
+
+    """).fetchone()["count"]
+
+
+
+
+
+    return render_template(
+
+        "admin.html",
+
+        total_users=total_users,
+
+        pending_deposits=pending_deposits,
+
+        pending_withdrawals=pending_withdrawals
+
+    )
+
+
+
+
+
+
+# ADMIN LOGOUT
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.pop("admin_id", None)
+
+    return redirect("/admin/login")
 
 
 if __name__ == "__main__":
