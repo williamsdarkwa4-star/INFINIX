@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Deposit - Zenith Capital</title>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 
 <style>
 
@@ -16,230 +20,377 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+
 body{
+
 background:#f4f7fb;
-padding-bottom:90px;
-}
-
-.header{
-background:linear-gradient(135deg,#0f172a,#2563eb);
-color:white;
-padding:35px 20px;
-border-radius:0 0 30px 30px;
-text-align:center;
-}
-
-.container{
+min-height:100vh;
 padding:20px;
+
 }
+
+
 
 .card{
+
 background:white;
-padding:20px;
-border-radius:20px;
-margin-bottom:20px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+max-width:400px;
+margin:auto;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+
 }
 
-.card h2{
-color:#2563eb;
-margin-bottom:15px;
-}
 
-.balance{
-font-size:32px;
-font-weight:bold;
-color:#16a34a;
+
+.logo{
+
 text-align:center;
-margin:15px 0;
-}
-
-.info{
-background:#eff6ff;
-padding:15px;
-border-radius:15px;
-margin-bottom:20px;
-line-height:28px;
-color:#1e3a8a;
-}
-
-label{
+font-size:30px;
 font-weight:bold;
-display:block;
-margin-bottom:8px;
-margin-top:15px;
+color:#2563EB;
+margin-bottom:20px;
+
 }
+
+
+
+h2{
+
+text-align:center;
+margin-bottom:20px;
+color:#0F172A;
+
+}
+
+
 
 input{
+
 width:100%;
 padding:15px;
+margin-bottom:15px;
 border:1px solid #ddd;
-border-radius:15px;
-font-size:16px;
+border-radius:12px;
 outline:none;
+
 }
 
-button{
-width:100%;
-padding:16px;
-margin-top:25px;
-border:none;
-border-radius:15px;
-background:#2563eb;
-color:white;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
+
+
+input:focus{
+
+border-color:#2563EB;
+
 }
 
-button:hover{
-background:#1d4ed8;
-}
 
-.paystack{
-background:#dcfce7;
-padding:15px;
-border-radius:15px;
-text-align:center;
-font-weight:bold;
-color:#166534;
-margin-top:15px;
-}
 
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
+.amount-buttons{
+
 display:flex;
-justify-content:space-around;
-padding:15px 0;
-box-shadow:0 -5px 15px rgba(0,0,0,.1);
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:15px;
+
 }
 
-.bottom-nav a{
-text-decoration:none;
-color:#2563eb;
-font-size:14px;
+
+
+.amount-buttons button{
+
+width:70px;
+padding:10px;
+border:none;
+border-radius:10px;
+background:#E0E7FF;
+color:#2563EB;
 font-weight:bold;
-text-align:center;
+
 }
+
+
+
+.pay-button{
+
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:#2563EB;
+color:white;
+font-size:16px;
+font-weight:bold;
+
+}
+
+
+
+.note{
+
+text-align:center;
+color:#64748b;
+font-size:14px;
+margin-bottom:20px;
+
+}
+
+
+
+.guide{
+
+margin-top:25px;
+padding:20px;
+background:#f8fafc;
+border-radius:15px;
+line-height:28px;
+color:#475569;
+
+}
+
+
 
 </style>
 
 </head>
 
+
+
 <body>
 
-<div class="header">
 
-<h1>Deposit Funds</h1>
-
-<p>Fast and Secure Payment</p>
-
-</div>
-
-<div class="container">
 
 <div class="card">
 
-<h2>Deposit Account</h2>
 
-<div class="balance">
+<div class="logo">
 
-GHS 0.00
-
-</div>
+ZC
 
 </div>
 
-<div class="card">
 
-<div class="info">
 
-✅ Minimum Deposit: <b>GHS 45</b><br><br>
+<h2>
 
-✅ Payment Method: <b>Paystack</b><br><br>
+Deposit Funds
 
-✅ Your balance will update after successful payment.
+</h2>
 
-</div>
 
-<label>Deposit Amount</label>
+
+<p class="note">
+
+Minimum Deposit: GHS 45
+
+</p>
+
+
+
 
 <input
+
 type="number"
-placeholder="Enter amount (Minimum GHS 45)"
-id="amount">
 
-<label>Phone Number</label>
+id="amount"
 
-<input
-type="tel"
-placeholder="Enter your phone number"
-id="phone">
+placeholder="Enter Amount (GHS)"
 
-<div class="paystack">
+min="45"
 
-🔒 Secure Payment Powered by Paystack
+required>
+
+
+
+
+<div class="amount-buttons">
+
+
+<button onclick="setAmount(45)">
+45
+</button>
+
+
+<button onclick="setAmount(50)">
+50
+</button>
+
+
+<button onclick="setAmount(100)">
+100
+</button>
+
+
+<button onclick="setAmount(200)">
+200
+</button>
+
+
+<button onclick="setAmount(300)">
+300
+</button>
+
+
+<button onclick="setAmount(400)">
+400
+</button>
+
 
 </div>
 
-<button onclick="payNow()">
+
+
+
+<input
+
+type="text"
+
+id="phone"
+
+placeholder="Enter Phone Number"
+
+required>
+
+
+
+
+
+<button class="pay-button" onclick="payWithPaystack()">
 
 Pay Now
 
 </button>
 
-</div>
+
+
+
+
+
+<div class="guide">
+
+
+<h3>
+
+How to Recharge
+
+</h3>
+
+
+<br>
+
+
+1. Enter the amount you want to deposit.<br>
+
+2. Select an amount button or type your amount.<br>
+
+3. Enter your phone number.<br>
+
+4. Click the Pay Now button.<br>
+
+5. Complete payment through Paystack.<br>
+
+6. Your deposit will be updated after confirmation.
 
 </div>
 
-<div class="bottom-nav">
 
-<a href="/dashboard">
-🏠<br>Home
-</a>
-
-<a href="/my_plan">
-💼<br>My Plan
-</a>
-
-<a href="/profile">
-👤<br>Profile
-</a>
 
 </div>
+
+
+
+
 
 <script>
 
-function payNow(){
 
-let amount=document.getElementById("amount").value;
-let phone=document.getElementById("phone").value;
+function setAmount(value){
 
-if(amount==""){
-alert("Please enter deposit amount.");
+document.getElementById("amount").value=value;
+
+}
+
+
+
+
+function payWithPaystack(){
+
+
+let amount =
+document.getElementById("amount").value;
+
+
+let phone =
+document.getElementById("phone").value;
+
+
+
+
+if(amount < 45){
+
+alert("Minimum deposit is GHS 45");
+
 return;
-}
-
-if(amount<45){
-alert("Minimum deposit is GHS 45.");
-return;
-}
-
-if(phone==""){
-alert("Please enter your phone number.");
-return;
-}
-
-// Paystack integration will be added in app.py later.
-alert("Redirecting to Paystack Payment...");
 
 }
+
+
+
+let handler = PaystackPop.setup({
+
+
+key:"YOUR_PUBLIC_KEY",
+
+
+email: phone + "@zenith.com",
+
+
+amount: amount * 100,
+
+
+currency:"GHS",
+
+
+
+callback:function(response){
+
+
+window.location.href =
+"/deposit_success?reference="
++response.reference
++"&amount="
++amount
++"&phone="
++phone;
+
+
+},
+
+
+
+onClose:function(){
+
+alert("Payment cancelled");
+
+}
+
+
+});
+
+
+
+handler.openIframe();
+
+
+}
+
+
 
 </script>
 
+
+
 </body>
+
 </html>
