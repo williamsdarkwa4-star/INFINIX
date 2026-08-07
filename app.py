@@ -1417,11 +1417,732 @@ def admin_dashboard():
     )
 
 
+# =========================
+# ADMIN WITHDRAWALS
+# =========================
+
+
+@app.route("/admin/withdrawals")
+@admin_required
+def admin_withdrawals():
+
+
+    db = get_db()
+
+
+    withdrawals = db.execute("""
+    SELECT
+
+    withdrawals.*,
+
+    users.username,
+
+    users.phone,
+
+    bind_accounts.account_name,
+
+    bind_accounts.phone_number,
+
+    bind_accounts.network
+
+
+    FROM withdrawals
+
+
+    JOIN users
+
+    ON withdrawals.user_id = users.id
+
+
+    JOIN bind_accounts
+
+    ON withdrawals.account_id = bind_accounts.id
+
+
+    WHERE withdrawals.status='Pending'
+
+
+    ORDER BY withdrawals.id DESC
+
+
+    """).fetchall()
+
+
+
+    return render_template(
+        "admin_withdraw.html",
+        withdrawals=withdrawals
+    )
 
 
 
 
-# ADMIN LOGOUT
+
+
+
+# APPROVE WITHDRAWAL
+
+
+@app.route("/admin/withdraw/approve/<int:id>")
+@admin_required
+def approve_withdraw(id):
+
+
+    db = get_db()
+
+
+    withdrawal = db.execute("""
+    SELECT *
+
+    FROM withdrawals
+
+    WHERE id=?
+
+    """,
+    (id,)).fetchone()
+
+
+
+    if withdrawal:
+
+
+        db.execute("""
+        UPDATE withdrawals
+
+        SET status='Approved'
+
+        WHERE id=?
+
+        """,
+        (id,))
+
+
+
+        db.execute("""
+        INSERT INTO transactions
+
+        (
+        user_id,
+        transaction_type,
+        amount,
+        description,
+        status
+        )
+
+        VALUES(?,?,?,?,?)
+
+        """,
+        (
+        withdrawal["user_id"],
+        "Withdrawal",
+        withdrawal["amount"],
+        "Withdrawal approved",
+        "Successful"
+        ))
+
+
+
+        db.commit()
+
+
+
+    return redirect("/admin/withdrawals")
+
+
+
+
+
+
+
+# REJECT WITHDRAWAL
+
+
+@app.route("/admin/withdraw/reject/<int:id>")
+@admin_required
+def reject_withdraw(id):
+
+
+    db = get_db()
+
+
+    db.execute("""
+    UPDATE withdrawals
+
+    SET status='Rejected'
+
+    WHERE id=?
+
+    """,
+    (id,))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/withdrawas")
+
+
+# =========================
+# ADMIN DEPOSITS
+# =========================
+
+
+@app.route("/admin/deposits")
+@admin_required
+def admin_deposits():
+
+
+    db = get_db()
+
+
+    deposits = db.execute("""
+    SELECT
+
+    deposits.*,
+
+    users.username,
+
+    users.phone
+
+
+    FROM deposits
+
+
+    JOIN users
+
+    ON deposits.user_id = users.id
+
+
+    WHERE deposits.status='Pending'
+
+
+    ORDER BY deposits.id DESC
+
+
+    """).fetchall()
+
+
+
+    return render_template(
+        "admin_deposit.html",
+        deposits=deposits
+    )
+
+
+
+
+
+
+
+# APPROVE DEPOSIT
+
+
+@app.route("/admin/deposit/approve/<int:id>")
+@admin_required
+def approve_deposit(id):
+
+
+    db = get_db()
+
+
+
+    deposit = db.execute("""
+    SELECT *
+
+    FROM deposits
+
+    WHERE id=?
+
+    """,
+    (id,)).fetchone()
+
+
+
+    if deposit:
+
+
+
+        # Update deposit status
+
+        db.execute("""
+        UPDATE deposits
+
+        SET status='Approved'
+
+        WHERE id=?
+
+        """,
+        (id,))
+
+
+
+
+
+        # Add money to user deposit account
+
+        db.execute("""
+        UPDATE accounts
+
+        SET deposit_account = deposit_account + ?
+
+        WHERE user_id=?
+
+        """,
+        (
+        deposit["amount"],
+        deposit["user_id"]
+        ))
+
+
+
+
+
+        # Save transaction
+
+        db.execute("""
+        INSERT INTO transactions
+
+        (
+        user_id,
+        transaction_type,
+        amount,
+        description,
+        status
+        )
+
+        VALUES(?,?,?,?,?)
+
+        """,
+        (
+        deposit["user_id"],
+        "Deposit",
+        deposit["amount"],
+        "Deposit approved",
+        "Successful"
+        ))
+
+
+
+
+
+        db.commit()
+
+
+
+    return redirect("/admin/deposits")
+
+
+
+
+
+
+
+
+
+# REJECT DEPOSIT
+
+
+@app.route("/admin/deposit/reject/<int:id>")
+@admin_required
+def reject_deposit(id):
+
+
+    db = get_db()
+
+
+
+    db.execute("""
+    UPDATE deposits
+
+    SET status='Rejected'
+
+    WHERE id=?
+
+    """,
+    (id,))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/deposits")
+
+# =========================
+# ADMIN USERS
+# =========================
+
+@app.route("/admin/users")
+@admin_required
+def admin_users():
+
+    db = get_db()
+
+    search = request.args.get("search", "")
+
+
+    users = db.execute("""
+    SELECT *
+
+    FROM users
+
+    WHERE username LIKE ?
+
+    OR phone LIKE ?
+
+    ORDER BY id DESC
+
+    """,
+    (
+    "%" + search + "%",
+    "%" + search + "%"
+    )).fetchall()
+
+
+
+    return render_template(
+        "admin_users.html",
+        users=users,
+        search=search
+    )
+    
+# =========================
+# ADMIN USER MANAGEMENT
+# =========================
+
+
+@app.route("/admin/users", methods=["GET","POST"])
+@admin_required
+def admin_users():
+
+
+    db = get_db()
+
+
+    search = request.args.get("search","")
+
+
+    users = db.execute("""
+    SELECT *
+
+    FROM users
+
+    WHERE username LIKE ?
+
+    OR phone LIKE ?
+
+    ORDER BY id DESC
+
+    """,
+    (
+    "%" + search + "%",
+    "%" + search + "%"
+    )).fetchall()
+
+
+
+    return render_template(
+        "admin_users.html",
+        users=users,
+        search=search
+    )
+
+
+
+
+
+
+
+# ADD / DEDUCT USER FUNDS
+
+
+@app.route("/admin/user/funds/<int:user_id>", methods=["POST"])
+@admin_required
+def manage_user_funds(user_id):
+
+
+    db = get_db()
+
+
+    amount = float(request.form["amount"])
+
+    action = request.form["action"]
+
+
+
+    if action == "add":
+
+        db.execute("""
+        UPDATE accounts
+
+        SET deposit_account = deposit_account + ?
+
+        WHERE user_id=?
+
+        """,
+        (amount,user_id))
+
+
+
+    elif action == "deduct":
+
+        db.execute("""
+        UPDATE accounts
+
+        SET deposit_account = deposit_account - ?
+
+        WHERE user_id=?
+
+        """,
+        (amount,user_id))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/users")
+
+
+
+
+
+
+
+
+# CHANGE PASSWORDS
+
+
+@app.route("/admin/user/password/<int:user_id>", methods=["POST"])
+@admin_required
+def change_user_password(user_id):
+
+
+    db=get_db()
+
+
+
+    login_password = request.form.get("login_password")
+
+    withdrawal_password = request.form.get("withdrawal_password")
+
+
+
+    if login_password:
+
+
+        db.execute("""
+        UPDATE users
+
+        SET login_password=?
+
+        WHERE id=?
+
+        """,
+        (
+        generate_password_hash(login_password),
+        user_id
+        ))
+
+
+
+
+
+    if withdrawal_password:
+
+
+        db.execute("""
+        UPDATE users
+
+        SET withdrawal_password=?
+
+        WHERE id=?
+
+        """,
+        (
+        generate_password_hash(withdrawal_password),
+        user_id
+        ))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/users")
+
+
+# =========================
+# ADMIN USER MANAGEMENT
+# =========================
+
+
+@app.route("/admin/users", methods=["GET","POST"])
+@admin_required
+def admin_users():
+
+
+    db = get_db()
+
+
+    search = request.args.get("search","")
+
+
+    users = db.execute("""
+    SELECT *
+
+    FROM users
+
+    WHERE username LIKE ?
+
+    OR phone LIKE ?
+
+    ORDER BY id DESC
+
+    """,
+    (
+    "%" + search + "%",
+    "%" + search + "%"
+    )).fetchall()
+
+
+
+    return render_template(
+        "admin_users.html",
+        users=users,
+        search=search
+    )
+
+
+
+
+
+
+
+# ADD / DEDUCT USER FUNDS
+
+
+@app.route("/admin/user/funds/<int:user_id>", methods=["POST"])
+@admin_required
+def manage_user_funds(user_id):
+
+
+    db = get_db()
+
+
+    amount = float(request.form["amount"])
+
+    action = request.form["action"]
+
+
+
+    if action == "add":
+
+        db.execute("""
+        UPDATE accounts
+
+        SET deposit_account = deposit_account + ?
+
+        WHERE user_id=?
+
+        """,
+        (amount,user_id))
+
+
+
+    elif action == "deduct":
+
+        db.execute("""
+        UPDATE accounts
+
+        SET deposit_account = deposit_account - ?
+
+        WHERE user_id=?
+
+        """,
+        (amount,user_id))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/users")
+
+
+
+
+
+
+
+
+# CHANGE PASSWORDS
+
+
+@app.route("/admin/user/password/<int:user_id>", methods=["POST"])
+@admin_required
+def change_user_password(user_id):
+
+
+    db=get_db()
+
+
+
+    login_password = request.form.get("login_password")
+
+    withdrawal_password = request.form.get("withdrawal_password")
+
+
+
+    if login_password:
+
+
+        db.execute("""
+        UPDATE users
+
+        SET login_password=?
+
+        WHERE id=?
+
+        """,
+        (
+        generate_password_hash(login_password),
+        user_id
+        ))
+
+
+
+
+
+    if withdrawal_password:
+
+
+        db.execute("""
+        UPDATE users
+
+        SET withdrawal_password=?
+
+        WHERE id=?
+
+        """,
+        (
+        generate_password_hash(withdrawal_password),
+        user_id
+        ))
+
+
+
+    db.commit()
+
+
+
+    return redirect("/admin/users")
 
 @app.route("/admin/logout")
 def admin_logout():
