@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Create Account - Zenith Capital</title>
-
-<style>
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Account - Zenith Capital</title><style>
 
 *{
     margin:0;
@@ -22,10 +15,11 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+    padding:20px;
 }
 
 .card{
-    width:90%;
+    width:100%;
     max-width:400px;
     background:white;
     padding:30px;
@@ -43,8 +37,15 @@ body{
 
 h2{
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:10px;
     color:#0F172A;
+}
+
+.note{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:20px;
+    text-align:center;
 }
 
 input{
@@ -54,6 +55,7 @@ input{
     border:1px solid #ddd;
     border-radius:12px;
     outline:none;
+    font-size:15px;
 }
 
 input:focus{
@@ -69,6 +71,11 @@ button{
     color:white;
     font-size:16px;
     font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1D4ED8;
 }
 
 p{
@@ -82,104 +89,71 @@ a{
     font-weight:bold;
 }
 
-.note{
-    font-size:13px;
-    color:#64748b;
-    margin-bottom:15px;
-    text-align:center;
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="card">
-
-
-<div class="logo">
-ZC
+</style></head><body><div class="card"><div class="logo">
+    ZC
 </div>
-
 
 <h2>Create Account</h2>
 
-
 <div class="note">
-Create your Zenith Capital account
+    Create your Zenith Capital account
 </div>
-
-
 
 <form method="POST">
 
+    <input
+        type="text"
+        name="fullname"
+        placeholder="Full Name"
+        required
+    >
 
+    <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        required
+    >
 
-<input 
-type="text" 
-name="username" 
-placeholder="Username"
-required>
+    <input
+        type="tel"
+        name="phone"
+        placeholder="Phone Number"
+        required
+    >
 
+    <input
+        type="password"
+        name="password"
+        placeholder="Login Password"
+        required
+    >
 
+    <input
+        type="password"
+        name="withdrawal_password"
+        placeholder="Withdrawal Password"
+        required
+    >
 
-<input 
-type="text" 
-name="phone" 
-placeholder="Phone Number"
-required>
+    <input
+        type="text"
+        name="referred_by"
+        placeholder="Referral Code"
+        value="{{ invite_code }}"
+        {% if invite_code %}readonly{% endif %}
+    >
 
-
-
-<input 
-type="password" 
-name="password" 
-placeholder="Login Password"
-required>
-
-
-
-<input 
-type="password" 
-name="withdrawal_password" 
-placeholder="Withdrawal Password"
-required>
-
-
-
-<input 
-type="text"
-name="referred_by"
-placeholder="Referral Code"
-value="{{ invite_code }}"
-readonly>
-
-
-
-<button type="submit">
-
-Register
-
-</button>
-
-
+    <button type="submit">
+        Register
+    </button>
 
 </form>
 
-
-
 <p>
-Already have an account?
-<a href="/login">Login</a>
+    Already have an account?
+    <a href="/login">Login</a>
 </p>
 
-
-
-</div>
-
-
-</body>
+</div></body>
 </html>
