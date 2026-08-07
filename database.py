@@ -25,12 +25,14 @@ def create_tables():
 
 
 
-    # Users table
+    # USERS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS users (
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        fullname TEXT NOT NULL,
 
         username TEXT UNIQUE NOT NULL,
 
@@ -55,7 +57,7 @@ def create_tables():
 
 
 
-    # User accounts table
+    # USER ACCOUNTS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS accounts (
@@ -81,7 +83,7 @@ def create_tables():
 
 
 
-    # Bind accounts table
+    # BIND WITHDRAWAL ACCOUNTS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS bind_accounts (
@@ -107,7 +109,7 @@ def create_tables():
 
 
 
-    # Plans table
+    # INVESTMENT PLANS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS plans (
@@ -131,7 +133,7 @@ def create_tables():
 
 
 
-    # User plans table
+    # USER ACTIVE PLANS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_plans (
@@ -161,7 +163,7 @@ def create_tables():
 
 
 
-    # Deposits table
+    # DEPOSITS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS deposits (
@@ -191,7 +193,7 @@ def create_tables():
 
 
 
-    # Withdrawals table
+    # WITHDRAWALS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS withdrawals (
@@ -221,7 +223,7 @@ def create_tables():
 
 
 
-    # Transactions table
+    # ALL TRANSACTIONS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS transactions (
@@ -249,7 +251,7 @@ def create_tables():
 
 
 
-    # Referrals table
+    # REFERRAL SYSTEM
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS referrals (
@@ -273,7 +275,31 @@ def create_tables():
 
 
 
-    # Admin table
+    # DAILY INCOME CLAIM HISTORY
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS claim_history (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        user_id INTEGER,
+
+        plan_id INTEGER,
+
+        amount REAL,
+
+        claim_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY(user_id) REFERENCES users(id)
+
+    )
+    """)
+
+
+
+
+
+    # ADMIN ACCOUNTS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS admins (
@@ -291,7 +317,29 @@ def create_tables():
 
 
 
-    # Support table
+    # ADMIN ACTION LOG
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS admin_actions (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        admin_id INTEGER,
+
+        action TEXT,
+
+        target_user INTEGER,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    )
+    """)
+
+
+
+
+
+    # SUPPORT
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS support_messages (
@@ -313,7 +361,7 @@ def create_tables():
 
 
 
-    # Settings table
+    # PLATFORM SETTINGS
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS settings (
@@ -339,8 +387,9 @@ def create_tables():
 
 
 
+
 if __name__ == "__main__":
 
     create_tables()
 
-    print("Database created successfully!")
+    print("Zenith Capital database created successfully!")
