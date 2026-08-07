@@ -1,482 +1,245 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
 
-{% block title %}
-Deposit
-{% endblock %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block content %}
+<title>Deposit - Zenith Capital</title>
 
 <style>
 
-.deposit-page{
-    padding-bottom:100px;
-    background:#000;
-    min-height:100vh;
-    color:white;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
+body{
+background:#f4f7fb;
+padding-bottom:90px;
+}
 
 .header{
-    text-align:center;
-    padding:25px;
-    font-size:30px;
-    font-weight:bold;
-    color:#e82127;
+background:linear-gradient(135deg,#0f172a,#2563eb);
+color:white;
+padding:35px 20px;
+border-radius:0 0 30px 30px;
+text-align:center;
 }
 
-
-/* Message */
-
-.flash{
-    margin:15px 20px;
-    padding:15px;
-    background:#111;
-    border:1px solid #e82127;
-    border-radius:12px;
-    text-align:center;
-    color:#fff;
+.container{
+padding:20px;
 }
-
-
-/* Cards */
 
 .card{
-
-    margin:20px;
-    background:#111;
-    padding:22px;
-    border-radius:18px;
-    border:1px solid #333;
-
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 
-
-.card h3{
-
-    color:#e82127;
-    margin-bottom:15px;
-
+.card h2{
+color:#2563eb;
+margin-bottom:15px;
 }
 
-
-
-.info-box{
-
-    background:#000;
-    padding:15px;
-    border-radius:12px;
-    border:1px solid #222;
-
+.balance{
+font-size:32px;
+font-weight:bold;
+color:#16a34a;
+text-align:center;
+margin:15px 0;
 }
 
-
-.info-box p{
-
-    margin:12px 0;
-    line-height:1.5;
-
+.info{
+background:#eff6ff;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+line-height:28px;
+color:#1e3a8a;
 }
-
-
-.info-box b{
-
-    color:#e82127;
-
-}
-
-
-
-/* Inputs */
 
 label{
-
-    color:#aaa;
-    display:block;
-    margin-top:15px;
-
+font-weight:bold;
+display:block;
+margin-bottom:8px;
+margin-top:15px;
 }
-
 
 input{
-
-    width:100%;
-    padding:15px;
-    margin-top:8px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#222;
-    color:white;
-    outline:none;
-
+width:100%;
+padding:15px;
+border:1px solid #ddd;
+border-radius:15px;
+font-size:16px;
+outline:none;
 }
 
-
-input:focus{
-
-    border-color:#e82127;
-
+button{
+width:100%;
+padding:16px;
+margin-top:25px;
+border:none;
+border-radius:15px;
+background:#2563eb;
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
 }
 
-
-/* Button */
-
-.btn{
-
-    width:100%;
-    padding:15px;
-    margin-top:20px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(135deg,#e82127,#800000);
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-
+button:hover{
+background:#1d4ed8;
 }
 
-
-
-.btn:hover{
-
-    opacity:.8;
-
+.paystack{
+background:#dcfce7;
+padding:15px;
+border-radius:15px;
+text-align:center;
+font-weight:bold;
+color:#166534;
+margin-top:15px;
 }
-
-
-
-/* Status */
-
-.status{
-
-    margin:20px;
-    padding:20px;
-    background:#111;
-    border-radius:18px;
-    border:1px solid #e82127;
-    text-align:center;
-
-}
-
-
-.status strong{
-
-    color:#e82127;
-
-}
-
-
-
-/* Bottom Navigation */
 
 .bottom-nav{
-
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:75px;
-    background:#111;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    border-top:1px solid #333;
-
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 15px rgba(0,0,0,.1);
 }
 
-
-
-.nav{
-
-    text-decoration:none;
-    color:#aaa;
-    text-align:center;
-    font-size:12px;
-
+.bottom-nav a{
+text-decoration:none;
+color:#2563eb;
+font-size:14px;
+font-weight:bold;
+text-align:center;
 }
-
-
-.nav i{
-
-    display:block;
-    font-size:22px;
-    margin-bottom:5px;
-
-}
-
-
-.nav:hover{
-
-    color:#e82127;
-
-}
-
 
 </style>
 
+</head>
 
-
-<div class="deposit-page">
-
+<body>
 
 <div class="header">
-TESLA DEPOSIT
+
+<h1>Deposit Funds</h1>
+
+<p>Fast and Secure Payment</p>
+
 </div>
 
-
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for message in messages %}
-<div class="flash">
-{{message}}
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-
-
+<div class="container">
 
 <div class="card">
 
-<h3>
-Deposit Rules
-</h3>
+<h2>Deposit Account</h2>
 
+<div class="balance">
 
-<p>
-Minimum Deposit:
-<b>GHS 90</b>
-</p>
-
-
-<p>
-Maximum Deposit:
-<b>GHS 10,000</b>
-</p>
-
-
-<p>
-Processing Time:
-<b>0 - 20 Minutes</b>
-</p>
-
+GHS 0.00
 
 </div>
 
-
-
-
+</div>
 
 <div class="card">
 
-<h3>
-Payment Details
-</h3>
+<div class="info">
 
+✅ Minimum Deposit: <b>GHS 45</b><br><br>
 
-<div class="info-box">
+✅ Payment Method: <b>Paystack</b><br><br>
 
-
-<p>
-MTN Mobile Money
-<br>
-<b>0257425844</b>
-</p>
-
+✅ Your balance will update after successful payment.
 
 </div>
 
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h3>
-Submit Deposit
-</h3>
-
-
-
-<form method="POST" enctype="multipart/form-data">
-
-
-<label>
-Deposit Amount (GHS)
-</label>
-
+<label>Deposit Amount</label>
 
 <input
 type="number"
-name="amount"
-placeholder="Enter amount"
-min="90"
-max="10000"
-required>
+placeholder="Enter amount (Minimum GHS 45)"
+id="amount">
 
-
-
-<label>
-Payment Screenshot
-</label>
-
+<label>Phone Number</label>
 
 <input
-type="file"
-name="screenshot"
-accept="image/*"
-required>
+type="tel"
+placeholder="Enter your phone number"
+id="phone">
 
+<div class="paystack">
 
+🔒 Secure Payment Powered by Paystack
 
-<button class="btn" type="submit">
-Submit Deposit
+</div>
+
+<button onclick="payNow()">
+
+Pay Now
+
 </button>
 
-
-</form>
-
-
 </div>
 
-
-
-
-
-<div class="status">
-
-<h3>
-Deposit Status
-</h3>
-
-<br>
-
-<p>
-Your payment will be reviewed by the TESLA team.
-</p>
-
-<br>
-
-<p>
-Current Status:
-<strong>
-Processing
-</strong>
-</p>
-
-
 </div>
-<!-- Deposit Bonus Promotion -->
-<div class="deposit-promo">
-    <h2>💰 Deposit Bonus Promotion</h2>
-
-    <div class="promo-item">
-        <span>Deposit GHS 1,000</span>
-        <strong>Receive GHS 100 Bonus</strong>
-    </div>
-
-    <div class="promo-item">
-        <span>Deposit GHS 2,000</span>
-        <strong>Receive GHS 200 Bonus</strong>
-    </div>
-
-    <div class="promo-item">
-        <span>Deposit GHS 3,000</span>
-        <strong>Receive GHS 300 Bonus</strong>
-    </div>
-
-    <div class="promo-item">
-        <span>Deposit GHS 5,000</span>
-        <strong>Receive GHS 500 Bonus</strong>
-    </div>
-
-    <div class="promo-item">
-        <span>Deposit GHS 10,000</span>
-        <strong>Receive GHS 1,000 Bonus</strong>
-    </div>
-</div>
-
-<style>
-.deposit-promo{
-    margin-top:30px;
-    background:#111;
-    border:2px solid #e00000;
-    border-radius:15px;
-    padding:20px;
-    color:#fff;
-    box-shadow:0 0 15px rgba(255,0,0,.3);
-}
-
-.deposit-promo h2{
-    text-align:center;
-    color:#ff2b2b;
-    margin-bottom:20px;
-}
-
-.promo-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 15px;
-    margin-bottom:10px;
-    background:#1b1b1b;
-    border-radius:10px;
-    border-left:4px solid #ff0000;
-}
-
-.promo-item strong{
-    color:#00ff66;
-    font-size:17px;
-}
-</style>
-
-
-
-
-
 
 <div class="bottom-nav">
 
-
-<a href="/dashboard" class="nav">
-<i>⌂</i>
-Home
+<a href="/dashboard">
+🏠<br>Home
 </a>
 
-
-<a href="/team" class="nav">
-<i>♟</i>
-Team
+<a href="/my_plan">
+💼<br>My Plan
 </a>
 
-
-<a href="/my_plan" class="nav">
-<i>▣</i>
-Plans
+<a href="/profile">
+👤<br>Profile
 </a>
-
-
-<a href="/service" class="nav">
-<i>⚙</i>
-Service
-</a>
-
-
-<a href="/profile" class="nav">
-<i>●</i>
-Profile
-</a>
-
 
 </div>
 
+<script>
 
-</div>
+function payNow(){
 
+let amount=document.getElementById("amount").value;
+let phone=document.getElementById("phone").value;
 
-{% endblock %}
+if(amount==""){
+alert("Please enter deposit amount.");
+return;
+}
+
+if(amount<45){
+alert("Minimum deposit is GHS 45.");
+return;
+}
+
+if(phone==""){
+alert("Please enter your phone number.");
+return;
+}
+
+// Paystack integration will be added in app.py later.
+alert("Redirecting to Paystack Payment...");
+
+}
+
+</script>
+
+</body>
+</html>
