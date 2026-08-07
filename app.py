@@ -10,15 +10,12 @@ app = Flask(__name__)
 app.secret_key = "change_this_secret_key"
 
 
-
-# Create database automatically
+# Create database tables
 create_tables()
 
 
 
-
-
-# Home
+# HOME
 
 @app.route("/")
 def home():
@@ -29,9 +26,7 @@ def home():
 
 
 
-
-
-# Register
+# REGISTER
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -41,19 +36,20 @@ def register():
 
     if request.method == "POST":
 
-
+        fullname = request.form["fullname"]
         username = request.form["username"]
         phone = request.form["phone"]
+
         password = request.form["password"]
+
         withdrawal_password = request.form["withdrawal_password"]
 
         referred_by = request.form.get("referred_by")
 
 
 
-        # Hash passwords
-
         login_password_hash = generate_password_hash(password)
+
 
         withdrawal_password_hash = generate_password_hash(
             withdrawal_password
@@ -61,13 +57,12 @@ def register():
 
 
 
-        # Generate referral code
-
         referral_code = secrets.token_hex(4).upper()
 
 
 
         db = get_db()
+
         cursor = db.cursor()
 
 
@@ -78,24 +73,26 @@ def register():
             cursor.execute("""
             INSERT INTO users
             (
-            username,
-            phone,
-            login_password,
-            withdrawal_password,
-            referral_code,
-            referred_by
+                fullname,
+                username,
+                phone,
+                login_password,
+                withdrawal_password,
+                referral_code,
+                referred_by
             )
 
-            VALUES(?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?)
 
             """,
             (
-            username,
-            phone,
-            login_password_hash,
-            withdrawal_password_hash,
-            referral_code,
-            referred_by
+                fullname,
+                username,
+                phone,
+                login_password_hash,
+                withdrawal_password_hash,
+                referral_code,
+                referred_by
             ))
 
 
@@ -104,10 +101,12 @@ def register():
 
 
 
-            # Create accounts
+
+            # Create user wallets
 
             cursor.execute("""
             INSERT INTO accounts(user_id)
+
             VALUES(?)
 
             """,
@@ -115,8 +114,51 @@ def register():
 
 
 
-            db.commit()
 
+
+            # Save referral relationship
+
+            if referred_by:
+
+
+                inviter = cursor.execute("""
+
+                SELECT id
+
+                FROM users
+
+                WHERE referral_code=?
+
+                """,
+                (referred_by,)).fetchone()
+
+
+
+                if inviter:
+
+
+                    cursor.execute("""
+                    INSERT INTO referrals
+                    (
+                    user_id,
+                    referred_user_id,
+                    level
+                    )
+
+                    VALUES(?,?,?)
+
+                    """,
+                    (
+                    inviter["id"],
+                    user_id,
+                    1
+                    ))
+
+
+
+
+
+            db.commit()
 
 
             return redirect("/login")
@@ -125,8 +167,8 @@ def register():
 
         except sqlite3.IntegrityError:
 
-            return "Username or phone already exists"
 
+            return "Username or phone already exists"
 
 
 
@@ -142,9 +184,7 @@ def register():
 
 
 
-
-
-# Login
+# LOGIN
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -154,6 +194,7 @@ def login():
 
 
         phone = request.form["phone"]
+
         password = request.form["password"]
 
 
@@ -163,7 +204,6 @@ def login():
 
 
         user = db.execute("""
-
         SELECT *
 
         FROM users
@@ -176,7 +216,6 @@ def login():
 
 
         if user:
-
 
 
             if check_password_hash(
@@ -197,7 +236,6 @@ def login():
 
 
 
-
     return render_template("login.html")
 
 
@@ -206,9 +244,7 @@ def login():
 
 
 
-
-
-# Dashboard
+# DASHBOARD
 
 @app.route("/dashboard")
 def dashboard():
@@ -262,9 +298,7 @@ def dashboard():
 
 
 
-
-
-# Profile
+# PROFILE
 
 @app.route("/profile")
 def profile():
@@ -276,11 +310,11 @@ def profile():
 
 
 
-    db=get_db()
+    db = get_db()
 
 
 
-    user=db.execute("""
+    user = db.execute("""
 
     SELECT *
 
@@ -293,7 +327,7 @@ def profile():
 
 
 
-    accounts=db.execute("""
+    accounts = db.execute("""
 
     SELECT *
 
@@ -318,9 +352,7 @@ def profile():
 
 
 
-
-
-# Logout
+# LOGOUT
 
 @app.route("/logout")
 def logout():
@@ -335,8 +367,7 @@ def logout():
 
 
 
-
-if __name__=="__main__":
+if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
