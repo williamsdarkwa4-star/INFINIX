@@ -6,51 +6,60 @@ from psycopg2.extras import RealDictCursor
 class Database:
 
     def __init__(self):
-
         self.conn = psycopg2.connect(
-            os.environ.get("DATABASE_URL"),
-            cursor_factory=RealDictCursor
+            os.environ.get("DATABASE_URL")
         )
 
 
     def execute(self, query, params=()):
 
-        cur = self.conn.cursor()
+        cursor = self.conn.cursor(
+            cursor_factory=RealDictCursor
+        )
 
-        query = query.replace("?", "%s")
-
-        cur.execute(query, params)
+        cursor.execute(query, params)
 
         self.conn.commit()
 
-        return cur
+        return cursor
 
 
+    def execute_one(self, query, params=()):
 
-    def fetchone(self, query, params=()):
+        cursor = self.conn.cursor(
+            cursor_factory=RealDictCursor
+        )
 
-        cur = self.execute(query, params)
+        cursor.execute(query, params)
 
-        return cur.fetchone()
+        result = cursor.fetchone()
+
+        cursor.close()
+
+        return result
 
 
+    def execute_all(self, query, params=()):
 
-    def fetchall(self, query, params=()):
+        cursor = self.conn.cursor(
+            cursor_factory=RealDictCursor
+        )
 
-        cur = self.execute(query, params)
+        cursor.execute(query, params)
 
-        return cur.fetchall()
+        result = cursor.fetchall()
 
+        cursor.close()
+
+        return result
 
 
     def commit(self):
-
         self.conn.commit()
 
 
 
 def get_db():
-
     return Database()
 
 
@@ -59,241 +68,76 @@ def create_tables():
 
     db = get_db()
 
+    cursor = db.conn.cursor()
 
-    db.execute("""
 
-    CREATE TABLE IF NOT EXISTS users(
+    cursor.execute("""
+    
+    CREATE TABLE IF NOT EXISTS users (
 
         id SERIAL PRIMARY KEY,
 
-        fullname TEXT,
+        fullname VARCHAR(100),
 
-        username TEXT UNIQUE,
+        username VARCHAR(50) UNIQUE,
 
-        phone TEXT UNIQUE,
+        phone VARCHAR(20) UNIQUE,
 
-        login_password TEXT,
+        login_password TEXT NOT NULL,
 
-        withdrawal_password TEXT,
+        withdrawal_password TEXT NOT NULL,
 
-        referral_code TEXT UNIQUE,
+        referral_code VARCHAR(20) UNIQUE,
 
-        referred_by TEXT,
+        referred_by VARCHAR(20),
 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
-    )
+    );
 
     """)
 
 
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS accounts(
+    cursor.execute("""
+    
+    CREATE TABLE IF NOT EXISTS accounts (
 
         id SERIAL PRIMARY KEY,
 
-        user_id INTEGER REFERENCES users(id),
+        user_id INTEGER REFERENCES users(id)
+        ON DELETE CASCADE,
 
         deposit_account NUMERIC DEFAULT 0,
 
         income_account NUMERIC DEFAULT 0,
 
-        withdraw_account NUMERIC DEFAULT 0,
-
         referral_account NUMERIC DEFAULT 0
 
-    )
+    );
 
     """)
 
 
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS plans(
+    cursor.execute("""
+    
+    CREATE TABLE IF NOT EXISTS bind_accounts (
 
         id SERIAL PRIMARY KEY,
 
-        plan_name TEXT,
+        user_id INTEGER REFERENCES users(id)
+        ON DELETE CASCADE,
 
-        investment_amount NUMERIC,
+        account_name VARCHAR(100),
 
-        daily_income NUMERIC,
+        phone_number VARCHAR(20),
 
-        duration INTEGER,
+        network VARCHAR(50)
 
-        status TEXT DEFAULT 'Active'
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS user_plans(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER REFERENCES users(id),
-
-        plan_id INTEGER REFERENCES plans(id),
-
-        status TEXT,
-
-        last_claim_time TIMESTAMP
-
-    )
+    );
 
     """)
 
 
+    db.conn.commit()
 
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS bind_accounts(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER REFERENCES users(id),
-
-        account_name TEXT,
-
-        phone_number TEXT,
-
-        network TEXT
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS deposits(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER REFERENCES users(id),
-
-        amount NUMERIC,
-
-        phone TEXT,
-
-        payment_reference TEXT,
-
-        payment_method TEXT,
-
-        status TEXT
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS withdrawals(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER REFERENCES users(id),
-
-        amount NUMERIC,
-
-        account_id INTEGER,
-
-        withdrawal_fee NUMERIC,
-
-        status TEXT
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS transactions(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER REFERENCES users(id),
-
-        transaction_type TEXT,
-
-        amount NUMERIC,
-
-        description TEXT,
-
-        status TEXT,
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS claim_history(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER,
-
-        plan_id INTEGER,
-
-        amount NUMERIC,
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS support_messages(
-
-        id SERIAL PRIMARY KEY,
-
-        user_id INTEGER,
-
-        message TEXT,
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-    )
-
-    """)
-
-
-
-    db.execute("""
-
-    CREATE TABLE IF NOT EXISTS admins(
-
-        id SERIAL PRIMARY KEY,
-
-        username TEXT UNIQUE,
-
-        password TEXT
-
-    )
-
-    """)
-
-
-
-    db.commit()
+    cursor.close()
