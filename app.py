@@ -1,30 +1,23 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-
 import os
 import secrets
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-
-# =========================================================
-# FLASK APP
-# =========================================================
-
 app = Flask(__name__)
 
 app.secret_key = os.environ.get(
     "SECRET_KEY",
-    "change-this-secret-key-in-render"
+    "change-this-secret-key"
 )
 
 
 # =========================================================
-# DATABASE CONNECTION
+# DATABASE
 # =========================================================
 
 def get_connection():
-
     database_url = os.environ.get("DATABASE_URL")
 
     if not database_url:
@@ -36,24 +29,17 @@ def get_connection():
     )
 
 
-# =========================================================
-# DATABASE TABLES
-# =========================================================
-
 def create_tables():
-
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
-
-        # USERS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 fullname VARCHAR(100) NOT NULL,
                 username VARCHAR(50) UNIQUE NOT NULL,
-                phone VARCHAR(20) UNIQUE NOT NULL,
+                phone VARCHAR(30) UNIQUE NOT NULL,
                 login_password TEXT NOT NULL,
                 withdrawal_password TEXT NOT NULL,
                 referral_code VARCHAR(20) UNIQUE NOT NULL,
@@ -62,144 +48,94 @@ def create_tables():
             )
         """)
 
-        # ACCOUNTS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE
-                    UNIQUE,
-
+                user_id INTEGER UNIQUE REFERENCES users(id)
+                    ON DELETE CASCADE,
                 deposit_account NUMERIC(12,2) DEFAULT 0,
                 income_account NUMERIC(12,2) DEFAULT 0,
                 referral_account NUMERIC(12,2) DEFAULT 0
             )
         """)
 
-        # PLANS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
                 id SERIAL PRIMARY KEY,
-
                 plan_name VARCHAR(100) NOT NULL,
-
                 investment_amount NUMERIC(12,2) NOT NULL,
-
                 daily_income NUMERIC(12,2) NOT NULL,
-
                 duration INTEGER NOT NULL,
-
                 status VARCHAR(20) DEFAULT 'Active'
             )
         """)
 
-        # USER PLANS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS user_plans (
                 id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
+                user_id INTEGER REFERENCES users(id)
                     ON DELETE CASCADE,
-
-                plan_id INTEGER
-                    REFERENCES plans(id)
+                plan_id INTEGER REFERENCES plans(id)
                     ON DELETE CASCADE,
-
                 status VARCHAR(20) DEFAULT 'Active',
-
                 purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # TRANSACTIONS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
                 id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
+                user_id INTEGER REFERENCES users(id)
                     ON DELETE CASCADE,
-
                 transaction_type VARCHAR(50),
-
                 amount NUMERIC(12,2),
-
                 description TEXT,
-
                 status VARCHAR(30),
-
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # BIND ACCOUNTS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS bind_accounts (
                 id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
+                user_id INTEGER REFERENCES users(id)
                     ON DELETE CASCADE,
-
                 account_name VARCHAR(100) NOT NULL,
-
-                phone_number VARCHAR(20) NOT NULL,
-
+                phone_number VARCHAR(30) NOT NULL,
                 network VARCHAR(50) NOT NULL,
-
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # REFERRALS
-        cursor.execute("""
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS referrals (
                 id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
+                user_id INTEGER REFERENCES users(id)
                     ON DELETE CASCADE,
-
-                referred_user_id INTEGER
-                    REFERENCES users(id)
+                referred_user_id INTEGER REFERENCES users(id)
                     ON DELETE CASCADE,
-
                 level INTEGER DEFAULT 1,
-
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # DEFAULT PLANS
-        cursor.execute("""
+        cur.execute("""
             SELECT COUNT(*) AS total
             FROM plans
         """)
 
-        result = cursor.fetchone()
-
-        if result["total"] == 0:
-
-            cursor.execute("""
+        if cur.fetchone()["total"] == 0:
+            cur.execute("""
                 INSERT INTO plans
-                (
-                    plan_name,
-                    investment_amount,
-                    daily_income,
-                    duration,
-                    status
-                )
+                (plan_name, investment_amount, daily_income, duration)
                 VALUES
-                    ('Plan 1', 50, 8, 100, 'Active'),
-                    ('Plan 2', 100, 20, 100, 'Active'),
-                    ('Plan 3', 200, 40, 100, 'Active'),
-                    ('Plan 4', 300, 65, 100, 'Active'),
-                    ('Plan 5', 500, 100, 100, 'Active'),
-                    ('Plan 6', 600, 200, 100, 'Active'),
-                    ('Plan 7', 1000, 360, 100, 'Active')
+                ('VIP 1', 50, 8, 100),
+                ('VIP 2', 100, 20, 100),
+                ('VIP 3', 200, 40, 100),
+                ('VIP 4', 300, 65, 100),
+                ('VIP 5', 500, 100, 100),
+                ('VIP 6', 600, 200, 100),
+                ('VIP 7', 1000, 360, 100)
             """)
 
         conn.commit()
@@ -209,11 +145,10 @@ def create_tables():
         raise
 
     finally:
-        cursor.close()
+        cur.close()
         conn.close()
 
 
-# Create tables when application starts
 create_tables()
 
 
@@ -223,7 +158,6 @@ create_tables()
 
 @app.route("/")
 def home():
-
     if "user_id" in session:
         return redirect(url_for("dashboard"))
 
@@ -238,57 +172,31 @@ def home():
 def register():
 
     invite_code = request.args.get(
-        "ref",
-        ""
+        "ref", ""
     ).strip().upper()
 
     if request.method == "POST":
 
-        fullname = request.form.get(
-            "fullname",
-            ""
-        ).strip()
-
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
-
-        phone = request.form.get(
-            "phone",
-            ""
-        ).strip()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
+        fullname = request.form.get("fullname", "").strip()
+        username = request.form.get("username", "").strip()
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "")
         withdrawal_password = request.form.get(
-            "withdrawal_password",
-            ""
+            "withdrawal_password", ""
         )
 
         referred_by = request.form.get(
-            "referred_by",
-            ""
+            "referred_by", ""
         ).strip().upper()
 
-        # Validation
-        if not fullname:
-            return "Please enter your full name."
-
-        if not username:
-            return "Please enter your username."
-
-        if not phone:
-            return "Please enter your phone number."
-
-        if not password:
-            return "Please enter your login password."
-
-        if not withdrawal_password:
-            return "Please enter your withdrawal password."
+        if not all([
+            fullname,
+            username,
+            phone,
+            password,
+            withdrawal_password
+        ]):
+            return "Please fill in all required fields."
 
         if len(password) < 6:
             return "Login password must be at least 6 characters."
@@ -297,74 +205,62 @@ def register():
             return "Withdrawal password must be at least 4 characters."
 
         conn = get_connection()
-        cursor = conn.cursor()
+        cur = conn.cursor()
 
         try:
 
-            # Check username
-            cursor.execute("""
-                SELECT id
-                FROM users
-                WHERE username = %s
-            """, (username,))
+            cur.execute(
+                "SELECT id FROM users WHERE username=%s",
+                (username,)
+            )
 
-            if cursor.fetchone():
+            if cur.fetchone():
                 return "Username already exists."
 
-            # Check phone
-            cursor.execute("""
-                SELECT id
-                FROM users
-                WHERE phone = %s
-            """, (phone,))
+            cur.execute(
+                "SELECT id FROM users WHERE phone=%s",
+                (phone,)
+            )
 
-            if cursor.fetchone():
+            if cur.fetchone():
                 return "Phone number already exists."
 
-            # Generate unique referral code
             while True:
+                referral_code = secrets.token_hex(4).upper()
 
-                referral_code = secrets.token_hex(
-                    4
-                ).upper()
-
-                cursor.execute("""
+                cur.execute(
+                    """
                     SELECT id
                     FROM users
-                    WHERE referral_code = %s
-                """, (referral_code,))
+                    WHERE referral_code=%s
+                    """,
+                    (referral_code,)
+                )
 
-                if not cursor.fetchone():
+                if not cur.fetchone():
                     break
 
-            # Validate referral
             valid_referral = None
             inviter_id = None
 
             if referred_by:
-
-                cursor.execute("""
+                cur.execute(
+                    """
                     SELECT id, referral_code
                     FROM users
-                    WHERE referral_code = %s
-                """, (referred_by,))
+                    WHERE referral_code=%s
+                    """,
+                    (referred_by,)
+                )
 
-                inviter = cursor.fetchone()
+                inviter = cur.fetchone()
 
                 if inviter:
-
                     valid_referral = inviter["referral_code"]
                     inviter_id = inviter["id"]
 
-            # Hash passwords
-            login_hash = generate_password_hash(password)
-
-            withdrawal_hash = generate_password_hash(
-                withdrawal_password
-            )
-
-            # Create user
-            cursor.execute("""
+            cur.execute(
+                """
                 INSERT INTO users
                 (
                     fullname,
@@ -375,83 +271,53 @@ def register():
                     referral_code,
                     referred_by
                 )
-                VALUES
-                (
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s
-                )
+                VALUES (%s,%s,%s,%s,%s,%s,%s)
                 RETURNING id
-            """, (
-                fullname,
-                username,
-                phone,
-                login_hash,
-                withdrawal_hash,
-                referral_code,
-                valid_referral
-            ))
+                """,
+                (
+                    fullname,
+                    username,
+                    phone,
+                    generate_password_hash(password),
+                    generate_password_hash(
+                        withdrawal_password
+                    ),
+                    referral_code,
+                    valid_referral
+                )
+            )
 
-            new_user = cursor.fetchone()
+            user_id = cur.fetchone()["id"]
 
-            user_id = new_user["id"]
-
-            # Create wallet
-            cursor.execute("""
+            cur.execute(
+                """
                 INSERT INTO accounts
-                (
-                    user_id,
-                    deposit_account,
-                    income_account,
-                    referral_account
-                )
-                VALUES
-                (
-                    %s,
-                    0,
-                    0,
-                    0
-                )
-            """, (user_id,))
+                (user_id)
+                VALUES (%s)
+                """,
+                (user_id,)
+            )
 
-            # Referral record
             if inviter_id:
-
-                cursor.execute("""
+                cur.execute(
+                    """
                     INSERT INTO referrals
-                    (
-                        user_id,
-                        referred_user_id,
-                        level
-                    )
-                    VALUES
-                    (
-                        %s,
-                        %s,
-                        1
-                    )
-                """, (
-                    inviter_id,
-                    user_id
-                ))
+                    (user_id, referred_user_id, level)
+                    VALUES (%s,%s,1)
+                    """,
+                    (inviter_id, user_id)
+                )
 
             conn.commit()
 
             return redirect(url_for("login"))
 
-        except psycopg2.Error:
-
+        except Exception:
             conn.rollback()
-
             return "Registration could not be completed."
 
         finally:
-
-            cursor.close()
+            cur.close()
             conn.close()
 
     return render_template(
@@ -469,32 +335,26 @@ def login():
 
     if request.method == "POST":
 
-        phone = request.form.get(
-            "phone",
-            ""
-        ).strip()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "")
 
         if not phone or not password:
             return "Please enter your phone number and password."
 
         conn = get_connection()
-        cursor = conn.cursor()
+        cur = conn.cursor()
 
         try:
-
-            cursor.execute("""
+            cur.execute(
+                """
                 SELECT *
                 FROM users
-                WHERE phone = %s
-                LIMIT 1
-            """, (phone,))
+                WHERE phone=%s
+                """,
+                (phone,)
+            )
 
-            user = cursor.fetchone()
+            user = cur.fetchone()
 
             if not user:
                 return "Invalid phone number or password."
@@ -506,16 +366,12 @@ def login():
                 return "Invalid phone number or password."
 
             session.clear()
-
             session["user_id"] = user["id"]
 
-            return redirect(
-                url_for("dashboard")
-            )
+            return redirect(url_for("dashboard"))
 
         finally:
-
-            cursor.close()
+            cur.close()
             conn.close()
 
     return render_template("login.html")
@@ -531,62 +387,60 @@ def dashboard():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user_id = session["user_id"]
-
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        # User
-        cursor.execute("""
-            SELECT
-                id,
-                fullname,
-                username,
-                phone,
-                referral_code,
-                referred_by,
-                created_at
-            FROM users
-            WHERE id = %s
-        """, (user_id,))
+        user_id = session["user_id"]
 
-        user = cursor.fetchone()
+        cur.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE id=%s
+            """,
+            (user_id,)
+        )
+
+        user = cur.fetchone()
 
         if not user:
-
             session.clear()
-
             return redirect(url_for("login"))
 
-        # Account
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM accounts
-            WHERE user_id = %s
-        """, (user_id,))
+            WHERE user_id=%s
+            """,
+            (user_id,)
+        )
 
-        account = cursor.fetchone()
+        account = cur.fetchone()
 
-        # Plans
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM plans
-            WHERE status = 'Active'
-            ORDER BY id ASC
-        """)
+            WHERE status='Active'
+            ORDER BY id
+            """
+        )
 
-        plans = cursor.fetchall()
+        plans = cur.fetchall()
 
-        # Referral count
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT COUNT(*) AS total
             FROM referrals
-            WHERE user_id = %s
-        """, (user_id,))
+            WHERE user_id=%s
+            """,
+            (user_id,)
+        )
 
-        referral_count = cursor.fetchone()["total"]
+        referral_count = cur.fetchone()["total"]
 
         return render_template(
             "dashboard.html",
@@ -597,14 +451,12 @@ def dashboard():
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
 # =========================================================
-# BUY PLAN - STEP 1
-# CHECK BALANCE BEFORE CONFIRMATION
+# PLAN CHECK
 # =========================================================
 
 @app.route("/buy_plan/<int:plan_id>")
@@ -613,49 +465,47 @@ def buy_plan(plan_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user_id = session["user_id"]
-
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        # Find plan
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM plans
-            WHERE id = %s
-            AND status = 'Active'
-        """, (plan_id,))
+            WHERE id=%s
+            AND status='Active'
+            """,
+            (plan_id,)
+        )
 
-        plan = cursor.fetchone()
+        plan = cur.fetchone()
 
         if not plan:
             return "Plan not found."
 
-        # Find account
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM accounts
-            WHERE user_id = %s
-        """, (user_id,))
+            WHERE user_id=%s
+            """,
+            (session["user_id"],)
+        )
 
-        account = cursor.fetchone()
+        account = cur.fetchone()
 
         if not account:
             return "Account not found."
 
-        # CHECK BALANCE BEFORE SHOWING CONFIRMATION
+        # Balance is checked BEFORE confirmation.
         if account["deposit_account"] < plan["investment_amount"]:
-
             return render_template(
                 "insufficient_balance.html",
                 plan=plan,
                 account=account
             )
-
-        # Balance is enough.
-        # Do NOT deduct anything yet.
 
         return render_template(
             "confirm_plan.html",
@@ -664,14 +514,12 @@ def buy_plan(plan_id):
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
 # =========================================================
-# CONFIRM PLAN - STEP 2
-# CHECK BALANCE AGAIN BEFORE PURCHASE
+# PLAN CONFIRMATION
 # =========================================================
 
 @app.route(
@@ -683,78 +531,77 @@ def confirm_buy_plan(plan_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    user_id = session["user_id"]
-
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        # Find plan
-        cursor.execute("""
+        user_id = session["user_id"]
+
+        cur.execute(
+            """
             SELECT *
             FROM plans
-            WHERE id = %s
-            AND status = 'Active'
-        """, (plan_id,))
+            WHERE id=%s
+            AND status='Active'
+            """,
+            (plan_id,)
+        )
 
-        plan = cursor.fetchone()
+        plan = cur.fetchone()
 
         if not plan:
             return "Plan is no longer available."
 
-        # Lock the account row during the transaction.
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM accounts
-            WHERE user_id = %s
+            WHERE user_id=%s
             FOR UPDATE
-        """, (user_id,))
+            """,
+            (user_id,)
+        )
 
-        account = cursor.fetchone()
+        account = cur.fetchone()
 
         if not account:
             return "Account not found."
 
-        # SECOND BALANCE CHECK
+        # Final balance check.
         if account["deposit_account"] < plan["investment_amount"]:
-
             conn.rollback()
 
-            return "Insufficient balance."
+            return render_template(
+                "insufficient_balance.html",
+                plan=plan,
+                account=account
+            )
 
-        # Deduct plan amount
-        cursor.execute("""
+        cur.execute(
+            """
             UPDATE accounts
             SET deposit_account =
                 deposit_account - %s
-            WHERE user_id = %s
-        """, (
-            plan["investment_amount"],
-            user_id
-        ))
+            WHERE user_id=%s
+            """,
+            (
+                plan["investment_amount"],
+                user_id
+            )
+        )
 
-        # Create active user plan
-        cursor.execute("""
+        cur.execute(
+            """
             INSERT INTO user_plans
-            (
-                user_id,
-                plan_id,
-                status
-            )
-            VALUES
-            (
-                %s,
-                %s,
-                'Active'
-            )
-        """, (
-            user_id,
-            plan_id
-        ))
+            (user_id, plan_id, status)
+            VALUES (%s,%s,'Active')
+            """,
+            (user_id, plan_id)
+        )
 
-        # Transaction record
-        cursor.execute("""
+        cur.execute(
+            """
             INSERT INTO transactions
             (
                 user_id,
@@ -763,37 +610,27 @@ def confirm_buy_plan(plan_id):
                 description,
                 status
             )
-            VALUES
+            VALUES (%s,%s,%s,%s,%s)
+            """,
             (
-                %s,
-                %s,
-                %s,
-                %s,
-                %s
+                user_id,
+                "Demo Plan Purchase",
+                plan["investment_amount"],
+                "Demo purchase of " + plan["plan_name"],
+                "Successful"
             )
-        """, (
-            user_id,
-            "Plan Purchase",
-            plan["investment_amount"],
-            "Purchased " + plan["plan_name"],
-            "Successful"
-        ))
+        )
 
         conn.commit()
 
-        return redirect(
-            url_for("my_plan")
-        )
+        return redirect(url_for("my_plan"))
 
     except Exception:
-
         conn.rollback()
-
-        return "The plan purchase could not be completed."
+        return "The demo purchase could not be completed."
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
@@ -808,34 +645,28 @@ def my_plan():
         return redirect(url_for("login"))
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT
-                user_plans.id,
-                user_plans.status,
-                user_plans.purchased_at,
-
+                user_plans.*,
                 plans.plan_name,
                 plans.investment_amount,
                 plans.daily_income,
                 plans.duration
-
             FROM user_plans
-
             JOIN plans
-            ON user_plans.plan_id = plans.id
-
-            WHERE user_plans.user_id = %s
-
+                ON plans.id=user_plans.plan_id
+            WHERE user_plans.user_id=%s
             ORDER BY user_plans.id DESC
-        """, (
-            session["user_id"],
-        ))
+            """,
+            (session["user_id"],)
+        )
 
-        user_plans = cursor.fetchall()
+        user_plans = cur.fetchall()
 
         return render_template(
             "my_plan.html",
@@ -843,8 +674,7 @@ def my_plan():
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
@@ -859,36 +689,23 @@ def profile():
         return redirect(url_for("login"))
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        cursor.execute("""
-            SELECT
-                id,
-                fullname,
-                username,
-                phone,
-                referral_code,
-                referred_by,
-                created_at
-            FROM users
-            WHERE id = %s
-        """, (
-            session["user_id"],
-        ))
+        cur.execute(
+            "SELECT * FROM users WHERE id=%s",
+            (session["user_id"],)
+        )
 
-        user = cursor.fetchone()
+        user = cur.fetchone()
 
-        cursor.execute("""
-            SELECT *
-            FROM accounts
-            WHERE user_id = %s
-        """, (
-            session["user_id"],
-        ))
+        cur.execute(
+            "SELECT * FROM accounts WHERE user_id=%s",
+            (session["user_id"],)
+        )
 
-        account = cursor.fetchone()
+        account = cur.fetchone()
 
         return render_template(
             "profile.html",
@@ -897,13 +714,12 @@ def profile():
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
 # =========================================================
-# BIND PAYMENT ACCOUNT
+# BIND ACCOUNT
 # =========================================================
 
 @app.route(
@@ -916,37 +732,29 @@ def bind_account():
         return redirect(url_for("login"))
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
         if request.method == "POST":
 
             account_name = request.form.get(
-                "account_name",
-                ""
+                "account_name", ""
             ).strip()
 
             phone_number = request.form.get(
-                "phone_number",
-                ""
+                "phone_number", ""
             ).strip()
 
             network = request.form.get(
-                "network",
-                ""
+                "network", ""
             ).strip()
 
-            if not account_name:
-                return "Please enter account name."
+            if not account_name or not phone_number or not network:
+                return "Please complete all fields."
 
-            if not phone_number:
-                return "Please enter phone number."
-
-            if not network:
-                return "Please select a network."
-
-            cursor.execute("""
+            cur.execute(
+                """
                 INSERT INTO bind_accounts
                 (
                     user_id,
@@ -954,36 +762,31 @@ def bind_account():
                     phone_number,
                     network
                 )
-                VALUES
+                VALUES (%s,%s,%s,%s)
+                """,
                 (
-                    %s,
-                    %s,
-                    %s,
-                    %s
+                    session["user_id"],
+                    account_name,
+                    phone_number,
+                    network
                 )
-            """, (
-                session["user_id"],
-                account_name,
-                phone_number,
-                network
-            ))
+            )
 
             conn.commit()
 
-            return redirect(
-                url_for("bind_account")
-            )
+            return redirect(url_for("bind_account"))
 
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM bind_accounts
-            WHERE user_id = %s
+            WHERE user_id=%s
             ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
+            """,
+            (session["user_id"],)
+        )
 
-        accounts = cursor.fetchall()
+        accounts = cur.fetchall()
 
         return render_template(
             "bind_account.html",
@@ -991,13 +794,12 @@ def bind_account():
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
 
 
 # =========================================================
-# TEAM / REFERRALS
+# TEAM
 # =========================================================
 
 @app.route("/team")
@@ -1007,68 +809,63 @@ def team():
         return redirect(url_for("login"))
 
     conn = get_connection()
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
     try:
 
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT referral_code
             FROM users
-            WHERE id = %s
-        """, (
-            session["user_id"],
-        ))
+            WHERE id=%s
+            """,
+            (session["user_id"],)
+        )
 
-        user = cursor.fetchone()
+        user = cur.fetchone()
 
         if not user:
             return redirect(url_for("login"))
 
-        referral_code = user["referral_code"]
-
-        # Level 1
-        cursor.execute("""
+        cur.execute(
+            """
             SELECT *
             FROM users
-            WHERE referred_by = %s
+            WHERE referred_by=%s
             ORDER BY id DESC
-        """, (referral_code,))
+            """,
+            (user["referral_code"],)
+        )
 
-        level1 = cursor.fetchall()
+        level1 = cur.fetchall()
 
-        # Level 2
         level2 = []
 
         for member in level1:
-
-            cursor.execute("""
+            cur.execute(
+                """
                 SELECT *
                 FROM users
-                WHERE referred_by = %s
-            """, (
-                member["referral_code"],
-            ))
-
-            level2.extend(
-                cursor.fetchall()
+                WHERE referred_by=%s
+                """,
+                (member["referral_code"],)
             )
 
-        # Level 3
+            level2.extend(cur.fetchall())
+
         level3 = []
 
         for member in level2:
-
-            cursor.execute("""
+            cur.execute(
+                """
                 SELECT *
                 FROM users
-                WHERE referred_by = %s
-            """, (
-                member["referral_code"],
-            ))
-
-            level3.extend(
-                cursor.fetchall()
+                WHERE referred_by=%s
+                """,
+                (member["referral_code"],)
             )
+
+            level3.extend(cur.fetchall())
 
         return render_template(
             "team.html",
@@ -1081,9 +878,206 @@ def team():
         )
 
     finally:
-
-        cursor.close()
+        cur.close()
         conn.close()
+
+
+# =========================================================
+# TRANSACTION HISTORY
+# =========================================================
+
+@app.route("/transaction_history")
+def transaction_history():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    try:
+
+        cur.execute(
+            """
+            SELECT *
+            FROM transactions
+            WHERE user_id=%s
+            ORDER BY id DESC
+            """,
+            (session["user_id"],)
+        )
+
+        transactions = cur.fetchall()
+
+        return render_template(
+            "transaction_history.html",
+            transactions=transactions
+        )
+
+    finally:
+        cur.close()
+        conn.close()
+
+
+# =========================================================
+# DEMO DEPOSIT
+# =========================================================
+
+@app.route("/deposit", methods=["GET", "POST"])
+def deposit():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        try:
+            amount = float(
+                request.form.get("amount", 0)
+            )
+        except ValueError:
+            amount = 0
+
+        if amount < 45:
+            return "Demo deposit minimum is GHS 45."
+
+        conn = get_connection()
+        cur = conn.cursor()
+
+        try:
+
+            cur.execute(
+                """
+                UPDATE accounts
+                SET deposit_account =
+                    deposit_account + %s
+                WHERE user_id=%s
+                """,
+                (
+                    amount,
+                    session["user_id"]
+                )
+            )
+
+            cur.execute(
+                """
+                INSERT INTO transactions
+                (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    description,
+                    status
+                )
+                VALUES (%s,%s,%s,%s,%s)
+                """,
+                (
+                    session["user_id"],
+                    "Demo Deposit",
+                    amount,
+                    "Sandbox deposit",
+                    "Successful"
+                )
+            )
+
+            conn.commit()
+
+            return redirect(url_for("dashboard"))
+
+        finally:
+            cur.close()
+            conn.close()
+
+    return render_template("deposit.html")
+
+
+# =========================================================
+# DEMO WITHDRAWAL
+# =========================================================
+
+@app.route("/withdraw", methods=["GET", "POST"])
+def withdraw():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        try:
+            amount = float(
+                request.form.get("amount", 0)
+            )
+        except ValueError:
+            amount = 0
+
+        if amount < 30:
+            return "Demo withdrawal minimum is GHS 30."
+
+        conn = get_connection()
+        cur = conn.cursor()
+
+        try:
+
+            cur.execute(
+                """
+                SELECT income_account
+                FROM accounts
+                WHERE user_id=%s
+                """,
+                (session["user_id"],)
+            )
+
+            account = cur.fetchone()
+
+            if not account or account["income_account"] < amount:
+                return "Insufficient demo balance."
+
+            # Demo only. No real payment is sent.
+            fee = amount * 0.16
+            final_amount = amount - fee
+
+            cur.execute(
+                """
+                UPDATE accounts
+                SET income_account =
+                    income_account - %s
+                WHERE user_id=%s
+                """,
+                (amount, session["user_id"])
+            )
+
+            cur.execute(
+                """
+                INSERT INTO transactions
+                (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    description,
+                    status
+                )
+                VALUES (%s,%s,%s,%s,%s)
+                """,
+                (
+                    session["user_id"],
+                    "Demo Withdrawal",
+                    final_amount,
+                    "Sandbox withdrawal; 16% demo fee",
+                    "Pending"
+                )
+            )
+
+            conn.commit()
+
+            return redirect(
+                url_for("transaction_history")
+            )
+
+        finally:
+            cur.close()
+            conn.close()
+
+    return render_template("withdraw.html")
 
 
 # =========================================================
@@ -1095,9 +1089,7 @@ def logout():
 
     session.clear()
 
-    return redirect(
-        url_for("login")
-    )
+    return redirect(url_for("login"))
 
 
 # =========================================================
@@ -1109,10 +1101,7 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(
-            os.environ.get(
-                "PORT",
-                5000
-            )
+            os.environ.get("PORT", 5000)
         ),
         debug=False
     )
