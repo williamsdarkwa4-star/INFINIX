@@ -2273,98 +2273,56 @@ def logout():
 # =========================================================
 # ADMIN LOGIN
 # =========================================================
+=========================================================
 
-def admin_required(f):
+ADMIN HELPERS
 
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
+=========================================================
 
-        if "admin_id" not in session:
-            return redirect(url_for("admin_login"))
+def admin_required(view):
+@wraps(view)
+def wrapped_view(*args, **kwargs):
 
-        return f(*args, **kwargs)
+    if "admin_id" not in session:
+        return redirect(url_for("admin_login"))
 
-    return decorated_function
+    return view(*args, **kwargs)
 
+return wrapped_view
+
+=========================================================
+
+ADMIN LOGIN
+
+=========================================================
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
 
-    if request.method == "POST":
+if "admin_id" in session:
+    return redirect(url_for("admin_dashboard"))
 
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
+if request.method == "POST":
 
-        password = request.form.get(
-            "password",
-            ""
-        )
+    username = request.form.get(
+        "username",
+        ""
+    ).strip()
 
-        conn = get_connection()
-        cursor = conn.cursor()
-
-        try:
-
-            cursor.execute("""
-                SELECT *
-                FROM admins
-                WHERE username = %s
-                LIMIT 1
-            """, (username,))
-
-            admin = cursor.fetchone()
-
-            if not admin:
-
-                flash(
-                    "Invalid admin username or password.",
-                    "error"
-                )
-
-                return render_template(
-                    "admin_login.html"
-                )
-
-            if not check_password_hash(
-                admin["password"],
-                password
-            ):
-
-                flash(
-                    "Invalid admin username or password.",
-                    "error"
-                )
-
-                return render_template(
-                    "admin_login.html"
-                )
-
-            session["admin_id"] = admin["id"]
-            session["admin_username"] = admin["username"]
-
-            return redirect(
-                url_for("admin_dashboard")
-            )
-
-        finally:
-
-            cursor.close()
-            conn.close()
-
-    return render_template(
-        "admin_login.html"
+    password = request.form.get(
+        "password",
+        ""
     )
 
+    if not username or not password:
 
-# =========================================================
-# ADMIN DASHBOARD
-# =========================================================
+        flash(
+            "Enter your admin username and password.",
+            "error"
+        )
 
-@app.route("/admin")
-@admin_required
-def admin_dashboard():
+        return render_template("admin_login.html")
+
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -2372,99 +2330,48 @@ def admin_dashboard():
     try:
 
         cursor.execute("""
-            SELECT COUNT(*) AS total
-            FROM users
-        """)
+            SELECT *
+            FROM admins
+            WHERE username = %s
+            LIMIT 1
+        """, (username,))
 
-        total_users = cursor.fetchone()["total"]
+        admin = cursor.fetchone()
 
+        if not admin:
 
-        cursor.execute("""
-            SELECT COUNT(*) AS total
-            FROM user_plans
-        """)
+            flash(
+                "Invalid admin credentials.",
+                "error"
+            )
 
-        total_plans = cursor.fetchone()["total"]
-
-
-        cursor.execute("""
-            SELECT COUNT(*) AS total
-            FROM deposits
-        """)
-
-        total_deposits = cursor.fetchone()["total"]
+            return render_template(
+                "admin_login.html"
+            )
 
 
-        cursor.execute("""
-            SELECT COUNT(*) AS total
-            FROM withdrawals
-        """)
+        if not check_password_hash(
+            admin["password"],
+            password
+        ):
 
-        total_withdrawals = cursor.fetchone()["total"]
+            flash(
+                "Invalid admin credentials.",
+                "error"
+            )
 
-
-        cursor.execute("""
-            SELECT
-                id,
-                fullname,
-                username,
-                phone,
-                referral_code,
-                created_at
-            FROM users
-            ORDER BY id DESC
-            LIMIT 50
-        """)
-
-        users = cursor.fetchall()
+            return render_template(
+                "admin_login.html"
+            )
 
 
-        cursor.execute("""
-            SELECT
-                deposits.id,
-                deposits.amount,
-                deposits.phone,
-                deposits.payment_reference,
-                deposits.status,
-                deposits.created_at,
-                users.username
-            FROM deposits
-            JOIN users
-                ON deposits.user_id = users.id
-            ORDER BY deposits.id DESC
-            LIMIT 50
-        """)
+        session.clear()
 
-        deposits = cursor.fetchall()
+        session["admin_id"] = admin["id"]
+        session["admin_username"] = admin["username"]
 
-
-        cursor.execute("""
-            SELECT
-                withdrawals.id,
-                withdrawals.amount,
-                withdrawals.withdrawal_fee,
-                withdrawals.status,
-                withdrawals.created_at,
-                users.username
-            FROM withdrawals
-            JOIN users
-                ON withdrawals.user_id = users.id
-            ORDER BY withdrawals.id DESC
-            LIMIT 50
-        """)
-
-        withdrawals = cursor.fetchall()
-
-
-        return render_template(
-            "admin.html",
-            total_users=total_users,
-            total_plans=total_plans,
-            total_deposits=total_deposits,
-            total_withdrawals=total_withdrawals,
-            users=users,
-            deposits=deposits,
-            withdrawals=withdrawals
+        return redirect(
+            url_for("admin_dashboard")
         )
 
     finally:
@@ -2473,23 +2380,540 @@ def admin_dashboard():
         conn.close()
 
 
-# =========================================================
-# ADMIN LOGOUT
-# =========================================================
+return render_template(
+    "admin_login.html"
+)
+
+=========================================================
+
+ADMIN DASHBOARD
+
+=========================================================
+
+@app.route("/admin")
+@app.route("/admin/dashboard")
+@admin_required
+def admin_dashboard():
+
+conn = get_connection()
+cursor = conn.cursor()
+
+try:
+
+    # USERS
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM users
+    """)
+
+    total_users = cursor.fetchone()["total"]
+
+
+    # PENDING DEPOSITS
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM deposits
+        WHERE status = 'Pending'
+    """)
+
+    pending_deposits = cursor.fetchone()["total"]
+
+
+    # PENDING WITHDRAWALS
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM withdrawals
+        WHERE status = 'Pending'
+    """)
+
+    pending_withdrawals = cursor.fetchone()["total"]
+
+
+    # TOTAL DEPOSITED
+
+    cursor.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM deposits
+        WHERE status = 'Approved'
+    """)
+
+    total_deposits = cursor.fetchone()["total"]
+
+
+    # RECENT DEPOSITS
+
+    cursor.execute("""
+        SELECT
+            deposits.*,
+            users.fullname,
+            users.username,
+            users.phone
+        FROM deposits
+
+        JOIN users
+        ON deposits.user_id = users.id
+
+        ORDER BY deposits.id DESC
+        LIMIT 20
+    """)
+
+    deposits = cursor.fetchall()
+
+
+    # RECENT WITHDRAWALS
+
+    cursor.execute("""
+        SELECT
+            withdrawals.*,
+            users.fullname,
+            users.username,
+            users.phone
+        FROM withdrawals
+
+        JOIN users
+        ON withdrawals.user_id = users.id
+
+        ORDER BY withdrawals.id DESC
+        LIMIT 20
+    """)
+
+    withdrawals = cursor.fetchall()
+
+
+    return render_template(
+        "admin_dashboard.html",
+        total_users=total_users,
+        pending_deposits=pending_deposits,
+        pending_withdrawals=pending_withdrawals,
+        total_deposits=total_deposits,
+        deposits=deposits,
+        withdrawals=withdrawals
+    )
+
+finally:
+
+    cursor.close()
+    conn.close()
+
+=========================================================
+
+ADMIN APPROVE DEPOSIT
+
+=========================================================
+
+@app.route(
+"/admin/deposit/"int:deposit_id" (int:deposit_id)/approve",
+methods=["POST"]
+)
+@admin_required
+def admin_approve_deposit(deposit_id):
+
+conn = get_connection()
+cursor = conn.cursor()
+
+try:
+
+    cursor.execute("""
+        SELECT *
+        FROM deposits
+        WHERE id = %s
+        FOR UPDATE
+    """, (deposit_id,))
+
+    deposit = cursor.fetchone()
+
+
+    if not deposit:
+
+        flash(
+            "Deposit not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    if deposit["status"] != "Pending":
+
+        flash(
+            "This deposit has already been processed.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    # Credit only once
+
+    cursor.execute("""
+        UPDATE accounts
+        SET deposit_account =
+            deposit_account + %s
+        WHERE user_id = %s
+    """, (
+        deposit["amount"],
+        deposit["user_id"]
+    ))
+
+
+    cursor.execute("""
+        UPDATE deposits
+        SET status = 'Approved'
+        WHERE id = %s
+    """, (deposit_id,))
+
+
+    cursor.execute("""
+        UPDATE transactions
+        SET status = 'Successful',
+            description = 'Deposit approved'
+        WHERE user_id = %s
+        AND transaction_type = 'Deposit'
+        AND status = 'Pending'
+        AND amount = %s
+    """, (
+        deposit["user_id"],
+        deposit["amount"]
+    ))
+
+
+    conn.commit()
+
+    flash(
+        "Deposit approved successfully.",
+        "success"
+    )
+
+except Exception:
+
+    conn.rollback()
+
+    flash(
+        "Could not approve deposit.",
+        "error"
+    )
+
+finally:
+
+    cursor.close()
+    conn.close()
+
+
+return redirect(
+    url_for("admin_dashboard")
+)
+
+=========================================================
+
+ADMIN REJECT DEPOSIT
+
+=========================================================
+
+@app.route(
+"/admin/deposit/"int:deposit_id" (int:deposit_id)/reject",
+methods=["POST"]
+)
+@admin_required
+def admin_reject_deposit(deposit_id):
+
+conn = get_connection()
+cursor = conn.cursor()
+
+try:
+
+    cursor.execute("""
+        UPDATE deposits
+        SET status = 'Rejected'
+        WHERE id = %s
+        AND status = 'Pending'
+        RETURNING id
+    """, (deposit_id,))
+
+    result = cursor.fetchone()
+
+
+    if not result:
+
+        flash(
+            "Deposit not found or already processed.",
+            "error"
+        )
+
+        conn.rollback()
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    conn.commit()
+
+    flash(
+        "Deposit rejected.",
+        "success"
+    )
+
+except Exception:
+
+    conn.rollback()
+
+    flash(
+        "Could not reject deposit.",
+        "error"
+    )
+
+finally:
+
+    cursor.close()
+    conn.close()
+
+
+return redirect(
+    url_for("admin_dashboard")
+)
+
+=========================================================
+
+ADMIN APPROVE WITHDRAWAL
+
+=========================================================
+
+@app.route(
+"/admin/withdrawal/"int:withdrawal_id" (int:withdrawal_id)/approve",
+methods=["POST"]
+)
+@admin_required
+def admin_approve_withdrawal(withdrawal_id):
+
+conn = get_connection()
+cursor = conn.cursor()
+
+try:
+
+    cursor.execute("""
+        SELECT *
+        FROM withdrawals
+        WHERE id = %s
+        FOR UPDATE
+    """, (withdrawal_id,))
+
+    withdrawal = cursor.fetchone()
+
+
+    if not withdrawal:
+
+        flash(
+            "Withdrawal not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    if withdrawal["status"] != "Pending":
+
+        flash(
+            "This withdrawal has already been processed.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    cursor.execute("""
+        UPDATE withdrawals
+        SET status = 'Approved'
+        WHERE id = %s
+    """, (withdrawal_id,))
+
+
+    cursor.execute("""
+        UPDATE transactions
+        SET status = 'Successful'
+        WHERE user_id = %s
+        AND transaction_type = 'Withdrawal'
+        AND status = 'Pending'
+        AND amount = %s
+    """, (
+        withdrawal["user_id"],
+        withdrawal["amount"]
+    ))
+
+
+    conn.commit()
+
+    flash(
+        "Withdrawal approved.",
+        "success"
+    )
+
+except Exception:
+
+    conn.rollback()
+
+    flash(
+        "Could not approve withdrawal.",
+        "error"
+    )
+
+finally:
+
+    cursor.close()
+    conn.close()
+
+
+return redirect(
+    url_for("admin_dashboard")
+)
+
+=========================================================
+
+ADMIN REJECT WITHDRAWAL
+
+IMPORTANT:
+
+Return the original withdrawal amount to the income account.
+
+=========================================================
+
+@app.route(
+"/admin/withdrawal/"int:withdrawal_id" (int:withdrawal_id)/reject",
+methods=["POST"]
+)
+@admin_required
+def admin_reject_withdrawal(withdrawal_id):
+
+conn = get_connection()
+cursor = conn.cursor()
+
+try:
+
+    cursor.execute("""
+        SELECT *
+        FROM withdrawals
+        WHERE id = %s
+        FOR UPDATE
+    """, (withdrawal_id,))
+
+    withdrawal = cursor.fetchone()
+
+
+    if not withdrawal:
+
+        flash(
+            "Withdrawal not found.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    if withdrawal["status"] != "Pending":
+
+        flash(
+            "This withdrawal has already been processed.",
+            "error"
+        )
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+
+    # Return the amount that was originally deducted.
+    original_amount = (
+        float(withdrawal["amount"])
+        + float(withdrawal["withdrawal_fee"])
+    )
+
+
+    cursor.execute("""
+        UPDATE accounts
+        SET income_account =
+            income_account + %s
+        WHERE user_id = %s
+    """, (
+        original_amount,
+        withdrawal["user_id"]
+    ))
+
+
+    cursor.execute("""
+        UPDATE withdrawals
+        SET status = 'Rejected'
+        WHERE id = %s
+    """, (withdrawal_id,))
+
+
+    cursor.execute("""
+        UPDATE transactions
+        SET status = 'Rejected'
+        WHERE user_id = %s
+        AND transaction_type = 'Withdrawal'
+        AND status = 'Pending'
+        AND amount = %s
+    """, (
+        withdrawal["user_id"],
+        withdrawal["amount"]
+    ))
+
+
+    conn.commit()
+
+    flash(
+        "Withdrawal rejected and balance returned.",
+        "success"
+    )
+
+except Exception:
+
+    conn.rollback()
+
+    flash(
+        "Could not reject withdrawal.",
+        "error"
+    )
+
+finally:
+
+    cursor.close()
+    conn.close()
+
+
+return redirect(
+    url_for("admin_dashboard")
+)
+
+=========================================================
+
+ADMIN LOGOUT
+
+=========================================================
 
 @app.route("/admin/logout")
 def admin_logout():
 
-    session.pop("admin_id", None)
-    session.pop("admin_username", None)
+session.pop("admin_id", None)
+session.pop("admin_username", None)
 
-    return redirect(
-        url_for("admin_login")
-    )
+return redirect(
+    url_for("admin_login")
+)
 
-# =========================================================
-# RUN
-# =========================================================
+
 
 if __name__ == "__main__":
 
