@@ -71,6 +71,18 @@ def init_db():
         )
     """)
 
+   cur.execute("""
+    CREATE TABLE IF NOT EXISTS withdrawal_accounts (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        account_name VARCHAR(100) NOT NULL,
+        account_number VARCHAR(30) NOT NULL,
+        network VARCHAR(30) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+""")
+    
+    
     cur.execute("""
         CREATE TABLE IF NOT EXISTS plans (
             id SERIAL PRIMARY KEY,
