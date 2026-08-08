@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirm Plan</title><style>
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:400px;
+    background:white;
+    padding:28px;
+    border-radius:24px;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+
+h2{
+    text-align:center;
+    color:#0f172a;
+    margin-bottom:20px;
+}
+
+.info{
+    background:#f8fafc;
+    padding:18px;
+    border-radius:16px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:12px 0;
+}
+
+.price{
+    color:#2563eb;
+    font-weight:bold;
+}
+
+.warning{
+    margin-top:18px;
+    padding:14px;
+    background:#fff7ed;
+    color:#9a3412;
+    border-radius:12px;
+    font-size:14px;
+}
+
+button{
+    width:100%;
+    border:0;
+    padding:15px;
+    margin-top:20px;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.cancel{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    color:#64748b;
+    text-decoration:none;
+}
+</style></head><body><div class="card"><h2>Confirm Selection</h2>
+
+<div class="info">
+
+    <div class="row">
+        <span>Plan</span>
+        <strong>{{ plan.plan_name }}</strong>
+    </div>
+
+    <div class="row">
+        <span>Amount</span>
+        <strong class="price">
+            GHS {{ "%.2f"|format(plan.investment_amount) }}
+        </strong>
+    </div>
+
+    <div class="row">
+        <span>Available balance</span>
+        <strong>
+            GHS {{ "%.2f"|format(account.deposit_account) }}
+        </strong>
+    </div>
+
+    <div class="row">
+        <span>Duration</span>
+        <strong>{{ plan.duration }} days</strong>
+    </div>
+
+</div>
+
+<div class="warning">
+    Please review the details before confirming this demo plan selection.
+</div>
+
+<form method="POST"
+      action="{{ url_for('confirm_buy_plan', plan_id=plan.id) }}">
+
+    <button type="submit">
+        Confirm Selection
+    </button>
+
+</form>
+
+<a class="cancel"
+   href="{{ url_for('dashboard') }}">
+    Cancel
+</a>
+
+</div></body>
+</html>
