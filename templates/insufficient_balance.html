@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insufficient Balance</title><style>
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f1f5f9;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:400px;
+    background:white;
+    padding:30px;
+    border-radius:24px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.icon{
+    width:65px;
+    height:65px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fee2e2;
+    color:#dc2626;
+    font-size:30px;
+}
+
+h2{
+    margin:18px 0 10px;
+}
+
+p{
+    color:#64748b;
+    line-height:1.5;
+}
+
+.amount{
+    margin:18px 0;
+    padding:16px;
+    background:#f8fafc;
+    border-radius:15px;
+}
+
+strong{
+    color:#2563eb;
+}
+
+a{
+    display:block;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:bold;
+    margin-top:18px;
+}
+</style></head><body><div class="card"><div class="icon">!</div>
+
+<h2>Insufficient Balance</h2>
+
+<p>
+    Your current demo balance is not enough for this plan.
+</p>
+
+<div class="amount">
+
+    <div>
+        Current balance:
+        <strong>
+            GHS {{ "%.2f"|format(account.deposit_account or 0) }}
+        </strong>
+    </div>
+
+    <br>
+
+    <div>
+        Plan amount:
+        <strong>
+            GHS {{ "%.2f"|format(plan.investment_amount) }}
+        </strong>
+    </div>
+
+</div>
+
+<a href="{{ url_for('dashboard') }}">
+    Back to Dashboard
+</a>
+
+</div></body>
+</html>
