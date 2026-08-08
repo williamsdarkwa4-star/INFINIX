@@ -2270,25 +2270,7 @@ def logout():
     return redirect(
         url_for("login")
     )
-# =========================================================
-# ADMIN LOGIN
-# =========================================================
-#=========================================================
 
-#ADMIN HELPERS
-
-#=========================================================
-
-def admin_required(view):
-@wraps(view)
-def wrapped_view(*args, **kwargs):
-
-    if "admin_id" not in session:
-        return redirect(url_for("admin_login"))
-
-    return view(*args, **kwargs)
-
-return wrapped_view
 #
 =========================================================
 
@@ -2787,26 +2769,7 @@ return redirect(
 #
 =========================================================
 
-@app.route(
-"/admin/withdrawal/"int:withdrawal_id" (int:withdrawal_id)/reject",
-methods=["POST"]
-)
-@admin_required
-def admin_reject_withdrawal(withdrawal_id):
-
-conn = get_connection()
-cursor = conn.cursor()
-
-try:
-
-    cursor.execute("""
-        SELECT *
-        FROM withdrawals
-        WHERE id = %s
-        FOR UPDATE
-    """, (withdrawal_id,))
-
-    withdrawal = cursor.fetchone()
+withdrawal = cursor.fetchone()
 
 
     if not withdrawal:
