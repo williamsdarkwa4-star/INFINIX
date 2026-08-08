@@ -1,8 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Zenith Capital Demo</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard - Zenith Capital</title><style>
 *{
     margin:0;
     padding:0;
@@ -11,262 +10,434 @@
 }
 
 body{
-    background:#f1f5f9;
+    background:#f4f7fb;
     color:#0f172a;
+    padding-bottom:80px;
 }
 
+/* HEADER */
 .header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
+    background:linear-gradient(135deg,#0F172A,#2563EB);
     color:white;
-    padding:25px 20px;
+    padding:22px 18px 30px;
     border-radius:0 0 25px 25px;
 }
 
-.header h2{
-    margin-bottom:6px;
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logout{
+    color:white;
+    text-decoration:none;
+    background:rgba(255,255,255,.15);
+    padding:9px 14px;
+    border-radius:10px;
+    font-size:13px;
+}
+
+.welcome{
+    margin-top:25px;
+}
+
+.welcome small{
+    opacity:.8;
+}
+
+.welcome h2{
+    margin-top:5px;
+}
+
+/* MAIN */
 .container{
-    width:92%;
+    width:94%;
     max-width:900px;
-    margin:20px auto;
+    margin:-15px auto 0;
 }
 
+/* BALANCE */
 .balance-card{
     background:white;
-    padding:22px;
     border-radius:20px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-    margin-bottom:20px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(15,23,42,.08);
+}
+
+.balance-title{
+    color:#64748b;
+    font-size:14px;
 }
 
 .balance{
     font-size:30px;
     font-weight:bold;
-    color:#2563eb;
-    margin-top:8px;
+    margin:8px 0 18px;
+    color:#0f172a;
 }
 
-.small-balances{
+.balance-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:10px;
-    margin-top:18px;
 }
 
 .balance-box{
     background:#f8fafc;
-    padding:15px;
-    border-radius:15px;
+    border-radius:13px;
+    padding:12px 8px;
+}
+
+.balance-box small{
+    display:block;
+    color:#64748b;
+    font-size:11px;
 }
 
 .balance-box strong{
     display:block;
-    margin-top:6px;
+    margin-top:5px;
+    font-size:15px;
 }
 
-.referral{
-    background:#eff6ff;
-    padding:18px;
-    border-radius:18px;
-    margin-bottom:20px;
+/* QUICK ACTIONS */
+.section{
+    margin-top:25px;
 }
 
-.referral-code{
-    background:white;
-    padding:12px;
-    border-radius:10px;
-    margin-top:10px;
-    font-weight:bold;
-    color:#2563eb;
-    word-break:break-all;
+.section-title{
+    font-size:19px;
+    margin-bottom:13px;
 }
 
-.plans{
+.actions{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.action{
+    background:white;
+    text-decoration:none;
+    color:#0f172a;
+    padding:15px 8px;
+    text-align:center;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(15,23,42,.06);
+    font-size:13px;
+    font-weight:bold;
+}
+
+.action span{
+    display:block;
+    font-size:22px;
+    margin-bottom:6px;
+}
+
+/* PLANS */
+.plan-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
     gap:15px;
 }
 
 .plan{
     background:white;
-    padding:20px;
     border-radius:20px;
-    box-shadow:0 8px 20px rgba(0,0,0,.07);
+    padding:20px;
+    box-shadow:0 7px 22px rgba(15,23,42,.07);
+    border:1px solid #e5e7eb;
 }
 
-.plan h3{
-    color:#2563eb;
-    margin-bottom:12px;
+.plan-name{
+    font-size:18px;
+    font-weight:bold;
+    color:#2563EB;
 }
 
-.plan p{
-    margin:8px 0;
-    color:#475569;
+.plan-price{
+    font-size:25px;
+    font-weight:bold;
+    margin:12px 0;
 }
 
-.buy{
+.plan-info{
+    color:#64748b;
+    font-size:13px;
+    line-height:1.8;
+}
+
+.buy-btn{
     display:block;
-    text-align:center;
-    background:#2563eb;
+    width:100%;
+    margin-top:15px;
+    padding:13px;
+    background:#2563EB;
     color:white;
+    text-align:center;
     text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+.buy-btn:hover{
+    background:#1D4ED8;
+}
+
+/* REFERRAL */
+.referral{
+    background:linear-gradient(135deg,#0F172A,#2563EB);
+    color:white;
+    border-radius:20px;
+    padding:20px;
+}
+
+.referral-code{
+    background:rgba(255,255,255,.12);
     padding:13px;
     border-radius:12px;
-    margin-top:15px;
+    margin:12px 0;
+    word-break:break-all;
     font-weight:bold;
 }
 
-.nav{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-    margin-top:20px;
-}
-
-.nav a{
-    background:white;
-    padding:12px 5px;
-    text-align:center;
-    text-decoration:none;
-    color:#2563eb;
-    border-radius:12px;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.logout{
-    color:#dc2626 !important;
-}
-
+/* MOBILE */
 @media(max-width:600px){
-    .small-balances{
+
+    .balance-grid{
         grid-template-columns:1fr;
     }
 
-    .nav{
+    .actions{
         grid-template-columns:repeat(2,1fr);
     }
+
+    .plan-grid{
+        grid-template-columns:1fr;
+    }
+
+    .balance{
+        font-size:27px;
+    }
 }
-</style></head><body><div class="header">
-    <h2>Welcome, {{ user.fullname }}</h2>
-    <p>@{{ user.username }}</p>
-</div><div class="container"><div class="balance-card">
-    <p>Demo Deposit Balance</p>
+</style></head><body><header class="header"><div class="header-top">
 
-    <div class="balance">
-        GHS {{ "%.2f"|format(account.deposit_account or 0) }}
+    <div class="logo">
+        ZC
     </div>
 
-    <div class="small-balances">
-
-        <div class="balance-box">
-            Income
-            <strong>
-                GHS {{ "%.2f"|format(account.income_account or 0) }}
-            </strong>
-        </div>
-
-        <div class="balance-box">
-            Referral
-            <strong>
-                GHS {{ "%.2f"|format(account.referral_account or 0) }}
-            </strong>
-        </div>
-
-        <div class="balance-box">
-            Team
-            <strong>
-                {{ referral_count }}
-            </strong>
-        </div>
-
-    </div>
-</div>
-
-
-<div class="referral">
-    <strong>Your Referral Code</strong>
-
-    <div class="referral-code">
-        {{ user.referral_code }}
-    </div>
-
-    <p style="margin-top:10px;">
-        Share your registration link:
-    </p>
-
-    <div class="referral-code">
-        {{ request.host_url }}register?ref={{ user.referral_code }}
-    </div>
-</div>
-
-
-<h2 style="margin-bottom:15px;">Demo Plans</h2>
-
-<div class="plans">
-
-    {% for plan in plans %}
-
-    <div class="plan">
-
-        <h3>{{ plan.plan_name }}</h3>
-
-        <p>
-            Amount:
-            <strong>
-                GHS {{ "%.2f"|format(plan.investment_amount) }}
-            </strong>
-        </p>
-
-        <p>
-            Daily demo value:
-            <strong>
-                GHS {{ "%.2f"|format(plan.daily_income) }}
-            </strong>
-        </p>
-
-        <p>
-            Duration:
-            <strong>{{ plan.duration }} days</strong>
-        </p>
-
-        <a class="buy"
-           href="{{ url_for('buy_plan', plan_id=plan.id) }}">
-            Continue
-        </a>
-
-    </div>
-
-    {% else %}
-
-    <p>No plans are currently available.</p>
-
-    {% endfor %}
-
-</div>
-
-
-<div class="nav">
-
-    <a href="{{ url_for('dashboard') }}">Home</a>
-
-    <a href="{{ url_for('my_plan') }}">My Plans</a>
-
-    <a href="{{ url_for('profile') }}">Profile</a>
-
-    <a href="{{ url_for('team') }}">Team</a>
-
-    <a href="{{ url_for('bind_account') }}">Accounts</a>
-
-    <a href="#">Transactions</a>
-
-    <a class="logout"
-       href="{{ url_for('logout') }}">
+    <a href="/logout" class="logout">
         Logout
     </a>
 
 </div>
 
-</div></body>
+<div class="welcome">
+
+    <small>Welcome back</small>
+
+    <h2>
+        {{ user.fullname }}
+    </h2>
+
+</div>
+
+</header><main class="container"><!-- BALANCE -->
+
+<section class="balance-card">
+
+    <div class="balance-title">
+        Deposit Balance
+    </div>
+
+    <div class="balance">
+        GHS {{ "%.2f"|format(account.deposit_account or 0) }}
+    </div>
+
+
+    <div class="balance-grid">
+
+        <div class="balance-box">
+
+            <small>Income</small>
+
+            <strong>
+                GHS {{ "%.2f"|format(account.income_account or 0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="balance-box">
+
+            <small>Referral</small>
+
+            <strong>
+                GHS {{ "%.2f"|format(account.referral_account or 0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="balance-box">
+
+            <small>Team</small>
+
+            <strong>
+                {{ referral_count }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QUICK ACTIONS -->
+
+<section class="section">
+
+    <h3 class="section-title">
+        Quick Actions
+    </h3>
+
+    <div class="actions">
+
+        <a href="/deposit" class="action">
+            <span>💰</span>
+            Deposit
+        </a>
+
+        <a href="/withdraw" class="action">
+            <span>💳</span>
+            Withdraw
+        </a>
+
+        <a href="/my_plan" class="action">
+            <span>📈</span>
+            My Plans
+        </a>
+
+        <a href="/team" class="action">
+            <span>👥</span>
+            My Team
+        </a>
+
+        <a href="/bind_account" class="action">
+            <span>📱</span>
+            Bind Account
+        </a>
+
+        <a href="/profile" class="action">
+            <span>👤</span>
+            Profile
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- VIP PLANS -->
+
+<section class="section">
+
+    <h3 class="section-title">
+        VIP Plans
+    </h3>
+
+
+    <div class="plan-grid">
+
+        {% for plan in plans %}
+
+        <div class="plan">
+
+            <div class="plan-name">
+                {{ plan.plan_name }}
+            </div>
+
+
+            <div class="plan-price">
+                GHS {{ "%.2f"|format(plan.investment_amount) }}
+            </div>
+
+
+            <div class="plan-info">
+
+                Daily Income:
+                <strong>
+                    GHS {{ "%.2f"|format(plan.daily_income) }}
+                </strong>
+
+                <br>
+
+                Duration:
+                <strong>
+                    {{ plan.duration }} days
+                </strong>
+
+            </div>
+
+
+            <!--
+                This goes to STEP 1.
+
+                The server checks the user's balance first.
+                It does NOT purchase the plan here.
+            -->
+
+            <a
+                href="{{ url_for('buy_plan', plan_id=plan.id) }}"
+                class="buy-btn"
+            >
+                View Plan
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- REFERRAL -->
+
+<section class="section">
+
+    <div class="referral">
+
+        <h3>
+            Referral Program
+        </h3>
+
+        <p style="margin-top:8px;opacity:.85;">
+            Invite members using your referral code.
+        </p>
+
+        <div class="referral-code">
+            {{ user.referral_code }}
+        </div>
+
+        <a
+            href="/team"
+            style="color:white;text-decoration:none;font-weight:bold;"
+        >
+            View My Team →
+        </a>
+
+    </div>
+
+</section>
+
+</main></body>
 </html>
