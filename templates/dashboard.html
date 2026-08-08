@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-<title>Zenith Capital Dashboard</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zenith Capital Dashboard</title>
 
 <style>
 
@@ -17,11 +19,14 @@
 
 body{
     background:#f4f7fb;
-    padding-bottom:80px;
+    padding-bottom:85px;
+    color:#0f172a;
 }
 
 
-/* Top Image */
+/* =========================
+   TOP BANNER
+========================= */
 
 .top-banner{
     height:230px;
@@ -30,68 +35,73 @@ body{
     border-radius:0 0 30px 30px;
 }
 
-
 .top-banner img{
     width:100%;
     height:100%;
     object-fit:cover;
 }
 
-
 .overlay{
     position:absolute;
     inset:0;
     background:rgba(15,23,42,0.55);
     color:white;
+
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-}
 
+    text-align:center;
+}
 
 .overlay h1{
     font-size:32px;
 }
 
-
 .overlay p{
     margin-top:10px;
+    font-size:15px;
 }
 
 
-
-/* Container */
+/* =========================
+   CONTAINER
+========================= */
 
 .container{
     padding:20px;
+    max-width:900px;
+    margin:auto;
 }
 
 
-
-/* Accounts */
+/* =========================
+   ACCOUNT CARDS
+========================= */
 
 .accounts{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:15px;
     margin-top:-20px;
+    position:relative;
 }
-
 
 .account-card{
     background:white;
     padding:20px;
     border-radius:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
 
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.10);
+}
 
 .account-card h3{
     color:#64748b;
     font-size:14px;
+    font-weight:600;
 }
-
 
 .amount{
     margin-top:10px;
@@ -101,8 +111,9 @@ body{
 }
 
 
-
-/* Buttons */
+/* =========================
+   ACTION BUTTONS
+========================= */
 
 .action{
     display:flex;
@@ -110,30 +121,38 @@ body{
     margin:25px 0;
 }
 
-
 .action a{
     flex:1;
     padding:15px;
     text-align:center;
+
     color:white;
     text-decoration:none;
+
     border-radius:15px;
     font-weight:bold;
 }
-
 
 .deposit{
     background:#10b981;
 }
 
+.deposit:hover{
+    background:#059669;
+}
 
 .withdraw{
     background:#2563eb;
 }
 
+.withdraw:hover{
+    background:#1d4ed8;
+}
 
 
-/* Plans */
+/* =========================
+   PLAN TITLE
+========================= */
 
 .title{
     color:#0f172a;
@@ -141,73 +160,164 @@ body{
 }
 
 
+/* =========================
+   PLAN CARD
+========================= */
+
 .plan{
     background:white;
     padding:20px;
     margin-bottom:15px;
-    border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
 
+    border-radius:20px;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.08);
+}
 
 .plan h3{
     color:#2563eb;
+    margin-bottom:8px;
 }
 
-
 .plan p{
-    margin-top:8px;
+    margin-top:7px;
     color:#475569;
 }
 
 
-.plan button{
+/* =========================
+   INVEST BUTTON
+========================= */
+
+.invest-btn{
+
+    display:block;
 
     width:100%;
+
     margin-top:15px;
+
     padding:13px;
+
     border:none;
     border-radius:12px;
+
     background:#2563eb;
+
     color:white;
+
+    text-align:center;
+
+    text-decoration:none;
+
     font-weight:bold;
+
+    cursor:pointer;
 
 }
 
+.invest-btn:hover{
+    background:#1d4ed8;
+}
+
+
+/* =========================
+   LOCKED PLANS
+========================= */
 
 .lock{
     opacity:.5;
 }
 
-
 .lock button{
-    background:#64748b;
-}
-
-
-
-/* Bottom Menu */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
     width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-}
 
+    margin-top:15px;
 
-.bottom-nav a{
-    text-decoration:none;
-    color:#2563eb;
-    text-align:center;
+    padding:13px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#64748b;
+
+    color:white;
+
     font-weight:bold;
 }
 
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    padding:14px 5px;
+
+    box-shadow:
+        0 -5px 15px rgba(0,0,0,.10);
+
+    z-index:1000;
+}
+
+.bottom-nav a{
+
+    text-decoration:none;
+
+    color:#2563eb;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    font-size:13px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:500px){
+
+    .accounts{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .overlay h1{
+        font-size:28px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    .account-card{
+        padding:16px;
+    }
+
+    .amount{
+        font-size:19px;
+    }
+
+}
 
 </style>
 
@@ -217,17 +327,28 @@ body{
 <body>
 
 
+<!-- =========================
+     TOP BANNER
+========================= -->
+
 <div class="top-banner">
 
-<img src="https://images.unsplash.com/photo-1559526324-593bc073d938">
+    <img
+        src="https://images.unsplash.com/photo-1559526324-593bc073d938"
+        alt="Zenith Capital"
+    >
 
-<div class="overlay">
+    <div class="overlay">
 
-<h1>Zenith Capital</h1>
+        <h1>
+            Zenith Capital
+        </h1>
 
-<p>Welcome to your dashboard</p>
+        <p>
+            Welcome, {{ user.fullname }}
+        </p>
 
-</div>
+    </div>
 
 </div>
 
@@ -236,135 +357,352 @@ body{
 <div class="container">
 
 
+<!-- =========================
+     ACCOUNTS
+========================= -->
+
 <div class="accounts">
 
 
-<div class="account-card">
-<h3>Deposit Account</h3>
-<div class="amount">GHS 0.00</div>
+    <div class="account-card">
+
+        <h3>
+            Deposit Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.deposit_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Withdraw Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.income_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Income Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.income_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Referral Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.referral_account|float) }}
+
+        </div>
+
+    </div>
+
+
 </div>
 
 
-<div class="account-card">
-<h3>Withdraw Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
 
-
-<div class="account-card">
-<h3>Income Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
-
-
-<div class="account-card">
-<h3>Referral Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
-
-
-</div>
-
-
+<!-- =========================
+     DEPOSIT / WITHDRAW
+========================= -->
 
 <div class="action">
 
-<a href="/deposit" class="deposit">
-Deposit
-</a>
+    <a
+        href="{{ url_for('deposit') }}"
+        class="deposit"
+    >
+        Deposit
+    </a>
 
 
-<a href="/withdraw" class="withdraw">
-Withdraw
-</a>
+    <a
+        href="{{ url_for('withdraw') }}"
+        class="withdraw"
+    >
+        Withdraw
+    </a>
 
 </div>
 
 
 
+<!-- =========================
+     INVESTMENT PLANS
+========================= -->
+
 <h2 class="title">
-Investment Plans
+    Investment Plans
 </h2>
 
 
 
+<!-- PLAN 1 -->
+
 <div class="plan">
-<h3>Plan 1</h3>
-<p>Invest GHS 50</p>
-<p>Receive GHS 8 Daily</p>
-<button onclick="invest('GHS 50')">Invest</button>
+
+    <h3>
+        Plan 1
+    </h3>
+
+    <p>
+        Invest GHS 50
+    </p>
+
+    <p>
+        Receive GHS 8 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=1) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 2 -->
+
 <div class="plan">
-<h3>Plan 2</h3>
-<p>Invest GHS 100</p>
-<p>Receive GHS 20 Daily</p>
-<button onclick="invest('GHS 100')">Invest</button>
+
+    <h3>
+        Plan 2
+    </h3>
+
+    <p>
+        Invest GHS 100
+    </p>
+
+    <p>
+        Receive GHS 20 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=2) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 3 -->
+
 <div class="plan">
-<h3>Plan 3</h3>
-<p>Invest GHS 200</p>
-<p>Receive GHS 40 Daily</p>
-<button onclick="invest('GHS 200')">Invest</button>
+
+    <h3>
+        Plan 3
+    </h3>
+
+    <p>
+        Invest GHS 200
+    </p>
+
+    <p>
+        Receive GHS 40 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=3) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 4 -->
+
 <div class="plan">
-<h3>Plan 4</h3>
-<p>Invest GHS 300</p>
-<p>Receive GHS 65 Daily</p>
-<button onclick="invest('GHS 300')">Invest</button>
+
+    <h3>
+        Plan 4
+    </h3>
+
+    <p>
+        Invest GHS 300
+    </p>
+
+    <p>
+        Receive GHS 65 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=4) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 5 -->
+
 <div class="plan">
-<h3>Plan 5</h3>
-<p>Invest GHS 500</p>
-<p>Receive GHS 100 Daily</p>
-<button onclick="invest('GHS 500')">Invest</button>
+
+    <h3>
+        Plan 5
+    </h3>
+
+    <p>
+        Invest GHS 500
+    </p>
+
+    <p>
+        Receive GHS 100 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=5) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 6 -->
+
 <div class="plan">
-<h3>Plan 6</h3>
-<p>Invest GHS 600</p>
-<p>Receive GHS 200 Daily</p>
-<button onclick="invest('GHS 600')">Invest</button>
+
+    <h3>
+        Plan 6
+    </h3>
+
+    <p>
+        Invest GHS 600
+    </p>
+
+    <p>
+        Receive GHS 200 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=6) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
 
+<!-- PLAN 7 -->
+
 <div class="plan">
-<h3>Plan 7</h3>
-<p>Invest GHS 1000</p>
-<p>Receive GHS 360 Daily</p>
-<button onclick="invest('GHS 1000')">Invest</button>
+
+    <h3>
+        Plan 7
+    </h3>
+
+    <p>
+        Invest GHS 1000
+    </p>
+
+    <p>
+        Receive GHS 360 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=7) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
 </div>
 
 
+
+<!-- LOCKED PLAN -->
 
 <div class="plan lock">
-<h3>🔒 Locked</h3>
-<p>Invest GHS 2000</p>
-<p>Receive GHS 500 Daily</p>
-<button disabled>Locked</button>
+
+    <h3>
+        🔒 Locked
+    </h3>
+
+    <p>
+        Invest GHS 2000
+    </p>
+
+    <p>
+        Receive GHS 500 Daily
+    </p>
+
+    <button disabled>
+        Locked
+    </button>
+
 </div>
 
 
+
+<!-- LOCKED PLAN -->
 
 <div class="plan lock">
-<h3>🔒 Locked</h3>
-<p>Invest GHS 4000</p>
-<p>Receive GHS 800 Daily</p>
-<button disabled>Locked</button>
+
+    <h3>
+        🔒 Locked
+    </h3>
+
+    <p>
+        Invest GHS 4000
+    </p>
+
+    <p>
+        Receive GHS 800 Daily
+    </p>
+
+    <button disabled>
+        Locked
+    </button>
+
 </div>
 
 
@@ -372,42 +710,37 @@ Investment Plans
 
 
 
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
 
 <div class="bottom-nav">
 
-<a href="/">
-🏠<br>Home
-</a>
 
-<a href="/team">
-👥<br>Team
-</a>
+    <a href="{{ url_for('dashboard') }}">
+        🏠
+        <br>
+        Home
+    </a>
 
-<a href="/profile">
-👤<br>Profile
-</a>
+
+    <a href="{{ url_for('team') }}">
+        👥
+        <br>
+        Team
+    </a>
+
+
+    <a href="{{ url_for('profile') }}">
+        👤
+        <br>
+        Profile
+    </a>
+
 
 </div>
 
 
-
-
-<script>
-
-function invest(amount){
-
-let confirmBox = confirm(
-"Are you sure you want to invest " + amount + "?"
-);
-
-if(confirmBox){
-alert("Investment request submitted");
-}
-
-}
-
-</script>
-
-
 </body>
+
 </html>
