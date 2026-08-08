@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-
-<title>Zenith Capital Dashboard</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
+<title>Dashboard - Zenith Capital Demo</title><style>
 *{
     margin:0;
     padding:0;
@@ -16,398 +11,262 @@
 }
 
 body{
-    background:#f4f7fb;
-    padding-bottom:80px;
+    background:#f1f5f9;
+    color:#0f172a;
 }
 
-
-/* Top Image */
-
-.top-banner{
-    height:230px;
-    position:relative;
-    overflow:hidden;
-    border-radius:0 0 30px 30px;
-}
-
-
-.top-banner img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-
-.overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(15,23,42,0.55);
+.header{
+    background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    padding:25px 20px;
+    border-radius:0 0 25px 25px;
 }
 
-
-.overlay h1{
-    font-size:32px;
+.header h2{
+    margin-bottom:6px;
 }
-
-
-.overlay p{
-    margin-top:10px;
-}
-
-
-
-/* Container */
 
 .container{
-    padding:20px;
+    width:92%;
+    max-width:900px;
+    margin:20px auto;
 }
 
-
-
-/* Accounts */
-
-.accounts{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:-20px;
-}
-
-
-.account-card{
+.balance-card{
     background:white;
-    padding:20px;
-    border-radius:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    padding:22px;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:20px;
 }
 
-
-.account-card h3{
-    color:#64748b;
-    font-size:14px;
-}
-
-
-.amount{
-    margin-top:10px;
+.balance{
+    font-size:30px;
+    font-weight:bold;
     color:#2563eb;
-    font-size:22px;
-    font-weight:bold;
+    margin-top:8px;
 }
 
-
-
-/* Buttons */
-
-.action{
-    display:flex;
-    gap:15px;
-    margin:25px 0;
+.small-balances{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:18px;
 }
 
-
-.action a{
-    flex:1;
+.balance-box{
+    background:#f8fafc;
     padding:15px;
-    text-align:center;
-    color:white;
-    text-decoration:none;
     border-radius:15px;
+}
+
+.balance-box strong{
+    display:block;
+    margin-top:6px;
+}
+
+.referral{
+    background:#eff6ff;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:20px;
+}
+
+.referral-code{
+    background:white;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
     font-weight:bold;
+    color:#2563eb;
+    word-break:break-all;
 }
 
-
-.deposit{
-    background:#10b981;
+.plans{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:15px;
 }
-
-
-.withdraw{
-    background:#2563eb;
-}
-
-
-
-/* Plans */
-
-.title{
-    color:#0f172a;
-    margin-bottom:15px;
-}
-
 
 .plan{
     background:white;
     padding:20px;
-    margin-bottom:15px;
     border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    box-shadow:0 8px 20px rgba(0,0,0,.07);
 }
-
 
 .plan h3{
     color:#2563eb;
+    margin-bottom:12px;
 }
 
-
 .plan p{
-    margin-top:8px;
+    margin:8px 0;
     color:#475569;
 }
 
-
-.plan button{
-
-    width:100%;
-    margin-top:15px;
-    padding:13px;
-    border:none;
-    border-radius:12px;
+.buy{
+    display:block;
+    text-align:center;
     background:#2563eb;
     color:white;
+    text-decoration:none;
+    padding:13px;
+    border-radius:12px;
+    margin-top:15px;
     font-weight:bold;
-
 }
 
-
-.lock{
-    opacity:.5;
+.nav{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:20px;
 }
 
-
-.lock button{
-    background:#64748b;
-}
-
-
-
-/* Bottom Menu */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
+.nav a{
     background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-}
-
-
-.bottom-nav a{
+    padding:12px 5px;
+    text-align:center;
     text-decoration:none;
     color:#2563eb;
-    text-align:center;
+    border-radius:12px;
+    font-size:13px;
     font-weight:bold;
 }
 
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="top-banner">
-
-<img src="https://images.unsplash.com/photo-1559526324-593bc073d938">
-
-<div class="overlay">
-
-<h1>Zenith Capital</h1>
-
-<p>Welcome to your dashboard</p>
-
-</div>
-
-</div>
-
-
-
-<div class="container">
-
-
-<div class="accounts">
-
-
-<div class="account-card">
-<h3>Deposit Account</h3>
-<div class="amount">GHS 5.00</div>
-</div>
-
-
-<div class="account-card">
-<h3>Withdraw Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
-
-
-<div class="account-card">
-<h3>Income Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
-
-
-<div class="account-card">
-<h3>Referral Account</h3>
-<div class="amount">GHS 0.00</div>
-</div>
-
-
-</div>
-
-
-
-<div class="action">
-
-<a href="/deposit" class="deposit">
-Deposit
-</a>
-
-
-<a href="/withdraw" class="withdraw">
-Withdraw
-</a>
-
-</div>
-
-
-
-<h2 class="title">
-Investment Plans
-</h2>
-
-
-
-<div class="plan">
-<h3>Plan 1</h3>
-<p>Invest GHS 50</p>
-<p>Receive GHS 8 Daily</p>
-<button onclick="invest('GHS 50')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 2</h3>
-<p>Invest GHS 100</p>
-<p>Receive GHS 20 Daily</p>
-<button onclick="invest('GHS 100')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 3</h3>
-<p>Invest GHS 200</p>
-<p>Receive GHS 40 Daily</p>
-<button onclick="invest('GHS 200')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 4</h3>
-<p>Invest GHS 300</p>
-<p>Receive GHS 65 Daily</p>
-<button onclick="invest('GHS 300')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 5</h3>
-<p>Invest GHS 500</p>
-<p>Receive GHS 100 Daily</p>
-<button onclick="invest('GHS 500')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 6</h3>
-<p>Invest GHS 600</p>
-<p>Receive GHS 200 Daily</p>
-<button onclick="invest('GHS 600')">Invest</button>
-</div>
-
-
-
-<div class="plan">
-<h3>Plan 7</h3>
-<p>Invest GHS 1000</p>
-<p>Receive GHS 360 Daily</p>
-<button onclick="invest('GHS 1000')">Invest</button>
-</div>
-
-
-
-<div class="plan lock">
-<h3>🔒 Locked</h3>
-<p>Invest GHS 2000</p>
-<p>Receive GHS 500 Daily</p>
-<button disabled>Locked</button>
-</div>
-
-
-
-<div class="plan lock">
-<h3>🔒 Locked</h3>
-<p>Invest GHS 4000</p>
-<p>Receive GHS 800 Daily</p>
-<button disabled>Locked</button>
-</div>
-
-
-</div>
-
-
-
-
-<div class="bottom-nav">
-
-<a href="/">
-🏠<br>Home
-</a>
-
-<a href="/team">
-👥<br>Team
-</a>
-
-<a href="/profile">
-👤<br>Profile
-</a>
-
-</div>
-
-
-
-
-<script>
-
-function invest(amount){
-
-let confirmBox = confirm(
-"Are you sure you want to invest " + amount + "?"
-);
-
-if(confirmBox){
-alert("Investment request submitted");
+.logout{
+    color:#dc2626 !important;
 }
 
+@media(max-width:600px){
+    .small-balances{
+        grid-template-columns:1fr;
+    }
+
+    .nav{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
+</style></head><body><div class="header">
+    <h2>Welcome, {{ user.fullname }}</h2>
+    <p>@{{ user.username }}</p>
+</div><div class="container"><div class="balance-card">
+    <p>Demo Deposit Balance</p>
 
-</script>
+    <div class="balance">
+        GHS {{ "%.2f"|format(account.deposit_account or 0) }}
+    </div>
+
+    <div class="small-balances">
+
+        <div class="balance-box">
+            Income
+            <strong>
+                GHS {{ "%.2f"|format(account.income_account or 0) }}
+            </strong>
+        </div>
+
+        <div class="balance-box">
+            Referral
+            <strong>
+                GHS {{ "%.2f"|format(account.referral_account or 0) }}
+            </strong>
+        </div>
+
+        <div class="balance-box">
+            Team
+            <strong>
+                {{ referral_count }}
+            </strong>
+        </div>
+
+    </div>
+</div>
 
 
-</body>
+<div class="referral">
+    <strong>Your Referral Code</strong>
+
+    <div class="referral-code">
+        {{ user.referral_code }}
+    </div>
+
+    <p style="margin-top:10px;">
+        Share your registration link:
+    </p>
+
+    <div class="referral-code">
+        {{ request.host_url }}register?ref={{ user.referral_code }}
+    </div>
+</div>
+
+
+<h2 style="margin-bottom:15px;">Demo Plans</h2>
+
+<div class="plans">
+
+    {% for plan in plans %}
+
+    <div class="plan">
+
+        <h3>{{ plan.plan_name }}</h3>
+
+        <p>
+            Amount:
+            <strong>
+                GHS {{ "%.2f"|format(plan.investment_amount) }}
+            </strong>
+        </p>
+
+        <p>
+            Daily demo value:
+            <strong>
+                GHS {{ "%.2f"|format(plan.daily_income) }}
+            </strong>
+        </p>
+
+        <p>
+            Duration:
+            <strong>{{ plan.duration }} days</strong>
+        </p>
+
+        <a class="buy"
+           href="{{ url_for('buy_plan', plan_id=plan.id) }}">
+            Continue
+        </a>
+
+    </div>
+
+    {% else %}
+
+    <p>No plans are currently available.</p>
+
+    {% endfor %}
+
+</div>
+
+
+<div class="nav">
+
+    <a href="{{ url_for('dashboard') }}">Home</a>
+
+    <a href="{{ url_for('my_plan') }}">My Plans</a>
+
+    <a href="{{ url_for('profile') }}">Profile</a>
+
+    <a href="{{ url_for('team') }}">Team</a>
+
+    <a href="{{ url_for('bind_account') }}">Accounts</a>
+
+    <a href="#">Transactions</a>
+
+    <a class="logout"
+       href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</div>
+
+</div></body>
 </html>
