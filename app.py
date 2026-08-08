@@ -2270,7 +2270,222 @@ def logout():
     return redirect(
         url_for("login")
     )
+# =========================================================
+# ADMIN LOGIN
+# =========================================================
 
+def admin_required(f):
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        if "admin_id" not in session:
+            return redirect(url_for("admin_login"))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+
+    if request.method == "POST":
+
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        try:
+
+            cursor.execute("""
+                SELECT *
+                FROM admins
+                WHERE username = %s
+                LIMIT 1
+            """, (username,))
+
+            admin = cursor.fetchone()
+
+            if not admin:
+
+                flash(
+                    "Invalid admin username or password.",
+                    "error"
+                )
+
+                return render_template(
+                    "admin_login.html"
+                )
+
+            if not check_password_hash(
+                admin["password"],
+                password
+            ):
+
+                flash(
+                    "Invalid admin username or password.",
+                    "error"
+                )
+
+                return render_template(
+                    "admin_login.html"
+                )
+
+            session["admin_id"] = admin["id"]
+            session["admin_username"] = admin["username"]
+
+            return redirect(
+                url_for("admin_dashboard")
+            )
+
+        finally:
+
+            cursor.close()
+            conn.close()
+
+    return render_template(
+        "admin_login.html"
+    )
+
+
+# =========================================================
+# ADMIN DASHBOARD
+# =========================================================
+
+@app.route("/admin")
+@admin_required
+def admin_dashboard():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM users
+        """)
+
+        total_users = cursor.fetchone()["total"]
+
+
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM user_plans
+        """)
+
+        total_plans = cursor.fetchone()["total"]
+
+
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM deposits
+        """)
+
+        total_deposits = cursor.fetchone()["total"]
+
+
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM withdrawals
+        """)
+
+        total_withdrawals = cursor.fetchone()["total"]
+
+
+        cursor.execute("""
+            SELECT
+                id,
+                fullname,
+                username,
+                phone,
+                referral_code,
+                created_at
+            FROM users
+            ORDER BY id DESC
+            LIMIT 50
+        """)
+
+        users = cursor.fetchall()
+
+
+        cursor.execute("""
+            SELECT
+                deposits.id,
+                deposits.amount,
+                deposits.phone,
+                deposits.payment_reference,
+                deposits.status,
+                deposits.created_at,
+                users.username
+            FROM deposits
+            JOIN users
+                ON deposits.user_id = users.id
+            ORDER BY deposits.id DESC
+            LIMIT 50
+        """)
+
+        deposits = cursor.fetchall()
+
+
+        cursor.execute("""
+            SELECT
+                withdrawals.id,
+                withdrawals.amount,
+                withdrawals.withdrawal_fee,
+                withdrawals.status,
+                withdrawals.created_at,
+                users.username
+            FROM withdrawals
+            JOIN users
+                ON withdrawals.user_id = users.id
+            ORDER BY withdrawals.id DESC
+            LIMIT 50
+        """)
+
+        withdrawals = cursor.fetchall()
+
+
+        return render_template(
+            "admin.html",
+            total_users=total_users,
+            total_plans=total_plans,
+            total_deposits=total_deposits,
+            total_withdrawals=total_withdrawals,
+            users=users,
+            deposits=deposits,
+            withdrawals=withdrawals
+        )
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# =========================================================
+# ADMIN LOGOUT
+# =========================================================
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.pop("admin_id", None)
+    session.pop("admin_username", None)
+
+    return redirect(
+        url_for("admin_login")
+    )
 
 # =========================================================
 # RUN
