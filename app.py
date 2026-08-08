@@ -111,16 +111,7 @@ def init_db():
         )
     """)
 
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS withdrawal_accounts (
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-            account_name VARCHAR(120) NOT NULL,
-            phone VARCHAR(30) NOT NULL,
-            network VARCHAR(40) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
+    
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS admins (
@@ -152,12 +143,18 @@ def init_db():
         )
     """)
 
-    cur.execute("""
-        INSERT INTO admins (username, password_hash)
-        VALUES (%s, %s)
-        ON CONFLICT (username) DO NOTHING
-    """, ("admin", generate_password_hash(os.environ.get("ADMIN_PASSWORD", "change-me"))))
+      ADMIN_USERNAME = "Williams"
+      ADMIN_PASSWORD = "Williams12"
 
+    cur.execute("""
+                INSERT INTO admins (username, password_hash)
+                 VALUES (%s, %s)
+                   ON CONFLICT (username)
+                    DO UPDATE SET password_hash = EXCLUDED.password_hash
+            """, (
+                         ADMIN_USERNAME,
+                         generate_password_hash(ADMIN_PASSWORD)
+                   ))
     conn.commit()
     cur.close()
     conn.close()
