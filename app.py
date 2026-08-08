@@ -1,81 +1,63 @@
+from flask import Flask, render_template, request, redirect, session, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import os
 import secrets
-from datetime import datetime, timedelta
-from functools import wraps
-from decimal import Decimal, InvalidOperation
-
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from flask import (
-Flask,
-render_template,
-request,
-redirect,
-session,
-flash
-)
-from werkzeug.security import (
-generate_password_hash,
-check_password_hash
-)
 
-============================================================
 
-APP CONFIGURATION
+# =========================================================
+# FLASK APP
+# =========================================================
 
-============================================================
-
-app = Flask(name)
+app = Flask(__name__)
 
 app.secret_key = os.environ.get(
-"SECRET_KEY",
-"change-this-secret-key"
+    "SECRET_KEY",
+    "change-this-secret-key-in-render"
 )
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if not DATABASE_URL:
-raise RuntimeError(
-"DATABASE_URL is missing. Add your PostgreSQL DATABASE_URL "
-"in Render Environment Variables."
-)
+# =========================================================
+# DATABASE CONNECTION
+# =========================================================
 
-============================================================
+def get_connection():
+    database_url = os.environ.get("DATABASE_URL")
 
-DATABASE CONNECTION
+    if not database_url:
+        raise RuntimeError(
+            "DATABASE_URL is not configured."
+        )
 
-============================================================
+    return psycopg2.connect(
+        database_url,
+        cursor_factory=RealDictCursor
+    )
 
-def get_db():
-return psycopg2.connect(
-DATABASE_URL,
-cursor_factory=RealDictCursor
-)
 
-============================================================
-
-DATABASE TABLES
-
-============================================================
+# =========================================================
+# DATABASE SETUP
+# =========================================================
 
 def create_tables():
 
-db = get_db()
+    conn = get_connection()
+    cursor = conn.cursor()
 
-try:
+    try:
 
-    with db.cursor() as cur:
-
-        # ------------------------------------------------
+        # -------------------------------------------------
         # USERS
-        # ------------------------------------------------
+        # -------------------------------------------------
 
-        cur.execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 fullname VARCHAR(100) NOT NULL,
                 username VARCHAR(50) UNIQUE NOT NULL,
-                phone VARCHAR(30) UNIQUE NOT NULL,
+                phone VARCHAR(20) UNIQUE NOT NULL,
                 login_password TEXT NOT NULL,
                 withdrawal_password TEXT NOT NULL,
                 referral_code VARCHAR(20) UNIQUE NOT NULL,
@@ -85,86 +67,36 @@ try:
         """)
 
 
-        # ------------------------------------------------
+        # -------------------------------------------------
         # ACCOUNTS
-        # ------------------------------------------------
+        # -------------------------------------------------
 
-        cur.execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 id SERIAL PRIMARY KEY,
 
-                user_id INTEGER UNIQUE
+                user_id INTEGER
                     REFERENCES users(id)
-                    ON DELETE CASCADE,
+                    ON DELETE CASCADE
+                    UNIQUE,
 
-                deposit_account NUMERIC(14,2)
+                deposit_account NUMERIC(12,2)
                     DEFAULT 0,
 
-                income_account NUMERIC(14,2)
+                income_account NUMERIC(12,2)
                     DEFAULT 0,
 
-                referral_account NUMERIC(14,2)
+                referral_account NUMERIC(12,2)
                     DEFAULT 0
             )
         """)
 
 
-        # ------------------------------------------------
-        # PLANS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS plans (
-                id SERIAL PRIMARY KEY,
-
-                plan_name VARCHAR(100) NOT NULL,
-
-                investment_amount NUMERIC(14,2)
-                    NOT NULL,
-
-                daily_income NUMERIC(14,2)
-                    NOT NULL,
-
-                duration INTEGER NOT NULL,
-
-                status VARCHAR(20)
-                    DEFAULT 'Active'
-            )
-        """)
-
-
-        # ------------------------------------------------
-        # USER PLANS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS user_plans (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                plan_id INTEGER
-                    REFERENCES plans(id)
-                    ON DELETE CASCADE,
-
-                status VARCHAR(20)
-                    DEFAULT 'Active',
-
-                last_claim_time TIMESTAMP,
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-
-        # ------------------------------------------------
+        # -------------------------------------------------
         # BIND ACCOUNTS
-        # ------------------------------------------------
+        # -------------------------------------------------
 
-        cur.execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS bind_accounts (
                 id SERIAL PRIMARY KEY,
 
@@ -174,102 +106,20 @@ try:
 
                 account_name VARCHAR(100) NOT NULL,
 
-                phone_number VARCHAR(30) NOT NULL,
+                phone_number VARCHAR(20) NOT NULL,
 
-                network VARCHAR(50) NOT NULL
+                network VARCHAR(50) NOT NULL,
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
 
-        # ------------------------------------------------
-        # DEPOSITS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS deposits (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                amount NUMERIC(14,2) NOT NULL,
-
-                phone VARCHAR(30),
-
-                payment_reference VARCHAR(100),
-
-                payment_method VARCHAR(50),
-
-                status VARCHAR(20)
-                    DEFAULT 'Pending',
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-
-        # ------------------------------------------------
-        # WITHDRAWALS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS withdrawals (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                amount NUMERIC(14,2) NOT NULL,
-
-                account_id INTEGER
-                    REFERENCES bind_accounts(id),
-
-                withdrawal_fee NUMERIC(14,2)
-                    DEFAULT 0,
-
-                status VARCHAR(20)
-                    DEFAULT 'Pending',
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-
-        # ------------------------------------------------
-        # TRANSACTIONS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS transactions (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                transaction_type VARCHAR(50),
-
-                amount NUMERIC(14,2),
-
-                description TEXT,
-
-                status VARCHAR(30),
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-
-        # ------------------------------------------------
+        # -------------------------------------------------
         # REFERRALS
-        # ------------------------------------------------
+        # -------------------------------------------------
 
-        cur.execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS referrals (
                 id SERIAL PRIMARY KEY,
 
@@ -281,230 +131,219 @@ try:
                     REFERENCES users(id)
                     ON DELETE CASCADE,
 
-                level INTEGER DEFAULT 1
+                level INTEGER DEFAULT 1,
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
 
-        # ------------------------------------------------
-        # CLAIM HISTORY
-        # ------------------------------------------------
+        conn.commit()
 
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS claim_history (
-                id SERIAL PRIMARY KEY,
+    except Exception:
+        conn.rollback()
+        raise
 
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                plan_id INTEGER
-                    REFERENCES plans(id)
-                    ON DELETE CASCADE,
-
-                amount NUMERIC(14,2),
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
+    finally:
+        cursor.close()
+        conn.close()
 
 
-        # ------------------------------------------------
-        # SUPPORT
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS support_messages (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                message TEXT NOT NULL,
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-
-        # ------------------------------------------------
-        # ADMINS
-        # ------------------------------------------------
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS admins (
-                id SERIAL PRIMARY KEY,
-
-                username VARCHAR(50)
-                    UNIQUE NOT NULL,
-
-                password TEXT NOT NULL
-            )
-        """)
-
-
-        # ------------------------------------------------
-        # DEMO PLANS
-        # ------------------------------------------------
-
-        cur.execute("""
-            INSERT INTO plans
-                (
-                    plan_name,
-                    investment_amount,
-                    daily_income,
-                    duration
-                )
-            SELECT *
-            FROM (
-                VALUES
-                ('Demo Plan 1', 50, 8, 100),
-                ('Demo Plan 2', 100, 20, 100),
-                ('Demo Plan 3', 200, 40, 100)
-            )
-            AS new_plans(
-                plan_name,
-                investment_amount,
-                daily_income,
-                duration
-            )
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM plans
-                WHERE plans.plan_name =
-                      new_plans.plan_name
-            )
-        """)
-
-
-    db.commit()
-
-except Exception:
-
-    db.rollback()
-    app.logger.exception(
-        "Database table creation failed"
-    )
-
-    raise
-
-finally:
-
-    db.close()
-
-Create tables when application starts
+# =========================================================
+# CREATE TABLES WHEN APP STARTS
+# =========================================================
 
 create_tables()
 
-============================================================
 
-HOME
-
-============================================================
+# =========================================================
+# HOME
+# =========================================================
 
 @app.route("/")
 def home():
 
-if "user_id" in session:
-    return redirect("/dashboard")
+    if "user_id" in session:
+        return redirect(url_for("dashboard"))
 
-return redirect("/login")
+    return redirect(url_for("login"))
 
-============================================================
 
-REGISTER
-
-============================================================
+# =========================================================
+# REGISTER
+# =========================================================
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
-invite_code = request.args.get(
-    "ref",
-    ""
-).strip()
+    # Referral code from URL
+    # Example:
+    # /register?ref=AB12CD34
 
-
-if request.method == "POST":
-
-    fullname = request.form.get(
-        "fullname",
+    invite_code = request.args.get(
+        "ref",
         ""
-    ).strip()
-
-    username = request.form.get(
-        "username",
-        ""
-    ).strip()
-
-    phone = request.form.get(
-        "phone",
-        ""
-    ).strip()
-
-    password = request.form.get(
-        "password",
-        ""
-    )
-
-    withdrawal_password = request.form.get(
-        "withdrawal_password",
-        ""
-    ).strip()
-
-    # Accept referral from either the URL or form
-    referred_by = request.form.get(
-        "referred_by",
-        invite_code
-    ).strip()
+    ).strip().upper()
 
 
-    # Required fields
-    if not all([
-        fullname,
-        username,
-        phone,
-        password,
-        withdrawal_password
-    ]):
+    if request.method == "POST":
 
-        return render_template(
-            "register.html",
-            invite_code=invite_code,
-            error="Please fill in all required fields."
+        fullname = request.form.get(
+            "fullname",
+            ""
+        ).strip()
+
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
+
+        phone = request.form.get(
+            "phone",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
         )
 
+        withdrawal_password = request.form.get(
+            "withdrawal_password",
+            ""
+        )
 
-    login_hash = generate_password_hash(
-        password
-    )
-
-    withdrawal_hash = generate_password_hash(
-        withdrawal_password
-    )
-
-    referral_code = secrets.token_hex(
-        4
-    ).upper()
+        referred_by = request.form.get(
+            "referred_by",
+            ""
+        ).strip().upper()
 
 
-    db = get_db()
+        # -------------------------------------------------
+        # VALIDATION
+        # -------------------------------------------------
+
+        if not fullname:
+            return "Please enter your full name."
+
+        if not username:
+            return "Please enter your username."
+
+        if not phone:
+            return "Please enter your phone number."
+
+        if not password:
+            return "Please enter your login password."
+
+        if not withdrawal_password:
+            return "Please enter your withdrawal password."
 
 
-    try:
+        if len(password) < 6:
+            return "Login password must be at least 6 characters."
 
-        with db.cursor() as cur:
 
-            # --------------------------------------------
+        if len(withdrawal_password) < 4:
+            return "Withdrawal password must be at least 4 characters."
+
+
+        # -------------------------------------------------
+        # DATABASE
+        # -------------------------------------------------
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+
+        try:
+
+            # Check username
+            cursor.execute("""
+                SELECT id
+                FROM users
+                WHERE username = %s
+            """, (username,))
+
+            existing_username = cursor.fetchone()
+
+
+            if existing_username:
+                return "Username already exists."
+
+
+            # Check phone
+            cursor.execute("""
+                SELECT id
+                FROM users
+                WHERE phone = %s
+            """, (phone,))
+
+            existing_phone = cursor.fetchone()
+
+
+            if existing_phone:
+                return "Phone number already exists."
+
+
+            # -------------------------------------------------
+            # GENERATE UNIQUE REFERRAL CODE
+            # -------------------------------------------------
+
+            while True:
+
+                referral_code = secrets.token_hex(
+                    4
+                ).upper()
+
+                cursor.execute("""
+                    SELECT id
+                    FROM users
+                    WHERE referral_code = %s
+                """, (referral_code,))
+
+                if not cursor.fetchone():
+                    break
+
+
+            # -------------------------------------------------
+            # CHECK REFERRER
+            # -------------------------------------------------
+
+            valid_referral = None
+
+            if referred_by:
+
+                cursor.execute("""
+                    SELECT id
+                    FROM users
+                    WHERE referral_code = %s
+                """, (referred_by,))
+
+                inviter = cursor.fetchone()
+
+                if inviter:
+                    valid_referral = referred_by
+
+
+            # -------------------------------------------------
+            # HASH PASSWORDS
+            # -------------------------------------------------
+
+            login_hash = generate_password_hash(
+                password
+            )
+
+            withdrawal_hash = generate_password_hash(
+                withdrawal_password
+            )
+
+
+            # -------------------------------------------------
             # CREATE USER
-            # --------------------------------------------
+            # -------------------------------------------------
 
-            cur.execute("""
-                INSERT INTO users
-                (
+            cursor.execute("""
+                INSERT INTO users (
                     fullname,
                     username,
                     phone,
@@ -513,8 +352,8 @@ if request.method == "POST":
                     referral_code,
                     referred_by
                 )
-                VALUES
-                (
+
+                VALUES (
                     %s,
                     %s,
                     %s,
@@ -523,6 +362,7 @@ if request.method == "POST":
                     %s,
                     %s
                 )
+
                 RETURNING id
             """, (
                 fullname,
@@ -531,523 +371,414 @@ if request.method == "POST":
                 login_hash,
                 withdrawal_hash,
                 referral_code,
-                referred_by or None
+                valid_referral
             ))
 
 
-            user_id = cur.fetchone()["id"]
+            new_user = cursor.fetchone()
+
+            user_id = new_user["id"]
 
 
-            # --------------------------------------------
-            # CREATE ACCOUNT
-            # --------------------------------------------
+            # -------------------------------------------------
+            # CREATE USER ACCOUNT
+            # -------------------------------------------------
 
-            cur.execute("""
-                INSERT INTO accounts
-                (
-                    user_id
+            cursor.execute("""
+                INSERT INTO accounts (
+                    user_id,
+                    deposit_account,
+                    income_account,
+                    referral_account
                 )
-                VALUES (%s)
-            """, (
-                user_id,
-            ))
+
+                VALUES (
+                    %s,
+                    0,
+                    0,
+                    0
+                )
+            """, (user_id,))
 
 
-            # --------------------------------------------
-            # REFERRAL
-            # --------------------------------------------
+            # -------------------------------------------------
+            # CREATE REFERRAL RECORD
+            # -------------------------------------------------
 
-            if referred_by:
+            if valid_referral:
 
-                cur.execute("""
+                cursor.execute("""
                     SELECT id
                     FROM users
                     WHERE referral_code = %s
-                """, (
-                    referred_by,
-                ))
+                """, (valid_referral,))
 
-                inviter = cur.fetchone()
+                inviter = cursor.fetchone()
 
 
                 if inviter:
 
-                    cur.execute("""
-                        INSERT INTO referrals
-                        (
+                    cursor.execute("""
+                        INSERT INTO referrals (
                             user_id,
                             referred_user_id,
                             level
                         )
-                        VALUES
-                        (
+
+                        VALUES (
                             %s,
                             %s,
-                            %s
+                            1
                         )
                     """, (
                         inviter["id"],
                         user_id,
-                        1
                     ))
 
 
-        db.commit()
+            conn.commit()
 
 
-        return redirect("/login")
+            # -------------------------------------------------
+            # SEND USER TO LOGIN
+            # -------------------------------------------------
+
+            return redirect(
+                url_for("login")
+            )
 
 
-    except psycopg2.errors.UniqueViolation:
+        except psycopg2.Error:
 
-        db.rollback()
+            conn.rollback()
 
-        return render_template(
-            "register.html",
-            invite_code=invite_code,
-            error="Username or phone number already exists."
-        )
+            return "Registration could not be completed. Please try again."
 
 
-    except Exception:
+        finally:
 
-        db.rollback()
-
-        app.logger.exception(
-            "Registration error"
-        )
-
-        return render_template(
-            "register.html",
-            invite_code=invite_code,
-            error="Registration could not be completed."
-        )
+            cursor.close()
+            conn.close()
 
 
-    finally:
+    # GET REQUEST
 
-        db.close()
+    return render_template(
+        "register.html",
+        invite_code=invite_code
+    )
 
 
-return render_template(
-    "register.html",
-    invite_code=invite_code
-)
-
-============================================================
-
-LOGIN
-
-============================================================
+# =========================================================
+# LOGIN
+# =========================================================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-if request.method == "POST":
+    if request.method == "POST":
 
-    phone = request.form.get(
-        "phone",
-        ""
-    ).strip()
+        phone = request.form.get(
+            "phone",
+            ""
+        ).strip()
 
-    password = request.form.get(
-        "password",
-        ""
-    )
-
-
-    if not phone or not password:
-
-        return render_template(
-            "login.html",
-            error="Please enter your phone number and password."
+        password = request.form.get(
+            "password",
+            ""
         )
 
 
-    db = get_db()
+        if not phone or not password:
+
+            return "Please enter your phone number and password."
 
 
-    try:
+        conn = get_connection()
+        cursor = conn.cursor()
 
-        with db.cursor() as cur:
 
-            cur.execute("""
+        try:
+
+            cursor.execute("""
                 SELECT *
                 FROM users
                 WHERE phone = %s
                 LIMIT 1
-            """, (
-                phone,
-            ))
-
-            user = cur.fetchone()
+            """, (phone,))
 
 
-    finally:
-
-        db.close()
+            user = cursor.fetchone()
 
 
-    if user:
+            if not user:
 
-        if check_password_hash(
-            user["login_password"],
-            password
-        ):
+                return "Invalid phone number or password."
+
+
+            if not check_password_hash(
+                user["login_password"],
+                password
+            ):
+
+                return "Invalid phone number or password."
+
+
+            # -------------------------------------------------
+            # LOGIN SESSION
+            # -------------------------------------------------
 
             session.clear()
 
             session["user_id"] = user["id"]
 
+
             return redirect(
-                "/dashboard"
+                url_for("dashboard")
             )
 
 
+        finally:
+
+            cursor.close()
+            conn.close()
+
+
     return render_template(
-        "login.html",
-        error="Invalid phone number or password."
+        "login.html"
     )
 
 
-return render_template(
-    "login.html"
-)
-
-============================================================
-
-DASHBOARD
-
-============================================================
+# =========================================================
+# DASHBOARD
+# =========================================================
 
 @app.route("/dashboard")
 def dashboard():
 
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        # User
-        cur.execute("""
-            SELECT *
-            FROM users
-            WHERE id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        user = cur.fetchone()
-
-
-        # Account
-        cur.execute("""
-            SELECT *
-            FROM accounts
-            WHERE user_id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        account = cur.fetchone()
-
-
-        # Active plans
-        cur.execute("""
-            SELECT *
-            FROM plans
-            WHERE status = 'Active'
-            ORDER BY id ASC
-        """)
-
-        plans = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-if not user:
-    session.clear()
-    return redirect("/login")
-
-
-return render_template(
-    "dashboard.html",
-    user=user,
-    account=account,
-    plans=plans
-)
-
-============================================================
-
-BUY DEMO PLAN
-
-============================================================
-
-@app.route(
-"/buy_plan/"int:plan_id" (int:plan_id)",
-methods=["POST"]
-)
-def buy_plan(plan_id):
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM plans
-            WHERE id = %s
-            AND status = 'Active'
-        """, (
-            plan_id,
-        ))
-
-        plan = cur.fetchone()
-
-
-        if not plan:
-
-            return redirect("/dashboard")
-
-
-        cur.execute("""
-            SELECT *
-            FROM accounts
-            WHERE user_id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        account = cur.fetchone()
-
-
-        if not account:
-
-            return redirect("/dashboard")
-
-
-        investment = Decimal(
-            str(plan["investment_amount"])
-        )
-
-        balance = Decimal(
-            str(
-                account["deposit_account"]
-                or 0
-            )
-        )
-
-
-        if balance < investment:
-
-            return redirect("/dashboard")
-
-
-        # Demo balance operation only
-        cur.execute("""
-            UPDATE accounts
-            SET deposit_account =
-                deposit_account - %s
-            WHERE user_id = %s
-        """, (
-            investment,
-            session["user_id"]
-        ))
-
-
-        cur.execute("""
-            INSERT INTO user_plans
-            (
-                user_id,
-                plan_id,
-                status,
-                last_claim_time
-            )
-            VALUES
-            (
-                %s,
-                %s,
-                'Active',
-                NULL
-            )
-        """, (
-            session["user_id"],
-            plan_id
-        ))
-
-
-        cur.execute("""
-            INSERT INTO transactions
-            (
-                user_id,
-                transaction_type,
-                amount,
-                description,
-                status
-            )
-            VALUES
-            (
-                %s,
-                'Demo Plan',
-                %s,
-                %s,
-                'Successful'
-            )
-        """, (
-            session["user_id"],
-            investment,
-            "Demo plan selected: "
-            + plan["plan_name"]
-        ))
-
-
-    db.commit()
-
-    return redirect("/my_plan")
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Plan purchase error"
-    )
-
-    return redirect("/dashboard")
-
-
-finally:
-
-    db.close()
-
-============================================================
-
-PROFILE
-
-============================================================
-
-@app.route("/profile")
-def profile():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM users
-            WHERE id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        user = cur.fetchone()
-
-
-        cur.execute("""
-            SELECT *
-            FROM accounts
-            WHERE user_id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        account = cur.fetchone()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "profile.html",
-    user=user,
-    account=account
-)
-
-============================================================
-
-BIND PAYMENT ACCOUNT
-
-============================================================
-
-@app.route(
-"/bind_account",
-methods=["GET", "POST"]
-)
-def bind_account():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-if request.method == "POST":
-
-    account_name = request.form.get(
-        "account_name",
-        ""
-    ).strip()
-
-    phone_number = request.form.get(
-        "phone_number",
-        ""
-    ).strip()
-
-    network = request.form.get(
-        "network",
-        ""
-    ).strip()
-
-
-    if not account_name or not phone_number or not network:
+    if "user_id" not in session:
 
         return redirect(
-            "/bind_account"
+            url_for("login")
         )
+
+
+    user_id = session["user_id"]
+
+
+    conn = get_connection()
+    cursor = conn.cursor()
 
 
     try:
 
-        with db.cursor() as cur:
+        # -------------------------------------------------
+        # USER
+        # -------------------------------------------------
 
-            cur.execute("""
-                INSERT INTO bind_accounts
-                (
+        cursor.execute("""
+            SELECT
+                id,
+                fullname,
+                username,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE id = %s
+        """, (user_id,))
+
+
+        user = cursor.fetchone()
+
+
+        if not user:
+
+            session.clear()
+
+            return redirect(
+                url_for("login")
+            )
+
+
+        # -------------------------------------------------
+        # ACCOUNT
+        # -------------------------------------------------
+
+        cursor.execute("""
+            SELECT
+                id,
+                deposit_account,
+                income_account,
+                referral_account
+            FROM accounts
+            WHERE user_id = %s
+        """, (user_id,))
+
+
+        account = cursor.fetchone()
+
+
+        # -------------------------------------------------
+        # REFERRAL COUNT
+        # -------------------------------------------------
+
+        cursor.execute("""
+            SELECT COUNT(*) AS total
+            FROM referrals
+            WHERE user_id = %s
+        """, (user_id,))
+
+
+        referral_result = cursor.fetchone()
+
+
+        referral_count = referral_result["total"]
+
+
+        # -------------------------------------------------
+        # DASHBOARD
+        # -------------------------------------------------
+
+        return render_template(
+            "dashboard.html",
+            user=user,
+            account=account,
+            referral_count=referral_count
+        )
+
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# =========================================================
+# PROFILE
+# =========================================================
+
+@app.route("/profile")
+def profile():
+
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("login")
+        )
+
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    try:
+
+        cursor.execute("""
+            SELECT
+                id,
+                fullname,
+                username,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE id = %s
+        """, (
+            session["user_id"],
+        ))
+
+
+        user = cursor.fetchone()
+
+
+        cursor.execute("""
+            SELECT *
+            FROM accounts
+            WHERE user_id = %s
+        """, (
+            session["user_id"],
+        ))
+
+
+        account = cursor.fetchone()
+
+
+        return render_template(
+            "profile.html",
+            user=user,
+            account=account
+        )
+
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# =========================================================
+# BIND ACCOUNT
+# =========================================================
+
+@app.route(
+    "/bind_account",
+    methods=["GET", "POST"]
+)
+def bind_account():
+
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("login")
+        )
+
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    try:
+
+        if request.method == "POST":
+
+            account_name = request.form.get(
+                "account_name",
+                ""
+            ).strip()
+
+            phone_number = request.form.get(
+                "phone_number",
+                ""
+            ).strip()
+
+            network = request.form.get(
+                "network",
+                ""
+            ).strip()
+
+
+            if not account_name:
+                return "Please enter account name."
+
+            if not phone_number:
+                return "Please enter phone number."
+
+            if not network:
+                return "Please select a network."
+
+
+            cursor.execute("""
+                INSERT INTO bind_accounts (
                     user_id,
                     account_name,
                     phone_number,
                     network
                 )
-                VALUES
-                (
+
+                VALUES (
                     %s,
                     %s,
                     %s,
@@ -1061,33 +792,15 @@ if request.method == "POST":
             ))
 
 
-        db.commit()
+            conn.commit()
 
 
-    except Exception:
-
-        db.rollback()
-
-        app.logger.exception(
-            "Bind account error"
-        )
+            return redirect(
+                url_for("bind_account")
+            )
 
 
-    finally:
-
-        db.close()
-
-
-    return redirect(
-        "/bind_account"
-    )
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
+        cursor.execute("""
             SELECT *
             FROM bind_accounts
             WHERE user_id = %s
@@ -1096,1497 +809,49 @@ try:
             session["user_id"],
         ))
 
-        accounts = cur.fetchall()
+
+        accounts = cursor.fetchall()
 
 
-finally:
-
-    db.close()
-
-
-return render_template(
-    "bind_account.html",
-    accounts=accounts
-)
-
-============================================================
-
-WITHDRAWAL REQUEST — DEMO ONLY
-
-============================================================
-
-@app.route(
-"/withdraw",
-methods=["GET", "POST"]
-)
-def withdraw():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-if request.method == "POST":
-
-    amount_text = request.form.get(
-        "amount",
-        ""
-    ).strip()
-
-    withdrawal_password = request.form.get(
-        "withdrawal_password",
-        ""
-    )
-
-    account_id = request.form.get(
-        "account_id",
-        ""
-    )
-
-
-    try:
-
-        amount = Decimal(
-            amount_text
-        )
-
-    except (InvalidOperation, ValueError):
-
-        return redirect("/withdraw")
-
-
-    if amount <= 0:
-        return redirect("/withdraw")
-
-
-    try:
-
-        with db.cursor() as cur:
-
-            cur.execute("""
-                SELECT *
-                FROM users
-                WHERE id = %s
-            """, (
-                session["user_id"],
-            ))
-
-            user = cur.fetchone()
-
-
-            if not user:
-
-                return redirect("/login")
-
-
-            if not check_password_hash(
-                user["withdrawal_password"],
-                withdrawal_password
-            ):
-
-                return redirect(
-                    "/withdraw"
-                )
-
-
-            cur.execute("""
-                SELECT *
-                FROM accounts
-                WHERE user_id = %s
-            """, (
-                session["user_id"],
-            ))
-
-            account = cur.fetchone()
-
-
-            balance = Decimal(
-                str(
-                    account["income_account"]
-                    or 0
-                )
-            )
-
-
-            if balance < amount:
-
-                return redirect(
-                    "/withdraw"
-                )
-
-
-            cur.execute("""
-                SELECT id
-                FROM bind_accounts
-                WHERE id = %s
-                AND user_id = %s
-            """, (
-                account_id,
-                session["user_id"]
-            ))
-
-            bound_account = cur.fetchone()
-
-
-            if not bound_account:
-
-                return redirect(
-                    "/withdraw"
-                )
-
-
-            # Demo-only: reserve the requested
-            # amount from the simulated balance.
-            cur.execute("""
-                UPDATE accounts
-                SET income_account =
-                    income_account - %s
-                WHERE user_id = %s
-            """, (
-                amount,
-                session["user_id"]
-            ))
-
-
-            cur.execute("""
-                INSERT INTO withdrawals
-                (
-                    user_id,
-                    amount,
-                    account_id,
-                    withdrawal_fee,
-                    status
-                )
-                VALUES
-                (
-                    %s,
-                    %s,
-                    %s,
-                    0,
-                    'Pending'
-                )
-            """, (
-                session["user_id"],
-                amount,
-                account_id
-            ))
-
-
-            cur.execute("""
-                INSERT INTO transactions
-                (
-                    user_id,
-                    transaction_type,
-                    amount,
-                    description,
-                    status
-                )
-                VALUES
-                (
-                    %s,
-                    'Demo Withdrawal',
-                    %s,
-                    'Demo withdrawal request',
-                    'Pending'
-                )
-            """, (
-                session["user_id"],
-                amount
-            ))
-
-
-        db.commit()
-
-
-    except Exception:
-
-        db.rollback()
-
-        app.logger.exception(
-            "Withdrawal error"
+        return render_template(
+            "bind_account.html",
+            accounts=accounts
         )
 
 
     finally:
 
-        db.close()
+        cursor.close()
+        conn.close()
 
 
-    return redirect(
-        "/transaction_history"
-    )
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM bind_accounts
-            WHERE user_id = %s
-            ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
-
-        accounts = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "withdraw.html",
-    accounts=accounts
-)
-
-============================================================
-
-MY PLAN
-
-============================================================
-
-@app.route(
-"/my_plan",
-methods=["GET", "POST"]
-)
-def my_plan():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT
-                user_plans.*,
-                plans.plan_name,
-                plans.daily_income,
-                plans.duration,
-                plans.investment_amount
-
-            FROM user_plans
-
-            JOIN plans
-                ON user_plans.plan_id = plans.id
-
-            WHERE user_plans.user_id = %s
-
-            AND user_plans.status = 'Active'
-
-            ORDER BY user_plans.id DESC
-
-            LIMIT 1
-        """, (
-            session["user_id"],
-        ))
-
-        plan = cur.fetchone()
-
-
-        can_claim = False
-
-
-        if plan:
-
-            if plan["last_claim_time"]:
-
-                last_claim = (
-                    plan["last_claim_time"]
-                )
-
-                can_claim = (
-                    datetime.now()
-                    >=
-                    last_claim
-                    +
-                    timedelta(hours=24)
-                )
-
-            else:
-
-                can_claim = True
-
-
-        if request.method == "POST":
-
-            if not plan:
-
-                return redirect(
-                    "/my_plan"
-                )
-
-
-            if not can_claim:
-
-                return redirect(
-                    "/my_plan"
-                )
-
-
-            amount = Decimal(
-                str(
-                    plan["daily_income"]
-                )
-            )
-
-
-            # Demo simulated income
-            cur.execute("""
-                UPDATE accounts
-                SET income_account =
-                    income_account + %s
-                WHERE user_id = %s
-            """, (
-                amount,
-                session["user_id"]
-            ))
-
-
-            now = datetime.now()
-
-
-            cur.execute("""
-                UPDATE user_plans
-
-                SET last_claim_time = %s
-
-                WHERE id = %s
-            """, (
-                now,
-                plan["id"]
-            ))
-
-
-            cur.execute("""
-                INSERT INTO claim_history
-                (
-                    user_id,
-                    plan_id,
-                    amount
-                )
-                VALUES
-                (
-                    %s,
-                    %s,
-                    %s
-                )
-            """, (
-                session["user_id"],
-                plan["plan_id"],
-                amount
-            ))
-
-
-            cur.execute("""
-                INSERT INTO transactions
-                (
-                    user_id,
-                    transaction_type,
-                    amount,
-                    description,
-                    status
-                )
-                VALUES
-                (
-                    %s,
-                    'Demo Claim',
-                    %s,
-                    'Simulated plan claim',
-                    'Successful'
-                )
-            """, (
-                session["user_id"],
-                amount
-            ))
-
-
-            db.commit()
-
-            return redirect(
-                "/my_plan"
-            )
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "my_plan.html",
-    plan=plan,
-    can_claim=can_claim
-)
-
-============================================================
-
-DEPOSIT PAGE — DEMO
-
-============================================================
-
-@app.route("/deposit")
-def deposit():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-return render_template(
-    "deposit.html"
-)
-
-============================================================
-
-DEMO DEPOSIT SUBMISSION
-
-============================================================
-
-@app.route("/deposit_success")
-def deposit_success():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-amount_text = request.args.get(
-    "amount",
-    ""
-)
-
-phone = request.args.get(
-    "phone",
-    ""
-)
-
-reference = request.args.get(
-    "reference",
-    ""
-)
-
-
-try:
-
-    amount = Decimal(
-        amount_text
-    )
-
-except (InvalidOperation, ValueError):
-
-    return redirect(
-        "/deposit"
-    )
-
-
-if amount <= 0:
-
-    return redirect(
-        "/deposit"
-    )
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            INSERT INTO deposits
-            (
-                user_id,
-                amount,
-                phone,
-                payment_reference,
-                payment_method,
-                status
-            )
-            VALUES
-            (
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                'Pending'
-            )
-        """, (
-            session["user_id"],
-            amount,
-            phone,
-            reference,
-            "Demo"
-        ))
-
-
-        cur.execute("""
-            INSERT INTO transactions
-            (
-                user_id,
-                transaction_type,
-                amount,
-                description,
-                status
-            )
-            VALUES
-            (
-                %s,
-                'Demo Deposit',
-                %s,
-                'Demo deposit submitted',
-                'Pending'
-            )
-        """, (
-            session["user_id"],
-            amount
-        ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Deposit submission error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/transaction_history"
-)
-
-============================================================
-
-TEAM / REFERRALS
-
-============================================================
-
-@app.route("/team")
-def team():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM users
-            WHERE id = %s
-        """, (
-            session["user_id"],
-        ))
-
-        user = cur.fetchone()
-
-
-        if not user:
-
-            return redirect(
-                "/logout"
-            )
-
-
-        # Level 1
-        cur.execute("""
-            SELECT *
-            FROM users
-            WHERE referred_by = %s
-            ORDER BY id DESC
-        """, (
-            user["referral_code"],
-        ))
-
-        level1 = cur.fetchall()
-
-
-        # Level 2
-        level2 = []
-
-
-        for member in level1:
-
-            cur.execute("""
-                SELECT *
-                FROM users
-                WHERE referred_by = %s
-                ORDER BY id DESC
-            """, (
-                member["referral_code"],
-            ))
-
-            level2.extend(
-                cur.fetchall()
-            )
-
-
-        # Level 3
-        level3 = []
-
-
-        for member in level2:
-
-            cur.execute("""
-                SELECT *
-                FROM users
-                WHERE referred_by = %s
-                ORDER BY id DESC
-            """, (
-                member["referral_code"],
-            ))
-
-            level3.extend(
-                cur.fetchall()
-            )
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "team.html",
-
-    user=user,
-
-    level1=level1,
-    level2=level2,
-    level3=level3,
-
-    level1_count=len(level1),
-    level2_count=len(level2),
-    level3_count=len(level3)
-)
-
-============================================================
-
-SUPPORT
-
-============================================================
-
-@app.route(
-"/support",
-methods=["GET", "POST"]
-)
-def support():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-if request.method == "POST":
-
-    message = request.form.get(
-        "message",
-        ""
-    ).strip()
-
-
-    if message:
-
-        try:
-
-            with db.cursor() as cur:
-
-                cur.execute("""
-                    INSERT INTO support_messages
-                    (
-                        user_id,
-                        message
-                    )
-                    VALUES
-                    (
-                        %s,
-                        %s
-                    )
-                """, (
-                    session["user_id"],
-                    message
-                ))
-
-
-            db.commit()
-
-
-        except Exception:
-
-            db.rollback()
-
-            app.logger.exception(
-                "Support message error"
-            )
-
-
-    db.close()
-
-    return redirect(
-        "/support"
-    )
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM support_messages
-            WHERE user_id = %s
-            ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
-
-        messages = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "service.html",
-    messages=messages
-)
-
-============================================================
-
-TRANSACTION HISTORY
-
-============================================================
-
-@app.route("/transaction_history")
-def transaction_history():
-
-if "user_id" not in session:
-    return redirect("/login")
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM transactions
-            WHERE user_id = %s
-            ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
-
-        transactions = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "transaction_history.html",
-    transactions=transactions
-)
-
-============================================================
-
-LOGOUT
-
-============================================================
+# =========================================================
+# LOGOUT
+# =========================================================
 
 @app.route("/logout")
 def logout():
 
-session.clear()
+    session.clear()
 
-return redirect(
-    "/login"
-)
-
-============================================================
-
-ADMIN LOGIN
-
-============================================================
-
-@app.route(
-"/admin/login",
-methods=["GET", "POST"]
-)
-def admin_login():
-
-if request.method == "POST":
-
-    username = request.form.get(
-        "username",
-        ""
-    ).strip()
-
-    password = request.form.get(
-        "password",
-        ""
+    return redirect(
+        url_for("login")
     )
 
 
-    db = get_db()
+# =========================================================
+# RUN APP
+# =========================================================
 
+if __name__ == "__main__":
 
-    try:
-
-        with db.cursor() as cur:
-
-            cur.execute("""
-                SELECT *
-                FROM admins
-                WHERE username = %s
-            """, (
-                username,
-            ))
-
-            admin = cur.fetchone()
-
-
-    finally:
-
-        db.close()
-
-
-    if admin and check_password_hash(
-        admin["password"],
-        password
-    ):
-
-        session["admin_id"] = admin["id"]
-
-        return redirect(
-            "/admin/dashboard"
-        )
-
-
-    return render_template(
-        "admin_login.html",
-        error="Invalid admin details."
+    app.run(
+        host="0.0.0.0",
+        port=int(
+            os.environ.get(
+                "PORT",
+                5000
+            )
+        ),
+        debug=False
     )
-
-
-return render_template(
-    "admin_login.html"
-)
-
-============================================================
-
-ADMIN PROTECTION
-
-============================================================
-
-def admin_required(function):
-
-@wraps(function)
-def wrapper(*args, **kwargs):
-
-    if "admin_id" not in session:
-
-        return redirect(
-            "/admin/login"
-        )
-
-    return function(
-        *args,
-        **kwargs
-    )
-
-return wrapper
-
-============================================================
-
-ADMIN DASHBOARD
-
-============================================================
-
-@app.route("/admin/dashboard")
-@admin_required
-def admin_dashboard():
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT COUNT(*) AS total
-            FROM users
-        """)
-
-        users = cur.fetchone()["total"]
-
-
-        cur.execute("""
-            SELECT COUNT(*) AS total
-            FROM deposits
-            WHERE status = 'Pending'
-        """)
-
-        deposits = cur.fetchone()["total"]
-
-
-        cur.execute("""
-            SELECT COUNT(*) AS total
-            FROM withdrawals
-            WHERE status = 'Pending'
-        """)
-
-        withdrawals = cur.fetchone()["total"]
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "admin.html",
-    users=users,
-    deposits=deposits,
-    withdrawals=withdrawals
-)
-
-============================================================
-
-ADMIN DEPOSITS
-
-============================================================
-
-@app.route("/admin/deposits")
-@admin_required
-def admin_deposits():
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT
-                deposits.*,
-                users.username,
-                users.phone
-            FROM deposits
-            JOIN users
-                ON deposits.user_id = users.id
-            WHERE deposits.status = 'Pending'
-            ORDER BY deposits.id DESC
-        """)
-
-        deposits = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "admin_deposit.html",
-    deposits=deposits
-)
-
-============================================================
-
-ADMIN APPROVE DEMO DEPOSIT
-
-============================================================
-
-@app.route(
-"/admin/deposit/approve/"int:id" (int:id)"
-)
-@admin_required
-def approve_deposit(id):
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM deposits
-            WHERE id = %s
-            AND status = 'Pending'
-        """, (
-            id,
-        ))
-
-        deposit = cur.fetchone()
-
-
-        if deposit:
-
-            cur.execute("""
-                UPDATE deposits
-                SET status = 'Approved'
-                WHERE id = %s
-            """, (
-                id,
-            ))
-
-
-            # Demo balance only
-            cur.execute("""
-                UPDATE accounts
-                SET deposit_account =
-                    deposit_account + %s
-                WHERE user_id = %s
-            """, (
-                deposit["amount"],
-                deposit["user_id"]
-            ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Deposit approval error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/admin/deposits"
-)
-
-============================================================
-
-ADMIN REJECT DEPOSIT
-
-============================================================
-
-@app.route(
-"/admin/deposit/reject/"int:id" (int:id)"
-)
-@admin_required
-def reject_deposit(id):
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            UPDATE deposits
-            SET status = 'Rejected'
-            WHERE id = %s
-        """, (
-            id,
-        ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Deposit rejection error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/admin/deposits"
-)
-
-============================================================
-
-ADMIN WITHDRAWALS
-
-============================================================
-
-@app.route("/admin/withdrawals")
-@admin_required
-def admin_withdrawals():
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT
-                withdrawals.*,
-                users.username,
-                users.phone
-            FROM withdrawals
-            JOIN users
-                ON withdrawals.user_id = users.id
-            WHERE withdrawals.status = 'Pending'
-            ORDER BY withdrawals.id DESC
-        """)
-
-        withdrawals = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "admin_withdraw.html",
-    withdrawals=withdrawals
-)
-
-============================================================
-
-ADMIN APPROVE DEMO WITHDRAWAL
-
-============================================================
-
-@app.route(
-"/admin/withdraw/approve/"int:id" (int:id)"
-)
-@admin_required
-def approve_withdraw(id):
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            UPDATE withdrawals
-            SET status = 'Approved'
-            WHERE id = %s
-            AND status = 'Pending'
-        """, (
-            id,
-        ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Withdrawal approval error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/admin/withdrawals"
-)
-
-============================================================
-
-ADMIN REJECT WITHDRAWAL
-
-============================================================
-
-@app.route(
-"/admin/withdraw/reject/"int:id" (int:id)"
-)
-@admin_required
-def reject_withdraw(id):
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM withdrawals
-            WHERE id = %s
-            AND status = 'Pending'
-        """, (
-            id,
-        ))
-
-        withdrawal = cur.fetchone()
-
-
-        if withdrawal:
-
-            # Return the simulated balance
-            cur.execute("""
-                UPDATE accounts
-                SET income_account =
-                    income_account + %s
-                WHERE user_id = %s
-            """, (
-                withdrawal["amount"],
-                withdrawal["user_id"]
-            ))
-
-
-            cur.execute("""
-                UPDATE withdrawals
-                SET status = 'Rejected'
-                WHERE id = %s
-            """, (
-                id,
-            ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Withdrawal rejection error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/admin/withdrawals"
-)
-
-============================================================
-
-ADMIN USERS
-
-============================================================
-
-@app.route("/admin/users")
-@admin_required
-def admin_users():
-
-search = request.args.get(
-    "search",
-    ""
-).strip()
-
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT *
-            FROM users
-            WHERE username ILIKE %s
-               OR phone ILIKE %s
-            ORDER BY id DESC
-        """, (
-            "%" + search + "%",
-            "%" + search + "%"
-        ))
-
-        users = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "admin_users.html",
-    users=users
-)
-
-============================================================
-
-ADMIN BIND ACCOUNTS
-
-============================================================
-
-@app.route("/admin/bind_accounts")
-@admin_required
-def admin_bind_accounts():
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            SELECT
-                bind_accounts.*,
-                users.username
-            FROM bind_accounts
-            JOIN users
-                ON bind_accounts.user_id = users.id
-            ORDER BY bind_accounts.id DESC
-        """)
-
-        accounts = cur.fetchall()
-
-
-finally:
-
-    db.close()
-
-
-return render_template(
-    "admin_bind_accounts.html",
-    accounts=accounts
-)
-
-============================================================
-
-DELETE BIND ACCOUNT
-
-============================================================
-
-@app.route(
-"/admin/bind_account/delete/"int:id" (int:id)"
-)
-@admin_required
-def delete_bind_account(id):
-
-db = get_db()
-
-
-try:
-
-    with db.cursor() as cur:
-
-        cur.execute("""
-            DELETE FROM bind_accounts
-            WHERE id = %s
-        """, (
-            id,
-        ))
-
-
-    db.commit()
-
-
-except Exception:
-
-    db.rollback()
-
-    app.logger.exception(
-        "Bind account deletion error"
-    )
-
-
-finally:
-
-    db.close()
-
-
-return redirect(
-    "/admin/bind_accounts"
-)
-
-============================================================
-
-ADMIN LOGOUT
-
-============================================================
-
-@app.route("/admin/logout")
-def admin_logout():
-
-session.pop(
-    "admin_id",
-    None
-)
-
-return redirect(
-    "/admin/login"
-)
-
-============================================================
-
-RUN
-
-============================================================
-
-if name == "main":
-
-app.run(
-    host="0.0.0.0",
-    port=int(
-        os.environ.get(
-            "PORT",
-            5000
-        )
-    ),
-    debug=False
-)
