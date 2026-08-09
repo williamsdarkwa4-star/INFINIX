@@ -317,35 +317,60 @@ def init_db():
         """)
 
         # =========================================================
-        # ADMIN ACCOUNT
-        # =========================================================
-        admin_username = os.environ.get(
-            "ADMIN_USERNAME",
-            "Williams"
-        )
+# ADMINS
+# =========================================================
 
-        admin_password = os.environ.get(
-            "ADMIN_PASSWORD",
-            "Williams12"
-        )
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS admins (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(80) UNIQUE NOT NULL,
+        password_hash TEXT
+    )
+""")
 
-        admin_hash = generate_password_hash(admin_password)
+# Support old database structure
+cur.execute("""
+    ALTER TABLE admins
+    ADD COLUMN IF NOT EXISTS password_hash TEXT
+""")
 
-        cur.execute("""
-            INSERT INTO admins (
-                username,
-                password_hash
-            )
-            VALUES (%s, %s)
+# If an old password column exists, make it optional
+cur.execute("""
+    ALTER TABLE admins
+    ADD COLUMN IF NOT EXISTS password TEXT
+""")
 
-            ON CONFLICT (username)
-            DO UPDATE SET
-                password_hash = EXCLUDED.password_hash
-        """, (
-            admin_username,
-            admin_hash
-        ))
+cur.execute("""
+    ALTER TABLE admins
+    ALTER COLUMN password DROP NOT NULL
+""")
 
+admin_username = os.environ.get(
+    "ADMIN_USERNAME",
+    "Williams"
+)
+
+admin_password = os.environ.get(
+    "ADMIN_PASSWORD",
+    "Williams12"
+)
+
+admin_hash = generate_password_hash(admin_password)
+
+cur.execute("""
+    INSERT INTO admins (
+        username,
+        password_hash
+    )
+    VALUES (%s, %s)
+
+    ON CONFLICT (username)
+    DO UPDATE SET
+        password_hash = EXCLUDED.password_hash
+""", (
+    admin_username,
+    admin_hash
+))
         # =========================================================
         # VERIFY IMPORTANT TABLES
         # =========================================================
