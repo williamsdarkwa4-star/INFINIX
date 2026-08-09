@@ -1280,58 +1280,29 @@ def admin_manage_user(user_id):
         return "User not found", 404
 
     if request.method == "POST":
-        action = request.form.get("action")
-        amount = Decimal(request.form.get("amount", "0") or "0")
 
-        if action == "add_deposit":
-            execute(
-                "UPDATE accounts SET deposit_account=deposit_account+%s WHERE user_id=%s",
-                (amount, user_id)
-            )
-        elif action == "deduct_deposit":
-            execute(
-                """
-                UPDATE accounts
-                SET deposit_account=GREATEST(deposit_account-%s,0)
-                WHERE user_id=%s
-                """,
-                (amount, user_id)
-            )
-        elif action == "add_withdraw":
-            execute(
-                "UPDATE accounts SET withdraw_account=withdraw_account+%s WHERE user_id=%s",
-                (amount, user_id)
-            )
-        elif action == "deduct_withdraw":
-            execute(
-                """
-                UPDATE accounts
-                SET withdraw_account=GREATEST(withdraw_account-%s,0)
-                WHERE user_id=%s
-                """,
-                (amount, user_id)
-            )
-        elif action == "update_login_password":
-            new_password = request.form.get("new_password", "")
-            if new_password:
-                execute(
-                    "UPDATE users SET password_hash=%s WHERE id=%s",
-                    (generate_password_hash(new_password), user_id)
-                )
-        elif action == "update_withdraw_password":
-            new_password = request.form.get("new_password", "")
-            if new_password:
-                execute(
-                    """
-                    UPDATE users
-                    SET withdraw_password_hash=%s
-                    WHERE id=%s
-                    """,
-                    (generate_password_hash(new_password), user_id)
-                )
+    action = request.form.get("action")
+    
+    try:
+        amount = Decimal(
+            request.form.get("amount", "0") or "0"
+        )
+    except Exception:
+        flash("Invalid amount.", "error")
+        return redirect(
+            url_for("admin_manage_user", user_id=user_id)
+        )
 
-        return redirect(url_for("admin_manage_user", user_id=user_id))
-
+    if amount <= 0 and action in [
+        "add_deposit",
+        "deduct_deposit",
+        "add_withdraw",
+        "deduct_withdraw"
+    ]:
+        flash("Amount must be greater than zero.", "error")
+        return redirect(
+            url_for("admin_manage_user", user_id=user_id)
+        )
     account = current_account(user_id)
     return render_template(
         "admin_manage_user.html",
