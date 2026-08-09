@@ -188,47 +188,92 @@ placeholder="Search username or phone number"
 
 
 
+{% for deposit in deposits %}
+
 <div class="card">
 
+    <h2>Deposit Request #{{ deposit.id }}</h2>
 
-<h2>Deposit Request</h2>
+    <div class="info">
 
+        Username: {{ deposit.username }}
 
-<div class="info">
+        <br>
 
+        Phone: {{ deposit.phone }}
 
-Username: Example User
+        <br>
 
-<br>
+        Amount:
+        GHS {{ "%.2f"|format(deposit.amount) }}
 
-Phone: 024 XXXXXXX
+        <br>
 
-<br>
+        Payment Method: Demo Payment
 
-Amount: GHS 100
+        <br>
 
-<br>
+        Reference:
+        {{ deposit.reference or "N/A" }}
 
-Payment Method: Paystack
+        <br>
 
-<br>
+        Date:
+        {{ deposit.created_at }}
 
-Reference: PAY_123456
+        <br>
 
-<br>
+        Status:
+        <span class="status">
+            {{ deposit.status|capitalize }}
+        </span>
 
-Date: 04/08/2026
+    </div>
 
-<br>
+    {% if deposit.status == "pending" %}
 
-Status:
+    <div class="buttons">
 
-<span class="status">
-Pending
-</span>
+        <form method="POST"
+              action="{{ url_for('admin_deposit_action',
+                                 deposit_id=deposit.id,
+                                 action='approve') }}"
+              style="flex:1;">
 
+            <button class="approve" type="submit">
+                Approve
+            </button>
+
+        </form>
+
+        <form method="POST"
+              action="{{ url_for('admin_deposit_action',
+                                 deposit_id=deposit.id,
+                                 action='reject') }}"
+              style="flex:1;">
+
+            <button class="reject" type="submit">
+                Reject
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
 
 </div>
+
+{% else %}
+
+<div class="card">
+    <h2>No Deposits</h2>
+    <div class="info">
+        There are currently no deposit requests.
+    </div>
+</div>
+
+{% endfor %}
 
 
 
