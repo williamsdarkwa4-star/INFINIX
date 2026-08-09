@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-<title>Team - Zenith Capital</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Team - Zenith Capital</title>
 
 <style>
 
@@ -16,151 +17,254 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
     background:#f4f7fb;
-    padding-bottom:80px;
+    color:#0f172a;
+    padding-bottom:85px;
 }
 
-
-/* Header */
+/* =========================
+   HEADER
+========================= */
 
 .header{
-
     background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
-    padding:30px;
+    padding:30px 20px;
     text-align:center;
     border-radius:0 0 30px 30px;
-
 }
 
+.header h1{
+    font-size:28px;
+}
+
+.header p{
+    margin-top:8px;
+    font-size:14px;
+    opacity:.9;
+}
+
+/* =========================
+   CONTAINER
+========================= */
 
 .container{
-    padding:20px;
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:20px 15px;
 }
 
-
-
-/* Card */
+/* =========================
+   CARD
+========================= */
 
 .card{
-
     background:white;
-    padding:22px;
+    padding:20px;
     border-radius:20px;
     margin-bottom:18px;
     box-shadow:0 5px 15px rgba(0,0,0,.08);
-
 }
-
 
 .card h2{
-
     color:#2563eb;
+    font-size:19px;
     margin-bottom:15px;
-
 }
 
-
-
-/* Referral */
+/* =========================
+   REFERRAL LINK
+========================= */
 
 .referral{
-
     background:#f8fafc;
-    padding:15px;
-    border-radius:15px;
+    border:1px solid #e2e8f0;
+    padding:14px;
+    border-radius:14px;
     color:#475569;
     word-break:break-all;
-
+    font-size:14px;
 }
 
-
-button{
-
+.copy-btn{
     width:100%;
     padding:14px;
     margin-top:12px;
     border:none;
-    border-radius:15px;
+    border-radius:14px;
     background:#2563eb;
     color:white;
     font-weight:bold;
-
+    cursor:pointer;
 }
 
+.copy-btn:hover{
+    background:#1d4ed8;
+}
 
-
-/* Stats */
+/* =========================
+   STATS
+========================= */
 
 .stats{
-
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:15px;
-
+    gap:12px;
 }
-
 
 .stat-box{
-
     background:#f8fafc;
-    padding:20px;
+    padding:18px 10px;
     border-radius:15px;
     text-align:center;
-
 }
-
 
 .number{
-
     color:#2563eb;
-    font-size:25px;
+    font-size:22px;
     font-weight:bold;
-
+    margin-bottom:6px;
 }
 
+.stat-label{
+    color:#64748b;
+    font-size:13px;
+}
 
+/* =========================
+   LEVEL SUMMARY
+========================= */
 
-/* Commission */
+.level-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:12px;
+}
+
+.level-box{
+    background:#f8fafc;
+    padding:16px 10px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.level-box h3{
+    color:#2563eb;
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+.level-count{
+    font-size:21px;
+    font-weight:bold;
+    color:#0f172a;
+}
+
+.level-limit{
+    color:#64748b;
+    font-size:12px;
+    margin-top:4px;
+}
+
+/* =========================
+   COMMISSION
+========================= */
 
 .level{
-
     background:#f8fafc;
     padding:15px;
     border-radius:15px;
     margin-bottom:12px;
     color:#475569;
-
 }
 
+.level:last-child{
+    margin-bottom:0;
+}
 
 .level strong{
-
     color:#2563eb;
-
+    font-size:16px;
 }
 
-
-
-/* Members */
+/* =========================
+   MEMBERS
+========================= */
 
 .member{
-
     background:#f8fafc;
-    padding:15px;
+    padding:16px;
     border-radius:15px;
-    color:#475569;
-
+    margin-bottom:12px;
+    border:1px solid #edf2f7;
 }
 
+.member:last-child{
+    margin-bottom:0;
+}
 
+.member-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
 
-/* Bottom Navigation */
+.member-name{
+    font-weight:bold;
+    color:#0f172a;
+}
+
+.member-level{
+    background:#dbeafe;
+    color:#2563eb;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.member-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.info-item{
+    color:#64748b;
+    font-size:12px;
+}
+
+.info-item strong{
+    display:block;
+    color:#334155;
+    font-size:14px;
+    margin-top:4px;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty{
+    text-align:center;
+    padding:25px 10px;
+    color:#64748b;
+}
+
+.empty-icon{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
@@ -168,21 +272,59 @@ button{
     background:white;
     display:flex;
     justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
+    padding:13px 5px;
+    box-shadow:0 -5px 15px rgba(0,0,0,.10);
+    z-index:1000;
 }
 
-
 .bottom-nav a{
-
     text-decoration:none;
     color:#2563eb;
     text-align:center;
     font-weight:bold;
+    font-size:13px;
+    line-height:20px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .container{
+        padding:15px;
+    }
+
+    .level-grid{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+
+    .level-box{
+        padding:14px 5px;
+    }
+
+    .header{
+        padding:28px 15px;
+    }
 
 }
 
+@media(max-width:400px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .level-grid{
+        grid-template-columns:1fr;
+    }
+
+    .member-info{
+        grid-template-columns:1fr;
+    }
+
+}
 
 </style>
 
@@ -192,152 +334,288 @@ button{
 <body>
 
 
-
+<!-- =========================
+     HEADER
+========================= -->
 
 <div class="header">
 
-<h1>My Team</h1>
+    <h1>My Team</h1>
 
-<p>Build your referral network</p>
+    <p>Build and manage your referral network</p>
 
 </div>
-
-
-
 
 
 <div class="container">
 
 
-
-
-
-<div class="card">
-
-<h2>My Referral Link</h2>
-
-
-<div class="referral">
-
-https://zenithcapital.com/register?ref=USER123
-
-</div>
-
-
-<button>
-
-Copy Referral Link
-
-</button>
-
-
-</div>
-
-
-
-
-
-
+<!-- =========================
+     REFERRAL LINK
+========================= -->
 
 <div class="card">
 
-<h2>Team Overview</h2>
+    <h2>My Referral Link</h2>
 
+    <div class="referral" id="referralLink">
+        {{ request.host_url }}register?ref={{ user.referral_code }}
+    </div>
 
-<div class="stats">
-
-
-<div class="stat-box">
-
-<div class="number">
-0
-</div>
-
-Total Team
-
-</div>
-
-
-
-<div class="stat-box">
-
-<div class="number">
-GHS 0.00
-</div>
-
-Referral Income
+    <button
+        class="copy-btn"
+        onclick="copyReferral()"
+    >
+        📋 Copy Referral Link
+    </button>
 
 </div>
 
 
-</div>
-
-
-</div>
-
-
-
-
-
-
-
+<!-- =========================
+     TEAM OVERVIEW
+========================= -->
 
 <div class="card">
 
-<h2>Referral Commission</h2>
+    <h2>Team Overview</h2>
+
+    <div class="stats">
+
+        <div class="stat-box">
+
+            <div class="number">
+                {{ total_team }}
+            </div>
+
+            <div class="stat-label">
+                Total Team
+            </div>
+
+        </div>
 
 
-<div class="level">
+        <div class="stat-box">
 
-<strong>Level 1</strong>
+            <div class="number">
+                GHS {{ "%.2f"|format(referral_income|float) }}
+            </div>
 
-<br>
+            <div class="stat-label">
+                Referral Income
+            </div>
 
-20% Commission
+        </div>
 
-</div>
-
-
-
-<div class="level">
-
-<strong>Level 2</strong>
-
-<br>
-
-3% Commission
-
-</div>
-
-
-
-<div class="level">
-
-<strong>Level 3</strong>
-
-<br>
-
-1% Commission
+    </div>
 
 </div>
 
 
-</div>
-
-
-
-
-
-
+<!-- =========================
+     LEVEL STRUCTURE
+========================= -->
 
 <div class="card">
 
-<h2>Team Members</h2>
+    <h2>Team Levels</h2>
+
+    <div class="level-grid">
+
+        <div class="level-box">
+
+            <h3>Level 1</h3>
+
+            <div class="level-count">
+                {{ level1_count|default(0) }}/3
+            </div>
+
+            <div class="level-limit">
+                3 Positions
+            </div>
+
+        </div>
 
 
-<div class="member">
+        <div class="level-box">
 
-No team members yet
+            <h3>Level 2</h3>
+
+            <div class="level-count">
+                {{ level2_count|default(0) }}/5
+            </div>
+
+            <div class="level-limit">
+                5 Positions
+            </div>
+
+        </div>
+
+
+        <div class="level-box">
+
+            <h3>Level 3</h3>
+
+            <div class="level-count">
+                {{ level3_count|default(0) }}/20
+            </div>
+
+            <div class="level-limit">
+                20 Positions
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     COMMISSION
+========================= -->
+
+<div class="card">
+
+    <h2>Referral Commission</h2>
+
+    <div class="level">
+
+        <strong>Level 1</strong>
+
+        <br>
+
+        20% Commission
+
+    </div>
+
+
+    <div class="level">
+
+        <strong>Level 2</strong>
+
+        <br>
+
+        3% Commission
+
+    </div>
+
+
+    <div class="level">
+
+        <strong>Level 3</strong>
+
+        <br>
+
+        1% Commission
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TEAM MEMBERS
+========================= -->
+
+<div class="card">
+
+    <h2>Team Members</h2>
+
+
+    {% if members %}
+
+        {% for member in members %}
+
+        <div class="member">
+
+            <div class="member-top">
+
+                <div class="member-name">
+                    {{ member.username }}
+                </div>
+
+                <div class="member-level">
+                    Level {{ member.referral_level }}
+                </div>
+
+            </div>
+
+
+            <div class="member-info">
+
+                <div class="info-item">
+
+                    Phone
+
+                    <strong>
+                        {{ member.phone }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    Investment
+
+                    <strong>
+                        GHS {{ "%.2f"|format(member.invest_amount|float) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    Joined
+
+                    <strong>
+                        {{ member.created_at.strftime("%d %b %Y") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    Status
+
+                    <strong>
+                        {% if member.invest_amount|float > 0 %}
+                            Active
+                        {% else %}
+                            Registered
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                👥
+            </div>
+
+            <p>
+                No team members yet.
+            </p>
+
+            <p style="font-size:13px;margin-top:6px;">
+                Share your referral link to build your team.
+            </p>
+
+        </div>
+
+    {% endif %}
 
 </div>
 
@@ -345,44 +623,57 @@ No team members yet
 </div>
 
 
-
-
-
-
-
-</div>
-
-
-
-
-
-
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
 
 <div class="bottom-nav">
 
-
-<a href="/dashboard">
-🏠<br>
-Home
-</a>
-
-
-<a href="/my_plan">
-💼<br>
-My Plan
-</a>
+    <a href="{{ url_for('dashboard') }}">
+        🏠<br>
+        Home
+    </a>
 
 
-<a href="/profile">
-👤<br>
-Profile
-</a>
+    <a href="{{ url_for('my_plan') }}">
+        💼<br>
+        My Plan
+    </a>
 
+
+    <a href="{{ url_for('profile') }}">
+        👤<br>
+        Profile
+    </a>
 
 </div>
 
 
+<script>
 
+function copyReferral(){
+
+    const link =
+        document.getElementById("referralLink").innerText.trim();
+
+    navigator.clipboard.writeText(link).then(function(){
+
+        const button =
+            document.querySelector(".copy-btn");
+
+        button.innerText = "✓ Link Copied";
+
+        setTimeout(function(){
+
+            button.innerText = "📋 Copy Referral Link";
+
+        },2000);
+
+    });
+
+}
+
+</script>
 
 
 </body>
