@@ -196,34 +196,54 @@ Withdrawal Fee: 16%
 
 
 
-<label>
-Select Amount
-</label>
+<form method="POST" action="{{ url_for('request_withdrawal') }}">
 
+    <label>Select Amount</label>
 
-<div class="amount-buttons">
+    <div class="amount-buttons">
+        <button type="button" onclick="setAmount(30)">GHS 30</button>
+        <button type="button" onclick="setAmount(50)">GHS 50</button>
+        <button type="button" onclick="setAmount(100)">GHS 100</button>
+        <button type="button" onclick="setAmount(200)">GHS 200</button>
+        <button type="button" onclick="setAmount(600)">GHS 600</button>
+    </div>
 
-<button onclick="setAmount(30)">
-GHS 30
-</button>
+    <input
+        type="number"
+        name="amount"
+        id="amount"
+        min="30"
+        step="0.16"
+        placeholder="Enter withdrawal amount"
+        required
+    >
 
-<button onclick="setAmount(50)">
-GHS 50
-</button>
+    <input
+        type="password"
+        name="password"
+        placeholder="Enter withdrawal password"
+        required
+    >
 
-<button onclick="setAmount(100)">
-GHS 100
-</button>
+    {% if accounts %}
+        <label>Select withdrawal account</label>
 
-<button onclick="setAmount(200)">
-GHS 200
-</button>
+        <select name="account_id" required>
+            {% for account in accounts %}
+                <option value="{{ account.id }}">
+                    {{ account.account_name }} -
+                    {{ account.phone }} -
+                    {{ account.network }}
+                </option>
+            {% endfor %}
+        </select>
+    {% endif %}
 
-<button onclick="setAmount(600)">
-GHS 600
-</button>
+    <button class="submit" type="submit">
+        Continue
+    </button>
 
-</div>
+</form>
 
 
 
@@ -248,7 +268,7 @@ placeholder="Enter withdrawal password"
 
 <button class="submit" onclick="withdraw()">
 
-Continue
+Next
 
 </button>
 
