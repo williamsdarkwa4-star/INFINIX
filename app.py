@@ -28,9 +28,9 @@ PLANS = {
     2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 30},
     3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 30},
     4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 30},
-    5: {"name": "Zenith 5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 30},
+    5: {"name": "Zenith  5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 30},
     6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 30},
-    7: {"name": "Zenith 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
+    7: {"name": "Zenith Demo 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
 }
 
 
@@ -42,13 +42,10 @@ def get_conn():
 
 def init_db():
     conn = get_conn()
-
     if conn is None:
         return
 
     cur = conn.cursor()
-
-    # ---------------- USERS ----------------
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -64,91 +61,54 @@ def init_db():
         )
     """)
 
-    # ---------------- ACCOUNTS ----------------
-
     cur.execute("""
         CREATE TABLE IF NOT EXISTS accounts (
-            user_id INTEGER PRIMARY KEY
-                REFERENCES users(id) ON DELETE CASCADE,
-
-            deposit_account NUMERIC(14,2) DEFAULT 5.00,
+            user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+            deposit_account NUMERIC(14,2) DEFAULT 0,
             income_account NUMERIC(14,2) DEFAULT 0,
             referral_account NUMERIC(14,2) DEFAULT 0,
             withdraw_account NUMERIC(14,2) DEFAULT 0
         )
     """)
 
-    # ---------------- WITHDRAWAL ACCOUNTS ----------------
-
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS withdrawal_accounts (
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER NOT NULL
-                REFERENCES users(id) ON DELETE CASCADE,
-
-            account_name VARCHAR(120) NOT NULL,
-            phone VARCHAR(30) NOT NULL,
-            network VARCHAR(40) NOT NULL,
-
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    # If an older database already has account_number,
-    # add the new phone column without deleting existing data.
-    cur.execute("""
-        ALTER TABLE withdrawal_accounts
-        ADD COLUMN IF NOT EXISTS phone VARCHAR(30)
-    """)
-
-    cur.execute("""
-        ALTER TABLE withdrawal_accounts
-        ADD COLUMN IF NOT EXISTS network VARCHAR(40)
-    """)
-
-    # ---------------- PLANS ----------------
-
     cur.execute("""
         CREATE TABLE IF NOT EXISTS plans (
             id SERIAL PRIMARY KEY,
-
-            user_id INTEGER
-                REFERENCES users(id) ON DELETE CASCADE,
-
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             plan_id INTEGER NOT NULL,
             plan_name VARCHAR(120) NOT NULL,
             investment_amount NUMERIC(14,2) NOT NULL,
             daily_income NUMERIC(14,2) NOT NULL,
             duration INTEGER NOT NULL,
-
             started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             last_claim_at TIMESTAMP,
-
             active BOOLEAN DEFAULT TRUE
         )
     """)
 
-    # ---------------- TRANSACTIONS ----------------
-
     cur.execute("""
         CREATE TABLE IF NOT EXISTS transactions (
             id SERIAL PRIMARY KEY,
-
-            user_id INTEGER
-                REFERENCES users(id) ON DELETE CASCADE,
-
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             transaction_type VARCHAR(30) NOT NULL,
             amount NUMERIC(14,2) NOT NULL,
             status VARCHAR(30) NOT NULL,
-
             reference VARCHAR(150),
             description TEXT,
-
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
-    # ---------------- ADMINS ----------------
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS withdrawal_accounts (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            account_name VARCHAR(120) NOT NULL,
+            phone VARCHAR(30) NOT NULL,
+            network VARCHAR(40) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS admins (
@@ -158,62 +118,35 @@ def init_db():
         )
     """)
 
-    # Admin credentials stored directly in app.py
-    ADMIN_USERNAME = "Williams"
-    ADMIN_PASSWORD = "Williams12"
-
-    cur.execute("""
-        INSERT INTO admins (username, password_hash)
-        VALUES (%s, %s)
-
-        ON CONFLICT (username)
-        DO UPDATE SET
-            password_hash = EXCLUDED.password_hash
-    """, (
-        ADMIN_USERNAME,
-        generate_password_hash(ADMIN_PASSWORD)
-    ))
-
-    # ---------------- DEPOSIT REQUESTS ----------------
-
     cur.execute("""
         CREATE TABLE IF NOT EXISTS deposit_requests (
             id SERIAL PRIMARY KEY,
-
-            user_id INTEGER
-                REFERENCES users(id) ON DELETE CASCADE,
-
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             amount NUMERIC(14,2) NOT NULL,
             reference VARCHAR(150),
-
             status VARCHAR(30) DEFAULT 'pending',
-
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-
-    # ---------------- WITHDRAWAL REQUESTS ----------------
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS withdrawal_requests (
             id SERIAL PRIMARY KEY,
-
-            user_id INTEGER
-                REFERENCES users(id) ON DELETE CASCADE,
-
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             amount NUMERIC(14,2) NOT NULL,
-
-            account_id INTEGER
-                REFERENCES withdrawal_accounts(id),
-
+            account_id INTEGER REFERENCES withdrawal_accounts(id),
             status VARCHAR(30) DEFAULT 'pending',
-
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
-    conn.commit()
+    cur.execute("""
+        INSERT INTO admins (username, password_hash)
+        VALUES (%s, %s)
+        ON CONFLICT (username) DO NOTHING
+    """, ("admin", generate_password_hash(os.environ.get("ADMIN_PASSWORD", "change-me"))))
 
+    conn.commit()
     cur.close()
     conn.close()
 
@@ -652,8 +585,8 @@ def bind_account():
     )
 
 
-@app.route("/request_withdraw", methods=["POST"])
-def request_withdraw():
+@app.route("/request_withdrawal", methods=["POST"])
+def request_withdrawal():
     user = current_user()
     if not user:
         return redirect(url_for("login"))
@@ -690,7 +623,7 @@ def request_withdraw():
 
     execute(
         """
-        INSERT INTO withdraw_requests
+        INSERT INTO withdrawal_requests
         (user_id, amount, account_id)
         VALUES (%s,%s,%s)
         """,
@@ -701,12 +634,12 @@ def request_withdraw():
         """
         INSERT INTO transactions
         (user_id, transaction_type, amount, status, description)
-        VALUES (%s,'withdraw',%s,'pending','Demo withdraw request')
+        VALUES (%s,'withdrawal',%s,'pending','Demo withdrawal request')
         """,
         (user["id"], amount)
     )
 
-    flash("Withdraw request submitted for review.", "success")
+    flash("Withdrawal request submitted for review.", "success")
     return redirect(url_for("transaction_history"))
 
 
@@ -781,38 +714,26 @@ def profile():
     )
 
 
-# ---------------- ADMIN AUTHENTICATION ----------------
-
-ADMIN_USERNAME = "Williams"
-ADMIN_PASSWORD = "Williams12"
-
+# ---------------- ADMIN ----------------
 
 def admin_required():
-    return session.get("admin_logged_in") is True
+    return session.get("admin_id") is not None
 
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
-
     if request.method == "POST":
-
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        print("ADMIN LOGIN ATTEMPT")
-        print("Username entered:", repr(username))
-        print("Password length:", len(password))
+        admin = query_one(
+            "SELECT * FROM admins WHERE username=%s",
+            (username,)
+        )
 
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-
-            session["admin_logged_in"] = True
-            session["admin_username"] = ADMIN_USERNAME
-
-            print("ADMIN LOGIN SUCCESS")
-
+        if admin and check_password_hash(admin["password_hash"], password):
+            session["admin_id"] = admin["id"]
             return redirect(url_for("admin_dashboard"))
-
-        print("ADMIN LOGIN FAILED")
 
         flash("Invalid administrator credentials.", "error")
 
@@ -821,12 +742,8 @@ def admin_login():
 
 @app.route("/admin/logout")
 def admin_logout():
-
-    session.pop("admin_logged_in", None)
-    session.pop("admin_username", None)
-
+    session.pop("admin_id", None)
     return redirect(url_for("admin_login"))
-
 
 
 @app.route("/admin_dashboard")
