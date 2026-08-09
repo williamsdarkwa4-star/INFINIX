@@ -381,7 +381,7 @@ def login():
             (phone,)
         )
 
-        if user and check_password_hash(user["password_hash"], password):
+        if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
             return redirect(url_for("dashboard"))
 
