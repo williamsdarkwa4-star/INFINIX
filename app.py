@@ -30,7 +30,7 @@ PLANS = {
     4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 30},
     5: {"name": "Zenith  5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 30},
     6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 30},
-    7: {"name": "Zenith Demo 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
+    7: {"name": "Zenith  7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
 }
 
 
@@ -580,11 +580,12 @@ def login():
         password = request.form.get("password", "")
 
         if not phone or not password:
-            flash("Please enter your phone number and password.", "error")
+            flash(
+                "Please enter your phone number and password.",
+                "error"
+            )
             return render_template("login.html")
 
-        # Support databases that use either:
-        # password_hash OR the older password column.
         user = query_one(
             """
             SELECT
@@ -592,7 +593,7 @@ def login():
                 username,
                 fullname,
                 phone,
-                COALESCE(password_hash, password) AS password_hash,
+                password_hash,
                 withdraw_password_hash,
                 referral_code,
                 referred_by,
@@ -604,31 +605,40 @@ def login():
         )
 
         if not user:
-            flash("Invalid phone number or password.", "error")
+            flash(
+                "Invalid phone number or password.",
+                "error"
+            )
             return render_template("login.html")
 
-        stored_password = user["password_hash"]
+        stored_password = user.get("password_hash")
 
         if not stored_password:
-            flash("This account has no valid password. Please contact support.", "error")
+            flash(
+                "This account has no valid password. "
+                "Please register again or contact support.",
+                "error"
+            )
             return render_template("login.html")
 
         try:
-            password_valid = check_password_hash(
+            valid = check_password_hash(
                 stored_password,
                 password
             )
         except Exception:
-            password_valid = False
+            valid = False
 
-        if password_valid:
+        if valid:
             session["user_id"] = user["id"]
             return redirect(url_for("dashboard"))
 
-        flash("Invalid phone number or password.", "error")
+        flash(
+            "Invalid phone number or password.",
+            "error"
+        )
 
     return render_template("login.html")
-
 
 @app.route("/logout")
 def logout():
