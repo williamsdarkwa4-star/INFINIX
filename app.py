@@ -50,9 +50,10 @@ def init_db():
     cur = conn.cursor()
 
     try:
-        # =========================================================
+
+        # =====================================================
         # USERS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -67,24 +68,24 @@ def init_db():
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # ACCOUNTS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY
                     REFERENCES users(id) ON DELETE CASCADE,
 
-                deposit_account NUMERIC(14,2) NOT NULL DEFAULT 5.00,
-                income_account NUMERIC(14,2) NOT NULL DEFAULT 0,
-                referral_account NUMERIC(14,2) NOT NULL DEFAULT 0,
-                withdraw_account NUMERIC(14,2) NOT NULL DEFAULT 0
+                deposit_account NUMERIC(14,2) DEFAULT 5.00,
+                income_account NUMERIC(14,2) DEFAULT 0,
+                referral_account NUMERIC(14,2) DEFAULT 0,
+                withdraw_account NUMERIC(14,2) DEFAULT 0
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # PLANS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
                 id SERIAL PRIMARY KEY,
@@ -94,22 +95,19 @@ def init_db():
 
                 plan_id INTEGER NOT NULL,
                 plan_name VARCHAR(120) NOT NULL,
-
                 investment_amount NUMERIC(14,2) NOT NULL,
                 daily_income NUMERIC(14,2) NOT NULL,
-
                 duration INTEGER NOT NULL,
 
                 started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_claim_at TIMESTAMP,
-
-                active BOOLEAN NOT NULL DEFAULT TRUE
+                active BOOLEAN DEFAULT TRUE
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # TRANSACTIONS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
                 id SERIAL PRIMARY KEY,
@@ -119,9 +117,7 @@ def init_db():
 
                 transaction_type VARCHAR(30) NOT NULL,
                 amount NUMERIC(14,2) NOT NULL,
-
                 status VARCHAR(30) NOT NULL,
-
                 reference VARCHAR(150),
                 description TEXT,
 
@@ -129,9 +125,9 @@ def init_db():
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # WITHDRAWAL ACCOUNTS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_accounts (
                 id SERIAL PRIMARY KEY,
@@ -147,9 +143,9 @@ def init_db():
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # DEPOSIT REQUESTS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS deposit_requests (
                 id SERIAL PRIMARY KEY,
@@ -158,18 +154,18 @@ def init_db():
                     REFERENCES users(id) ON DELETE CASCADE,
 
                 amount NUMERIC(14,2) NOT NULL,
-
                 reference VARCHAR(150),
 
-                status VARCHAR(30) NOT NULL DEFAULT 'pending',
+                status VARCHAR(30)
+                    NOT NULL DEFAULT 'pending',
 
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # WITHDRAWAL REQUESTS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_requests (
                 id SERIAL PRIMARY KEY,
@@ -183,33 +179,33 @@ def init_db():
                     REFERENCES withdrawal_accounts(id)
                     ON DELETE SET NULL,
 
-                status VARCHAR(30) NOT NULL DEFAULT 'pending',
+                status VARCHAR(30)
+                    NOT NULL DEFAULT 'pending',
 
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # =========================================================
+        # =====================================================
         # ADMINS
-        # =========================================================
+        # =====================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS admins (
                 id SERIAL PRIMARY KEY,
-
                 username VARCHAR(80) UNIQUE NOT NULL,
-
                 password_hash TEXT
             )
         """)
 
-        # =========================================================
-        # MIGRATE OLD TABLES
-        # =========================================================
+        # =====================================================
+        # OLD DATABASE COMPATIBILITY
+        # =====================================================
 
         # USERS
         cur.execute("""
             ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120) DEFAULT ''
+            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120)
+            DEFAULT ''
         """)
 
         cur.execute("""
@@ -264,11 +260,22 @@ def init_db():
             ADD COLUMN IF NOT EXISTS password_hash TEXT
         """)
 
-        # =========================================================
-        # CREATE REFERRAL CODES FOR OLD USERS
-        # =========================================================
-        old_users = []
+        # Older versions may have a "password" column.
+        cur.execute("""
+            ALTER TABLE admins
+            ADD COLUMN IF NOT EXISTS password TEXT
+        """)
 
+        # The old password column must not block creation
+        # of the new admin record.
+        cur.execute("""
+            ALTER TABLE admins
+            ALTER COLUMN password DROP NOT NULL
+        """)
+
+        # =====================================================
+        # GENERATE REFERRAL CODES FOR OLD USERS
+        # =====================================================
         cur.execute("""
             SELECT id
             FROM users
@@ -279,6 +286,7 @@ def init_db():
         old_users = cur.fetchall()
 
         for row in old_users:
+
             user_id = row[0]
 
             referral_code = (
@@ -291,11 +299,14 @@ def init_db():
                 UPDATE users
                 SET referral_code=%s
                 WHERE id=%s
-            """, (referral_code, user_id))
+            """, (
+                referral_code,
+                user_id
+            ))
 
-        # =========================================================
-        # ENSURE EVERY USER HAS AN ACCOUNT
-        # =========================================================
+        # =====================================================
+        # ENSURE ALL USERS HAVE ACCOUNTS
+        # =====================================================
         cur.execute("""
             INSERT INTO accounts (
                 user_id,
@@ -316,64 +327,41 @@ def init_db():
             WHERE a.user_id IS NULL
         """)
 
-        # =========================================================
-# ADMINS
-# =========================================================
+        # =====================================================
+        # ADMIN
+        # =====================================================
+        admin_username = os.environ.get(
+            "ADMIN_USERNAME",
+            "Williams"
+        )
 
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS admins (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(80) UNIQUE NOT NULL,
-        password_hash TEXT
-    )
-""")
+        admin_password = os.environ.get(
+            "ADMIN_PASSWORD",
+            "Williams12"
+        )
 
-# Support old database structure
-cur.execute("""
-    ALTER TABLE admins
-    ADD COLUMN IF NOT EXISTS password_hash TEXT
-""")
+        admin_hash = generate_password_hash(
+            admin_password
+        )
 
-# If an old password column exists, make it optional
-cur.execute("""
-    ALTER TABLE admins
-    ADD COLUMN IF NOT EXISTS password TEXT
-""")
+        cur.execute("""
+            INSERT INTO admins (
+                username,
+                password_hash
+            )
+            VALUES (%s, %s)
 
-cur.execute("""
-    ALTER TABLE admins
-    ALTER COLUMN password DROP NOT NULL
-""")
+            ON CONFLICT (username)
+            DO UPDATE SET
+                password_hash = EXCLUDED.password_hash
+        """, (
+            admin_username,
+            admin_hash
+        ))
 
-admin_username = os.environ.get(
-    "ADMIN_USERNAME",
-    "Williams"
-)
-
-admin_password = os.environ.get(
-    "ADMIN_PASSWORD",
-    "Williams12"
-)
-
-admin_hash = generate_password_hash(admin_password)
-
-cur.execute("""
-    INSERT INTO admins (
-        username,
-        password_hash
-    )
-    VALUES (%s, %s)
-
-    ON CONFLICT (username)
-    DO UPDATE SET
-        password_hash = EXCLUDED.password_hash
-""", (
-    admin_username,
-    admin_hash
-))
-        # =========================================================
-        # VERIFY IMPORTANT TABLES
-        # =========================================================
+        # =====================================================
+        # VERIFY TABLES
+        # =====================================================
         required_tables = [
             "users",
             "accounts",
@@ -404,38 +392,32 @@ cur.execute("""
                     f"was not created."
                 )
 
-        # =========================================================
-        # COMMIT EVERYTHING
-        # =========================================================
+        # =====================================================
+        # COMMIT
+        # =====================================================
         conn.commit()
 
-        print("")
-        print("==========================================")
+        print("======================================")
         print("DATABASE INITIALIZATION SUCCESS")
-        print("==========================================")
-        print("Tables created/verified:")
-        for table in required_tables:
-            print(" -", table)
-        print("------------------------------------------")
+        print("======================================")
+        print("All required tables are ready.")
         print("Admin username:", admin_username)
-        print("==========================================")
-        print("")
+        print("======================================")
 
     except Exception as exc:
 
         conn.rollback()
 
-        print("")
-        print("==========================================")
-        print("DATABASE INITIALIZATION FAILED")
-        print("==========================================")
-        print("ERROR:", exc)
-        print("==========================================")
-        print("")
+        print("======================================")
+        print("DATABASE INITIALIZATION ERROR")
+        print("======================================")
+        print(exc)
+        print("======================================")
 
         raise
 
     finally:
+
         cur.close()
         conn.close()
 
