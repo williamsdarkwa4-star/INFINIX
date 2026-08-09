@@ -545,15 +545,53 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+
         phone = request.form.get("phone", "").strip()
         password = request.form.get("password", "")
 
+        if not phone or not password:
+            flash("Please enter your phone number and password.", "error")
+            return render_template("login.html")
+
+        # Support databases that use either:
+        # password_hash OR the older password column.
         user = query_one(
-            "SELECT * FROM users WHERE phone=%s",
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                COALESCE(password_hash, password) AS password_hash,
+                withdraw_password_hash,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE phone=%s
+            """,
             (phone,)
         )
 
-        if user and check_password_hash(user["password_hash"], password):
+        if not user:
+            flash("Invalid phone number or password.", "error")
+            return render_template("login.html")
+
+        stored_password = user["password_hash"]
+
+        if not stored_password:
+            flash("This account has no valid password. Please contact support.", "error")
+            return render_template("login.html")
+
+        try:
+            password_valid = check_password_hash(
+                stored_password,
+                password
+            )
+        except Exception:
+            password_valid = False
+
+        if password_valid:
             session["user_id"] = user["id"]
             return redirect(url_for("dashboard"))
 
