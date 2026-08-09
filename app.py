@@ -520,32 +520,123 @@ def index():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    # Get referral code from the URL:
+    # /register?ref=ZEN123
+    invite_code = (
+        request.args.get("ref", "").strip()
+        or request.form.get("referred_by", "").strip()
+    )
+
+    # Check whether the referral code belongs to an existing user
+    referred_user = None
+
+    if invite_code:
+        referred_user = query_one(
+            """
+            SELECT id, username, referral_code
+            FROM users
+            WHERE referral_code=%s
+            """,
+            (invite_code,)
+        )
+
     if request.method == "POST":
+
         fullname = request.form.get("fullname", "").strip()
         username = request.form.get("username", "").strip()
         phone = request.form.get("phone", "").strip()
         password = request.form.get("password", "")
-        withdraw_password = request.form.get("withdraw_password", "")
-        ref = request.args.get("ref") or request.form.get("referral_code", "")
+        withdrawal_password = request.form.get(
+            "withdrawal_password", ""
+        )
 
-        if not username or not phone or not password:
-            flash("Please complete all required fields.", "error")
-            return render_template("register.html")
+        # -------------------------
+        # BASIC VALIDATION
+        # -------------------------
 
-        if query_one(
-            "SELECT id FROM users WHERE username=%s OR phone=%s",
+        if not fullname or not username or not phone:
+            flash(
+                "Please complete all required fields.",
+                "error"
+            )
+            return render_template(
+                "register.html",
+                invite_code=invite_code
+            )
+
+        if not password or not withdrawal_password:
+            flash(
+                "Please enter both passwords.",
+                "error"
+            )
+            return render_template(
+                "register.html",
+                invite_code=invite_code
+            )
+
+        # -------------------------
+        # CHECK USERNAME / PHONE
+        # -------------------------
+
+        existing_user = query_one(
+            """
+            SELECT id
+            FROM users
+            WHERE username=%s OR phone=%s
+            """,
             (username, phone)
-        ):
-            flash("Username or phone number already exists.", "error")
-            return render_template("register.html")
+        )
 
-        referral_code = f"ZEN{datetime.utcnow().strftime('%y%m%d%H%M%S')}{os.urandom(2).hex()}"
+        if existing_user:
+            flash(
+                "Username or phone number already exists.",
+                "error"
+            )
+            return render_template(
+                "register.html",
+                invite_code=invite_code
+            )
+
+        # -------------------------
+        # CHECK REFERRAL CODE
+        # -------------------------
+
+        if invite_code and not referred_user:
+            flash(
+                "Invalid referral code.",
+                "error"
+            )
+            return render_template(
+                "register.html",
+                invite_code=invite_code
+            )
+
+        # -------------------------
+        # CREATE UNIQUE REFERRAL CODE
+        # -------------------------
+
+        referral_code = (
+            f"ZEN"
+            f"{datetime.utcnow().strftime('%y%m%d%H%M%S')}"
+            f"{os.urandom(3).hex()}"
+        )
+
+        # -------------------------
+        # CREATE USER
+        # -------------------------
 
         user = execute(
             """
             INSERT INTO users
-            (username, fullname, phone, password_hash,
-             withdraw_password_hash, referral_code, referred_by)
+            (
+                username,
+                fullname,
+                phone,
+                password_hash,
+                withdraw_password_hash,
+                referral_code,
+                referred_by
+            )
             VALUES (%s,%s,%s,%s,%s,%s,%s)
             RETURNING id
             """,
@@ -554,23 +645,46 @@ def register():
                 fullname,
                 phone,
                 generate_password_hash(password),
-                generate_password_hash(withdraw_password) if withdraw_password else None,
+                generate_password_hash(withdrawal_password),
                 referral_code,
-                ref or None,
+                referred_user["referral_code"]
+                if referred_user
+                else None
             ),
-            fetchone=True,
+            fetchone=True
         )
 
+        # -------------------------
+        # CREATE ACCOUNT BALANCES
+        # -------------------------
+
         execute(
-            "INSERT INTO accounts (user_id) VALUES (%s)",
+            """
+            INSERT INTO accounts
+            (
+                user_id,
+                deposit_account,
+                income_account,
+                referral_account,
+                withdraw_account
+            )
+            VALUES (%s, 5.00, 0, 0, 0)
+            """,
             (user["id"],)
         )
 
-        flash("Registration successful. Please log in.", "success")
+        flash(
+            "Registration successful. Please log in.",
+            "success"
+        )
+
         return redirect(url_for("login"))
 
-    return render_template("register.html")
-
+    # GET request
+    return render_template(
+        "register.html",
+        invite_code=invite_code
+    )
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
