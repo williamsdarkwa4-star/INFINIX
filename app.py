@@ -145,7 +145,28 @@ def init_db():
         VALUES (%s, %s)
         ON CONFLICT (username) DO NOTHING
     """, ("admin", generate_password_hash(os.environ.get("ADMIN_PASSWORD", "change-me"))))
+      
+    cur.execute("""
+         CREATE TABLE IF NOT EXISTS deposit_requests (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        amount NUMERIC(14,2) NOT NULL,
+        reference VARCHAR(150),
+        status VARCHAR(30) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+       )
+    """)
 
+    cur.execute("""
+       CREATE TABLE IF NOT EXISTS withdrawal_requests (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        amount NUMERIC(14,2) NOT NULL,
+        account_id INTEGER,
+        status VARCHAR(30) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+      """)
     conn.commit()
     cur.close()
     conn.close()
