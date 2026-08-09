@@ -189,56 +189,87 @@ placeholder="Search username or phone number"
 
 
 
+{% for user in users %}
 
 <div class="user-card">
 
+    <h2>{{ user.fullname or user.username }}</h2>
 
-<h2>
-Example User
-</h2>
+    <div class="info">
 
+        Username: {{ user.username }}
 
+        <br>
 
-<div class="info">
+        Phone: {{ user.phone }}
 
+        <br>
 
-Username: example123
+        User ID: {{ user.id }}
 
-<br>
+        <br>
 
-Phone: 024 XXXXXXX
+        Deposit Account:
+        GHS {{ "%.2f"|format(user.deposit_account or 0) }}
 
-<br>
+        <br>
 
-User ID: 001
+        Withdrawal Account:
+        GHS {{ "%.2f"|format(user.withdraw_account or 0) }}
 
-<br>
+        <br>
 
-Deposit Account: GHS 100
+        Status: Active
 
-<br>
+    </div>
 
-Withdrawal Account: GHS 50
-
-<br>
-
-Status: Active
-
+    <a href="{{ url_for('admin_manage_user', user_id=user.id) }}"
+       style="
+           display:block;
+           width:100%;
+           padding:14px;
+           margin-top:15px;
+           border-radius:15px;
+           background:#2563eb;
+           color:white;
+           text-decoration:none;
+           text-align:center;
+           font-weight:bold;
+       ">
+        Manage User
+    </a>
 
 </div>
 
+{% else %}
 
-
-<button>
-
-Manage User
-
-</button>
-
-
-
+<div class="user-card">
+    <h2>No Users</h2>
+    <div class="info">
+        No registered users found.
+    </div>
 </div>
 
+{% endfor %}
+
+
+
+
+<a href="{{ url_for('admin_manage_user', user_id=user.id) }}"
+   style="
+       display:block;
+       width:100%;
+       padding:14px;
+       margin-top:15px;
+       border-radius:15px;
+       background:#2563eb;
+       color:white;
+       text-decoration:none;
+       text-align:center;
+       font-weight:bold;
+   ">
+    Manage User
+</a>
 
 
 
