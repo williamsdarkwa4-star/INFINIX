@@ -237,7 +237,8 @@ def init_db():
         """)
 
         conn.commit()
-
+        cur.close()
+        conn.close()
         print("======================================")
         print("DATABASE INITIALIZATION SUCCESS")
         print("All required tables are ready.")
@@ -249,9 +250,6 @@ def init_db():
         print("DATABASE INITIALIZATION ERROR:", exc)
         raise
 
-    finally:
-        cur.close()
-        conn.close()
 
 
 def query_one(sql, params=()):
