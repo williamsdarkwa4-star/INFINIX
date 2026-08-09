@@ -827,10 +827,6 @@ def admin_logout():
 
     return redirect(url_for("admin_login"))
 
-@app.route("/admin/logout")
-def admin_logout():
-    session.pop("admin_id", None)
-    return redirect(url_for("admin_login"))
 
 
 @app.route("/admin_dashboard")
