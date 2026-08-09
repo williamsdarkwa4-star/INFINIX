@@ -200,58 +200,98 @@ placeholder="Search user phone or username">
 
 
 
+{% for withdrawal in withdrawals %}
+
 <div class="card">
 
+    <h2>Withdrawal #{{ withdrawal.id }}</h2>
 
-<h2>Withdrawal Request</h2>
+    <div class="info">
 
+        <b>User:</b>
+        {{ withdrawal.username }}
 
+        <br>
 
-<div class="info">
+        <b>Phone:</b>
+        {{ withdrawal.phone }}
 
+        <br>
 
-<b>User:</b> Example User
+        <b>Amount:</b>
+        GHS {{ "%.2f"|format(withdrawal.amount) }}
 
+        <br>
 
-<br>
+        <b>Account Name:</b>
+        {{ withdrawal.account_name or "Not provided" }}
 
+        <br>
 
-<b>Phone:</b> 024 XXXXXXX
+        <b>Mobile Money:</b>
+        {{ withdrawal.account_phone or "Not provided" }}
 
+        <br>
 
-<br>
+        <b>Network:</b>
+        {{ withdrawal.network or "Not provided" }}
 
+        <br>
 
-<b>Amount:</b> GHS 100
+        <b>Status:</b>
+        <span class="status">
+            {{ withdrawal.status|capitalize }}
+        </span>
 
+    </div>
 
-<br>
+    {% if withdrawal.status == "pending" %}
 
+    <div class="buttons">
 
-<b>Account:</b> MTN Mobile Money
+        <form method="POST"
+              action="{{ url_for('admin_withdraw_action',
+                                 withdrawal_id=withdrawal.id,
+                                 action='approve') }}"
+              style="flex:1;">
 
+            <button class="approve" type="submit">
+                Approve
+            </button>
 
-<br>
+        </form>
 
+        <form method="POST"
+              action="{{ url_for('admin_withdraw_action',
+                                 withdrawal_id=withdrawal.id,
+                                 action='reject') }}"
+              style="flex:1;">
 
-<b>Name:</b> Example Name
+            <button class="reject" type="submit">
+                Reject
+            </button>
 
+        </form>
 
-<br>
+    </div>
 
-
-<b>Status:</b>
-
-<span class="status">
-Pending
-</span>
-
+    {% endif %}
 
 </div>
 
+{% else %}
 
+<div class="card">
 
+    <h2>No Withdrawals</h2>
 
+    <div class="info">
+        There are currently no withdrawal requests.
+    </div>
+
+</div>
+
+{% endfor %}
 <div class="buttons">
 
 
@@ -274,40 +314,6 @@ Reject
 
 
 </div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>Withdrawal Request</h2>
-
-
-
-<div class="info">
-
-
-<b>User:</b> No pending requests
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
 
 
 
