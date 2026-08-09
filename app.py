@@ -652,8 +652,8 @@ def bind_account():
     )
 
 
-@app.route("/request_withdrawal", methods=["POST"])
-def request_withdrawal():
+@app.route("/request_withdraw", methods=["POST"])
+def request_withdraw():
     user = current_user()
     if not user:
         return redirect(url_for("login"))
@@ -690,7 +690,7 @@ def request_withdrawal():
 
     execute(
         """
-        INSERT INTO withdrawal_requests
+        INSERT INTO withdraw_requests
         (user_id, amount, account_id)
         VALUES (%s,%s,%s)
         """,
@@ -701,12 +701,12 @@ def request_withdrawal():
         """
         INSERT INTO transactions
         (user_id, transaction_type, amount, status, description)
-        VALUES (%s,'withdrawal',%s,'pending','Demo withdrawal request')
+        VALUES (%s,'withdraw',%s,'pending','Demo withdraw request')
         """,
         (user["id"], amount)
     )
 
-    flash("Withdrawal request submitted for review.", "success")
+    flash("Withdraw request submitted for review.", "success")
     return redirect(url_for("transaction_history"))
 
 
@@ -781,31 +781,51 @@ def profile():
     )
 
 
-# ---------------- ADMIN ----------------
+# ---------------- ADMIN AUTHENTICATION ----------------
+
+ADMIN_USERNAME = "Williams"
+ADMIN_PASSWORD = "Williams12"
+
 
 def admin_required():
-    return session.get("admin_id") is not None
+    return session.get("admin_logged_in") is True
 
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+
     if request.method == "POST":
+
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        admin = query_one(
-            "SELECT * FROM admins WHERE username=%s",
-            (username,)
-        )
+        print("ADMIN LOGIN ATTEMPT")
+        print("Username entered:", repr(username))
+        print("Password length:", len(password))
 
-        if admin and check_password_hash(admin["password_hash"], password):
-            session["admin_id"] = admin["id"]
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+
+            session["admin_logged_in"] = True
+            session["admin_username"] = ADMIN_USERNAME
+
+            print("ADMIN LOGIN SUCCESS")
+
             return redirect(url_for("admin_dashboard"))
+
+        print("ADMIN LOGIN FAILED")
 
         flash("Invalid administrator credentials.", "error")
 
     return render_template("admin_login.html")
 
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.pop("admin_logged_in", None)
+    session.pop("admin_username", None)
+
+    return redirect(url_for("admin_login"))
 
 @app.route("/admin/logout")
 def admin_logout():
