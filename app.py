@@ -39,20 +39,20 @@ def get_conn():
         return None
     return psycopg2.connect(DATABASE_URL, sslmode="require")
 
-
 def init_db():
     conn = get_conn()
 
     if conn is None:
-        print("DATABASE_URL is missing or psycopg2 is unavailable.")
-        return
+        raise RuntimeError(
+            "DATABASE_URL is missing or psycopg2 is unavailable."
+        )
 
     cur = conn.cursor()
 
     try:
-        # =========================
+        # =========================================================
         # USERS
-        # =========================
+        # =========================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -67,188 +67,353 @@ def init_db():
             )
         """)
 
-        # =========================
+        # =========================================================
         # ACCOUNTS
-        # =========================
+        # =========================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY
                     REFERENCES users(id) ON DELETE CASCADE,
-                deposit_account NUMERIC(14,2) DEFAULT 5.00,
-                income_account NUMERIC(14,2) DEFAULT 0,
-                referral_account NUMERIC(14,2) DEFAULT 0,
-                withdraw_account NUMERIC(14,2) DEFAULT 0
+
+                deposit_account NUMERIC(14,2) NOT NULL DEFAULT 5.00,
+                income_account NUMERIC(14,2) NOT NULL DEFAULT 0,
+                referral_account NUMERIC(14,2) NOT NULL DEFAULT 0,
+                withdraw_account NUMERIC(14,2) NOT NULL DEFAULT 0
             )
         """)
 
-        # =========================
+        # =========================================================
         # PLANS
-        # =========================
+        # =========================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
                 id SERIAL PRIMARY KEY,
+
                 user_id INTEGER
                     REFERENCES users(id) ON DELETE CASCADE,
+
                 plan_id INTEGER NOT NULL,
                 plan_name VARCHAR(120) NOT NULL,
+
                 investment_amount NUMERIC(14,2) NOT NULL,
                 daily_income NUMERIC(14,2) NOT NULL,
+
                 duration INTEGER NOT NULL,
+
                 started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_claim_at TIMESTAMP,
-                active BOOLEAN DEFAULT TRUE
+
+                active BOOLEAN NOT NULL DEFAULT TRUE
             )
         """)
 
-        # =========================
+        # =========================================================
         # TRANSACTIONS
-        # =========================
+        # =========================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
                 id SERIAL PRIMARY KEY,
+
                 user_id INTEGER
                     REFERENCES users(id) ON DELETE CASCADE,
+
                 transaction_type VARCHAR(30) NOT NULL,
                 amount NUMERIC(14,2) NOT NULL,
+
                 status VARCHAR(30) NOT NULL,
+
                 reference VARCHAR(150),
                 description TEXT,
+
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # =========================
+        # =========================================================
         # WITHDRAWAL ACCOUNTS
-        # =========================
+        # =========================================================
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_accounts (
                 id SERIAL PRIMARY KEY,
+
                 user_id INTEGER
                     REFERENCES users(id) ON DELETE CASCADE,
+
                 account_name VARCHAR(120) NOT NULL,
                 phone VARCHAR(30) NOT NULL,
                 network VARCHAR(40) NOT NULL,
+
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # =========================
-        # ADMINS
-        # =========================
+        # =========================================================
+        # DEPOSIT REQUESTS
+        # =========================================================
         cur.execute("""
-            CREATE TABLE IF NOT EXISTS admins (
+            CREATE TABLE IF NOT EXISTS deposit_requests (
                 id SERIAL PRIMARY KEY,
-                username VARCHAR(80) UNIQUE NOT NULL
+
+                user_id INTEGER
+                    REFERENCES users(id) ON DELETE CASCADE,
+
+                amount NUMERIC(14,2) NOT NULL,
+
+                reference VARCHAR(150),
+
+                status VARCHAR(30) NOT NULL DEFAULT 'pending',
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # Add password_hash if an old admins table exists
+        # =========================================================
+        # WITHDRAWAL REQUESTS
+        # =========================================================
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS withdrawal_requests (
+                id SERIAL PRIMARY KEY,
+
+                user_id INTEGER
+                    REFERENCES users(id) ON DELETE CASCADE,
+
+                amount NUMERIC(14,2) NOT NULL,
+
+                account_id INTEGER
+                    REFERENCES withdrawal_accounts(id)
+                    ON DELETE SET NULL,
+
+                status VARCHAR(30) NOT NULL DEFAULT 'pending',
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # =========================================================
+        # ADMINS
+        # =========================================================
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS admins (
+                id SERIAL PRIMARY KEY,
+
+                username VARCHAR(80) UNIQUE NOT NULL,
+
+                password_hash TEXT
+            )
+        """)
+
+        # =========================================================
+        # MIGRATE OLD TABLES
+        # =========================================================
+
+        # USERS
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120) DEFAULT ''
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS withdraw_password_hash TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS referral_code VARCHAR(40)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS referred_by VARCHAR(40)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS created_at
+            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        """)
+
+        # ACCOUNTS
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS deposit_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS income_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS referral_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS withdraw_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        # ADMINS
         cur.execute("""
             ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS password_hash TEXT
         """)
 
-        # =========================
-        # DEPOSIT REQUESTS
-        # =========================
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS deposit_requests (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER
-                    REFERENCES users(id) ON DELETE CASCADE,
-                amount NUMERIC(14,2) NOT NULL,
-                reference VARCHAR(150),
-                status VARCHAR(30) DEFAULT 'pending',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # =========================
-        # WITHDRAWAL REQUESTS
-        # =========================
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS withdrawal_requests (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER
-                    REFERENCES users(id) ON DELETE CASCADE,
-                amount NUMERIC(14,2) NOT NULL,
-                account_id INTEGER
-                    REFERENCES withdrawal_accounts(id)
-                    ON DELETE SET NULL,
-                status VARCHAR(30) DEFAULT 'pending',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # =========================
-        # MAKE SURE ACCOUNT COLUMNS EXIST
-        # =========================
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS deposit_account NUMERIC(14,2) DEFAULT 0
-        """)
+        # =========================================================
+        # CREATE REFERRAL CODES FOR OLD USERS
+        # =========================================================
+        old_users = []
 
         cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS income_account NUMERIC(14,2) DEFAULT 0
-        """)
-
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS referral_account NUMERIC(14,2) DEFAULT 0
-        """)
-
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS withdraw_account NUMERIC(14,2) DEFAULT 0
-        """)
-
-        # =========================
-        # CREATE DEFAULT ADMIN
-        # =========================
-        admin_username = os.environ.get("ADMIN_USERNAME", "Williams")
-        admin_password = os.environ.get("ADMIN_PASSWORD")
-
-        if not admin_password:
-            admin_password = "Williams12"
-
-        password_hash = generate_password_hash(admin_password)
-
-        cur.execute("""
-            INSERT INTO admins (username, password_hash)
-            VALUES (%s, %s)
-            ON CONFLICT (username)
-            DO UPDATE SET password_hash = EXCLUDED.password_hash
-        """, (
-            admin_username,
-            password_hash
-        ))
-
-        # =========================
-        # ENSURE EVERY USER HAS ACCOUNT
-        # =========================
-        cur.execute("""
-            INSERT INTO accounts (user_id)
             SELECT id
             FROM users
-            WHERE id NOT IN (
-                SELECT user_id FROM accounts
-            )
+            WHERE referral_code IS NULL
+               OR referral_code = ''
         """)
 
+        old_users = cur.fetchall()
+
+        for row in old_users:
+            user_id = row[0]
+
+            referral_code = (
+                f"ZEN{user_id}"
+                f"{datetime.utcnow().strftime('%y%m%d%H%M%S')}"
+                f"{os.urandom(2).hex()}"
+            )
+
+            cur.execute("""
+                UPDATE users
+                SET referral_code=%s
+                WHERE id=%s
+            """, (referral_code, user_id))
+
+        # =========================================================
+        # ENSURE EVERY USER HAS AN ACCOUNT
+        # =========================================================
+        cur.execute("""
+            INSERT INTO accounts (
+                user_id,
+                deposit_account,
+                income_account,
+                referral_account,
+                withdraw_account
+            )
+            SELECT
+                u.id,
+                5.00,
+                0,
+                0,
+                0
+            FROM users u
+            LEFT JOIN accounts a
+                ON a.user_id = u.id
+            WHERE a.user_id IS NULL
+        """)
+
+        # =========================================================
+        # ADMIN ACCOUNT
+        # =========================================================
+        admin_username = os.environ.get(
+            "ADMIN_USERNAME",
+            "Williams"
+        )
+
+        admin_password = os.environ.get(
+            "ADMIN_PASSWORD",
+            "Williams12"
+        )
+
+        admin_hash = generate_password_hash(admin_password)
+
+        cur.execute("""
+            INSERT INTO admins (
+                username,
+                password_hash
+            )
+            VALUES (%s, %s)
+
+            ON CONFLICT (username)
+            DO UPDATE SET
+                password_hash = EXCLUDED.password_hash
+        """, (
+            admin_username,
+            admin_hash
+        ))
+
+        # =========================================================
+        # VERIFY IMPORTANT TABLES
+        # =========================================================
+        required_tables = [
+            "users",
+            "accounts",
+            "plans",
+            "transactions",
+            "withdrawal_accounts",
+            "deposit_requests",
+            "withdrawal_requests",
+            "admins"
+        ]
+
+        for table_name in required_tables:
+
+            cur.execute("""
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM information_schema.tables
+                    WHERE table_schema = 'public'
+                    AND table_name = %s
+                )
+            """, (table_name,))
+
+            exists = cur.fetchone()[0]
+
+            if not exists:
+                raise RuntimeError(
+                    f"Required table '{table_name}' "
+                    f"was not created."
+                )
+
+        # =========================================================
+        # COMMIT EVERYTHING
+        # =========================================================
         conn.commit()
-        cur.close()
-        conn.close()
-        print("======================================")
+
+        print("")
+        print("==========================================")
         print("DATABASE INITIALIZATION SUCCESS")
-        print("All required tables are ready.")
+        print("==========================================")
+        print("Tables created/verified:")
+        for table in required_tables:
+            print(" -", table)
+        print("------------------------------------------")
         print("Admin username:", admin_username)
-        print("======================================")
+        print("==========================================")
+        print("")
 
     except Exception as exc:
+
         conn.rollback()
-        print("DATABASE INITIALIZATION ERROR:", exc)
+
+        print("")
+        print("==========================================")
+        print("DATABASE INITIALIZATION FAILED")
+        print("==========================================")
+        print("ERROR:", exc)
+        print("==========================================")
+        print("")
+
         raise
+
+    finally:
+        cur.close()
+        conn.close()
+
 
 
 
@@ -381,7 +546,7 @@ def login():
             (phone,)
         )
 
-        if user and check_password_hash(user["password"], password):
+        if user and check_password_hash(user["password_hash"], password):
             session["user_id"] = user["id"]
             return redirect(url_for("dashboard"))
 
@@ -1169,10 +1334,7 @@ def server_error(error):
 
 
 with app.app_context():
-    try:
-        init_db()
-    except Exception as exc:
-        print("Database initialization skipped:", exc)
+    init_db()
 
 
 
