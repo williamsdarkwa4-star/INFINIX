@@ -1195,8 +1195,17 @@ def profile():
 
 # ---------------- ADMIN LOGIN ----------------
 
-ADMIN_USERNAME = "Williams"
-ADMIN_PASSWORD = "Williams12"
+# ---------------- ADMIN LOGIN ----------------
+
+ADMIN_USERNAME = os.environ.get(
+    "ADMIN_USERNAME",
+    "Williams"
+)
+
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
+    "Williams12"
+)
 
 
 def admin_required():
