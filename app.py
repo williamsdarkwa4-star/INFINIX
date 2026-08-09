@@ -74,7 +74,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY
                     REFERENCES users(id) ON DELETE CASCADE,
-                deposit_account NUMERIC(14,2) DEFAULT 0,
+                deposit_account NUMERIC(14,2) DEFAULT 5.00,
                 income_account NUMERIC(14,2) DEFAULT 0,
                 referral_account NUMERIC(14,2) DEFAULT 0,
                 withdraw_account NUMERIC(14,2) DEFAULT 0
