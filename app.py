@@ -1195,8 +1195,6 @@ def profile():
 
 # ---------------- ADMIN LOGIN ----------------
 
-# ---------------- ADMIN LOGIN ----------------
-
 ADMIN_USERNAME = os.environ.get(
     "ADMIN_USERNAME",
     "Williams"
@@ -1214,29 +1212,38 @@ def admin_required():
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+
     if request.method == "POST":
+
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        print("ADMIN LOGIN ATTEMPT")
-        print("Username:", repr(username))
-        print("Password length:", len(password))
-
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+
             session["admin_logged_in"] = True
-            print("ADMIN LOGIN SUCCESS")
+
+            flash(
+                "Administrator login successful.",
+                "success"
+            )
+
             return redirect(url_for("admin_dashboard"))
 
-        print("ADMIN LOGIN FAILED")
-        flash("Invalid administrator credentials.", "error")
+        flash(
+            "Invalid administrator credentials.",
+            "error"
+        )
 
     return render_template("admin_login.html")
 
 
 @app.route("/admin/logout")
 def admin_logout():
+
     session.pop("admin_logged_in", None)
+
     return redirect(url_for("admin_login"))
+
 
 
 @app.route("/admin_dashboard")
