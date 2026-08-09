@@ -137,12 +137,12 @@ a{
     >
 
     <input
-        type="text"
-        name="referred_by"
-        placeholder="Referral Code"
-        value="{{ invite_code }}"
-        {% if invite_code %}readonly{% endif %}
-    >
+    type="text"
+    name="referred_by"
+    placeholder="Referral Code"
+    value="{{ invite_code or '' }}"
+    {% if invite_code %}readonly{% endif %}
+>
 
     <button type="submit">
         Register
