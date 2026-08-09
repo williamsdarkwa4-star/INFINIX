@@ -50,7 +50,6 @@ def init_db():
     cur = conn.cursor()
 
     try:
-
         # =====================================================
         # USERS
         # =====================================================
@@ -60,12 +59,75 @@ def init_db():
                 username VARCHAR(80) UNIQUE NOT NULL,
                 fullname VARCHAR(120) DEFAULT '',
                 phone VARCHAR(30) UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
+                password_hash TEXT,
                 withdraw_password_hash TEXT,
-                referral_code VARCHAR(40) UNIQUE NOT NULL,
-                referred_by VARCHAR(40),
+                referral_code VARCHAR(100) UNIQUE,
+                referred_by VARCHAR(100),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        """)
+
+        # -----------------------------------------------------
+        # USERS - MIGRATE OLD DATABASE
+        # -----------------------------------------------------
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS username VARCHAR(80)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120)
+            DEFAULT ''
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS phone VARCHAR(30)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS password_hash TEXT
+        """)
+
+        # Old installations may have this column.
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS password TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS withdraw_password_hash TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS referral_code VARCHAR(100)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS referred_by VARCHAR(100)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS created_at
+            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        """)
+
+        # -----------------------------------------------------
+        # COPY OLD PASSWORD COLUMN INTO password_hash
+        # -----------------------------------------------------
+
+        cur.execute("""
+            UPDATE users
+            SET password_hash = password
+            WHERE password_hash IS NULL
+              AND password IS NOT NULL
         """)
 
         # =====================================================
@@ -81,6 +143,30 @@ def init_db():
                 referral_account NUMERIC(14,2) DEFAULT 0,
                 withdraw_account NUMERIC(14,2) DEFAULT 0
             )
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS deposit_account
+            NUMERIC(14,2) DEFAULT 5.00
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS income_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS referral_account
+            NUMERIC(14,2) DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE accounts
+            ADD COLUMN IF NOT EXISTS withdraw_account
+            NUMERIC(14,2) DEFAULT 0
         """)
 
         # =====================================================
@@ -105,6 +191,22 @@ def init_db():
             )
         """)
 
+        cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS started_at
+            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        """)
+
+        cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS last_claim_at TIMESTAMP
+        """)
+
+        cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE
+        """)
+
         # =====================================================
         # TRANSACTIONS
         # =====================================================
@@ -115,7 +217,7 @@ def init_db():
                 user_id INTEGER
                     REFERENCES users(id) ON DELETE CASCADE,
 
-                transaction_type VARCHAR(30) NOT NULL,
+                transaction_type VARCHAR(50) NOT NULL,
                 amount NUMERIC(14,2) NOT NULL,
                 status VARCHAR(30) NOT NULL,
                 reference VARCHAR(150),
@@ -197,84 +299,26 @@ def init_db():
             )
         """)
 
-        # =====================================================
-        # OLD DATABASE COMPATIBILITY
-        # =====================================================
-
-        # USERS
-        cur.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120)
-            DEFAULT ''
-        """)
-
-        cur.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS withdraw_password_hash TEXT
-        """)
-
-        cur.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS referral_code VARCHAR(40)
-        """)
-
-        cur.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS referred_by VARCHAR(40)
-        """)
-
-        cur.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS created_at
-            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        """)
-
-        # ACCOUNTS
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS deposit_account
-            NUMERIC(14,2) DEFAULT 0
-        """)
-
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS income_account
-            NUMERIC(14,2) DEFAULT 0
-        """)
-
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS referral_account
-            NUMERIC(14,2) DEFAULT 0
-        """)
-
-        cur.execute("""
-            ALTER TABLE accounts
-            ADD COLUMN IF NOT EXISTS withdraw_account
-            NUMERIC(14,2) DEFAULT 0
-        """)
-
-        # ADMINS
+        # Old admin databases may have "password".
         cur.execute("""
             ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS password_hash TEXT
         """)
 
-        # Older versions may have a "password" column.
         cur.execute("""
             ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS password TEXT
         """)
 
-        # The old password column must not block creation
-        # of the new admin record.
+        # Prevent old NOT NULL password column from
+        # breaking creation of the new admin.
         cur.execute("""
             ALTER TABLE admins
             ALTER COLUMN password DROP NOT NULL
         """)
 
         # =====================================================
-        # GENERATE REFERRAL CODES FOR OLD USERS
+        # GENERATE REFERRAL CODES
         # =====================================================
         cur.execute("""
             SELECT id
@@ -286,26 +330,22 @@ def init_db():
         old_users = cur.fetchall()
 
         for row in old_users:
-
             user_id = row[0]
 
             referral_code = (
                 f"ZEN{user_id}"
                 f"{datetime.utcnow().strftime('%y%m%d%H%M%S')}"
-                f"{os.urandom(2).hex()}"
+                f"{os.urandom(3).hex()}"
             )
 
             cur.execute("""
                 UPDATE users
                 SET referral_code=%s
                 WHERE id=%s
-            """, (
-                referral_code,
-                user_id
-            ))
+            """, (referral_code, user_id))
 
         # =====================================================
-        # ENSURE ALL USERS HAVE ACCOUNTS
+        # ENSURE USERS HAVE ACCOUNTS
         # =====================================================
         cur.execute("""
             INSERT INTO accounts (
@@ -340,9 +380,7 @@ def init_db():
             "Williams12"
         )
 
-        admin_hash = generate_password_hash(
-            admin_password
-        )
+        admin_hash = generate_password_hash(admin_password)
 
         cur.execute("""
             INSERT INTO admins (
@@ -379,33 +417,26 @@ def init_db():
                 SELECT EXISTS (
                     SELECT 1
                     FROM information_schema.tables
-                    WHERE table_schema = 'public'
-                    AND table_name = %s
+                    WHERE table_schema='public'
+                    AND table_name=%s
                 )
             """, (table_name,))
 
-            exists = cur.fetchone()[0]
-
-            if not exists:
+            if not cur.fetchone()[0]:
                 raise RuntimeError(
-                    f"Required table '{table_name}' "
-                    f"was not created."
+                    f"Required table '{table_name}' was not created."
                 )
 
-        # =====================================================
-        # COMMIT
-        # =====================================================
         conn.commit()
 
         print("======================================")
         print("DATABASE INITIALIZATION SUCCESS")
         print("======================================")
-        print("All required tables are ready.")
+        print("All tables and migrations are ready.")
         print("Admin username:", admin_username)
         print("======================================")
 
     except Exception as exc:
-
         conn.rollback()
 
         print("======================================")
@@ -417,7 +448,6 @@ def init_db():
         raise
 
     finally:
-
         cur.close()
         conn.close()
 
