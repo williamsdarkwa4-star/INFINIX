@@ -375,10 +375,10 @@ def init_db():
     "Williams"
            )
 
-  ADMIN_PASSWORD = os.environ.get(
-           "ADMIN_PASSWORD",
-            "Williams12"
-           )
+    admin_password = os.environ.get(
+    "ADMIN_PASSWORD",
+    "Williams12"
+)
         admin_hash = generate_password_hash(admin_password)
 
         cur.execute("""
