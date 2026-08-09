@@ -1,6 +1,14 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Account - Zenith Capital</title><style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register - Zenith Capital</title>
+
+<style>
 
 *{
     margin:0;
@@ -10,150 +18,451 @@
 }
 
 body{
-    background:linear-gradient(135deg,#0F172A,#2563EB);
     min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    padding:25px 15px;
     display:flex;
-    justify-content:center;
     align-items:center;
-    padding:20px;
+    justify-content:center;
 }
 
-.card{
+.register-container{
     width:100%;
-    max-width:400px;
-    background:white;
-    padding:30px;
-    border-radius:25px;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    max-width:430px;
 }
 
 .logo{
     text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+.logo-icon{
+    width:65px;
+    height:65px;
+    margin:0 auto 12px;
+    border-radius:18px;
+    background:rgba(255,255,255,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-size:30px;
-    font-weight:bold;
-    color:#2563EB;
-    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,.2);
 }
 
-h2{
+.logo h1{
+    font-size:28px;
+    margin-bottom:6px;
+}
+
+.logo p{
+    font-size:14px;
+    color:#dbeafe;
+}
+
+.card{
+    background:white;
+    padding:28px;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+
+.card-header{
     text-align:center;
-    margin-bottom:10px;
-    color:#0F172A;
+    margin-bottom:22px;
 }
 
-.note{
-    font-size:13px;
+.card-header h2{
+    color:#0f172a;
+    margin-bottom:7px;
+}
+
+.card-header p{
     color:#64748b;
-    margin-bottom:20px;
+    font-size:14px;
+}
+
+/* Flash messages */
+
+.message{
+    padding:13px 15px;
+    border-radius:13px;
+    margin-bottom:16px;
+    font-size:14px;
+    line-height:1.4;
     text-align:center;
+}
+
+.success{
+    background:#dcfce7;
+    color:#15803d;
+    border:1px solid #bbf7d0;
+}
+
+.error{
+    background:#fee2e2;
+    color:#b91c1c;
+    border:1px solid #fecaca;
+}
+
+/* Referral message */
+
+.referral-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1e40af;
+    padding:13px;
+    border-radius:14px;
+    margin-bottom:18px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.referral-box strong{
+    color:#2563eb;
+}
+
+/* Form */
+
+.form-group{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    color:#334155;
+    font-size:14px;
+    font-weight:bold;
 }
 
 input{
     width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border:1px solid #ddd;
-    border-radius:12px;
+    padding:14px 15px;
+    border:1px solid #dbe1e8;
+    border-radius:13px;
     outline:none;
+    background:#f8fafc;
+    color:#0f172a;
     font-size:15px;
+    transition:.2s;
 }
 
 input:focus{
-    border-color:#2563EB;
+    border-color:#2563eb;
+    background:white;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
 }
 
-button{
+input::placeholder{
+    color:#94a3b8;
+}
+
+.referral-input{
+    background:#eff6ff;
+    border-color:#bfdbfe;
+}
+
+.password-note{
+    color:#64748b;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.register-btn{
     width:100%;
-    padding:15px;
     border:none;
-    border-radius:12px;
-    background:#2563EB;
+    padding:15px;
+    margin-top:5px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
     color:white;
     font-size:16px;
     font-weight:bold;
     cursor:pointer;
+    box-shadow:0 7px 15px rgba(37,99,235,.25);
 }
 
-button:hover{
-    background:#1D4ED8;
+.register-btn:hover{
+    background:linear-gradient(135deg,#1d4ed8,#1e40af);
 }
 
-p{
+.login-link{
     text-align:center;
     margin-top:20px;
+    color:#64748b;
+    font-size:14px;
 }
 
-a{
-    color:#2563EB;
-    text-decoration:none;
+.login-link a{
+    color:#2563eb;
     font-weight:bold;
+    text-decoration:none;
 }
 
-</style></head><body><div class="card"><div class="logo">
-    ZC
+.security{
+    margin-top:18px;
+    padding-top:15px;
+    border-top:1px solid #e2e8f0;
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <!-- Logo -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            Z
+        </div>
+
+        <h1>Zenith Capital</h1>
+
+        <p>Welcome to Zenith Capital</p>
+
+    </div>
+
+
+    <!-- Registration Card -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>Create Account</h2>
+
+            <p>Register your account to continue</p>
+
+        </div>
+
+
+        <!-- Flash Messages -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="message {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- Referral Information -->
+
+        {% if invite_code %}
+
+            <div class="referral-box">
+
+                🎁 Referral code detected:
+
+                <strong>{{ invite_code }}</strong>
+
+                <br>
+
+                Your account will be linked to this referral code.
+
+            </div>
+
+        {% else %}
+
+            <div class="referral-box">
+
+                💡 <strong>Referral code is optional.</strong>
+
+                You can register without entering a referral code.
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- Registration Form -->
+
+        <form method="POST"
+              action="{{ url_for('register') }}">
+
+            <!-- Full Name -->
+
+            <div class="form-group">
+
+                <label for="fullname">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Username -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Login Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a login password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <div class="password-note">
+                    Use a password you can remember.
+                </div>
+
+            </div>
+
+
+            <!-- Withdrawal Password -->
+
+            <div class="form-group">
+
+                <label for="withdrawal_password">
+                    Withdrawal Password
+                </label>
+
+                <input
+                    type="password"
+                    id="withdrawal_password"
+                    name="withdrawal_password"
+                    placeholder="Create withdrawal password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <div class="password-note">
+                    This password is used to authorize withdrawal requests.
+                </div>
+
+            </div>
+
+
+            <!-- Referral Code -->
+
+            <div class="form-group">
+
+                <label for="referred_by">
+                    Referral Code
+                    <span style="font-weight:normal;color:#94a3b8;">
+                        (Optional)
+                    </span>
+                </label>
+
+                <input
+                    class="referral-input"
+                    type="text"
+                    id="referred_by"
+                    name="referred_by"
+                    value="{{ invite_code or '' }}"
+                    placeholder="Enter referral code"
+                >
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="register-btn">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <!-- Login -->
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="{{ url_for('login') }}">
+                Login
+            </a>
+
+        </div>
+
+
+        <!-- Security -->
+
+        <div class="security">
+
+            🔒 Your account information is protected.
+
+        </div>
+
+    </div>
+
 </div>
 
-<h2>Create Account</h2>
+</body>
 
-<div class="note">
-    Create your Zenith Capital account
-</div>
-
-<form method="POST">
-
-    <input
-        type="text"
-        name="fullname"
-        placeholder="Full Name"
-        required
-    >
-
-    <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        required
-    >
-
-    <input
-        type="tel"
-        name="phone"
-        placeholder="Phone Number"
-        required
-    >
-
-    <input
-        type="password"
-        name="password"
-        placeholder="Login Password"
-        required
-    >
-
-    <input
-        type="password"
-        name="withdraw_password"
-        placeholder="Withdrawal Password"
-        required
-    >
-
-    <input
-    type="text"
-    name="referred_by"
-    placeholder="Referral Code"
-    value="{{ invite_code or '' }}"
-    {% if invite_code %}readonly{% endif %}
->
-
-    <button type="submit">
-        Register
-    </button>
-
-</form>
-
-<p>
-    Already have an account?
-    <a href="/login">Login</a>
-</p>
-
-</div></body>
 </html>
