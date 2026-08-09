@@ -713,11 +713,14 @@ def profile():
         referral_balance=account["referral_account"],
     )
 
+# ---------------- ADMIN LOGIN ----------------
 
-# ---------------- ADMIN ----------------
+ADMIN_USERNAME = "Williams"
+ADMIN_PASSWORD = "Williams12"
+
 
 def admin_required():
-    return session.get("admin_id") is not None
+    return session.get("admin_logged_in") is True
 
 
 @app.route("/admin/login", methods=["GET", "POST"])
@@ -726,15 +729,16 @@ def admin_login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        admin = query_one(
-            "SELECT * FROM admins WHERE username=%s",
-            (username,)
-        )
+        print("ADMIN LOGIN ATTEMPT")
+        print("Username:", repr(username))
+        print("Password length:", len(password))
 
-        if admin and check_password_hash(admin["password_hash"], password):
-            session["admin_id"] = admin["id"]
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session["admin_logged_in"] = True
+            print("ADMIN LOGIN SUCCESS")
             return redirect(url_for("admin_dashboard"))
 
+        print("ADMIN LOGIN FAILED")
         flash("Invalid administrator credentials.", "error")
 
     return render_template("admin_login.html")
@@ -742,7 +746,7 @@ def admin_login():
 
 @app.route("/admin/logout")
 def admin_logout():
-    session.pop("admin_id", None)
+    session.pop("admin_logged_in", None)
     return redirect(url_for("admin_login"))
 
 
