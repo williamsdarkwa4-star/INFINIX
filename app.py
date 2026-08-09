@@ -546,8 +546,8 @@ def register():
         username = request.form.get("username", "").strip()
         phone = request.form.get("phone", "").strip()
         password = request.form.get("password", "")
-        withdrawal_password = request.form.get(
-            "withdrawal_password", ""
+        withdraw_password = request.form.get(
+            "withdraw_password", ""
         )
 
         # -------------------------
@@ -564,7 +564,7 @@ def register():
                 invite_code=invite_code
             )
 
-        if not password or not withdrawal_password:
+        if not password or not withdraw_password:
             flash(
                 "Please enter both passwords.",
                 "error"
@@ -645,7 +645,7 @@ def register():
                 fullname,
                 phone,
                 generate_password_hash(password),
-                generate_password_hash(withdrawal_password),
+                generate_password_hash(withdraw_password),
                 referral_code,
                 referred_user["referral_code"]
                 if referred_user
@@ -1006,9 +1006,25 @@ def my_plan():
 
 @app.route("/withdraw")
 def withdraw():
-    if not current_user():
+    user = current_user()
+
+    if not user:
         return redirect(url_for("login"))
-    return render_template("withdraw.html")
+
+    accounts = query_all(
+        """
+        SELECT *
+        FROM withdrawal_accounts
+        WHERE user_id=%s
+        ORDER BY id DESC
+        """,
+        (user["id"],)
+    )
+
+    return render_template(
+        "withdraw.html",
+        accounts=accounts
+    )
 
 
 @app.route("/bind_account", methods=["GET", "POST"])
