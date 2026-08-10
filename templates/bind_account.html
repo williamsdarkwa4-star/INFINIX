@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Bind Account - Zenith Capital</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<style>
+<!DOCTYPE html><html>
+<head><title>Bind Account - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
 
 *{
     margin:0;
@@ -16,108 +8,97 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
     background:#f4f7fb;
-    padding-bottom:80px;
+    padding-bottom:90px;
 }
-
-
-/* Header */
 
 .header{
-
     background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
-    padding:30px;
+    padding:30px 20px;
     text-align:center;
     border-radius:0 0 30px 30px;
-
 }
 
+.header h1{
+    font-size:25px;
+}
 
+.header p{
+    margin-top:8px;
+    color:#dbeafe;
+}
 
 .container{
     padding:20px;
+    max-width:600px;
+    margin:auto;
 }
 
-
-
-/* Card */
-
 .card{
-
     background:white;
     padding:22px;
     border-radius:20px;
     margin-bottom:18px;
     box-shadow:0 5px 15px rgba(0,0,0,.08);
-
 }
-
 
 .card h2{
-
     color:#2563eb;
-    margin-bottom:15px;
-
+    margin-bottom:16px;
+    font-size:20px;
 }
 
-
-
-/* Account */
-
 .account{
-
     background:#f8fafc;
-    padding:15px;
+    padding:16px;
     border-radius:15px;
     margin-bottom:12px;
     border:1px solid #e2e8f0;
-
 }
 
-
-.account input{
-
-    margin-right:10px;
-
+.account-row{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
 }
 
+.account input[type="radio"]{
+    width:20px;
+    height:20px;
+    margin-top:3px;
+}
 
 .account strong{
-
     color:#0f172a;
-
+    font-size:16px;
 }
-
-
 
 .info{
-
     color:#475569;
-    margin-top:8px;
-
+    margin-top:7px;
+    line-height:1.5;
+    font-size:14px;
 }
 
-
-
-/* Form */
-
-input{
-
+input,
+select{
     width:100%;
     padding:15px;
-    margin:10px 0;
+    margin:8px 0;
     border-radius:15px;
-    border:1px solid #ddd;
-
+    border:1px solid #dbe1e8;
+    outline:none;
+    font-size:15px;
 }
 
-
+input:focus,
+select:focus{
+    border-color:#2563eb;
+}
 
 button{
-
     width:100%;
     padding:15px;
     border:none;
@@ -125,17 +106,57 @@ button{
     background:#2563eb;
     color:white;
     font-weight:bold;
+    font-size:15px;
     margin-top:10px;
-
+    cursor:pointer;
 }
 
+.notice{
+    background:#eff6ff;
+    color:#1e40af;
+    padding:14px;
+    border-radius:15px;
+    margin-bottom:18px;
+    line-height:1.5;
+    font-size:14px;
+}
 
+.empty{
+    text-align:center;
+    color:#64748b;
+    padding:15px 5px;
+}
 
+.flash{
+    padding:14px;
+    border-radius:14px;
+    margin-bottom:15px;
+    font-weight:bold;
+}
 
-/* Bottom Navigation */
+.flash.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.flash.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    background:#e2e8f0;
+    color:#0f172a;
+    padding:14px;
+    border-radius:15px;
+    margin-bottom:18px;
+    font-weight:bold;
+}
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
@@ -145,199 +166,182 @@ button{
     justify-content:space-around;
     padding:15px;
     box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
 }
 
-
-
 .bottom-nav a{
-
     text-decoration:none;
     color:#2563eb;
     text-align:center;
     font-weight:bold;
-
+    font-size:13px;
 }
 
+</style></head><body><div class="header"><h1>Bind Account</h1>
 
-</style>
+<p>Manage your withdrawal account</p>
 
-</head>
-
-
-<body>
-
-
-
-<div class="header">
-
-<h1>Bind Account</h1>
-
-<p>Select withdrawal account</p>
-
-</div>
-
-
-
-
-<div class="container">
-
-
-
-<div class="card">
-
-
-<h2>Your Accounts</h2>
-
-
-
-<div class="account">
-
-<input type="radio" name="account">
-
-<strong>MTN Mobile Money</strong>
-
-<div class="info">
-Name: William Darkwa
-</div>
-
-<div class="info">
-Number: 024 XXX XXXX
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="account">
-
-<input type="radio" name="account">
-
-<strong>Telecel Cash</strong>
-
-
-<div class="info">
-Name: William Darkwa
-</div>
-
-
-<div class="info">
-Number: 020 XXX XXXX
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>Add New Account</h2>
-
-
-
-<input 
-type="text"
-placeholder="Account Name"
->
-
-
-
-<input 
-type="number"
-placeholder="Mobile Money Number"
->
-
-
-
-
-<button>
-
-Save Account
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>Withdrawal Password</h2>
-
-
-<input 
-type="password"
-placeholder="Enter withdrawal password"
->
-
-
-
-<button>
-
-Confirm Withdrawal
-
-</button>
-
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard">
-🏠<br>
-Home
+</div><div class="container"><a href="{{ url_for('withdraw') }}" class="back">
+    ← Back to Withdrawal
 </a>
 
 
-<a href="/my_plan">
-💼<br>
-My Plan
-</a>
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% for category, message in messages %}
+
+        <div class="flash {{ category }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+{% endwith %}
 
 
-<a href="/profile">
-👤<br>
-Profile
-</a>
+<div class="notice">
+    🔐 Add your own withdrawal account and make sure the account
+    name and mobile money number are correct before saving.
+</div>
 
+
+<!-- SAVED ACCOUNTS -->
+
+<div class="card">
+
+    <h2>🏦 Your Saved Accounts</h2>
+
+    {% if accounts %}
+
+        {% for account in accounts %}
+
+        <div class="account">
+
+            <div class="account-row">
+
+                <input
+                    type="radio"
+                    name="selected_account"
+                    value="{{ account.id }}"
+                >
+
+                <div>
+
+                    <strong>
+                        {{ account.network }}
+                    </strong>
+
+                    <div class="info">
+                        Account Name:
+                        {{ account.account_name }}
+                    </div>
+
+                    <div class="info">
+                        Number:
+                        {{ account.phone }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            No withdrawal account has been added yet.
+
+        </div>
+
+    {% endif %}
 
 </div>
 
 
+<!-- ADD ACCOUNT -->
+
+<div class="card">
+
+    <h2>➕ Add New Account</h2>
+
+    <form method="POST"
+          action="{{ url_for('bind_account') }}">
+
+        <input
+            type="text"
+            name="account_name"
+            placeholder="Account holder name"
+            required
+        >
+
+        <input
+            type="tel"
+            name="phone"
+            placeholder="Mobile Money number"
+            required
+        >
+
+        <select name="network" required>
+
+            <option value="">
+                Select Mobile Money Network
+            </option>
+
+            <option value="MTN Mobile Money">
+                MTN Mobile Money
+            </option>
+
+            <option value="Telecel Cash">
+                Telecel Cash
+            </option>
+
+            <option value="AirtelTigo Money">
+                AirtelTigo Money
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Save Withdrawal Account
+        </button>
+
+    </form>
+
+</div>
 
 
-</body>
+<!-- INFORMATION -->
+
+<div class="card">
+
+    <h2>ℹ️ Account Information</h2>
+
+    <div class="info">
+
+        Saved withdrawal accounts are linked to your user account.
+        You can select one when submitting a withdrawal request.
+
+    </div>
+
+</div>
+
+</div><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
+    🏠<br>
+    Home
+</a>
+
+<a href="{{ url_for('my_plan') }}">
+    💼<br>
+    My Plan
+</a>
+
+<a href="{{ url_for('profile') }}">
+    👤<br>
+    Profile
+</a>
+
+</div></body>
 </html>
