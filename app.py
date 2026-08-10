@@ -662,15 +662,24 @@ def my_plan():
 @app.route("/withdraw")
 def withdraw():
     user = current_user()
+
     if not user:
         return redirect(url_for("login"))
 
+    account = current_account(user["id"])
+
     accounts = query_all("""
-        SELECT * FROM withdrawal_accounts
-        WHERE user_id=%s ORDER BY id DESC
+        SELECT *
+        FROM withdrawal_accounts
+        WHERE user_id=%s
+        ORDER BY id DESC
     """, (user["id"],))
 
-    return render_template("withdraw.html", accounts=accounts)
+    return render_template(
+        "withdraw.html",
+        account=account,
+        accounts=accounts
+    )
 
 
 @app.route("/bind_account", methods=["GET", "POST"])
