@@ -1,216 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Rice Profile Dashboard</title>
-    <!-- Tailwind CSS Engine -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Lucide Icon Toolkit -->
-    <script src="https://unpkg.com"></script>
-    
-    <style>
-        /* Base system typography reset */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f3f4f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        /* Responsive Mobile Sandbox Container */
-        .phone-container {
-            width: 100%;
-            max-width: 440px;
-            background-color: #f8fafc;
-            min-height: 100vh;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-col: column;
-            flex-direction: column;
-            position: relative;
-            padding-bottom: 80px;
-            user-select: none;
-        }
-
-        /* Unified Dark Metric Balance Card */
-        .metric-card-bg {
-            background-color: #10144c;
-            border-radius: 0.75rem;
-            padding-top: 1.25rem;
-            padding-bottom: 1.25rem;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            text-align: center;
-            color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Navigation list row interactions */
-        .list-item-action {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #ffffff;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            padding-top: 0.875rem;
-            padding-bottom: 0.875rem;
-            border-radius: 0.75rem;
-            border: 1px solid rgba(241, 245, 249, 0.5);
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .list-item-action:active {
-            background-color: #f8fafc;
-        }
-
-        /* Persistent Navigation Tab Activation Bar */
-        .active-indicator {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #10144c;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Main Viewport Box Mockup -->
-    <div class="phone-container">
-        
-        <!-- App Top Shell Navigation Utilities -->
-        <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100">
-            <div class="flex items-center space-x-4">
-                <i data-lucide="x" class="w-6 h-6 text-slate-700 cursor-pointer"></i>
-                <i data-lucide="chevron-down" class="w-6 h-6 text-slate-700 cursor-pointer"></i>
-            </div>
-            <div class="text-center">
-                <span class="text-sm font-semibold text-slate-800 block leading-none">My</span>
-                <span class="text-[10px] text-slate-400 block mt-0.5">rice-portal.com</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <i data-lucide="share-2" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
-                <i data-lucide="share" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
-                <i data-lucide="more-vertical" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
-            </div>
-        </div>
-
-        
-        <div class="px-5 pt-6 pb-4 bg-gradient-to-b from-blue-50/40 to-transparent">
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <div class="w-20 h-20 bg-white rounded-full border-2 border-indigo-100 p-1 flex items-center justify-center shadow-xs overflow-hidden">
-                        <div class="text-center">
-                            <span class="text-amber-600 font-extrabold text-xs tracking-tighter block">RICE</span>
-                            <span class="text-emerald-600 font-bold text-[10px] tracking-widest block -mt-1">CORAL</span>
-                        </div>
-                    </div>
-                    <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-indigo-500 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-xs tracking-wide">VIP0</span>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-semibold text-slate-700 tracking-wide">233246551897</h2>
-                    <div class="mt-1 inline-flex items-center bg-indigo-100/80 text-indigo-600 text-[11px] font-medium px-2 py-0.5 rounded">
-                        ID 10243
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Metrics Matrix Section Area -->
-        <div class="px-4 mb-4">
-            <div class="metric-card-bg">
-                <div class="border-r border-slate-700/40">
-                    <div class="text-xl font-bold">10</div>
-                    <div class="text-[11px] text-slate-300 font-light mt-1">Balance</div>
-                </div>
-                <div class="border-r border-slate-700/40">
-                    <div class="text-xl font-bold">120</div>
-                    <div class="text-[11px] text-slate-300 font-light mt-1">Deposit</div>
-                </div>
-                <div>
-                    <div class="text-xl font-bold">10</div>
-                    <div class="text-[11px] text-slate-300 font-light mt-1">Total income</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Vertical Dynamic Action Link Options List -->
-        <div class="px-4 space-y-2 flex-grow">
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="message-square" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Messages</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="user" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Personal information</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="file-text" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Income details</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="arrow-down-left" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Deposit details</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="arrow-up-right" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Withdrawal details</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="info" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">About us</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-
-            <div class="list-item-action">
-                <div class="flex items-center space-x-3.5">
-                    <i data-lucide="download" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] text-slate-700">Download</span>
-                </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-            </div>
-        </div>
-
-        <!-- Sticky Layout Application Bottom Tab Navigation Menu -->
-        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 grid grid-cols-5 py-2 px-1 text-center">
-            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                <span class="text-[10px] mt-1 font-medium">Home</span>
-            </div>
-            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
-                <i data-lucide="wallet" class="w-5 h-5"></i>
-                <span class="text-[10px] mt-1 font-medium">Income</span>
-            </div>
-            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
-                <i data-lucide="users" class="w-5 h-5"></i>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile</title>
+<script src="https://jsdelivr.net"></script><script src="https://unpkg.com"></script>
+<style>body{-webkit-tap-highlight-color:transparent;font-family:system-ui,-apple-system,sans-serif;}
+.row{display:flex;align-items:center;justify-content:between;background:#fff;padding:14px 16px;border-radius:12px;border:1px solid #f1f5f9;cursor:pointer;}
+.row:active{background:#f8fafc;}</style></head><body class="bg-gray-100 flex justify-center min-h-screen">
+<div class="w-full max-w-[440px] bg-white min-h-screen flex flex-col relative pb-20 shadow-lg select-none">
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div class="flex space-x-4"><i data-lucide="x" class="w-5 h-5"></i><i data-lucide="chevron-down" class="w-5 h-5"></i></div>
+        <div class="text-center text-xs text-slate-800"><b class="block text-sm">My</b>paint-col08.com</div>
+        <div class="flex space-x-4"><i data-lucide="share-2" class="w-5 h-5"></i><i data-lucide="share" class="w-5 h-5"></i><i data-lucide="more-vertical" class="w-5 h-5"></i></div>
+    </div>
+    <!-- Profile -->
+    <div class="px-5 py-6 bg-gradient-to-b from-blue-50/50 to-transparent flex items-center space-x-4">
+        <div class="relative"><div class="w-20 h-20 bg-white rounded-full border border-slate-100 flex items-center justify-center shadow-sm">
+            <div class="text-center font-black"><span class="text-[#e0533c] text-sm block">Coral</span><span class="text-emerald-600 text-[9px] tracking-widest block">RICE</span></div>
+        </div><span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#7084d4] text-white text-[9px] font-bold px-3 py-0.5 rounded-full">VIP0</span></div>
+        <div><h2 class="text-2xl font-bold text-slate-700">233246551897</h2><span class="bg-indigo-50 text-[#4c64bc] text-xs font-semibold px-2 py-0.5 rounded">ID 10243</span></div>
+    </div>
+    <!-- Dark Counter Box -->
+    <div class="px-4 mb-4"><div class="bg-[#10144c] rounded-xl py-4 grid grid-cols-3 text-center text-white shadow">
+        <div class="border-r border-slate-600/40"><b class="text-xl">10</b><p class="text-[11px] text-slate-300">Balance</p></div>
+        <div class="border-r border-slate-600/40"><b class="text-xl">120</b><p class="text-[11px] text-slate-300">Deposit</p></div>
+        <div><b class="text-xl">10</b><p class="text-[11px] text-slate-300">Total income</p></div>
+    </div></div>
+    <!-- Options Rows -->
+    <div class="px-4 space-y-2 flex-grow bg-slate-50/50 pt-2 text-slate-700 text-[15px]">
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="message-square-text" class="w-5 h-5"></i><span>Messages</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="user-round" class="w-5 h-5"></i><span>Personal information</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="text-quote" class="w-5 h-5"></i><span>Income details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="package-plus" class="w-5 h-5"></i><span>Deposit details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="package-minus" class="w-5 h-5"></i><span>Withdrawal details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="info" class="w-5 h-5"></i><span>About us</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="download" class="w-5 h-5"></i><span>Download</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+    </div>
+    <!-- Navigation Bottom Bar -->
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 grid grid-cols-5 py-2 text-center text-[10px] text-slate-400">
+        <div class="cursor-pointer"><i data-lucide="home" class="w-5 h-5 mx-auto"></i><span>Home</span></div>
+        <div class="cursor-pointer"><i data-lucide="trending-up" class="w-5 h-5 mx-auto"></i><span>Income</span></div>
+        <div class="cursor-pointer"><i data-lucide="users-2" class="w-5 h-5 mx-auto"></i><span>Team</span></div>
+        <div class="cursor-pointer"><i data-lucide="share-2" class="w-5 h-5 mx-auto"></i><span>Share</span></div>
+        <div class="cursor-pointer text-[#10144c] font-bold relative"><i data-lucide="user" class="w-5 h-5 mx-auto"></i><span>My</span><div class="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-[#10144c]"></div></div>
+    </div>
+</div>
+<script>lucide.createIcons();</script></body></html>
