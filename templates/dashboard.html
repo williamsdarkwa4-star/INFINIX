@@ -1,178 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rice Premium Dashboard</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background: #f4f6fa; display: flex; justify-content: center; }
-        
-        .phone { 
-            width: 100%; 
-            max-width: 450px; 
-            background: #fbfcff; 
-            padding-bottom: 80px; 
-            box-shadow: 0 0 15px rgba(0,0,0,0.05); 
-            position: relative;
-        }
-        
-        .header { background: #fff; padding: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        
-        /* Balance Bar Component */
-        .balance-bar {
-            background: #fff;
-            padding: 10px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #edf1f7;
-            font-size: 0.9rem;
-        }
-        .balance-amount { font-weight: bold; color: #10cf74; }
 
-        .banner { height: 160px; background: linear-gradient(135deg, #0e2954, #1c4b8f); color: white; text-align: center; padding: 35px 20px; }
-        .banner h2 { font-size: 1.4rem; margin-bottom: 5px; }
-        .banner p { font-size: 0.8rem; opacity: 0.8; }
-        
-        .actions { display: grid; grid-template-columns: repeat(4, 1fr); padding: 15px; background: white; margin-bottom: 10px; text-align: center; font-size: 0.8rem; }
-        .circle { width: 45px; height: 45px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 1.2rem; }
-        
-        .card { background: white; margin: 12px; padding: 15px; border-radius: 12px; border: 1px solid #edf1f7; }
-        .main-box { display: flex; justify-content: space-between; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 65%; }
-        .box { background: #f8fafd; padding: 8px; border-radius: 6px; text-align: center; }
-        .lbl { font-size: 0.7rem; color: #8c96a3; margin-bottom: 3px; }
-        .val { font-size: 0.9rem; font-weight: bold; color: #0e2954; }
-        
-        /* Product Preview Frame for Custom Imagery */
-        .preview { 
-            width: 32%; 
-            height: 110px; 
-            border-radius: 8px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-end; 
-            align-items: center; 
-            padding-bottom: 8px; 
-            position: relative; 
-            background-size: cover;
-            background-position: center;
-            overflow: hidden;
-        }
-        .preview::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);
-            z-index: 1;
-        }
-        
-        .tag { position: absolute; top: 0; right: 0; background: rgba(0,0,0,0.7); color: white; font-size: 0.6rem; padding: 2px 6px; border-top-right-radius: 8px; border-bottom-left-radius: 6px; z-index: 2; }
-        .badge { background: #0e2954; color: #ffd700; font-size: 0.7rem; font-weight: bold; padding: 3px 10px; border-radius: 10px; position: relative; z-index: 2; border: 1px solid #ffd700; }
-        
-        .btn { width: 100%; border: none; padding: 11px; border-radius: 20px; font-weight: bold; margin-top: 12px; cursor: pointer; transition: background 0.2s; }
-        .buy { background: #0c1c33; color: white; }
-        .buy:hover { background: #16325c; }
-        .soon { background: #9da4b0; color: white; cursor: not-allowed; }
-        
-        .nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; height: 60px; background: white; display: flex; justify-content: space-around; border-top: 1px solid #eee; align-items: center; font-size: 0.75rem; color: #8fa0b5; z-index: 10; }
-        .nav-item { text-align: center; cursor: pointer; width: 20%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .nav-item.active { color: #0e2954; font-weight: bold; background: #f8fafc; }
-    </style>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zenith Capital Dashboard</title>
+<style> 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+} 
+
+body {
+    background-color: #f4f6fa;
+    padding-bottom: 90px;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   MOBILE CONTROLLER SHELL (Forces desktop viewing into a mobile layout)
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 450px;
+    background-color: #fbfcff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    margin: 0 auto;
+    position: relative;
+}
+
+/* =========================
+   TOP BANNER (The Blues / Golden Grain)
+   ========================= */ 
+.top-banner {
+    height: 165px;
+    background: linear-gradient(135deg, #0e2954, #1c4b8f);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+} 
+
+.top-banner h1 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+} 
+
+.top-banner p {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Simulated Slider Bar Indicators */
+.top-banner::after {
+    content: '';
+    position: absolute;
+    bottom: 12px;
+    width: 45px;
+    height: 4px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+    box-shadow: -25px 0 0 0 rgba(255,255,255,1), 25px 0 0 0 rgba(255,255,255,0.4);
+}
+
+/* Hide old unused components */
+.top-banner img, .overlay {
+    display: none;
+}
+
+/* =========================
+   ACTION BUTTONS (Deposit, Withdraw, Service, Channel Grid)
+   ========================= */ 
+.action {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 18px 15px;
+    background: #ffffff;
+    border-radius: 0 0 15px 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
+} 
+
+.action a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #333333;
+    background: transparent !important; /* Overrides old flex layout block backgrounds */
+    padding: 0;
+    text-decoration: none;
+} 
+
+/* Icon Circle Wrappers inside links to hold the visual elements */
+.action a::before {
+    content: '';
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 1.25rem;
+}
+
+/* Maps styles back to your exact deposit/withdraw classes */
+.deposit::before { content: '📋'; background-color: #10cf74; }
+.withdraw::before { content: '💳'; background-color: #ff9f43; }
+
+/* Custom extra anchors if used */
+.service::before { content: '🎧'; background-color: #3884ff; }
+.channel::before { content: '🚀'; background-color: #705ec8; }
+
+/* =========================
+   PLAN CARD (Layout match splitter with left statistics and right image)
+   ========================= */ 
+.plan {
+    background: #ffffff;
+    margin: 12px 15px;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #edf1f7;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+} 
+
+/* Flex row setup containing left numbers and right photo thumbnail */
+.plan-split-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Grid layout for left text information blocks */
+.plan-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 63%;
+}
+
+/* Box wrapper around each specific statistic element label/value */
+.metric-item-block {
+    background-color: #f8fafd;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.plan-metric-lbl {
+    font-size: 0.72rem;
+    color: #8c96a3;
+    margin-bottom: 4px;
+}
+
+.plan-metric-val {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #0e2954;
+}
+
+/* Right Side Image View Frame */
+.plan-image-frame {
+    width: 33%;
+    height: 115px;
+    background-color: #f3f4f7;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+/* Upper instance allocation stamp code element */
+.plan-instance-tag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(60, 65, 75, 0.85);
+    color: #ffffff;
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    z-index: 2;
+}
+
+/* Bottom VIP text box pill styling on the picture container */
+.plan h3 {
+    background: linear-gradient(90deg, #0e2954, #1c4b8f);
+    color: #ffd700;
+    font-size: 0.72rem;
+    font-weight: bold;
+    padding: 4px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 85%;
+    z-index: 2;
+    border: 0.5px solid #ffd700;
+    margin-bottom: 0; /* Clear original margin rules */
+}
+
+/* =========================
+   INVEST BUTTON
+   ========================= */ 
+.invest-btn { 
+    width: 100%;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-top: 14px;
+    cursor: pointer;
+    background: #0c1c33; 
+    color: white; 
+    text-align: center; 
+} 
+
+.invest-btn:hover {
+    background: #142a4a;
+}
+
+/* =========================
+   LOCKED PLANS
+   ========================= */ 
+.lock {
+    opacity: 1; /* Reset old low opacity wrapper rule to clear card text shading */
+} 
+
+.lock .invest-btn {
+    background: #9da4b0;
+    cursor: not-allowed;
+}
+
+/* =========================
+   BOTTOM NAVIGATION (Fixed Grid Footer)
+   ========================= */ 
+.bottom-nav { 
+    position: fixed; 
+    bottom: 0;
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 100%; 
+    max-width: 450px;
+    background: white; 
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 10px 0; 
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.04); 
+    border-top: 1px solid #edf1f7;
+    z-index: 1000;
+} 
+
+.bottom-nav a { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; 
+    color: #8fa0b5; 
+    font-weight: 500; 
+    font-size: 0.75rem; 
+}
+
+/* Target element active styling item */
+.bottom-nav a.active {
+    color: #0e2954;
+    font-weight: bold;
+}
+
+/* Embedded Icon Indicator Stack inside footer navbar menu links */
+.bottom-nav a::before {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+}
+
+/* Maps simple placeholder emojis for tabs layout sequentially */
+.bottom-nav a:nth-child(1)::before { content: '🏠'; }
+.bottom-nav a:nth-child(2)::before { content: '📊'; }
+.bottom-nav a:nth-child(3)::before { content: '👥'; }
+.bottom-nav a:nth-child(4)::before { content: '🔗'; }
+.bottom-nav a:nth-child(5)::before { content: '👤'; }
+
+/* Hide unused old metrics blocks if necessary */
+.accounts, .account-card, .amount, .title, .plan p {
+    display: none;
+}
+</style>
+    
 </head>
+
+
 <body>
 
-<div class="phone">
-    <!-- Top Header -->
-    <div class="header"><span>✕</span><div>Home<br><small style="color:#777; font-size:0.7rem">rice-distro08.com</small></div><span>⋮</span></div>
-    
-    <!-- User Dynamic Wallet System -->
-    <div class="balance-bar">
-        <span>Your Wallet Balance:</span>
-        <span class="balance-amount" id="user-balance">₵ 5,000.00</span>
-    </div>
-    
-    <!-- Promotional Banner -->
-    <div class="banner"><h2>GOLDEN GRAIN CO.</h2><p>RICE HARVEST & LOGISTICS 2026</p></div>
 
-    <!-- Quick Shortcuts Grid -->
-    <div class="actions">
-        <div onclick="alert('Deposit channel loading...')"><div class="circle" style="background:#10cf74">📋</div>Deposit</div>
-        <div onclick="alert('Withdraw gateway busy...')"><div class="circle" style="background:#ff9f43">💳</div>Withdraw</div>
-        <div onclick="alert('Connecting with service agent...')"><div class="circle" style="background:#3884ff">🎧</div>Service</div>
-        <div onclick="alert('Opening official Telegram channel...')"><div class="circle" style="background:#705ec8">🚀</div>Channel</div>
+<!-- =========================
+     TOP BANNER
+========================= -->
+
+<div class="top-banner">
+
+    <img
+        src="https://images.unsplash.com/photo-1559526324-593bc073d938"
+        alt="Zenith Capital"
+    >
+
+    <div class="overlay">
+
+        <h1>
+            Zenith Capital
+        </h1>
+
+        <p>
+            Welcome, {{ user.fullname }}
+        </p>
+
     </div>
 
-    <!-- Main Plans Area Wrapper -->
-    <div id="plans-container"></div>
-
-    <!-- Interactive Navigation Tabs -->
-    <div class="nav">
-        <div class="nav-item active" onclick="switchTab(this)">🏠<br>Home</div>
-        <div class="nav-item" onclick="switchTab(this); alert('Loading your investment statements...')">📊<br>Income</div>
-        <div class="nav-item" onclick="switchTab(this); alert('Loading team referral codes...')">👥<br>Team</div>
-        <div class="nav-item" onclick="switchTab(this); alert('Link copied to clipboard!')">🔗<br>Share</div>
-        <div class="nav-item" onclick="switchTab(this)">👤<br>My</div>
-    </div>
 </div>
 
-<script>
-    // Wallet initialization status
-    let userBalance = 5000.00;
 
-    // Plans array populated with unique rice processing imagery URLs
-    const plans = [
-        { vip: 1, price: 120, daily: 20, total: 3600, active: true, img: "https://unsplash.com" },
-        { vip: 2, price: 240, daily: 42, total: 7560, active: true, img: "https://unsplash.com" },
-        { vip: 3, price: 450, daily: 85, total: 15300, active: true, img: "https://unsplash.com" },
-        { vip: 4, price: 960, daily: 200, total: 36000, active: true, img: "https://unsplash.com" },
-        { vip: 5, price: 1800, daily: 400, total: 72000, active: false, img: "https://unsplash.com" },
-        { vip: 6, price: 2900, daily: 700, total: 126000, active: false, img: "https://unsplash.com" },
-        { vip: 7, price: 4200, daily: 1200, total: 216000, active: false, img: "https://unsplash.com" },
-        { vip: 8, price: 6500, daily: 2050, total: 369000, active: false, img: "https://unsplash.com" },
-        { vip: 9, price: 8800, daily: 3200, total: 576000, active: false, img: "https://unsplash.com" },
-        { vip: 10, price: 11000, daily: 4680, total: 842400, active: false, img: "https://unsplash.com" }
-    ];
 
-    // Build product grid structure
-    const container = document.getElementById('plans-container');
-    plans.forEach(p => {
-        container.innerHTML += `
-            <div class="card">
-                <div class="main-box">
-                    <div class="grid">
-                        <div class="box"><div class="lbl">Price</div><div class="val">₵ ${p.price}</div></div>
-                        <div class="box"><div class="lbl">Daily profit</div><div class="val">₵ ${p.daily}</div></div>
-                        <div class="box"><div class="lbl">Days</div><div class="val">180</div></div>
-                        <div class="box"><div class="lbl">Total profit</div><div class="val">₵ ${p.total}</div></div>
-                    </div>
-                    <div class="preview" style="background-image: url('${p.img}')">
-                        <div class="tag">Times ${p.active ? '1/1' : '0/1'}</div>
-                        <div class="badge">VIP ${p.vip}</div>
-                    </div>
-                </div>
-                <button class="btn ${p.active ? 'buy' : 'soon'}" onclick="handlePurchase(${p.price}, ${p.vip}, ${p.active})">
-                    ${p.active ? 'Buy now' : 'Coming soon'}
-                </button>
-            </div>
-        `;
-    });
+<div class="container">
 
-    // Handle button purchase state calculations 
-    function handlePurchase(price, tier, isActive) {
-        if (!isActive) {
-            alert(`VIP ${tier} package is currently locked or sold out!`);
-            return;
-        }
-        
-        if (userBalance >= price) {
-            userBalance -= price;
-            document.getElementById('user-balance').innerText = `₵ ${userBalance.toFixed(2)}`;
-            alert(`Successfully unlocked Rice Tier VIP ${tier}!\n₵ ${price} deducted from your balance.`);
-        } else {
-            alert(`Insufficient Balance to purchase VIP ${tier}!\nYou need ₵ ${(price - userBalance).toFixed(2)} more.`);
-        }
-    }
 
-    // Tab Switching visual state update
+<!-- =========================
+     ACCOUNTS
+========================= -->
+
+<div class="accounts">
+
+
+    <div class="account-card">
+
+        <h3>
+            Deposit Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.deposit_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Withdraw Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.withdraw_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Income Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.income_account|float) }}
+
+        </div>
+
+    </div>
+
+
+
+    <div class="account-card">
+
+        <h3>
+            Referral Account
+        </h3>
+
+        <div class="amount">
+
+            GHS
+            {{ "%.2f"|format(account.referral_account|float) }}
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     DEPOSIT / WITHDRAW
+========================= -->
+
+<div class="action">
+
+    <a
+        href="{{ url_for('deposit') }}"
+        class="deposit"
+    >
+        Deposit
+    </a>
+
+
+    <a
+        href="{{ url_for('withdraw') }}"
+        class="withdraw"
+    >
+        Withdraw
+    </a>
+
+</div>
+
+
+
+<!-- =========================
+     INVESTMENT PLANS
+========================= -->
+
+<h2 class="title">
+    Investment Plans
+</h2>
+
+
+
+<!-- PLAN 1 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 1
+    </h3>
+
+    <p>
+        Invest GHS 50
+    </p>
+
+    <p>
+        Receive GHS 8 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=1) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 2 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 2
+    </h3>
+
+    <p>
+        Invest GHS 100
+    </p>
+
+    <p>
+        Receive GHS 20 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=2) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 3 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 3
+    </h3>
+
+    <p>
+        Invest GHS 200
+    </p>
+
+    <p>
+        Receive GHS 40 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=3) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 4 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 4
+    </h3>
+
+    <p>
+        Invest GHS 300
+    </p>
+
+    <p>
+        Receive GHS 65 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=4) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 5 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 5
+    </h3>
+
+    <p>
+        Invest GHS 500
+    </p>
+
+    <p>
+        Receive GHS 100 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=5) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 6 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 6
+    </h3>
+
+    <p>
+        Invest GHS 600
+    </p>
+
+    <p>
+        Receive GHS 200 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=6) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- PLAN 7 -->
+
+<div class="plan">
+
+    <h3>
+        Plan 7
+    </h3>
+
+    <p>
+        Invest GHS 1000
+    </p>
+
+    <p>
+        Receive GHS 360 Daily
+    </p>
+
+    <a
+        href="{{ url_for('buy_plan', plan_id=7) }}"
+        class="invest-btn"
+    >
+        Invest
+    </a>
+
+</div>
+
+
+
+<!-- LOCKED PLAN -->
+
+<div class="plan lock">
+
+    <h3>
+        🔒 Locked
+    </h3>
+
+    <p>
+        Invest GHS 2000
+    </p>
+
+    <p>
+        Receive GHS 500 Daily
+    </p>
+
+    <button disabled>
+        Locked
+    </button>
+
+</div>
+
+
+
+<!-- LOCKED PLAN -->
+
+<div class="plan lock">
+
+    <h3>
+        🔒 Locked
+    </h3>
+
+    <p>
+        Invest GHS 4000
+    </p>
+
+    <p>
+        Receive GHS 800 Daily
+    </p>
+
+    <button disabled>
+        Locked
+    </button>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<div class="bottom-nav">
+
+
+    <a href="{{ url_for('dashboard') }}">
+        🏠
+        <br>
+        Home
+    </a>
+
+
+    <a href="{{ url_for('team') }}">
+        👥
+        <br>
+        Team
+    </a>
+
+
+    <a href="{{ url_for('profile') }}">
+        👤
+        <br>
+        Profile
+    </a>
+
+
+</div>
+
+
+</body>
+
+</html>
