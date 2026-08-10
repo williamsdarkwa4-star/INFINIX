@@ -23,13 +23,13 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 PLANS = {
-    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("5"), "duration": 200},
-    2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 200},
-    3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 200},
-    4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 200},
-    5: {"name": "Zenith 5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 200},
-    6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 200},
-    7: {"name": "Zenith 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 200},
+    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("8"), "duration": 30},
+    2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 30},
+    3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 30},
+    4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 30},
+    5: {"name": "Zenith 5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 30},
+    6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 30},
+    7: {"name": "Zenith 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
 }
 
 
@@ -121,70 +121,19 @@ def init_db():
         """)
 
         cur.execute("""
-    CREATE TABLE IF NOT EXISTS plans (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        plan_id INTEGER NOT NULL,
-        plan_name VARCHAR(120) NOT NULL,
-        investment_amount NUMERIC(14,2) NOT NULL,
-        daily_income NUMERIC(14,2) NOT NULL,
-        duration INTEGER NOT NULL,
-        started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        last_claim_at TIMESTAMP,
-        active BOOLEAN DEFAULT TRUE
-    )
-""")
-
-# -------------------------------------------------
-# MIGRATE OLD PLANS TABLE
-# -------------------------------------------------
-
-      cur.execute("""
-            ALTER TABLE plans
-            ADD COLUMN IF NOT EXISTS user_id INTEGER
-             """)
-
-       cur.execute("""
-           ALTER TABLE plans
-            ADD COLUMN IF NOT EXISTS plan_id INTEGER
-           """)
-
-        cur.execute("""
-             ALTER TABLE plans
-           ADD COLUMN IF NOT EXISTS plan_name VARCHAR(120)
-           """)
-
-         cur.execute("""
-             ALTER TABLE plans
-           ADD COLUMN IF NOT EXISTS investment_amount NUMERIC(14,2)
-         """)
-
-        cur.execute("""
-                 ALTER TABLE plans
-                 ADD COLUMN IF NOT EXISTS daily_income NUMERIC(14,2)
-          """)
-
-        cur.execute("""
-              ALTER TABLE plans
-             ADD COLUMN IF NOT EXISTS duration INTEGER
-          """)
-
-         cur.execute("""
-               ALTER TABLE plans
-               ADD COLUMN IF NOT EXISTS started_at TIMESTAMP
-              DEFAULT CURRENT_TIMESTAMP
-          """)
-
-        cur.execute("""
-            ALTER TABLE plans
-            ADD COLUMN IF NOT EXISTS last_claim_at TIMESTAMP
+            CREATE TABLE IF NOT EXISTS plans (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                plan_id INTEGER NOT NULL,
+                plan_name VARCHAR(120) NOT NULL,
+                investment_amount NUMERIC(14,2) NOT NULL,
+                daily_income NUMERIC(14,2) NOT NULL,
+                duration INTEGER NOT NULL,
+                started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_claim_at TIMESTAMP,
+                active BOOLEAN DEFAULT TRUE
+            )
         """)
-
-       cur.execute("""
-            ALTER TABLE plans
-            ADD COLUMN IF NOT EXISTS active BOOLEAN
-            DEFAULT TRUE
-      """)
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
@@ -713,24 +662,15 @@ def my_plan():
 @app.route("/withdraw")
 def withdraw():
     user = current_user()
-
     if not user:
         return redirect(url_for("login"))
 
-    account = current_account(user["id"])
-
     accounts = query_all("""
-        SELECT *
-        FROM withdrawal_accounts
-        WHERE user_id=%s
-        ORDER BY id DESC
+        SELECT * FROM withdrawal_accounts
+        WHERE user_id=%s ORDER BY id DESC
     """, (user["id"],))
 
-    return render_template(
-        "withdraw.html",
-        account=account,
-        accounts=accounts
-    )
+    return render_template("withdraw.html", accounts=accounts)
 
 
 @app.route("/bind_account", methods=["GET", "POST"])
@@ -764,37 +704,29 @@ def bind_account():
 
 @app.route("/request_withdrawal", methods=["POST"])
 def request_withdrawal():
-
     user = current_user()
-
     if not user:
         return redirect(url_for("login"))
 
     try:
-        amount = Decimal(
-            request.form.get("amount", "0").strip()
-        ).quantize(Decimal("0.01"))
-
+        amount = Decimal(request.form.get("amount", "0"))
     except (InvalidOperation, ValueError):
-        amount = Decimal("0.00")
+        amount = Decimal("0")
 
     password = request.form.get("password", "")
     account_id = request.form.get("account_id")
 
-    # Minimum withdrawal
-    if amount < Decimal("30.00"):
+    if amount < Decimal("30"):
         flash("Minimum demo withdrawal is GHS 30.", "error")
         return redirect(url_for("withdraw"))
 
-    # Withdrawal password
     if not user["withdraw_password_hash"]:
         flash("Withdrawal password is not configured.", "error")
         return redirect(url_for("withdraw"))
 
     try:
         valid_password = check_password_hash(
-            user["withdraw_password_hash"],
-            password
+            user["withdraw_password_hash"], password
         )
     except Exception:
         valid_password = False
@@ -803,135 +735,57 @@ def request_withdrawal():
         flash("Invalid withdrawal password.", "error")
         return redirect(url_for("withdraw"))
 
-    # Check withdrawal account
-    if account_id:
-
-        withdrawal_account = query_one("""
-            SELECT id
-            FROM withdrawal_accounts
-            WHERE id=%s AND user_id=%s
-        """, (account_id, user["id"]))
-
-        if not withdrawal_account:
-            flash("Invalid withdrawal account.", "error")
-            return redirect(url_for("withdraw"))
-
-    # Calculate 16% fee on the server
-    fee_rate = Decimal("0.16")
-
-    fee = (amount * fee_rate).quantize(
-        Decimal("0.01")
-    )
-
-    receive_amount = (amount - fee).quantize(
-        Decimal("0.01")
-    )
-
-    # Get withdrawal balance
     account = current_account(user["id"])
-
-    balance = Decimal(
-        account["withdraw_account"] or 0
-    )
+    balance = Decimal(account["withdraw_account"] or 0)
 
     if balance < amount:
         flash("Insufficient withdrawal balance.", "error")
         return redirect(url_for("withdraw"))
 
+    if account_id:
+        withdrawal_account = query_one("""
+            SELECT id FROM withdrawal_accounts
+            WHERE id=%s AND user_id=%s
+        """, (account_id, user["id"]))
+        if not withdrawal_account:
+            flash("Invalid withdrawal account.", "error")
+            return redirect(url_for("withdraw"))
+
     conn = get_conn()
     cur = conn.cursor()
 
     try:
-
-        # Deduct the requested withdrawal amount
         cur.execute("""
             UPDATE accounts
             SET withdraw_account = withdraw_account - %s
-            WHERE user_id=%s
-              AND withdraw_account >= %s
-        """, (
-            amount,
-            user["id"],
-            amount
-        ))
+            WHERE user_id=%s AND withdraw_account >= %s
+        """, (amount, user["id"], amount))
 
         if cur.rowcount != 1:
-
             conn.rollback()
-
-            flash(
-                "Insufficient withdrawal balance.",
-                "error"
-            )
-
+            flash("Insufficient withdrawal balance.", "error")
             return redirect(url_for("withdraw"))
 
-        # Save withdrawal request
-        #
-        # amount = amount requested
-        # fee = 16% fee
-        # receive_amount = amount after fee
-        #
-        # These values are stored in the description so the
-        # transaction history can show the calculation.
-
-        description = (
-            f"Demo withdrawal request | "
-            f"Fee: GHS {fee:.2f} (16%) | "
-            f"User receives: GHS {receive_amount:.2f}"
-        )
-
         cur.execute("""
-            INSERT INTO withdrawal_requests
-            (user_id, amount, account_id)
+            INSERT INTO withdrawal_requests (user_id, amount, account_id)
             VALUES (%s,%s,%s)
-        """, (
-            user["id"],
-            amount,
-            account_id or None
-        ))
+        """, (user["id"], amount, account_id or None))
 
         cur.execute("""
             INSERT INTO transactions
-            (
-                user_id,
-                transaction_type,
-                amount,
-                status,
-                description
-            )
-            VALUES (
-                %s,
-                'withdrawal',
-                %s,
-                'pending',
-                %s
-            )
-        """, (
-            user["id"],
-            receive_amount,
-            description
-        ))
+            (user_id, transaction_type, amount, status, description)
+            VALUES (%s,'withdrawal',%s,'pending','Demo withdrawal request')
+        """, (user["id"], amount))
 
         conn.commit()
-
     except Exception:
-
         conn.rollback()
         raise
-
     finally:
-
         cur.close()
         conn.close()
 
-    flash(
-        f"Withdrawal request submitted. "
-        f"Fee: GHS {fee:.2f}. "
-        f"Amount after fee: GHS {receive_amount:.2f}.",
-        "success"
-    )
-
+    flash("Withdrawal request submitted for review.", "success")
     return redirect(url_for("transaction_history"))
 
 
@@ -1071,19 +925,18 @@ def admin_manage_user(user_id):
     if not admin_required():
         return redirect(url_for("admin_login"))
 
-    user = query_one(
-        "SELECT * FROM users WHERE id=%s",
-        (user_id,)
-    )
-
+    user = query_one("SELECT * FROM users WHERE id=%s", (user_id,))
     if not user:
         return "User not found", 404
 
     if request.method == "POST":
+        action = request.form.get("action", "")
 
-        action = request.form.get("action", "").strip()
-
-        # ---------------- BALANCE ACTIONS ----------------
+        try:
+            amount = Decimal(request.form.get("amount", "0") or "0")
+        except (InvalidOperation, ValueError):
+            flash("Invalid amount.", "error")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
 
         balance_actions = {
             "add_deposit": ("deposit_account", 1),
@@ -1093,181 +946,34 @@ def admin_manage_user(user_id):
         }
 
         if action in balance_actions:
-
-            try:
-                amount = Decimal(
-                    request.form.get("amount", "0") or "0"
-                )
-            except (InvalidOperation, ValueError):
-
-                flash("Invalid amount.", "error")
-                return redirect(
-                    url_for(
-                        "admin_manage_user",
-                        user_id=user_id
-                    )
-                )
-
             if amount <= 0:
-
-                flash(
-                    "Amount must be greater than zero.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin_manage_user",
-                        user_id=user_id
-                    )
-                )
+                flash("Amount must be greater than zero.", "error")
+                return redirect(url_for("admin_manage_user", user_id=user_id))
 
             column, multiplier = balance_actions[action]
 
             if multiplier == 1:
-
                 execute(
-                    f"""
-                    UPDATE accounts
-                    SET {column} = {column} + %s
-                    WHERE user_id=%s
-                    """,
+                    f"UPDATE accounts SET {column}={column}+%s WHERE user_id=%s",
                     (amount, user_id)
                 )
-
             else:
-
                 execute(
                     f"""
                     UPDATE accounts
-                    SET {column} = GREATEST(0, {column} - %s)
+                    SET {column}=GREATEST(0, {column}-%s)
                     WHERE user_id=%s
                     """,
                     (amount, user_id)
                 )
 
-            flash(
-                "User balance updated successfully.",
-                "success"
-            )
+            flash("User balance updated.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
 
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
-                )
-            )
-
-        # ---------------- LOGIN PASSWORD ----------------
-
-        if action == "update_login_password":
-
-            new_password = request.form.get(
-                "new_password",
-                ""
-            )
-
-            if len(new_password) < 6:
-
-                flash(
-                    "Login password must be at least 6 characters.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin_manage_user",
-                        user_id=user_id
-                    )
-                )
-
-            password_hash = generate_password_hash(
-                new_password
-            )
-
-            execute(
-                """
-                UPDATE users
-                SET password_hash=%s
-                WHERE id=%s
-                """,
-                (password_hash, user_id)
-            )
-
-            flash(
-                "Login password updated successfully.",
-                "success"
-            )
-
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
-                )
-            )
-
-        # ---------------- WITHDRAWAL PASSWORD ----------------
-
-        if action == "update_withdraw_password":
-
-            new_password = request.form.get(
-                "new_password",
-                ""
-            )
-
-            if len(new_password) < 6:
-
-                flash(
-                    "Withdrawal password must be at least 6 characters.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin_manage_user",
-                        user_id=user_id
-                    )
-                )
-
-            password_hash = generate_password_hash(
-                new_password
-            )
-
-            execute(
-                """
-                UPDATE users
-                SET withdraw_password_hash=%s
-                WHERE id=%s
-                """,
-                (password_hash, user_id)
-            )
-
-            flash(
-                "Withdrawal password updated successfully.",
-                "success"
-            )
-
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
-                )
-            )
-
-        flash(
-            "Unknown admin action.",
-            "error"
-        )
-
-        return redirect(
-            url_for(
-                "admin_manage_user",
-                user_id=user_id
-            )
-        )
+        flash("Unknown admin action.", "error")
+        return redirect(url_for("admin_manage_user", user_id=user_id))
 
     account = current_account(user_id)
-
     return render_template(
         "admin_manage_user.html",
         user=user,
