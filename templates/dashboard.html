@@ -3,40 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rice Investment Dashboard</title>
+    <title>Premium Rice Distribution Dashboard</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
         }
 
         body {
-            background-color: #f5f6fa;
+            background-color: #f4f6fa;
             color: #333;
             display: flex;
             justify-content: center;
         }
 
-        /* Simulating the mobile phone container */
+        /* Fixed Mobile Wrapper Layout */
         .mobile-container {
             width: 100%;
             max-width: 450px;
-            background-color: #fcfdfe;
+            background-color: #fbfcff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
             position: relative;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
         }
 
-        /* Top Banner */
+        /* Header Header Section */
+        .app-header {
+            background-color: #ffffff;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+        }
+
+        .header-center {
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .header-url {
+            font-size: 0.75rem;
+            color: #777;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Top Brand Slider Area */
         .top-banner {
             width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, #103067, #1c4a94);
+            height: 155px;
+            background: linear-gradient(135deg, #0f2c59, #1c4b8f);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -44,27 +67,48 @@
             text-align: center;
             flex-direction: column;
             padding: 20px;
+            position: relative;
         }
 
         .top-banner h2 {
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .top-banner p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             opacity: 0.8;
+            font-weight: 300;
         }
 
-        /* Quick Actions Grid */
+        .slider-indicator {
+            display: flex;
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 20px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+
+        .dot.active {
+            background: white;
+        }
+
+        /* Top Navigation Grid Action Cards */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            padding: 20px 15px;
+            padding: 18px 15px;
             background: white;
-            margin-bottom: 10px;
+            border-radius: 0 0 15px 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
 
         .action-item {
@@ -72,15 +116,15 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 500;
-            color: #444;
+            color: #333;
             cursor: pointer;
         }
 
         .icon-circle {
-            width: 45px;
-            height: 45px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -90,19 +134,19 @@
             font-size: 1.2rem;
         }
 
-        .bg-deposit { background-color: #2ece72; }
+        .bg-deposit { background-color: #10cf74; }
         .bg-withdraw { background-color: #ff9f43; }
-        .bg-service { background-color: #2575fc; }
-        .bg-channel { background-color: #6c5ce7; }
+        .bg-service { background-color: #3884ff; }
+        .bg-channel { background-color: #705ec8; }
 
-        /* Investment Package Cards */
+        /* Investment Product Box Standard Styling */
         .package-card {
             background: white;
             margin: 10px 15px;
             border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            border: 1px solid #edf0f5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #edf1f7;
         }
 
         .card-main {
@@ -111,102 +155,109 @@
             align-items: center;
         }
 
+        /* Statistics Layout Segment */
         .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            width: 60%;
+            gap: 10px;
+            width: 62%;
         }
 
         .metric-box {
-            background-color: #f8fafc;
-            padding: 8px 10px;
-            border-radius: 6px;
+            background-color: #f8fafd;
+            padding: 10px;
+            border-radius: 8px;
             text-align: center;
         }
 
         .metric-label {
             font-size: 0.75rem;
-            color: #7f8c8d;
+            color: #8c96a3;
             margin-bottom: 4px;
         }
 
         .metric-value {
             font-size: 0.95rem;
             font-weight: bold;
-            color: #1a2a40;
+            color: #0f2c59;
         }
 
-        /* Product image block matching the layout */
+        /* Product Graphic Frame Mockup */
         .product-preview {
-            width: 35%;
-            height: 110px;
-            background-color: #f1f2f6;
-            border-radius: 8px;
+            width: 34%;
+            height: 115px;
+            background-color: #f3f4f7;
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
-            padding-bottom: 8px;
+            padding-bottom: 10px;
             position: relative;
-            background-image: url('https://icons8.com');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="%230f2c59" width="48" height="48"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>');
             background-repeat: no-repeat;
             background-position: center 30%;
-            background-size: 60px;
+            background-size: 45px;
         }
 
         .tag-times {
             position: absolute;
             top: 0;
             right: 0;
-            background-color: rgba(0,0,0,0.6);
+            background-color: rgba(60,65,75,0.85);
             color: white;
             font-size: 0.65rem;
-            padding: 2px 6px;
-            border-top-right-radius: 8px;
-            border-bottom-left-radius: 8px;
+            padding: 2px 7px;
+            border-top-right-radius: 10px;
+            border-bottom-left-radius: 10px;
         }
 
         .vip-badge {
-            background-color: #103067;
-            color: #f1c40f;
-            font-size: 0.75rem;
+            background: linear-gradient(90deg, #133363, #1f4882);
+            color: #ffd700;
+            font-size: 0.72rem;
             font-weight: bold;
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Action Buttons */
-        .btn-buy {
+        /* CTA Operations Footer Buttons */
+        .btn-action {
             width: 100%;
-            background-color: #0b1a30;
-            color: white;
             border: none;
             padding: 12px;
             border-radius: 25px;
             font-weight: bold;
             font-size: 0.95rem;
-            margin-top: 12px;
+            margin-top: 14px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
         }
 
-        .btn-buy:active {
-            opacity: 0.9;
+        .btn-active {
+            background-color: #0c1c33;
+            color: white;
         }
 
-        /* Navigation Bar fixed at bottom */
+        .btn-disabled {
+            background-color: #9da4b0;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        /* Fixed Navigation Tab Layout */
         .nav-bar {
             position: fixed;
             bottom: 0;
             width: 100%;
             max-width: 450px;
-            height: 60px;
+            height: 64px;
             background: white;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            border-top: 1px solid #edf0f5;
-            z-index: 100;
+            border-top: 1px solid #eee;
+            z-index: 1000;
         }
 
         .nav-item {
@@ -215,18 +266,18 @@
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
-            color: #888;
+            color: #8fa0b5;
             cursor: pointer;
         }
 
         .nav-item.active {
-            color: #103067;
+            color: #0f2c59;
             font-weight: bold;
         }
 
         .nav-icon {
-            font-size: 1.2rem;
-            margin-bottom: 2px;
+            font-size: 1.3rem;
+            margin-bottom: 3px;
         }
     </style>
 </head>
@@ -234,98 +285,52 @@
 
     <div class="mobile-container">
         
-        <!-- Top Promotional Banner -->
+        <!-- App Bar Navigation -->
+        <div class="app-header">
+            <span>✕</span>
+            <div class="header-center">
+                <span>Home</span>
+                <span class="header-url">rice-distro08.com</span>
+            </div>
+            <span style="font-weight: bold; font-size: 1.2rem;">⋮</span>
+        </div>
+        
+        <!-- Premium Brand Slider -->
         <div class="top-banner">
-            <h2>GOLDEN GRAIN</h2>
-            <p>AGRICULTURE INVESTMENT 2026</p>
-            <div style="margin-top: 10px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 15px; font-size: 0.75rem;">
-                THE RHYTHM OF HARVEST
+            <h2>GOLDEN GRAIN CO.</h2>
+            <p>AGRICULTURE HARVEST & LOGISTICS 2026</p>
+            <div class="slider-indicator">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
         </div>
 
-        <!-- System Action Buttons -->
+        <!-- Shortcuts Panel Grid -->
         <div class="action-grid">
             <div class="action-item">
-                <div class="icon-circle bg-deposit">📥</div>
+                <div class="icon-circle bg-deposit">📋</div>
                 Deposit
             </div>
             <div class="action-item">
-                <div class="icon-circle bg-withdraw">📤</div>
+                <div class="icon-circle bg-withdraw">💳</div>
                 Withdraw
             </div>
             <div class="action-item">
-                <div class="icon-circle bg-service">🎧</div>
+                <div class="icon-circle bg-service">🛠️</div>
                 Service
             </div>
             <div class="action-item">
-                <div class="icon-circle bg-channel">📢</div>
+                <div class="icon-circle bg-channel">🚀</div>
                 Channel
             </div>
         </div>
 
-        <!-- VIP Tier 1 Item -->
+        <!-- Dynamic Loop Structure Generation for Packages VIP 1 to 10 -->
+        
+        <!-- VIP 1 -->
         <div class="package-card">
             <div class="card-main">
                 <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Price</div>
-                        <div class="metric-value">₵ 120</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Daily profit</div>
-                        <div class="metric-value">₵ 20</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Days</div>
-                        <div class="metric-value">180</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Total profit</div>
-                        <div class="metric-value">₵ 3600</div>
-                    </div>
-                </div>
-                
-                <div class="product-preview">
-                    <div class="tag-times">Times 1/1</div>
-                    <div class="vip-badge">VIP 1</div>
-                </div>
-            </div>
-            <button class="btn-buy">Buy now</button>
-        </div>
-
-        <!-- VIP Tier 2 Item -->
-        <div class="package-card">
-            <div class="card-main">
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Price</div>
-                        <div class="metric-value">₵ 240</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Daily profit</div>
-                        <div class="metric-value">₵ 42</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Days</div>
-                        <div class="metric-value">180</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Total profit</div>
-                        <div class="metric-value">₵ 7560</div>
-                    </div>
-                </div>
-                
-                <div class="product-preview" style="background-image: url('https://icons8.com');">
-                    <div class="tag-times">Times 0/1</div>
-                    <div class="vip-badge">VIP 2</div>
-                </div>
-            </div>
-            <button class="btn-buy">Buy now</button>
-        </div>
-
-        <!-- Bottom Tab Navigation -->
-        <div class="nav-bar">
-            <div class="nav-item active">
-                <div class="nav-icon">🏠</div>
-                Home
-            </div>
+                    <div class="metric-box"><div class="metric-label">Price</div><div class="metric-value">₵ 120</div></div>
+                    <div class="metric-box"><div class="metric-label">Daily profit</div><div class="metric-value">₵ 20</div></div>
