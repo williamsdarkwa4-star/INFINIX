@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Zenith Capital Dashboard</title>
 
     <style>
@@ -27,6 +28,7 @@
             background: #fbfcff;
             padding-bottom: 80px;
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            overflow: hidden;
         }
 
         /* =========================
@@ -35,54 +37,95 @@
 
         .header {
             background: #fff;
-            padding: 12px;
+            height: 55px;
+            padding: 10px 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
         }
 
         .header-title {
             text-align: center;
-            font-weight: bold;
             color: #0e2954;
+            font-weight: bold;
+            font-size: .95rem;
         }
 
-        .header small {
+        .header-title small {
+            display: block;
             color: #777;
-            font-size: 0.7rem;
+            font-size: .68rem;
             font-weight: normal;
+            margin-top: 2px;
         }
 
         /* =========================
-           BANNER
+           TOP ROTATING BANNER
         ========================= */
 
         .banner {
-            height: 160px;
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(14,41,84,.95),
-                    rgba(28,75,143,.92)
-                ),
-                url("https://images.unsplash.com/photo-1559526324-593bc073d938");
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
-            padding: 35px 20px;
+            height: 175px;
+            position: relative;
+            overflow: hidden;
+            background: #0e2954;
         }
 
-        .banner h1 {
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity .6s ease;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                rgba(14,41,84,.65),
+                rgba(14,41,84,.78)
+            );
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .banner-overlay h1 {
             font-size: 1.45rem;
             margin-bottom: 7px;
         }
 
-        .banner p {
-            font-size: 0.8rem;
-            opacity: .85;
+        .banner-overlay p {
+            font-size: .78rem;
+            opacity: .9;
+        }
+
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.5);
+            margin: 0 3px;
+        }
+
+        .dot.active {
+            background: white;
+            width: 8px;
+            height: 8px;
         }
 
         /* =========================
@@ -92,7 +135,7 @@
         .actions {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            padding: 15px 10px;
+            padding: 15px 8px;
             background: white;
             margin-bottom: 10px;
             text-align: center;
@@ -133,7 +176,7 @@
         }
 
         /* =========================
-           ACCOUNT CARD
+           ACCOUNT OVERVIEW
         ========================= */
 
         .account-card {
@@ -177,7 +220,7 @@
         }
 
         /* =========================
-           PLAN TITLE
+           PLANS TITLE
         ========================= */
 
         .section-title {
@@ -230,23 +273,31 @@
             color: #0e2954;
         }
 
+        /* =========================
+           PLAN PHOTO
+        ========================= */
+
         .preview {
             width: 32%;
-            min-height: 110px;
+            height: 110px;
             background: #f3f4f7;
             border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 8px;
+            overflow: hidden;
             position: relative;
+        }
+
+        .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .tag {
             position: absolute;
             top: 0;
             right: 0;
+            z-index: 2;
             background: #444;
             color: white;
             font-size: .58rem;
@@ -255,17 +306,17 @@
             border-bottom-left-radius: 6px;
         }
 
-        .plan-icon {
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-
         .badge {
+            position: absolute;
+            bottom: 7px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
             background: #0e2954;
             color: #ffd700;
-            font-size: .68rem;
+            font-size: .65rem;
             font-weight: bold;
-            padding: 3px 10px;
+            padding: 3px 9px;
             border-radius: 10px;
         }
 
@@ -293,16 +344,11 @@
         }
 
         /* =========================
-           LOCKED PLAN
+           LOCKED PLANS
         ========================= */
 
         .locked {
             opacity: .55;
-        }
-
-        .locked .badge {
-            background: #64748b;
-            color: white;
         }
 
         .locked-btn {
@@ -341,6 +387,7 @@
             text-decoration: none;
             color: #8fa0b5;
             text-align: center;
+            min-width: 60px;
         }
 
         .nav .active {
@@ -359,7 +406,11 @@
 
         @media (max-width: 380px) {
 
-            .banner h1 {
+            .banner {
+                height: 160px;
+            }
+
+            .banner-overlay h1 {
                 font-size: 1.3rem;
             }
 
@@ -387,28 +438,40 @@
     ========================= -->
 
     <div class="header">
-        <span>✕</span>
-
         <div class="header-title">
             Zenith Capital
-            <br>
             <small>Dashboard</small>
         </div>
-
-        <span>⋮</span>
     </div>
 
 
     <!-- =========================
-         BANNER
+         ROTATING TOP BANNER
     ========================= -->
 
     <div class="banner">
-        <h1>ZENITH CAPITAL</h1>
 
-        <p>
-            Welcome, {{ user.fullname }}
-        </p>
+        <img id="bannerImage"
+             src="https://images.unsplash.com/photo-1559526324-593bc073d938"
+             alt="Zenith Capital">
+
+        <div class="banner-overlay">
+
+            <h1>ZENITH CAPITAL</h1>
+
+            <p>
+                Welcome, {{ user.fullname }}
+            </p>
+
+        </div>
+
+        <div class="banner-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
     </div>
 
 
@@ -442,7 +505,7 @@
 
 
     <!-- =========================
-         ACCOUNT BALANCES
+         ACCOUNT OVERVIEW
     ========================= -->
 
     <div class="account-card">
@@ -487,7 +550,7 @@
 
 
     <!-- =========================
-         PLAN SECTION
+         INVESTMENT PLANS
     ========================= -->
 
     <h2 class="section-title">
@@ -523,7 +586,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -531,13 +594,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1551836022-d5d88e9218df"
+                    alt="Plan 1"
+                >
 
                 <div class="badge">
                     PLAN 1
@@ -581,7 +643,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -589,13 +651,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1556761175-b413da4baf72"
+                    alt="Plan 2"
+                >
 
                 <div class="badge">
                     PLAN 2
@@ -639,7 +700,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -647,13 +708,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51"
+                    alt="Plan 3"
+                >
 
                 <div class="badge">
                     PLAN 3
@@ -697,7 +757,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -705,13 +765,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
+                    alt="Plan 4"
+                >
 
                 <div class="badge">
                     PLAN 4
@@ -755,7 +814,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -763,13 +822,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1554224155-6726b3ff858f"
+                    alt="Plan 5"
+                >
 
                 <div class="badge">
                     PLAN 5
@@ -813,7 +871,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -821,13 +879,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d"
+                    alt="Plan 6"
+                >
 
                 <div class="badge">
                     PLAN 6
@@ -871,7 +928,7 @@
                 </div>
 
                 <div class="plan-box">
-                    <div class="lbl">Plan</div>
+                    <div class="lbl">Status</div>
                     <div class="plan-value">Active</div>
                 </div>
 
@@ -879,13 +936,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    1/1
-                </div>
+                <div class="tag">1/1</div>
 
-                <div class="plan-icon">
-                    ⭐
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7"
+                    alt="Plan 7"
+                >
 
                 <div class="badge">
                     PLAN 7
@@ -937,13 +993,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    0/1
-                </div>
+                <div class="tag">0/1</div>
 
-                <div class="plan-icon">
-                    🔒
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1553877522-43269d4ea984"
+                    alt="Plan 8"
+                >
 
                 <div class="badge">
                     PLAN 8
@@ -992,13 +1047,12 @@
 
             <div class="preview">
 
-                <div class="tag">
-                    0/1
-                </div>
+                <div class="tag">0/1</div>
 
-                <div class="plan-icon">
-                    🔒
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1556761175-4b46a572b786"
+                    alt="Plan 9"
+                >
 
                 <div class="badge">
                     PLAN 9
@@ -1016,7 +1070,7 @@
 
 
     <!-- =========================
-         BOTTOM NAVIGATION
+         FIXED BOTTOM NAVIGATION
     ========================= -->
 
     <div class="nav">
@@ -1039,6 +1093,70 @@
     </div>
 
 </div>
+
+
+<script>
+
+    /* =========================
+       ROTATING TOP BANNER
+    ========================= */
+
+    const bannerImages = [
+
+        "https://images.unsplash.com/photo-1559526324-593bc073d938",
+
+        "https://images.unsplash.com/photo-1556761175-b413da4baf72",
+
+        "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
+
+        "https://images.unsplash.com/photo-1554224155-6726b3ff858f"
+
+    ];
+
+    let currentBanner = 0;
+
+    const bannerImage =
+        document.getElementById("bannerImage");
+
+    const dots =
+        document.querySelectorAll(".dot");
+
+
+    function changeBanner() {
+
+        currentBanner++;
+
+        if (currentBanner >= bannerImages.length) {
+            currentBanner = 0;
+        }
+
+        bannerImage.style.opacity = "0";
+
+        setTimeout(() => {
+
+            bannerImage.src =
+                bannerImages[currentBanner];
+
+            bannerImage.style.opacity = "1";
+
+        }, 300);
+
+
+        dots.forEach((dot, index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === currentBanner
+            );
+
+        });
+
+    }
+
+
+    setInterval(changeBanner, 5000);
+
+</script>
 
 </body>
 </html>
