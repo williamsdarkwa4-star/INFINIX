@@ -222,9 +222,9 @@ def init_db():
 
         cur.execute("""
             UPDATE users
-            SET password_hash = password
+            SET password_hash = withdraw_password
             WHERE password_hash IS NULL
-              AND password IS NOT NULL
+              AND withdraw_password IS NOT NULL
         """)
 
         cur.execute("""
@@ -250,7 +250,7 @@ def init_db():
 
         cur.execute("""
             ALTER TABLE users
-            ALTER COLUMN password DROP NOT NULL
+            ALTER COLUMN witdraw_password DROP NOT NULL
         """)
 
         # ----------------------------------------------------
