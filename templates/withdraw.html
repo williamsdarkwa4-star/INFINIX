@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><title>Withdraw - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+<!DOCTYPE html><html lang="en">
+<head><title>Withdraw - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
 
 *{
     margin:0;
@@ -81,6 +82,7 @@ body{
     padding:16px;
     border-radius:15px;
     margin-bottom:12px;
+    cursor:pointer;
 }
 
 .account-row{
@@ -135,6 +137,71 @@ button{
 
 button:active{
     transform:scale(.98);
+}
+
+/* QUICK AMOUNTS */
+
+.quick-title{
+    color:#475569;
+    font-size:14px;
+    margin-top:8px;
+    margin-bottom:10px;
+}
+
+.quick-amounts{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.quick-btn{
+    background:#eff6ff;
+    color:#2563eb;
+    border:1px solid #bfdbfe;
+    padding:12px 5px;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:0;
+}
+
+.quick-btn:hover{
+    background:#dbeafe;
+}
+
+/* FEE BOX */
+
+.fee-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    padding:16px;
+    margin-top:15px;
+}
+
+.fee-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    color:#475569;
+    gap:15px;
+}
+
+.fee-row strong{
+    color:#0f172a;
+}
+
+.fee-row.total{
+    border-top:1px solid #e2e8f0;
+    margin-top:8px;
+    padding-top:14px;
+    font-size:16px;
+}
+
+.fee-row.total strong{
+    color:#2563eb;
 }
 
 .bind-btn{
@@ -193,6 +260,7 @@ button:active{
     justify-content:space-around;
     padding:15px;
     box-shadow:0 -5px 15px rgba(0,0,0,.1);
+    z-index:100;
 }
 
 .bottom-nav a{
@@ -203,179 +271,212 @@ button:active{
     font-size:13px;
 }
 
-</style></head><body><div class="header"><h1>Withdraw</h1>
-
-<p>Request a withdrawal from your account</p>
-
-</div><div class="container">{% with messages = get_flashed_messages(with_categories=true) %}
+</style></head><body><div class="header"><h1>Withdraw</h1><p>Request a withdrawal from your account</p></div><div class="container">{% with messages = get_flashed_messages(with_categories=true) %}
 
 {% for category, message in messages %}
 
-    <div class="flash {{ category }}">
-        {{ message }}
-    </div>
-
-{% endfor %}
+<div class="flash {{ category }}">
+    {{ message }}
+</div>{% endfor %}
 
 {% endwith %}
 
-<!-- REAL WITHDRAWAL BALANCE --><div class="balance-card"><p>Available Withdrawal Balance</p>
+<!-- WITHDRAWAL BALANCE --><div class="balance-card"><p>Available Withdrawal Balance</p><div class="balance">GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
 
-<div class="balance">
-
-    GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
-
-</div>
-
-</div><div class="notice">💡 Minimum withdrawal amount is
+</div></div><!-- NOTICE --><div class="notice">💡 Minimum withdrawal amount is
 <strong>GHS 30.00</strong>.
 
-Make sure your withdrawal account details are correct
-before submitting your request.
+A <strong>16%</strong> withdrawal fee is deducted from the
+amount you request.
 
-</div><!-- WITHDRAWAL ACCOUNT --><div class="card"><h2>🏦 Select Withdrawal Account</h2>
+</div><!-- WITHDRAWAL ACCOUNT --><div class="card"><h2>🏦 Select Withdrawal Account</h2>{% if accounts %}
 
+{% for withdrawal_account in accounts %}
 
-{% if accounts %}
+<label class="account"><div class="account-row"><input
+type="radio"
+name="account_id"
+value="{{ withdrawal_account.id }}"
+form="withdrawForm"
+{% if loop.first %}checked{% endif %}
+required
 
-    {% for withdrawal_account in accounts %}
+«»
 
-    <label class="account">
-
-        <div class="account-row">
-
-            <input
-                type="radio"
-                name="account_id"
-                value="{{ withdrawal_account.id }}"
-                form="withdrawForm"
-                {% if loop.first %}checked{% endif %}
-                required
-            >
-
-            <div>
-
-                <strong>
-                    {{ withdrawal_account.network }}
-                </strong>
-
-                <div class="account-info">
-                    Account Name:
-                    {{ withdrawal_account.account_name }}
-                </div>
-
-                <div class="account-info">
-                    Number:
-                    {{ withdrawal_account.phone }}
-                </div>
-
-            </div>
-
-        </div>
-
-    </label>
-
-    {% endfor %}
+<div><strong>
+{{ withdrawal_account.network }}
+</strong><div class="account-info">
+Account Name:
+{{ withdrawal_account.account_name }}
+</div><div class="account-info">
+Number:
+{{ withdrawal_account.phone }}
+</div></div></div></label>{% endfor %}
 
 {% else %}
 
-    <div class="empty">
+<div class="empty"><p>You have no withdrawal account yet.</p><a
+href="{{ url_for('bind_account') }}"
+class="bind-btn"
 
-        <p>You have no withdrawal account yet.</p>
+«»
 
-        <a
-            href="{{ url_for('bind_account') }}"
-            class="bind-btn"
-        >
-            ➕ Bind Withdrawal Account
-        </a>
+➕ Bind Withdrawal Account
+</a>
 
-    </div>
-
-{% endif %}
+</div>{% endif %}
 
 </div><!-- WITHDRAWAL FORM -->{% if accounts %}
 
-<div class="card"><h2>💸 Withdrawal Request</h2>
-
-<form
+<div class="card"><h2>💸 Withdrawal Request</h2><form
     method="POST"
     action="{{ url_for('request_withdrawal') }}"
     id="withdrawForm"
->
+><label class="quick-title">
+Enter Withdrawal Amount
+</label><input
+type="number"
+id="withdrawAmount"
+name="amount"
+min="30"
+step="0.01"
+max="{{ account.withdraw_account or 0 }}"
+placeholder="Enter withdrawal amount"
+required
+oninput="calculateWithdrawal()"
 
-    <input
-        type="number"
-        name="amount"
-        min="30"
-        step="0.01"
-        max="{{ account.withdraw_account or 0 }}"
-        placeholder="Enter withdrawal amount"
-        required
-    >
-<!-- Withdrawal Fee -->
+«»
 
-<div class="fee-box">
+<!-- QUICK AMOUNTS --><div class="quick-title">
+Quick Amount
+</div><div class="quick-amounts"><button
+type="button"
+class="quick-btn"
+onclick="setAmount(30)"
 
-    <div class="fee-row">
-        <span>Withdrawal Amount</span>
-        <strong id="displayAmount">GHS 0.00</strong>
-    </div>
+«»
 
-    <div class="fee-row">
-        <span>Withdrawal Fee (16%)</span>
-        <strong id="displayFee">GHS 0.00</strong>
-    </div>
+GHS 30
+</button>
 
-    <div class="fee-row total">
-        <span>You Receive</span>
-        <strong id="displayReceive">GHS 0.00</strong>
-    </div>
+<button
+type="button"
+class="quick-btn"
+onclick="setAmount(50)"
 
-</div>
+«»
 
+GHS 50
+</button>
 
-<style>
+<button
+type="button"
+class="quick-btn"
+onclick="setAmount(100)"
 
-.fee-box{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:15px;
-    padding:16px;
-    margin-top:15px;
-}
+«»
 
-.fee-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:9px 0;
-    color:#475569;
-}
+GHS 100
+</button>
 
-.fee-row strong{
-    color:#0f172a;
-}
+<button
+type="button"
+class="quick-btn"
+onclick="setAmount(200)"
 
-.fee-row.total{
-    border-top:1px solid #e2e8f0;
-    margin-top:8px;
-    padding-top:14px;
-    font-size:16px;
-}
+«»
 
-.fee-row.total strong{
-    color:#2563eb;
-}
+GHS 200
+</button>
 
-</style>
+<button
+type="button"
+class="quick-btn"
+onclick="setAmount(300)"
 
+«»
 
-<script>
+GHS 300
+</button>
+
+<button
+type="button"
+class="quick-btn"
+onclick="setAmount(400)"
+
+«»
+
+GHS 400
+</button>
+
+</div><!-- FEE CALCULATION --><div class="fee-box"><div class="fee-row"><span>Withdrawal Amount</span>
+
+<strong id="displayAmount">
+GHS 0.00
+</strong></div><div class="fee-row"><span>Withdrawal Fee (16%)</span>
+
+<strong id="displayFee">
+GHS 0.00
+</strong></div><div class="fee-row total"><span>You Receive</span>
+
+<strong id="displayReceive">
+GHS 0.00
+</strong></div></div><!-- PASSWORD --><input
+type="password"
+name="password"
+placeholder="Enter withdrawal password"
+minlength="6"
+required
+
+«»
+
+<button type="submit">💸 Submit Withdrawal
+
+</button></form><a
+href="{{ url_for('bind_account') }}"
+class="bind-btn"
+
+«»
+
+⚙️ Go to Bind Account
+</a>
+
+</div>{% endif %}
+
+<!-- INFORMATION --><div class="card"><h2>ℹ️ Withdrawal Information</h2><div class="info"><p>
+Your withdrawal request will be submitted for review.
+</p><br><p>
+The 16% withdrawal fee is calculated automatically before
+you submit your request.
+</p><br><p>
+Make sure the selected account belongs to you and that
+the withdrawal password is correct.
+</p></div></div></div><!-- BOTTOM NAVIGATION --><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
+🏠<br>
+Home
+</a><a href="{{ url_for('my_plan') }}">
+💼<br>
+My Plan
+</a><a href="{{ url_for('transaction_history') }}">
+📋<br>
+History
+</a><a href="{{ url_for('profile') }}">
+👤<br>
+Profile
+</a></div><script>
+
+/* GET AMOUNT INPUT */
 
 const amountInput = document.getElementById("withdrawAmount");
 
+
+/* CALCULATE 16% FEE */
+
 function calculateWithdrawal(){
+
+    if(!amountInput){
+        return;
+    }
 
     const amount = parseFloat(amountInput.value) || 0;
 
@@ -383,19 +484,22 @@ function calculateWithdrawal(){
 
     const receive = amount - fee;
 
+
     document.getElementById("displayAmount").textContent =
         "GHS " + amount.toFixed(2);
+
 
     document.getElementById("displayFee").textContent =
         "GHS " + fee.toFixed(2);
 
+
     document.getElementById("displayReceive").textContent =
         "GHS " + receive.toFixed(2);
+
 }
 
 
-amountInput.addEventListener("input", calculateWithdrawal);
-
+/* QUICK AMOUNT BUTTON */
 
 function setAmount(amount){
 
@@ -405,71 +509,14 @@ function setAmount(amount){
 
 }
 
-</script>
 
-    <input
-        type="password"
-        name="password"
-        placeholder="Enter withdrawal password"
-        minlength="6"
-        required
-    >
+/* CALCULATE WHEN PAGE LOADS */
 
+document.addEventListener("DOMContentLoaded", function(){
 
-    <button type="submit">
+    calculateWithdrawal();
 
-        💸 Submit Withdrawal
+});
 
-    </button>
-
-</form>
-
-
-<a
-    href="{{ url_for('bind_account') }}"
-    class="bind-btn"
->
-    ⚙️ Go to bind Account
-</a>
-
-</div>{% endif %}
-
-<!-- INFORMATION --><div class="card"><h2>ℹ️ Withdrawal Information</h2>
-
-<div class="info">
-
-    <p>
-        Your withdrawal request will be submitted for review.
-    </p>
-
-    <br>
-
-    <p>
-        Make sure the selected account belongs to you and that
-        the withdrawal password is correct.
-    </p>
-
-</div>
-
-</div></div><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
-    🏠<br>
-    Home
-</a>
-
-<a href="{{ url_for('my_plan') }}">
-    💼<br>
-    My Plan
-</a>
-
-<a href="{{ url_for('transaction_history') }}">
-    📋<br>
-    History
-</a>
-
-<a href="{{ url_for('profile') }}">
-    👤<br>
-    Profile
-</a>
-
-</div></body>
+</script></body>
 </html>
