@@ -23,13 +23,13 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 PLANS = {
-    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("8"), "duration": 30},
-    2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 30},
-    3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 30},
-    4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 30},
-    5: {"name": "Zenith 5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 30},
-    6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 30},
-    7: {"name": "Zenith 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 30},
+    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("8"), "duration": 200},
+    2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 200},
+    3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 200},
+    4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 200},
+    5: {"name": "Zenith 5", "investment": Decimal("500"), "daily": Decimal("100"), "duration": 200},
+    6: {"name": "Zenith 6", "investment": Decimal("600"), "daily": Decimal("200"), "duration": 200},
+    7: {"name": "Zenith 7", "investment": Decimal("1000"), "daily": Decimal("360"), "duration": 200},
 }
 
 
@@ -713,29 +713,37 @@ def bind_account():
 
 @app.route("/request_withdrawal", methods=["POST"])
 def request_withdrawal():
+
     user = current_user()
+
     if not user:
         return redirect(url_for("login"))
 
     try:
-        amount = Decimal(request.form.get("amount", "0"))
+        amount = Decimal(
+            request.form.get("amount", "0").strip()
+        ).quantize(Decimal("0.01"))
+
     except (InvalidOperation, ValueError):
-        amount = Decimal("0")
+        amount = Decimal("0.00")
 
     password = request.form.get("password", "")
     account_id = request.form.get("account_id")
 
-    if amount < Decimal("30"):
+    # Minimum withdrawal
+    if amount < Decimal("30.00"):
         flash("Minimum demo withdrawal is GHS 30.", "error")
         return redirect(url_for("withdraw"))
 
+    # Withdrawal password
     if not user["withdraw_password_hash"]:
         flash("Withdrawal password is not configured.", "error")
         return redirect(url_for("withdraw"))
 
     try:
         valid_password = check_password_hash(
-            user["withdraw_password_hash"], password
+            user["withdraw_password_hash"],
+            password
         )
     except Exception:
         valid_password = False
@@ -744,57 +752,135 @@ def request_withdrawal():
         flash("Invalid withdrawal password.", "error")
         return redirect(url_for("withdraw"))
 
+    # Check withdrawal account
+    if account_id:
+
+        withdrawal_account = query_one("""
+            SELECT id
+            FROM withdrawal_accounts
+            WHERE id=%s AND user_id=%s
+        """, (account_id, user["id"]))
+
+        if not withdrawal_account:
+            flash("Invalid withdrawal account.", "error")
+            return redirect(url_for("withdraw"))
+
+    # Calculate 16% fee on the server
+    fee_rate = Decimal("0.16")
+
+    fee = (amount * fee_rate).quantize(
+        Decimal("0.01")
+    )
+
+    receive_amount = (amount - fee).quantize(
+        Decimal("0.01")
+    )
+
+    # Get withdrawal balance
     account = current_account(user["id"])
-    balance = Decimal(account["withdraw_account"] or 0)
+
+    balance = Decimal(
+        account["withdraw_account"] or 0
+    )
 
     if balance < amount:
         flash("Insufficient withdrawal balance.", "error")
         return redirect(url_for("withdraw"))
 
-    if account_id:
-        withdrawal_account = query_one("""
-            SELECT id FROM withdrawal_accounts
-            WHERE id=%s AND user_id=%s
-        """, (account_id, user["id"]))
-        if not withdrawal_account:
-            flash("Invalid withdrawal account.", "error")
-            return redirect(url_for("withdraw"))
-
     conn = get_conn()
     cur = conn.cursor()
 
     try:
+
+        # Deduct the requested withdrawal amount
         cur.execute("""
             UPDATE accounts
             SET withdraw_account = withdraw_account - %s
-            WHERE user_id=%s AND withdraw_account >= %s
-        """, (amount, user["id"], amount))
+            WHERE user_id=%s
+              AND withdraw_account >= %s
+        """, (
+            amount,
+            user["id"],
+            amount
+        ))
 
         if cur.rowcount != 1:
+
             conn.rollback()
-            flash("Insufficient withdrawal balance.", "error")
+
+            flash(
+                "Insufficient withdrawal balance.",
+                "error"
+            )
+
             return redirect(url_for("withdraw"))
 
+        # Save withdrawal request
+        #
+        # amount = amount requested
+        # fee = 16% fee
+        # receive_amount = amount after fee
+        #
+        # These values are stored in the description so the
+        # transaction history can show the calculation.
+
+        description = (
+            f" withdrawal request | "
+            f"Fee: GHS {fee:.2f} (16%) | "
+            f"User receives: GHS {receive_amount:.2f}"
+        )
+
         cur.execute("""
-            INSERT INTO withdrawal_requests (user_id, amount, account_id)
+            INSERT INTO withdrawal_requests
+            (user_id, amount, account_id)
             VALUES (%s,%s,%s)
-        """, (user["id"], amount, account_id or None))
+        """, (
+            user["id"],
+            amount,
+            account_id or None
+        ))
 
         cur.execute("""
             INSERT INTO transactions
-            (user_id, transaction_type, amount, status, description)
-            VALUES (%s,'withdrawal',%s,'pending','Demo withdrawal request')
-        """, (user["id"], amount))
+            (
+                user_id,
+                transaction_type,
+                amount,
+                status,
+                description
+            )
+            VALUES (
+                %s,
+                'withdrawal',
+                %s,
+                'pending',
+                %s
+            )
+        """, (
+            user["id"],
+            receive_amount,
+            description
+        ))
 
         conn.commit()
+
     except Exception:
+
         conn.rollback()
         raise
+
     finally:
+
         cur.close()
         conn.close()
 
-    flash("Withdrawal request submitted for review.", "success")
+    flash(
+        f"Withdrawal request submitted. "
+        f"Fee: GHS {fee:.2f}. "
+        f"Amount after fee: GHS {receive_amount:.2f}.",
+        "success"
+    )
+
     return redirect(url_for("transaction_history"))
 
 
