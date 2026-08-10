@@ -8,101 +8,162 @@
 
 <title>Team - Zenith Capital</title>
 
+<script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:system-ui,-apple-system,Arial,sans-serif;
 }
 
 body{
-    background:#f4f7fb;
-    color:#0f172a;
-    padding-bottom:85px;
+    background:#f1f5f9;
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    color:#334155;
+    padding-bottom:75px;
+    -webkit-tap-highlight-color:transparent;
 }
 
+.phone{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    background:#f8fafc;
+    position:relative;
+    padding-bottom:75px;
+    box-shadow:0 0 18px rgba(0,0,0,.06);
+}
+
+
 /* =========================
-   HEADER
+   TOP HEADER
 ========================= */
 
-.header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    color:white;
-    padding:30px 20px;
+.top-header{
+    height:55px;
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid #e5e7eb;
+    background:white;
+}
+
+.header-title{
     text-align:center;
-    border-radius:0 0 30px 30px;
+    font-size:13px;
+    color:#0f172a;
 }
 
-.header h1{
-    font-size:28px;
+.header-title strong{
+    display:block;
+    font-size:15px;
 }
 
-.header p{
-    margin-top:8px;
-    font-size:14px;
-    opacity:.9;
+.header-title small{
+    display:block;
+    margin-top:2px;
+    color:#94a3b8;
+    font-size:10px;
 }
+
 
 /* =========================
-   CONTAINER
+   PAGE HEADER
+========================= */
+
+.page-header{
+    background:#10144c;
+    color:white;
+    padding:20px 16px;
+    text-align:center;
+}
+
+.page-header h1{
+    font-size:20px;
+    margin-bottom:5px;
+}
+
+.page-header p{
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+
+/* =========================
+   CONTENT
 ========================= */
 
 .container{
-    width:100%;
-    max-width:900px;
-    margin:auto;
-    padding:20px 15px;
+    padding:16px;
 }
 
+
 /* =========================
-   CARD
+   CARDS
 ========================= */
 
 .card{
     background:white;
-    padding:20px;
-    border-radius:20px;
-    margin-bottom:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    padding:16px;
+    border-radius:14px;
+    border:1px solid #edf1f7;
+    margin-bottom:12px;
 }
 
 .card h2{
-    color:#2563eb;
-    font-size:19px;
-    margin-bottom:15px;
+    color:#10144c;
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:12px;
 }
+
 
 /* =========================
    REFERRAL LINK
 ========================= */
 
+.referral-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
 .referral{
+    flex:1;
+    min-width:0;
     background:#f8fafc;
     border:1px solid #e2e8f0;
-    padding:14px;
-    border-radius:14px;
+    padding:12px;
+    border-radius:11px;
     color:#475569;
-    word-break:break-all;
-    font-size:14px;
+    font-size:11px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .copy-btn{
-    width:100%;
-    padding:14px;
-    margin-top:12px;
     border:none;
-    border-radius:14px;
-    background:#2563eb;
+    background:#10144c;
     color:white;
-    font-weight:bold;
+    padding:11px 12px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:700;
     cursor:pointer;
+    white-space:nowrap;
 }
 
-.copy-btn:hover{
-    background:#1d4ed8;
+.copy-btn:active{
+    transform:scale(.97);
 }
+
 
 /* =========================
    STATS
@@ -111,27 +172,30 @@ body{
 .stats{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:12px;
+    gap:8px;
 }
 
 .stat-box{
     background:#f8fafc;
-    padding:18px 10px;
-    border-radius:15px;
+    border:1px solid #f1f5f9;
+    padding:15px 8px;
+    border-radius:11px;
     text-align:center;
 }
 
 .number{
-    color:#2563eb;
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:6px;
+    color:#10144c;
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:4px;
+    word-break:break-word;
 }
 
 .stat-label{
-    color:#64748b;
-    font-size:13px;
+    color:#8c96a3;
+    font-size:10px;
 }
+
 
 /* =========================
    LEVEL SUMMARY
@@ -139,55 +203,68 @@ body{
 
 .level-grid{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:12px;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
 }
 
 .level-box{
     background:#f8fafc;
-    padding:16px 10px;
-    border-radius:15px;
+    border:1px solid #f1f5f9;
+    padding:13px 5px;
+    border-radius:11px;
     text-align:center;
 }
 
 .level-box h3{
-    color:#2563eb;
-    font-size:15px;
-    margin-bottom:8px;
+    color:#10144c;
+    font-size:12px;
+    margin-bottom:7px;
 }
 
 .level-count{
-    font-size:21px;
-    font-weight:bold;
-    color:#0f172a;
+    font-size:17px;
+    font-weight:700;
+    color:#334155;
 }
 
 .level-limit{
-    color:#64748b;
-    font-size:12px;
-    margin-top:4px;
+    color:#94a3b8;
+    font-size:9px;
+    margin-top:3px;
 }
+
 
 /* =========================
    COMMISSION
 ========================= */
 
-.level{
+.commission-level{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     background:#f8fafc;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:12px;
-    color:#475569;
+    border:1px solid #f1f5f9;
+    padding:12px 13px;
+    border-radius:11px;
+    margin-bottom:7px;
 }
 
-.level:last-child{
+.commission-level:last-child{
     margin-bottom:0;
 }
 
-.level strong{
-    color:#2563eb;
-    font-size:16px;
+.commission-name{
+    color:#475569;
+    font-size:12px;
+    font-weight:600;
 }
+
+.commission-percent{
+    color:#10144c;
+    font-size:15px;
+    font-weight:800;
+}
+
 
 /* =========================
    MEMBERS
@@ -195,10 +272,10 @@ body{
 
 .member{
     background:#f8fafc;
-    padding:16px;
-    border-radius:15px;
-    margin-bottom:12px;
-    border:1px solid #edf2f7;
+    padding:13px;
+    border-radius:12px;
+    margin-bottom:9px;
+    border:1px solid #e9eef5;
 }
 
 .member:last-child{
@@ -209,41 +286,46 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
-    margin-bottom:12px;
+    gap:8px;
+    margin-bottom:11px;
 }
 
 .member-name{
-    font-weight:bold;
+    font-weight:700;
     color:#0f172a;
+    font-size:13px;
+    word-break:break-word;
 }
 
 .member-level{
-    background:#dbeafe;
-    color:#2563eb;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:bold;
+    background:#eef2ff;
+    color:#4c64bc;
+    padding:4px 8px;
+    border-radius:15px;
+    font-size:9px;
+    font-weight:700;
+    white-space:nowrap;
 }
 
 .member-info{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:8px;
 }
 
 .info-item{
-    color:#64748b;
-    font-size:12px;
+    color:#94a3b8;
+    font-size:10px;
 }
 
 .info-item strong{
     display:block;
     color:#334155;
-    font-size:14px;
-    margin-top:4px;
+    font-size:12px;
+    margin-top:3px;
+    word-break:break-word;
 }
+
 
 /* =========================
    EMPTY STATE
@@ -256,72 +338,111 @@ body{
 }
 
 .empty-icon{
-    font-size:35px;
-    margin-bottom:10px;
+    margin-bottom:8px;
+    color:#94a3b8;
 }
+
+.empty-icon svg{
+    width:35px;
+    height:35px;
+}
+
 
 /* =========================
    BOTTOM NAVIGATION
+   SAME AS PROFILE PAGE
 ========================= */
 
 .bottom-nav{
     position:fixed;
     bottom:0;
-    left:0;
+
     width:100%;
+    max-width:440px;
+
+    height:65px;
+
     background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:13px 5px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.10);
+    border-top:1px solid #e2e8f0;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+
     z-index:1000;
+
+    box-shadow:0 -3px 12px rgba(0,0,0,.05);
 }
 
 .bottom-nav a{
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:3px;
+
     text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
-    font-size:13px;
-    line-height:20px;
+
+    color:#94a3b8;
+
+    font-size:9px;
 }
 
+.bottom-nav svg{
+    width:20px;
+    height:20px;
+}
+
+.bottom-nav a.active{
+    color:#10144c;
+    font-weight:bold;
+}
+
+.bottom-nav a.active::after{
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:25%;
+    right:25%;
+
+    height:3px;
+
+    background:#10144c;
+
+    border-radius:4px 4px 0 0;
+}
+
+
 /* =========================
-   MOBILE
+   SMALL PHONES
 ========================= */
 
-@media(max-width:600px){
+@media(max-width:360px){
 
     .container{
-        padding:15px;
-    }
-
-    .level-grid{
-        grid-template-columns:1fr 1fr 1fr;
+        padding:13px;
     }
 
     .level-box{
-        padding:14px 5px;
-    }
-
-    .header{
-        padding:28px 15px;
-    }
-
-}
-
-@media(max-width:400px){
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .level-grid{
-        grid-template-columns:1fr;
+        padding:12px 3px;
     }
 
     .member-info{
         grid-template-columns:1fr;
+    }
+
+    .referral-box{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .copy-btn{
+        width:100%;
     }
 
 }
@@ -333,16 +454,37 @@ body{
 
 <body>
 
+<div class="phone">
+
 
 <!-- =========================
-     HEADER
+     TOP HEADER
 ========================= -->
 
-<div class="header">
+<div class="top-header">
+
+    <div class="header-title">
+
+        <strong>Team</strong>
+
+        <small>Zenith Capital</small>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+
+<div class="page-header">
 
     <h1>My Team</h1>
 
-    <p>Build and manage your referral network</p>
+    <p>
+        Build and manage your referral network
+    </p>
 
 </div>
 
@@ -358,16 +500,23 @@ body{
 
     <h2>My Referral Link</h2>
 
-    <div class="referral" id="referralLink">
-        {{ request.host_url }}register?ref={{ user.referral_code }}
-    </div>
+    <div class="referral-box">
 
-    <button
-        class="copy-btn"
-        onclick="copyReferral()"
-    >
-        📋 Copy Referral Link
-    </button>
+        <div
+            class="referral"
+            id="referralLink"
+        >
+            {{ request.host_url }}register?ref={{ user.referral_code }}
+        </div>
+
+        <button
+            class="copy-btn"
+            onclick="copyReferral()"
+        >
+            Copy
+        </button>
+
+    </div>
 
 </div>
 
@@ -385,7 +534,7 @@ body{
         <div class="stat-box">
 
             <div class="number">
-                {{ total_team }}
+                {{ total_team|default(0) }}
             </div>
 
             <div class="stat-label">
@@ -398,7 +547,7 @@ body{
         <div class="stat-box">
 
             <div class="number">
-                GHS {{ "%.2f"|format(referral_income|float) }}
+                GHS {{ "%.2f"|format(referral_income|default(0)|float) }}
             </div>
 
             <div class="stat-label">
@@ -413,7 +562,7 @@ body{
 
 
 <!-- =========================
-     LEVEL STRUCTURE
+     TEAM LEVELS
 ========================= -->
 
 <div class="card">
@@ -479,35 +628,42 @@ body{
 
     <h2>Referral Commission</h2>
 
-    <div class="level">
 
-        <strong>Level 1</strong>
+    <div class="commission-level">
 
-        <br>
+        <span class="commission-name">
+            Level 1
+        </span>
 
-        20% Commission
-
-    </div>
-
-
-    <div class="level">
-
-        <strong>Level 2</strong>
-
-        <br>
-
-        3% Commission
+        <span class="commission-percent">
+            20%
+        </span>
 
     </div>
 
 
-    <div class="level">
+    <div class="commission-level">
 
-        <strong>Level 3</strong>
+        <span class="commission-name">
+            Level 2
+        </span>
 
-        <br>
+        <span class="commission-percent">
+            3%
+        </span>
 
-        1% Commission
+    </div>
+
+
+    <div class="commission-level">
+
+        <span class="commission-name">
+            Level 3
+        </span>
+
+        <span class="commission-percent">
+            1%
+        </span>
 
     </div>
 
@@ -536,13 +692,14 @@ body{
                 </div>
 
                 <div class="member-level">
-                    Level {{ member.referral_level }}
+                    Level {{ member.referral_level|default(1) }}
                 </div>
 
             </div>
 
 
             <div class="member-info">
+
 
                 <div class="info-item">
 
@@ -560,7 +717,7 @@ body{
                     Investment
 
                     <strong>
-                        GHS {{ "%.2f"|format(member.invest_amount|float) }}
+                        GHS {{ "%.2f"|format(member.invest_amount|default(0)|float) }}
                     </strong>
 
                 </div>
@@ -571,7 +728,17 @@ body{
                     Joined
 
                     <strong>
-                        {{ member.created_at.strftime("%d %b %Y") }}
+
+                        {% if member.created_at %}
+
+                            {{ member.created_at.strftime("%d %b %Y") }}
+
+                        {% else %}
+
+                            N/A
+
+                        {% endif %}
+
                     </strong>
 
                 </div>
@@ -582,14 +749,21 @@ body{
                     Status
 
                     <strong>
-                        {% if member.invest_amount|float > 0 %}
+
+                        {% if member.invest_amount|default(0)|float > 0 %}
+
                             Active
+
                         {% else %}
+
                             Registered
+
                         {% endif %}
+
                     </strong>
 
                 </div>
+
 
             </div>
 
@@ -597,20 +771,25 @@ body{
 
         {% endfor %}
 
+
     {% else %}
 
         <div class="empty">
 
             <div class="empty-icon">
-                👥
+
+                <i data-lucide="users"></i>
+
             </div>
 
             <p>
                 No team members yet.
             </p>
 
-            <p style="font-size:13px;margin-top:6px;">
+            <p style="font-size:11px;margin-top:5px;color:#94a3b8;">
+
                 Share your referral link to build your team.
+
             </p>
 
         </div>
@@ -624,50 +803,121 @@ body{
 
 
 <!-- =========================
-     BOTTOM NAVIGATION
+     SAME BOTTOM NAVIGATION
+     AS PROFILE PAGE
 ========================= -->
 
 <div class="bottom-nav">
 
+
+    <!-- HOME -->
+
     <a href="{{ url_for('dashboard') }}">
-        🏠<br>
-        Home
+
+        <i data-lucide="home"></i>
+
+        <span>
+            Home
+        </span>
+
     </a>
 
+
+    <!-- INCOME -->
 
     <a href="{{ url_for('my_plan') }}">
-        💼<br>
-        My Plan
+
+        <i data-lucide="trending-up"></i>
+
+        <span>
+            Income
+        </span>
+
     </a>
 
+
+    <!-- TEAM ACTIVE -->
+
+    <a
+        href="{{ url_for('team') }}"
+        class="active"
+    >
+
+        <i data-lucide="users"></i>
+
+        <span>
+            Team
+        </span>
+
+    </a>
+
+
+    <!-- SHARE -->
+
+    <a href="{{ url_for('team') }}">
+
+        <i data-lucide="share-2"></i>
+
+        <span>
+            Share
+        </span>
+
+    </a>
+
+
+    <!-- MY -->
 
     <a href="{{ url_for('profile') }}">
-        👤<br>
-        Profile
+
+        <i data-lucide="user"></i>
+
+        <span>
+            My
+        </span>
+
     </a>
+
+
+</div>
+
 
 </div>
 
 
 <script>
 
+lucide.createIcons();
+
+
 function copyReferral(){
 
-    const link =
-        document.getElementById("referralLink").innerText.trim();
+    const element =
+        document.getElementById("referralLink");
 
-    navigator.clipboard.writeText(link).then(function(){
+    const link =
+        element.innerText.trim();
+
+    navigator.clipboard.writeText(link)
+    .then(function(){
 
         const button =
             document.querySelector(".copy-btn");
 
-        button.innerText = "✓ Link Copied";
+        const original =
+            button.innerText;
+
+        button.innerText = "Copied";
 
         setTimeout(function(){
 
-            button.innerText = "📋 Copy Referral Link";
+            button.innerText = original;
 
-        },2000);
+        },1500);
+
+    })
+    .catch(function(){
+
+        alert("Unable to copy referral link.");
 
     });
 
@@ -677,4 +927,5 @@ function copyReferral(){
 
 
 </body>
+
 </html>
