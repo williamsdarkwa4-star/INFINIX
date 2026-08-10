@@ -139,10 +139,10 @@ def init_db():
 # MIGRATE OLD PLANS TABLE
 # -------------------------------------------------
 
-    cur.execute("""
-        ALTER TABLE plans
-        ADD COLUMN IF NOT EXISTS user_id INTEGER
-        """)
+      cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS user_id INTEGER
+             """)
 
        cur.execute("""
            ALTER TABLE plans
