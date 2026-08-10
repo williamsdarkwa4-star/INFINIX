@@ -35,7 +35,6 @@ PLANS = {
 # ---------------- DATABASE ----------------
 
 def get_conn():
-    """Create a PostgreSQL database connection."""
     if not DATABASE_URL:
         raise RuntimeError("DATABASE_URL environment variable is not set.")
 
@@ -49,250 +48,223 @@ def get_conn():
 
 
 def init_db():
-    """
-    Create all required database tables.
-
-    This function is safe to run when the application starts.
-    Existing tables/data are preserved.
-    """
-
     conn = get_conn()
     cur = conn.cursor()
 
     try:
+
         # ==========================================================
         # USERS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                username VARCHAR(80) UNIQUE NOT NULL,
-                fullname VARCHAR(120) NOT NULL DEFAULT '',
-                phone VARCHAR(30) UNIQUE NOT NULL,
-                password_hash TEXT,
-                withdraw_password_hash TEXT,
-                referral_code VARCHAR(100) UNIQUE,
-                referred_by VARCHAR(100),
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        user_columns = {
+            "username": "VARCHAR(80)",
+            "fullname": "VARCHAR(120) DEFAULT ''",
+            "phone": "VARCHAR(30)",
+            "password_hash": "TEXT",
+            "withdraw_password_hash": "TEXT",
+            "referral_code": "VARCHAR(100)",
+            "referred_by": "VARCHAR(100)",
+            "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        }
+
+        for column, definition in user_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE users
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # ACCOUNTS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                deposit_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 5.00,
-
-                income_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0.00,
-
-                referral_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0.00,
-
-                withdraw_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0.00
             )
         """)
 
+        account_columns = {
+            "deposit_account": "NUMERIC(14,2) DEFAULT 5.00",
+            "income_account": "NUMERIC(14,2) DEFAULT 0.00",
+            "referral_account": "NUMERIC(14,2) DEFAULT 0.00",
+            "withdraw_account": "NUMERIC(14,2) DEFAULT 0.00"
+        }
+
+        for column, definition in account_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE accounts
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
+
         # ==========================================================
-        # USER PLANS
+        # PLANS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER NOT NULL
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                plan_id INTEGER NOT NULL,
-                plan_name VARCHAR(120) NOT NULL,
-
-                investment_amount NUMERIC(14,2) NOT NULL,
-                daily_income NUMERIC(14,2) NOT NULL,
-
-                duration INTEGER NOT NULL,
-
-                started_at TIMESTAMP NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP,
-
-                last_claim_at TIMESTAMP,
-
-                active BOOLEAN NOT NULL DEFAULT TRUE
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        plan_columns = {
+            "user_id": "INTEGER",
+            "plan_id": "INTEGER",
+            "plan_name": "VARCHAR(120)",
+            "investment_amount": "NUMERIC(14,2)",
+            "daily_income": "NUMERIC(14,2)",
+            "duration": "INTEGER",
+            "started_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+            "last_claim_at": "TIMESTAMP",
+            "active": "BOOLEAN DEFAULT TRUE"
+        }
+
+        for column, definition in plan_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE plans
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # TRANSACTIONS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER NOT NULL
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                transaction_type VARCHAR(50) NOT NULL,
-
-                amount NUMERIC(14,2) NOT NULL,
-
-                status VARCHAR(30) NOT NULL,
-
-                reference VARCHAR(150),
-
-                description TEXT,
-
-                created_at TIMESTAMP NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        transaction_columns = {
+            "user_id": "INTEGER",
+            "transaction_type": "VARCHAR(50)",
+            "amount": "NUMERIC(14,2)",
+            "status": "VARCHAR(30)",
+            "reference": "VARCHAR(150)",
+            "description": "TEXT",
+            "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        }
+
+        for column, definition in transaction_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE transactions
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # WITHDRAWAL ACCOUNTS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_accounts (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER NOT NULL
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                account_name VARCHAR(120) NOT NULL,
-
-                phone VARCHAR(30) NOT NULL,
-
-                network VARCHAR(40) NOT NULL,
-
-                created_at TIMESTAMP NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        withdrawal_account_columns = {
+            "user_id": "INTEGER",
+            "account_name": "VARCHAR(120)",
+            "phone": "VARCHAR(30)",
+            "network": "VARCHAR(40)",
+            "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        }
+
+        for column, definition in withdrawal_account_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE withdrawal_accounts
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # DEPOSIT REQUESTS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS deposit_requests (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER NOT NULL
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                amount NUMERIC(14,2) NOT NULL,
-
-                reference VARCHAR(150),
-
-                status VARCHAR(30) NOT NULL
-                    DEFAULT 'pending',
-
-                created_at TIMESTAMP NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        deposit_columns = {
+            "user_id": "INTEGER",
+            "amount": "NUMERIC(14,2)",
+            "reference": "VARCHAR(150)",
+            "status": "VARCHAR(30) DEFAULT 'pending'",
+            "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        }
+
+        for column, definition in deposit_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE deposit_requests
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # WITHDRAWAL REQUESTS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_requests (
-                id SERIAL PRIMARY KEY,
-
-                user_id INTEGER NOT NULL
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                amount NUMERIC(14,2) NOT NULL,
-
-                account_id INTEGER
-                    REFERENCES withdrawal_accounts(id)
-                    ON DELETE SET NULL,
-
-                status VARCHAR(30) NOT NULL
-                    DEFAULT 'pending',
-
-                created_at TIMESTAMP NOT NULL
-                    DEFAULT CURRENT_TIMESTAMP
+                id SERIAL PRIMARY KEY
             )
         """)
+
+        withdrawal_columns = {
+            "user_id": "INTEGER",
+            "amount": "NUMERIC(14,2)",
+            "account_id": "INTEGER",
+            "status": "VARCHAR(30) DEFAULT 'pending'",
+            "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+        }
+
+        for column, definition in withdrawal_columns.items():
+            cur.execute(
+                f"""
+                ALTER TABLE withdrawal_requests
+                ADD COLUMN IF NOT EXISTS {column} {definition}
+                """
+            )
 
         # ==========================================================
         # ADMINS
         # ==========================================================
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS admins (
-                id SERIAL PRIMARY KEY,
-
-                username VARCHAR(80) UNIQUE NOT NULL,
-
-                password_hash TEXT NOT NULL
+                id SERIAL PRIMARY KEY
             )
         """)
 
-        # ==========================================================
-        # INDEXES
-        # ==========================================================
-
         cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_users_phone
-            ON users(phone)
+            ALTER TABLE admins
+            ADD COLUMN IF NOT EXISTS username VARCHAR(80)
         """)
 
         cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_users_referral_code
-            ON users(referral_code)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_users_referred_by
-            ON users(referred_by)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_plans_user_id
-            ON plans(user_id)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_plans_active
-            ON plans(user_id, active)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_transactions_user_id
-            ON transactions(user_id)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_transactions_created_at
-            ON transactions(created_at DESC)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_deposit_requests_status
-            ON deposit_requests(status)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_status
-            ON withdrawal_requests(status)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_withdrawal_accounts_user_id
-            ON withdrawal_accounts(user_id)
+            ALTER TABLE admins
+            ADD COLUMN IF NOT EXISTS password_hash TEXT
         """)
 
         # ==========================================================
-        # CREATE ACCOUNTS FOR EXISTING USERS
+        # CREATE MISSING USER ACCOUNTS
         # ==========================================================
 
         cur.execute("""
@@ -316,7 +288,7 @@ def init_db():
         """)
 
         # ==========================================================
-        # GENERATE REFERRAL CODES FOR EXISTING USERS
+        # REFERRAL CODES
         # ==========================================================
 
         cur.execute("""
@@ -326,9 +298,10 @@ def init_db():
                OR referral_code = ''
         """)
 
-        users_without_referral = cur.fetchall()
+        users_without_codes = cur.fetchall()
 
-        for row in users_without_referral:
+        for row in users_without_codes:
+
             user_id = row[0]
 
             referral_code = (
@@ -341,10 +314,13 @@ def init_db():
                 UPDATE users
                 SET referral_code=%s
                 WHERE id=%s
-            """, (referral_code, user_id))
+            """, (
+                referral_code,
+                user_id
+            ))
 
         # ==========================================================
-        # ADMIN ACCOUNT
+        # ADMIN
         # ==========================================================
 
         admin_username = os.environ.get(
@@ -360,71 +336,94 @@ def init_db():
         admin_hash = generate_password_hash(admin_password)
 
         cur.execute("""
-            INSERT INTO admins (
-                username,
-                password_hash
-            )
-            VALUES (%s, %s)
+            SELECT id
+            FROM admins
+            WHERE username=%s
+        """, (admin_username,))
 
-            ON CONFLICT (username)
-            DO UPDATE SET
-                password_hash = EXCLUDED.password_hash
-        """, (
-            admin_username,
-            admin_hash
-        ))
+        existing_admin = cur.fetchone()
 
-        # ==========================================================
-        # VERIFY REQUIRED TABLES
-        # ==========================================================
-
-        required_tables = [
-            "users",
-            "accounts",
-            "plans",
-            "transactions",
-            "withdrawal_accounts",
-            "deposit_requests",
-            "withdrawal_requests",
-            "admins"
-        ]
-
-        for table_name in required_tables:
+        if existing_admin:
 
             cur.execute("""
-                SELECT EXISTS (
-                    SELECT 1
-                    FROM information_schema.tables
-                    WHERE table_schema = 'public'
-                    AND table_name = %s
-                )
-            """, (table_name,))
+                UPDATE admins
+                SET password_hash=%s
+                WHERE username=%s
+            """, (
+                admin_hash,
+                admin_username
+            ))
 
-            exists = cur.fetchone()[0]
+        else:
 
-            if not exists:
-                raise RuntimeError(
-                    f"Required table '{table_name}' was not created."
+            cur.execute("""
+                INSERT INTO admins (
+                    username,
+                    password_hash
                 )
+                VALUES (%s,%s)
+            """, (
+                admin_username,
+                admin_hash
+            ))
+
+        # ==========================================================
+        # INDEXES
+        # ==========================================================
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_plans_user_id
+            ON plans(user_id)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_plans_active
+            ON plans(user_id, active)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_transactions_user_id
+            ON transactions(user_id)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_deposit_requests_user_id
+            ON deposit_requests(user_id)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_deposit_requests_status
+            ON deposit_requests(status)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_user_id
+            ON withdrawal_requests(user_id)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_withdrawal_requests_status
+            ON withdrawal_requests(status)
+        """)
+
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_withdrawal_accounts_user_id
+            ON withdrawal_accounts(user_id)
+        """)
 
         conn.commit()
 
         print("======================================")
         print("DATABASE INITIALIZATION SUCCESS")
-        print("======================================")
-        print("Tables verified:")
-        for table in required_tables:
-            print(" ✓", table)
-
         print("Admin username:", admin_username)
         print("======================================")
 
     except Exception as exc:
+
         conn.rollback()
 
         print("======================================")
         print("DATABASE INITIALIZATION ERROR")
-        print("======================================")
         print(exc)
         print("======================================")
 
@@ -436,8 +435,6 @@ def init_db():
 
 
 def query_one(sql, params=()):
-    """Execute a SELECT query and return one row as a dictionary."""
-
     conn = get_conn()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -451,8 +448,6 @@ def query_one(sql, params=()):
 
 
 def query_all(sql, params=()):
-    """Execute a SELECT query and return all rows as dictionaries."""
-
     conn = get_conn()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -466,12 +461,6 @@ def query_all(sql, params=()):
 
 
 def execute(sql, params=(), fetchone=False):
-    """
-    Execute INSERT/UPDATE/DELETE queries.
-
-    Set fetchone=True when using RETURNING.
-    """
-
     conn = get_conn()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -497,8 +486,6 @@ def execute(sql, params=(), fetchone=False):
 
 
 def current_user():
-    """Return the currently logged-in user."""
-
     user_id = session.get("user_id")
 
     if not user_id:
@@ -511,8 +498,6 @@ def current_user():
 
 
 def current_account(user_id):
-    """Return the balance/account record for a user."""
-
     return query_one(
         "SELECT * FROM accounts WHERE user_id=%s",
         (user_id,)
@@ -524,6 +509,12 @@ def inject_user():
     return {
         "logged_user": current_user()
     }
+
+
+
+
+
+
 
 
 
