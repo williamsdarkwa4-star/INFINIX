@@ -23,7 +23,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 PLANS = {
-    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("8"), "duration": 200},
+    1: {"name": "Zenith 1", "investment": Decimal("50"), "daily": Decimal("5"), "duration": 200},
     2: {"name": "Zenith 2", "investment": Decimal("100"), "daily": Decimal("20"), "duration": 200},
     3: {"name": "Zenith 3", "investment": Decimal("200"), "daily": Decimal("40"), "duration": 200},
     4: {"name": "Zenith 4", "investment": Decimal("300"), "daily": Decimal("65"), "duration": 200},
@@ -121,19 +121,70 @@ def init_db():
         """)
 
         cur.execute("""
-            CREATE TABLE IF NOT EXISTS plans (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-                plan_id INTEGER NOT NULL,
-                plan_name VARCHAR(120) NOT NULL,
-                investment_amount NUMERIC(14,2) NOT NULL,
-                daily_income NUMERIC(14,2) NOT NULL,
-                duration INTEGER NOT NULL,
-                started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                last_claim_at TIMESTAMP,
-                active BOOLEAN DEFAULT TRUE
-            )
+    CREATE TABLE IF NOT EXISTS plans (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        plan_id INTEGER NOT NULL,
+        plan_name VARCHAR(120) NOT NULL,
+        investment_amount NUMERIC(14,2) NOT NULL,
+        daily_income NUMERIC(14,2) NOT NULL,
+        duration INTEGER NOT NULL,
+        started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_claim_at TIMESTAMP,
+        active BOOLEAN DEFAULT TRUE
+    )
+""")
+
+# -------------------------------------------------
+# MIGRATE OLD PLANS TABLE
+# -------------------------------------------------
+
+    cur.execute("""
+        ALTER TABLE plans
+        ADD COLUMN IF NOT EXISTS user_id INTEGER
         """)
+
+       cur.execute("""
+           ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS plan_id INTEGER
+           """)
+
+        cur.execute("""
+             ALTER TABLE plans
+           ADD COLUMN IF NOT EXISTS plan_name VARCHAR(120)
+           """)
+
+         cur.execute("""
+             ALTER TABLE plans
+           ADD COLUMN IF NOT EXISTS investment_amount NUMERIC(14,2)
+         """)
+
+        cur.execute("""
+                 ALTER TABLE plans
+                 ADD COLUMN IF NOT EXISTS daily_income NUMERIC(14,2)
+          """)
+
+        cur.execute("""
+              ALTER TABLE plans
+             ADD COLUMN IF NOT EXISTS duration INTEGER
+          """)
+
+         cur.execute("""
+               ALTER TABLE plans
+               ADD COLUMN IF NOT EXISTS started_at TIMESTAMP
+              DEFAULT CURRENT_TIMESTAMP
+          """)
+
+        cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS last_claim_at TIMESTAMP
+        """)
+
+       cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS active BOOLEAN
+            DEFAULT TRUE
+      """)
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
