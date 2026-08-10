@@ -3,347 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Grain Full Dashboard</title>
+    <title>Rice Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6fa;
-            color: #333;
-            display: flex;
-            justify-content: center;
-        }
-
-        .mobile-container {
-            width: 100%;
-            max-width: 450px;
-            background-color: #fbfcff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 80px;
-            position: relative;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-        }
-
-        .app-header {
-            background-color: #ffffff;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            font-weight: 500;
-        }
-
-        .header-center {
-            text-align: center;
-            flex-grow: 1;
-        }
-        
-        .header-url {
-            font-size: 0.75rem;
-            color: #777;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .top-banner {
-            width: 100%;
-            height: 165px;
-            background: linear-gradient(135deg, #0e2954, #1c4b8f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            flex-direction: column;
-            padding: 20px;
-            position: relative;
-        }
-
-        .top-banner h2 {
-            font-size: 1.4rem;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .top-banner p {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            font-weight: 300;
-        }
-
-        .slider-indicator {
-            display: flex;
-            gap: 5px;
-            margin-top: 15px;
-        }
-
-        .dot {
-            width: 20px;
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-        }
-
-        .dot.active {
-            background: white;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 18px 15px;
-            background: white;
-            border-radius: 0 0 15px 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
-        }
-
-        .action-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: #333;
-            cursor: pointer;
-        }
-
-        .icon-circle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .bg-deposit { background-color: #10cf74; }
-        .bg-withdraw { background-color: #ff9f43; }
-        .bg-service { background-color: #3884ff; }
-        .bg-channel { background-color: #705ec8; }
-
-        .package-card {
-            background: white;
-            margin: 10px 15px;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            border: 1px solid #edf1f7;
-        }
-
-        .card-main {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 62%;
-        }
-
-        .metric-box {
-            background-color: #f8fafd;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: #8c96a3;
-            margin-bottom: 4px;
-        }
-
-        .metric-value {
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: #0e2954;
-        }
-
-        .product-preview {
-            width: 34%;
-            height: 115px;
-            background-color: #f3f4f7;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 10px;
-            position: relative;
-        }
-
-        .rice-svg {
-            width: 55px;
-            height: 55px;
-            margin-bottom: 8px;
-        }
-
-        .tag-times {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: rgba(60,65,75,0.85);
-            color: white;
-            font-size: 0.65rem;
-            padding: 2px 7px;
-            border-top-right-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-
-        .vip-badge {
-            background: linear-gradient(90deg, #0e2954, #1c4b8f);
-            color: #ffd700;
-            font-size: 0.72rem;
-            font-weight: bold;
-            padding: 4px 14px;
-            border-radius: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 85%;
-        }
-
-        .btn-action {
-            width: 100%;
-            border: none;
-            padding: 12px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            margin-top: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-active {
-            background-color: #0c1c33;
-            color: white;
-        }
-
-        .btn-disabled {
-            background-color: #8a8e94;
-            color: white;
-            cursor: not-allowed;
-        }
-
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 450px;
-            height: 64px;
-            background: white;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            border-top: 1px solid #eee;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: #8fa0b5;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: #0e2954;
-            font-weight: bold;
-        }
-
-        .nav-icon {
-            font-size: 1.3rem;
-            margin-bottom: 3px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #f4f6fa; display: flex; justify-content: center; }
+        .phone { width: 100%; max-width: 450px; background: #fbfcff; padding-bottom: 80px; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+        .header { background: #fff; padding: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .banner { height: 160px; background: linear-gradient(135deg, #0e2954, #1c4b8f); color: white; text-align: center; padding: 35px 20px; }
+        .banner h2 { font-size: 1.4rem; margin-bottom: 5px; }
+        .banner p { font-size: 0.8rem; opacity: 0.8; }
+        .actions { display: grid; grid-template-columns: repeat(4, 1fr); padding: 15px; background: white; margin-bottom: 10px; text-align: center; font-size: 0.8rem; }
+        .circle { width: 45px; height: 45px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 1.2rem; }
+        .card { background: white; margin: 12px; padding: 15px; border-radius: 12px; border: 1px solid #edf1f7; }
+        .main-box { display: flex; justify-content: space-between; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 65%; }
+        .box { background: #f8fafd; padding: 8px; border-radius: 6px; text-align: center; }
+        .lbl { font-size: 0.7rem; color: #8c96a3; margin-bottom: 3px; }
+        .val { font-size: 0.9rem; font-weight: bold; color: #0e2954; }
+        .preview { width: 32%; height: 110px; background: #f3f4f7; border-radius: 8px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 8px; position: relative; }
+        .tag { position: absolute; top: 0; right: 0; background: #444; color: white; font-size: 0.6rem; padding: 2px 6px; border-top-right-radius: 8px; border-bottom-left-radius: 6px; }
+        .badge { background: #0e2954; color: #ffd700; font-size: 0.7rem; font-weight: bold; padding: 3px 10px; border-radius: 10px; }
+        .btn { width: 100%; border: none; padding: 11px; border-radius: 20px; font-weight: bold; margin-top: 12px; cursor: pointer; }
+        .buy { background: #0c1c33; color: white; }
+        .soon { background: #9da4b0; color: white; cursor: not-allowed; }
+        .nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; height: 60px; background: white; display: flex; justify-content: space-around; border-top: 1px solid #eee; align-items: center; font-size: 0.75rem; color: #8fa0b5; }
+        .active { color: #0e2954; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="mobile-container">
-        
-        <div class="app-header">
-            <span>✕</span>
-            <div class="header-center">
-                <span>Home</span>
-                <span class="header-url">rice-distro08.com</span>
-            </div>
-            <span style="font-weight: bold; font-size: 1.2rem;">⋮</span>
-        </div>
-        
-        <div class="top-banner">
-            <h2>GOLDEN GRAIN CO.</h2>
-            <p>AGRICULTURE HARVEST & LOGISTICS 2026</p>
-            <div class="slider-indicator">
-                <div class="dot active"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-        </div>
+<div class="phone">
+    <!-- Header -->
+    <div class="header"><span>✕</span><div>Home<br><small style="color:#777; font-size:0.7rem">rice-distro.com</small></div><span>⋮</span></div>
+    
+    <!-- Banner -->
+    <div class="banner"><h2>GOLDEN GRAIN CO.</h2><p>RICE HARVEST & LOGISTICS 2026</p></div>
 
-        <div class="action-grid">
-            <div class="action-item">
-                <div class="icon-circle bg-deposit">📋</div>
-                Deposit
-            </div>
-            <div class="action-item">
-                <div class="icon-circle bg-withdraw">💳</div>
-                Withdraw
-            </div>
-            <div class="action-item">
-                <div class="icon-circle bg-service">🎧</div>
-                Service
-            </div>
-            <div class="action-item">
-                <div class="icon-circle bg-channel">🚀</div>
-                Channel
-            </div>
-        </div>
+    <!-- Quick Menu -->
+    <div class="actions">
+        <div><div class="circle" style="background:#10cf74">📋</div>Deposit</div>
+        <div><div class="circle" style="background:#ff9f43">💳</div>Withdraw</div>
+        <div><div class="circle" style="background:#3884ff">🎧</div>Service</div>
+        <div><div class="circle" style="background:#705ec8">🚀</div>Channel</div>
+    </div>
 
-        <svg style="display: none;">
-            <g id="rice-sack-icon">
-                <path d="M16,12 C20,8 44,8 48,12 C52,18 50,54 45,58 C38,62 26,62 19,58 C14,54 12,18 16,12 Z" fill="#f5dab1" stroke="#cfa670" stroke-width="2"/>
-                <path d="M20,13 C24,18 40,18 44,13" fill="none" stroke="#bfa076" stroke-width="2"/>
-                <path d="M17,25 L47,25 L45,46 L19,46 Z" fill="#ffffff" opacity="0.6"/>
-                <text x="32" y="38" font-size="8" font-weight="bold" fill="#784b1d" text-anchor="middle">RICE</text>
-            </g>
-        </svg>
+    <!-- Container where JavaScript loads all plans -->
+    <div id="plans-container"></div>
 
-        <!-- VIP 1 -->
-        <div class="package-card">
-            <div class="card-main">
-                <div class="metrics-grid">
-                    <div class="metric-box"><div class="metric-label">Price</div><div class="metric-value">₵ 120</div></div>
-                    <div class="metric-box"><div class="metric-label">Daily profit</div><div class="metric-value">₵ 20</div></div>
-                    <div class="metric-box"><div class="metric-label">Days</div><div class="metric-value">180</div></div>
-                    <div class="metric-box"><div class="metric-label">Total profit</div><div class="metric-value">₵ 3600</div></div>
+    <!-- Navigation -->
+    <div class="nav">
+        <div class="active">🏠<br>Home</div>
+        <div>📊<br>Income</div>
+        <div>👥<br>Team</div>
+        <div>🔗<br>Share</div>
+        <div>👤<br>My</div>
+    </div>
+</div>
+
+<script>
+    // All 10 tiers stored neatly in a simple data list
+    const plans = [
+        { vip: 1, price: 120, daily: 20, total: 3600, active: true },
+        { vip: 2, price: 240, daily: 42, total: 7560, active: false },
+        { vip: 3, price: 450, daily: 85, total: 15300, active: false },
+        { vip: 4, price: 960, daily: 200, total: 36000, active: false },
+        { vip: 5, price: 1800, daily: 400, total: 72000, active: false },
+        { vip: 6, price: 2900, daily: 700, total: 126000, active: false },
+        { vip: 7, price: 4200, daily: 1200, total: 216000, active: false },
+        { vip: 8, price: 6500, daily: 2050, total: 369000, active: false },
+        { vip: 9, price: 8800, daily: 3200, total: 576000, active: false },
+        { vip: 10, price: 11000, daily: 4680, total: 842400, active: false }
+    ];
+
+    const container = document.getElementById('plans-container');
+    
+    // Automatically build the cards
+    plans.forEach(p => {
+        container.innerHTML += `
+            <div class="card">
+                <div class="main-box">
+                    <div class="grid">
+                        <div class="box"><div class="lbl">Price</div><div class="val">₵ ${p.price}</div></div>
+                        <div class="box"><div class="lbl">Daily profit</div><div class="val">₵ ${p.daily}</div></div>
+                        <div class="box"><div class="lbl">Days</div><div class="val">180</div></div>
+                        <div class="box"><div class="lbl">Total profit</div><div class="val">₵ ${p.total}</div></div>
+                    </div>
+                    <div class="preview">
+                        <div class="tag">Times ${p.active ? '1/1' : '0/1'}</div>
+                        <span style="font-size: 2.2rem; margin-bottom: 5px;">🌾</span>
+                        <div class="badge">VIP ${p.vip}</div>
+                    </div>
                 </div>
-                <div class="product-preview">
-                    <div class="tag-times">Times 1/1</div>
-                    <svg class="rice-svg"><use href="#rice-sack-icon"/></svg>
-                    <div class="vip-badge">VIP 1</div>
-                </div>
+                <button class="btn ${p.active ? 'buy' : 'soon'}">${p.active ? 'Buy now' : 'Coming soon'}</button>
             </div>
-            <button class="btn-action btn-active">Buy now</button>
-        </div>
+        `;
+    });
+</script>
 
-        <!-- VIP 2 -->
-        <div class="package-card">
+</body>
+</html>
