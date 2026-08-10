@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Withdraw - Zenith Capital</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
+<!DOCTYPE html><html lang="en"><head><title>Withdraw - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
 
 *{
     margin:0;
@@ -15,126 +7,183 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
     background:#f4f7fb;
-    padding-bottom:80px;
+    padding-bottom:90px;
 }
-
 
 .header{
-
     background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
-    padding:30px;
+    padding:30px 20px;
     text-align:center;
     border-radius:0 0 30px 30px;
-
 }
 
+.header h1{
+    font-size:26px;
+}
+
+.header p{
+    margin-top:8px;
+    color:#dbeafe;
+}
 
 .container{
     padding:20px;
+    max-width:600px;
+    margin:auto;
 }
-
 
 .card{
-
     background:white;
-    padding:25px;
+    padding:22px;
     border-radius:20px;
+    margin-bottom:18px;
     box-shadow:0 5px 15px rgba(0,0,0,.08);
-
 }
-
 
 .card h2{
-
     color:#2563eb;
-    margin-bottom:15px;
-
+    margin-bottom:16px;
+    font-size:20px;
 }
 
+.balance-card{
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:18px;
+    text-align:center;
+}
 
-.notice{
+.balance-card p{
+    color:#475569;
+    margin-bottom:8px;
+}
 
-    background:#dbeafe;
-    color:#1e40af;
-    padding:15px;
+.balance{
+    color:#2563eb;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.info{
+    color:#475569;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.account{
+    display:block;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    padding:16px;
     border-radius:15px;
-    margin-bottom:20px;
-
+    margin-bottom:12px;
 }
 
+.account-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.account input{
+    width:20px;
+    height:20px;
+    margin-top:3px;
+}
+
+.account strong{
+    color:#0f172a;
+}
+
+.account-info{
+    color:#64748b;
+    margin-top:6px;
+    line-height:1.5;
+    font-size:14px;
+}
 
 input{
-
     width:100%;
     padding:15px;
+    margin:8px 0;
     border-radius:15px;
-    border:1px solid #ddd;
-    margin:10px 0 15px;
-
+    border:1px solid #dbe1e8;
+    outline:none;
+    font-size:15px;
 }
 
-
-
-/* Amount Buttons */
-
-.amount-buttons{
-
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-
+input:focus{
+    border-color:#2563eb;
 }
 
-
-.amount-buttons button{
-
-    flex:1;
-    min-width:80px;
-    padding:12px;
+button{
+    width:100%;
+    padding:15px;
     border:none;
-    border-radius:12px;
+    border-radius:15px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.bind-btn{
+    display:block;
+    width:100%;
+    padding:15px;
     background:#e2e8f0;
     color:#0f172a;
-    font-weight:bold;
-
-}
-
-
-.amount-buttons button:hover{
-
-    background:#2563eb;
-    color:white;
-
-}
-
-
-
-/* Submit */
-
-.submit{
-
-    width:100%;
-    padding:15px;
-    margin-top:20px;
-    border:none;
+    text-decoration:none;
+    text-align:center;
     border-radius:15px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
     font-weight:bold;
-
+    margin-top:12px;
 }
 
+.notice{
+    background:#eff6ff;
+    color:#1e40af;
+    padding:14px;
+    border-radius:15px;
+    margin-bottom:18px;
+    font-size:14px;
+    line-height:1.5;
+}
 
+.flash{
+    padding:14px;
+    border-radius:14px;
+    margin-bottom:15px;
+    font-weight:bold;
+}
 
-/* Bottom Navigation */
+.flash.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.flash.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.empty{
+    text-align:center;
+    padding:10px 0;
+    color:#64748b;
+}
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
@@ -144,215 +193,191 @@ input{
     justify-content:space-around;
     padding:15px;
     box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
 }
 
-
 .bottom-nav a{
-
     text-decoration:none;
     color:#2563eb;
     text-align:center;
     font-weight:bold;
-
+    font-size:13px;
 }
 
-</style>
+</style></head><body><div class="header"><h1>Withdraw</h1>
 
-</head>
+<p>Request a withdrawal from your account</p>
 
+</div><div class="container">{% with messages = get_flashed_messages(with_categories=true) %}
 
-<body>
+{% for category, message in messages %}
 
-
-
-<div class="header">
-
-<h1>Withdraw</h1>
-
-<p>Secure withdrawal request</p>
-
-</div>
-
-
-
-
-<div class="container">
-
-
-<div class="card">
-
-
-<h2>Withdraw Funds</h2>
-
-
-<div class="notice">
-
-Minimum Withdrawal: GHS 30<br><br>
-
-Withdrawal Fee: 16%
-
-</div>
-
-
-
-<form method="POST" action="{{ url_for('request_withdrawal') }}">
-
-    <label>Select Amount</label>
-
-    <div class="amount-buttons">
-        <button type="button" onclick="setAmount(30)">GHS 30</button>
-        <button type="button" onclick="setAmount(50)">GHS 50</button>
-        <button type="button" onclick="setAmount(100)">GHS 100</button>
-        <button type="button" onclick="setAmount(200)">GHS 200</button>
-        <button type="button" onclick="setAmount(600)">GHS 600</button>
+    <div class="flash {{ category }}">
+        {{ message }}
     </div>
+
+{% endfor %}
+
+{% endwith %}
+
+<!-- REAL WITHDRAWAL BALANCE --><div class="balance-card"><p>Available Withdrawal Balance</p>
+
+<div class="balance">
+
+    GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
+
+</div>
+
+</div><div class="notice">💡 Minimum withdrawal amount is
+<strong>GHS 30.00</strong>.
+
+Make sure your withdrawal account details are correct
+before submitting your request.
+
+</div><!-- WITHDRAWAL ACCOUNT --><div class="card"><h2>🏦 Select Withdrawal Account</h2>
+
+
+{% if accounts %}
+
+    {% for withdrawal_account in accounts %}
+
+    <label class="account">
+
+        <div class="account-row">
+
+            <input
+                type="radio"
+                name="account_id"
+                value="{{ withdrawal_account.id }}"
+                form="withdrawForm"
+                {% if loop.first %}checked{% endif %}
+                required
+            >
+
+            <div>
+
+                <strong>
+                    {{ withdrawal_account.network }}
+                </strong>
+
+                <div class="account-info">
+                    Account Name:
+                    {{ withdrawal_account.account_name }}
+                </div>
+
+                <div class="account-info">
+                    Number:
+                    {{ withdrawal_account.phone }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </label>
+
+    {% endfor %}
+
+{% else %}
+
+    <div class="empty">
+
+        <p>You have no withdrawal account yet.</p>
+
+        <a
+            href="{{ url_for('bind_account') }}"
+            class="bind-btn"
+        >
+            ➕ Bind Withdrawal Account
+        </a>
+
+    </div>
+
+{% endif %}
+
+</div><!-- WITHDRAWAL FORM -->{% if accounts %}
+
+<div class="card"><h2>💸 Withdrawal Request</h2>
+
+<form
+    method="POST"
+    action="{{ url_for('request_withdrawal') }}"
+    id="withdrawForm"
+>
 
     <input
         type="number"
         name="amount"
-        id="amount"
         min="30"
-        step="0.16"
+        step="0.01"
+        max="{{ account.withdraw_account or 0 }}"
         placeholder="Enter withdrawal amount"
         required
     >
+
 
     <input
         type="password"
         name="password"
         placeholder="Enter withdrawal password"
+        minlength="6"
         required
     >
 
-    {% if accounts %}
-        <label>Select withdrawal account</label>
 
-        <select name="account_id" required>
-            {% for account in accounts %}
-                <option value="{{ account.id }}">
-                    {{ account.account_name }} -
-                    {{ account.phone }} -
-                    {{ account.network }}
-                </option>
-            {% endfor %}
-        </select>
-    {% endif %}
+    <button type="submit">
 
-    <button class="submit" type="submit">
-        Continue
+        💸 Submit Withdrawal
+
     </button>
 
 </form>
 
 
-
-
-<input 
-type="number"
-id="amount"
-placeholder="Enter withdrawal amount"
+<a
+    href="{{ url_for('bind_account') }}"
+    class="bind-btn"
 >
+    ⚙️ Manage Withdrawal Accounts
+</a>
 
+</div>{% endif %}
 
+<!-- INFORMATION --><div class="card"><h2>ℹ️ Withdrawal Information</h2>
 
+<div class="info">
 
-<input 
-type="password"
-id="password"
-placeholder="Enter withdrawal password"
->
+    <p>
+        Your withdrawal request will be submitted for review.
+    </p>
 
+    <br>
 
-
-
-<button class="submit" onclick="withdraw()">
-
-Next
-
-</button>
-
-
+    <p>
+        Make sure the selected account belongs to you and that
+        the withdrawal password is correct.
+    </p>
 
 </div>
 
-</div>
-
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard">
-🏠<br>
-Home
+</div></div><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
+    🏠<br>
+    Home
 </a>
 
-
-<a href="/my_plan">
-💼<br>
-My Plan
+<a href="{{ url_for('my_plan') }}">
+    💼<br>
+    My Plan
 </a>
 
-
-<a href="/profile">
-👤<br>
-Profile
+<a href="{{ url_for('transaction_history') }}">
+    📋<br>
+    History
 </a>
 
+<a href="{{ url_for('profile') }}">
+    👤<br>
+    Profile
+</a>
 
-</div>
-
-
-
-
-
-
-
-<script>
-
-function setAmount(value){
-
-document.getElementById("amount").value=value;
-
-}
-
-
-
-function withdraw(){
-
-let amount=document.getElementById("amount").value;
-
-let password=document.getElementById("password").value;
-
-
-if(amount < 30){
-
-alert("Minimum withdrawal amount is GHS 30");
-
-}
-
-else if(password==""){
-
-alert("Please enter withdrawal password");
-
-}
-
-else{
-
-window.location.href="/bind_account";
-
-}
-
-}
-
-
-</script>
-
-
-
-</body>
+</div></body>
 </html>
