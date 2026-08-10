@@ -4,78 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Rice Profile Dashboard</title>
-    <!-- Tailwind CSS for modern, production-ready styling -->
+    <!-- Tailwind CSS Engine -->
     <script src="https://jsdelivr.net"></script>
-    <!-- Lucide Icons for clean visual layout anchors -->
+    <!-- Lucide Icon Toolkit -->
     <script src="https://unpkg.com"></script>
+    
     <style>
+        /* Base system typography reset */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Responsive Mobile Sandbox Container */
+        .phone-container {
+            width: 100%;
+            max-width: 440px;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-col: column;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 80px;
+            user-select: none;
+        }
+
+        /* Unified Dark Metric Balance Card */
+        .metric-card-bg {
+            background-color: #10144c;
+            border-radius: 0.75rem;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation list row interactions */
+        .list-item-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.875rem;
+            padding-bottom: 0.875rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(241, 245, 249, 0.5);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .list-item-action:active {
+            background-color: #f8fafc;
+        }
+
+        /* Persistent Navigation Tab Activation Bar */
+        .active-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #10144c;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex justify-center">
+<body>
 
-    <!-- Mobile Screen Wrapper Container -->
-    <div class="w-full max-w-md bg-slate-50 min-h-screen shadow-lg flex flex-col relative pb-20 select-none">
+    <!-- Main Viewport Box Mockup -->
+    <div class="phone-container">
         
-        <!-- Top Custom App Header Bar -->
-        <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
+        <!-- App Top Shell Navigation Utilities -->
+        <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100">
             <div class="flex items-center space-x-4">
-                <i data-lucide="x" class="w-6 h-6 text-gray-700 cursor-pointer"></i>
-                <i data-lucide="chevron-down" class="w-6 h-6 text-gray-700 cursor-pointer"></i>
+                <i data-lucide="x" class="w-6 h-6 text-slate-700 cursor-pointer"></i>
+                <i data-lucide="chevron-down" class="w-6 h-6 text-slate-700 cursor-pointer"></i>
             </div>
             <div class="text-center">
-                <span class="text-sm font-medium text-gray-800 block leading-none">My</span>
-                <span class="text-[10px] text-gray-400 block mt-0.5">rice-portal.com</span>
+                <span class="text-sm font-semibold text-slate-800 block leading-none">My</span>
+                <span class="text-[10px] text-slate-400 block mt-0.5">rice-portal.com</span>
             </div>
             <div class="flex items-center space-x-4">
-                <i data-lucide="share-2" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
-                <i data-lucide="share" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
-                <i data-lucide="more-vertical" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
+                <i data-lucide="share-2" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
+                <i data-lucide="share" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
+                <i data-lucide="more-vertical" class="w-5 h-5 text-slate-700 cursor-pointer"></i>
             </div>
         </div>
 
-        <!-- Upper Profile Header Section -->
-        <div class="px-5 pt-6 pb-4 bg-gradient-to-b from-blue-50/50 to-transparent">
+        
+        <div class="px-5 pt-6 pb-4 bg-gradient-to-b from-blue-50/40 to-transparent">
             <div class="flex items-center space-x-4">
-                <!-- Brand Avatar Design Container -->
                 <div class="relative">
-                    <div class="w-20 h-20 bg-white rounded-full border-2 border-indigo-200 p-1 flex items-center justify-center shadow-sm overflow-hidden">
+                    <div class="w-20 h-20 bg-white rounded-full border-2 border-indigo-100 p-1 flex items-center justify-center shadow-xs overflow-hidden">
                         <div class="text-center">
-                            <span class="text-amber-600 font-black text-xs tracking-tighter block">RICE</span>
+                            <span class="text-amber-600 font-extrabold text-xs tracking-tighter block">RICE</span>
                             <span class="text-emerald-600 font-bold text-[10px] tracking-widest block -mt-1">CORAL</span>
                         </div>
                     </div>
-                    <!-- VIP Badge Position overlay -->
-                    <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-indigo-400 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-sm tracking-wide">VIP0</span>
+                    <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-indigo-500 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-xs tracking-wide">VIP0</span>
                 </div>
-
-                <!-- Account Credentials Block -->
                 <div>
                     <h2 class="text-2xl font-semibold text-slate-700 tracking-wide">233246551897</h2>
-                    <div class="mt-1 inline-flex items-center bg-indigo-100/70 text-indigo-600 text-[11px] font-medium px-2 py-0.5 rounded">
+                    <div class="mt-1 inline-flex items-center bg-indigo-100/80 text-indigo-600 text-[11px] font-medium px-2 py-0.5 rounded">
                         ID 10243
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Central Performance Metric Cards Row -->
+        <!-- Metrics Matrix Section Area -->
         <div class="px-4 mb-4">
-            <div class="bg-[#11165c] rounded-xl py-5 px-3 grid grid-cols-3 text-center text-white shadow-md">
-                <!-- Column 1: Rice Bag Balance -->
-                <div class="border-r border-slate-600/50">
+            <div class="metric-card-bg">
+                <div class="border-r border-slate-700/40">
                     <div class="text-xl font-bold">10</div>
                     <div class="text-[11px] text-slate-300 font-light mt-1">Balance</div>
                 </div>
-                <!-- Column 2: Total Bag Deposits -->
-                <div class="border-r border-slate-600/50">
+                <div class="border-r border-slate-700/40">
                     <div class="text-xl font-bold">120</div>
                     <div class="text-[11px] text-slate-300 font-light mt-1">Deposit</div>
                 </div>
-                <!-- Column 3: Total Income Output -->
                 <div>
                     <div class="text-xl font-bold">10</div>
                     <div class="text-[11px] text-slate-300 font-light mt-1">Total income</div>
@@ -83,85 +143,74 @@
             </div>
         </div>
 
-        <!-- Vertical Menu Navigation Links List -->
+        <!-- Vertical Dynamic Action Link Options List -->
         <div class="px-4 space-y-2 flex-grow">
-            <!-- Messages Link Container -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="message-square" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Messages</span>
+                    <i data-lucide="message-square" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Messages</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Personal Data Settings -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="user-round" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Personal information</span>
+                    <i data-lucide="user" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Personal information</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Revenue Status Matrix Link -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="book-open" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Income details</span>
+                    <i data-lucide="file-text" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Income details</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Inward Transaction Log -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="arrow-down-left-from-circle" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Deposit details</span>
+                    <i data-lucide="arrow-down-left" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Deposit details</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Outward Payout Log -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="arrow-up-right-from-circle" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Withdrawal details</span>
+                    <i data-lucide="arrow-up-right" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Withdrawal details</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Corporate Overview Link -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="building-2" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">About us</span>
+                    <i data-lucide="info" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">About us</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
 
-            <!-- Application Binary Installer Download -->
-            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+            <div class="list-item-action">
                 <div class="flex items-center space-x-3.5">
-                    <i data-lucide="download" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
-                    <span class="text-[15px] font-normal text-slate-700">Download</span>
+                    <i data-lucide="download" class="w-[21px] h-[21px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] text-slate-700">Download</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
             </div>
         </div>
 
-        <!-- Sticky Persistent Application Bottom Navigation Tab-Bar -->
-        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 grid grid-cols-5 py-2 px-1 text-center shadow-lg">
-            <!-- Navigation Action Item 1 -->
-            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
+        <!-- Sticky Layout Application Bottom Tab Navigation Menu -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 grid grid-cols-5 py-2 px-1 text-center">
+            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
                 <i data-lucide="home" class="w-5 h-5"></i>
                 <span class="text-[10px] mt-1 font-medium">Home</span>
             </div>
-            <!-- Navigation Action Item 2 -->
-            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
-                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
                 <span class="text-[10px] mt-1 font-medium">Income</span>
             </div>
-            <!-- Navigation Action Item 3 -->
-            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
+            <div class="flex flex-col items-center cursor-pointer text-slate-400 hover:text-slate-600">
                 <i data-lucide="users" class="w-5 h-5"></i>
-                <span class="text-[10px] mt-1 font-medium">Team</span>
