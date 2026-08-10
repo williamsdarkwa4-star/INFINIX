@@ -925,18 +925,19 @@ def admin_manage_user(user_id):
     if not admin_required():
         return redirect(url_for("admin_login"))
 
-    user = query_one("SELECT * FROM users WHERE id=%s", (user_id,))
+    user = query_one(
+        "SELECT * FROM users WHERE id=%s",
+        (user_id,)
+    )
+
     if not user:
         return "User not found", 404
 
     if request.method == "POST":
-        action = request.form.get("action", "")
 
-        try:
-            amount = Decimal(request.form.get("amount", "0") or "0")
-        except (InvalidOperation, ValueError):
-            flash("Invalid amount.", "error")
-            return redirect(url_for("admin_manage_user", user_id=user_id))
+        action = request.form.get("action", "").strip()
+
+        # ---------------- BALANCE ACTIONS ----------------
 
         balance_actions = {
             "add_deposit": ("deposit_account", 1),
@@ -946,34 +947,181 @@ def admin_manage_user(user_id):
         }
 
         if action in balance_actions:
+
+            try:
+                amount = Decimal(
+                    request.form.get("amount", "0") or "0"
+                )
+            except (InvalidOperation, ValueError):
+
+                flash("Invalid amount.", "error")
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id
+                    )
+                )
+
             if amount <= 0:
-                flash("Amount must be greater than zero.", "error")
-                return redirect(url_for("admin_manage_user", user_id=user_id))
+
+                flash(
+                    "Amount must be greater than zero.",
+                    "error"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id
+                    )
+                )
 
             column, multiplier = balance_actions[action]
 
             if multiplier == 1:
-                execute(
-                    f"UPDATE accounts SET {column}={column}+%s WHERE user_id=%s",
-                    (amount, user_id)
-                )
-            else:
+
                 execute(
                     f"""
                     UPDATE accounts
-                    SET {column}=GREATEST(0, {column}-%s)
+                    SET {column} = {column} + %s
                     WHERE user_id=%s
                     """,
                     (amount, user_id)
                 )
 
-            flash("User balance updated.", "success")
-            return redirect(url_for("admin_manage_user", user_id=user_id))
+            else:
 
-        flash("Unknown admin action.", "error")
-        return redirect(url_for("admin_manage_user", user_id=user_id))
+                execute(
+                    f"""
+                    UPDATE accounts
+                    SET {column} = GREATEST(0, {column} - %s)
+                    WHERE user_id=%s
+                    """,
+                    (amount, user_id)
+                )
+
+            flash(
+                "User balance updated successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id
+                )
+            )
+
+        # ---------------- LOGIN PASSWORD ----------------
+
+        if action == "update_login_password":
+
+            new_password = request.form.get(
+                "new_password",
+                ""
+            )
+
+            if len(new_password) < 6:
+
+                flash(
+                    "Login password must be at least 6 characters.",
+                    "error"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id
+                    )
+                )
+
+            password_hash = generate_password_hash(
+                new_password
+            )
+
+            execute(
+                """
+                UPDATE users
+                SET password_hash=%s
+                WHERE id=%s
+                """,
+                (password_hash, user_id)
+            )
+
+            flash(
+                "Login password updated successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id
+                )
+            )
+
+        # ---------------- WITHDRAWAL PASSWORD ----------------
+
+        if action == "update_withdraw_password":
+
+            new_password = request.form.get(
+                "new_password",
+                ""
+            )
+
+            if len(new_password) < 6:
+
+                flash(
+                    "Withdrawal password must be at least 6 characters.",
+                    "error"
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id
+                    )
+                )
+
+            password_hash = generate_password_hash(
+                new_password
+            )
+
+            execute(
+                """
+                UPDATE users
+                SET withdraw_password_hash=%s
+                WHERE id=%s
+                """,
+                (password_hash, user_id)
+            )
+
+            flash(
+                "Withdrawal password updated successfully.",
+                "success"
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id
+                )
+            )
+
+        flash(
+            "Unknown admin action.",
+            "error"
+        )
+
+        return redirect(
+            url_for(
+                "admin_manage_user",
+                user_id=user_id
+            )
+        )
 
     account = current_account(user_id)
+
     return render_template(
         "admin_manage_user.html",
         user=user,
