@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Register - Zenith Capital</title>
-
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Register - Zenith Capital</title><style>
 
 *{
     margin:0;
@@ -82,8 +73,6 @@ body{
     font-size:14px;
 }
 
-/* Flash messages */
-
 .message{
     padding:13px 15px;
     border-radius:13px;
@@ -105,8 +94,6 @@ body{
     border:1px solid #fecaca;
 }
 
-/* Referral message */
-
 .referral-box{
     background:#eff6ff;
     border:1px solid #bfdbfe;
@@ -121,8 +108,6 @@ body{
 .referral-box strong{
     color:#2563eb;
 }
-
-/* Form */
 
 .form-group{
     margin-bottom:15px;
@@ -209,260 +194,226 @@ input::placeholder{
     font-size:12px;
 }
 
-</style>
+</style></head><body><div class="register-container"><div class="logo">
 
-</head>
+    <div class="logo-icon">
+        Z
+    </div>
 
-<body>
+    <h1>Zenith Capital</h1>
 
-<div class="register-container">
+    <p>Welcome to Zenith Capital</p>
 
-    <!-- Logo -->
+</div>
 
-    <div class="logo">
 
-        <div class="logo-icon">
-            Z
-        </div>
+<div class="card">
 
-        <h1>Zenith Capital</h1>
+    <div class="card-header">
 
-        <p>Welcome to Zenith Capital</p>
+        <h2>Create Account</h2>
+
+        <p>Register your account to continue</p>
 
     </div>
 
 
-    <!-- Registration Card -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-    <div class="card">
+        {% for category, message in messages %}
 
-        <div class="card-header">
+            <div class="message {{ category }}">
+                {{ message }}
+            </div>
 
-            <h2>Create Account</h2>
+        {% endfor %}
 
-            <p>Register your account to continue</p>
+    {% endwith %}
+
+
+    {% if invite_code %}
+
+        <div class="referral-box">
+
+            🎁 Referral code detected:
+
+            <strong>{{ invite_code }}</strong>
+
+            <br>
+
+            Your account will be linked to this referral code.
+
+        </div>
+
+    {% else %}
+
+        <div class="referral-box">
+
+            💡 <strong>Referral code is optional.</strong>
+
+            You can register without entering a referral code.
+
+        </div>
+
+    {% endif %}
+
+
+    <form method="POST"
+          action="{{ url_for('register') }}">
+
+
+        <div class="form-group">
+
+            <label for="fullname">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
 
         </div>
 
 
-        <!-- Flash Messages -->
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-
-            {% for category, message in messages %}
-
-                <div class="message {{ category }}">
-                    {{ message }}
-                </div>
-
-            {% endfor %}
-
-        {% endwith %}
-
-
-        <!-- Referral Information -->
-
-        {% if invite_code %}
-
-            <div class="referral-box">
-
-                🎁 Referral code detected:
-
-                <strong>{{ invite_code }}</strong>
-
-                <br>
-
-                Your account will be linked to this referral code.
-
-            </div>
-
-        {% else %}
-
-            <div class="referral-box">
-
-                💡 <strong>Referral code is optional.</strong>
-
-                You can register without entering a referral code.
-
-            </div>
-
-        {% endif %}
-
-
-        <!-- Registration Form -->
-
-        <form method="POST"
-              action="{{ url_for('register') }}">
-
-            <!-- Full Name -->
-
-            <div class="form-group">
-
-                <label for="fullname">
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="fullname"
-                    name="fullname"
-                    placeholder="Enter your full name"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
-
-
-            <!-- Username -->
-
-            <div class="form-group">
-
-                <label for="username">
-                    Username
-                </label>
-
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Choose a username"
-                    autocomplete="username"
-                    required
-                >
-
-            </div>
-
-
-            <!-- Phone -->
-
-            <div class="form-group">
-
-                <label for="phone">
-                    Phone Number
-                </label>
-
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="Enter your phone number"
-                    autocomplete="tel"
-                    required
-                >
-
-            </div>
-
-
-            <!-- Password -->
-
-            <div class="form-group">
-
-                <label for="password">
-                    Login Password
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Create a login password"
-                    autocomplete="new-password"
-                    required
-                >
-
-                <div class="password-note">
-                    Use a password you can remember.
-                </div>
-
-            </div>
-
-
-            <!-- Withdrawal Password -->
-
-            <div class="form-group">
-
-                <label for="withdrawal_password">
-                    Withdrawal Password
-                </label>
-
-                <input
-                    type="password"
-                    id="withdraw_password"
-                    name="withdraw_password"
-                    placeholder="Create withdrawal password"
-                    autocomplete="new-password"
-                    required
-                >
-
-                <div class="password-note">
-                    This password is used to authorize withdrawal requests.
-                </div>
-
-            </div>
-
-
-            <!-- Referral Code -->
-
-            <div class="form-group">
-
-                <label for="referred_by">
-                    Referral Code
-                    <span style="font-weight:normal;color:#94a3b8;">
-                        (Optional)
-                    </span>
-                </label>
-
-                <input
-                    class="referral-input"
-                    type="text"
-                    id="referred_by"
-                    name="referred_by"
-                    value="{{ invite_code or '' }}"
-                    placeholder="Enter referral code"
-                >
-
-            </div>
-
-
-            <!-- Submit -->
-
-            <button
-                type="submit"
-                class="register-btn">
-
-                Create Account
-
-            </button>
-
-        </form>
-
-
-        <!-- Login -->
-
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="{{ url_for('login') }}">
-                Login
-            </a>
+        <div class="form-group">
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Choose a username"
+                autocomplete="username"
+                required
+            >
 
         </div>
 
 
-        <!-- Security -->
+        <div class="form-group">
 
-        <div class="security">
+            <label for="phone">
+                Phone Number
+            </label>
 
-            🔒 Your account information is protected.
+            <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter your phone number"
+                autocomplete="tel"
+                required
+            >
 
         </div>
+
+
+        <div class="form-group">
+
+            <label for="login_password">
+                Login Password
+            </label>
+
+            <input
+                type="password"
+                id="login_password"
+                name="login_password"
+                placeholder="Create a login password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+            <div class="password-note">
+                Use at least 6 characters.
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="withdrawal_password">
+                Withdrawal Password
+            </label>
+
+            <input
+                type="password"
+                id="withdrawal_password"
+                name="withdrawal_password"
+                placeholder="Create withdrawal password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+            <div class="password-note">
+                Used to authorize withdrawal requests.
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="referred_by">
+
+                Referral Code
+
+                <span style="font-weight:normal;color:#94a3b8;">
+                    (Optional)
+                </span>
+
+            </label>
+
+            <input
+                class="referral-input"
+                type="text"
+                id="referred_by"
+                name="referred_by"
+                value="{{ invite_code or '' }}"
+                placeholder="Enter referral code"
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="register-btn">
+
+            Create Account
+
+        </button>
+
+    </form>
+
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a href="{{ url_for('login') }}">
+            Login
+        </a>
+
+    </div>
+
+
+    <div class="security">
+
+        🔒 Your account information is protected.
 
     </div>
 
 </div>
 
-</body>
-
-</html>
+</div></body></html>
