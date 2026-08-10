@@ -9,25 +9,21 @@
 
 body{
     background:#f4f7fb;
-    padding-bottom:95px;
-    color:#0f172a;
+    padding-bottom:100px;
 }
 
-
-/* ================= HEADER ================= */
+/* HEADER */
 
 .header{
-    background:linear-gradient(135deg,#0f172a,#1d4ed8,#2563eb);
+    background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
-    padding:32px 20px 36px;
+    padding:28px 20px;
     text-align:center;
     border-radius:0 0 30px 30px;
-    box-shadow:0 5px 18px rgba(37,99,235,.20);
 }
 
 .header h1{
-    font-size:28px;
-    font-weight:800;
+    font-size:27px;
 }
 
 .header p{
@@ -36,25 +32,234 @@ body{
     font-size:14px;
 }
 
-
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 
 .container{
     width:100%;
     max-width:600px;
     margin:auto;
-    padding:20px;
+    padding:18px;
 }
 
+/* CARDS */
 
-/* ================= FLASH ================= */
+.card{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:16px;
+    box-shadow:0 5px 15px rgba(0,0,0,.07);
+}
+
+.card h2{
+    color:#2563eb;
+    margin-bottom:15px;
+    font-size:19px;
+}
+
+/* BALANCE */
+
+.balance-card{
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    padding:22px;
+    border-radius:20px;
+    margin-bottom:16px;
+    text-align:center;
+}
+
+.balance-card p{
+    color:#475569;
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.balance{
+    color:#2563eb;
+    font-size:30px;
+    font-weight:bold;
+}
+
+/* NOTICE */
+
+.notice{
+    background:#eff6ff;
+    color:#1e40af;
+    padding:14px;
+    border-radius:15px;
+    margin-bottom:16px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* ACCOUNTS */
+
+.account{
+    display:block;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:11px;
+}
+
+.account-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.account input{
+    width:20px;
+    height:20px;
+    margin-top:3px;
+}
+
+.account strong{
+    color:#0f172a;
+    font-size:15px;
+}
+
+.account-info{
+    color:#64748b;
+    margin-top:5px;
+    line-height:1.4;
+    font-size:13px;
+}
+
+/* INPUT */
+
+input{
+    width:100%;
+    padding:15px;
+    margin:7px 0;
+    border-radius:14px;
+    border:1px solid #dbe1e8;
+    outline:none;
+    font-size:15px;
+    background:#fff;
+}
+
+input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 2px rgba(37,99,235,.08);
+}
+
+/* QUICK AMOUNTS */
+
+.quick-title{
+    color:#64748b;
+    font-size:13px;
+    margin-top:10px;
+    margin-bottom:9px;
+}
+
+.quick-amounts{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.quick-btn{
+    background:#eff6ff;
+    color:#2563eb;
+    border:1px solid #bfdbfe;
+    padding:11px 5px;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.quick-btn:active{
+    transform:scale(.97);
+}
+
+/* FEE BOX */
+
+.fee-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    padding:14px;
+    margin-top:5px;
+    margin-bottom:12px;
+}
+
+.fee-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    color:#475569;
+    font-size:14px;
+}
+
+.fee-row strong{
+    color:#0f172a;
+}
+
+.fee-row.total{
+    border-top:1px solid #e2e8f0;
+    margin-top:5px;
+    padding-top:13px;
+    font-size:16px;
+}
+
+.fee-row.total strong{
+    color:#2563eb;
+}
+
+/* BUTTON */
+
+button.submit-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+button.submit-btn:active{
+    transform:scale(.98);
+}
+
+/* BIND BUTTON */
+
+.bind-btn{
+    display:block;
+    width:100%;
+    padding:14px;
+    background:#e2e8f0;
+    color:#0f172a;
+    text-decoration:none;
+    text-align:center;
+    border-radius:14px;
+    font-weight:bold;
+    margin-top:12px;
+}
+
+/* INFORMATION */
+
+.info{
+    color:#475569;
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* FLASH */
 
 .flash{
-    padding:14px 16px;
-    border-radius:15px;
+    padding:14px;
+    border-radius:14px;
     margin-bottom:15px;
-    font-size:14px;
     font-weight:bold;
+    font-size:14px;
 }
 
 .flash.success{
@@ -67,262 +272,7 @@ body{
     color:#991b1b;
 }
 
-
-/* ================= BALANCE ================= */
-
-.balance-card{
-    background:linear-gradient(135deg,#eff6ff,#dbeafe);
-    border:1px solid #bfdbfe;
-    border-radius:22px;
-    padding:25px 20px;
-    margin-bottom:18px;
-    text-align:center;
-    box-shadow:0 6px 18px rgba(37,99,235,.08);
-}
-
-.balance-card p{
-    color:#475569;
-    font-size:14px;
-    margin-bottom:8px;
-}
-
-.balance{
-    color:#2563eb;
-    font-size:32px;
-    font-weight:800;
-}
-
-
-/* ================= NOTICE ================= */
-
-.notice{
-    background:#ffffff;
-    border-left:5px solid #2563eb;
-    padding:16px;
-    border-radius:15px;
-    margin-bottom:18px;
-    color:#475569;
-    font-size:14px;
-    line-height:1.6;
-    box-shadow:0 4px 14px rgba(0,0,0,.05);
-}
-
-.notice strong{
-    color:#1d4ed8;
-}
-
-
-/* ================= CARD ================= */
-
-.card{
-    background:white;
-    padding:22px;
-    border-radius:22px;
-    margin-bottom:18px;
-    box-shadow:0 6px 18px rgba(0,0,0,.07);
-}
-
-.card h2{
-    color:#0f172a;
-    margin-bottom:18px;
-    font-size:19px;
-}
-
-
-/* ================= ACCOUNT ================= */
-
-.account{
-    display:block;
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    padding:16px;
-    border-radius:16px;
-    margin-bottom:12px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.account:hover{
-    border-color:#2563eb;
-    background:#eff6ff;
-}
-
-.account-row{
-    display:flex;
-    gap:13px;
-    align-items:flex-start;
-}
-
-.account input{
-    width:20px;
-    height:20px;
-    margin-top:3px;
-    accent-color:#2563eb;
-}
-
-.account strong{
-    color:#0f172a;
-    font-size:15px;
-}
-
-.account-info{
-    color:#64748b;
-    margin-top:6px;
-    line-height:1.5;
-    font-size:14px;
-}
-
-
-/* ================= INPUT ================= */
-
-.input-label{
-    display:block;
-    color:#334155;
-    font-size:14px;
-    font-weight:bold;
-    margin-bottom:5px;
-}
-
-input{
-    width:100%;
-    padding:15px;
-    margin:8px 0;
-    border-radius:15px;
-    border:1px solid #dbe1e8;
-    outline:none;
-    font-size:15px;
-    background:#fff;
-}
-
-input:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.10);
-}
-
-
-/* ================= QUICK AMOUNTS ================= */
-
-.amount-title{
-    color:#475569;
-    font-size:14px;
-    font-weight:bold;
-    margin-top:12px;
-    margin-bottom:10px;
-}
-
-.quick-amounts{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-bottom:16px;
-}
-
-.quick-btn{
-    width:100%;
-    padding:13px 5px;
-    border:none;
-    border-radius:13px;
-    background:#eff6ff;
-    color:#2563eb;
-    border:1px solid #bfdbfe;
-    font-weight:bold;
-    font-size:14px;
-    cursor:pointer;
-    margin:0;
-    transition:.2s;
-}
-
-.quick-btn:hover{
-    background:#dbeafe;
-}
-
-.quick-btn:active{
-    transform:scale(.95);
-}
-
-
-/* ================= FEE BOX ================= */
-
-.fee-box{
-    background:#f8fafc;
-    border:1px solid #e2e8f0;
-    border-radius:17px;
-    padding:15px;
-    margin-top:5px;
-    margin-bottom:15px;
-}
-
-.fee-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 0;
-    color:#64748b;
-    font-size:14px;
-    gap:10px;
-}
-
-.fee-row strong{
-    color:#0f172a;
-}
-
-.fee-row.total{
-    border-top:1px solid #e2e8f0;
-    margin-top:6px;
-    padding-top:15px;
-    font-size:16px;
-    font-weight:bold;
-}
-
-.fee-row.total strong{
-    color:#2563eb;
-    font-size:18px;
-}
-
-
-/* ================= SUBMIT BUTTON ================= */
-
-.submit-btn{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    color:white;
-    font-weight:bold;
-    font-size:16px;
-    cursor:pointer;
-    margin-top:5px;
-    box-shadow:0 6px 15px rgba(37,99,235,.20);
-}
-
-.submit-btn:active{
-    transform:scale(.98);
-}
-
-
-/* ================= BIND BUTTON ================= */
-
-.bind-btn{
-    display:block;
-    width:100%;
-    padding:15px;
-    background:#f1f5f9;
-    color:#334155;
-    text-decoration:none;
-    text-align:center;
-    border-radius:15px;
-    font-weight:bold;
-    margin-top:12px;
-    border:1px solid #e2e8f0;
-}
-
-.bind-btn:hover{
-    background:#e2e8f0;
-}
-
-
-/* ================= EMPTY ================= */
+/* EMPTY */
 
 .empty{
     text-align:center;
@@ -331,27 +281,7 @@ input:focus{
     font-size:14px;
 }
 
-
-/* ================= INFORMATION ================= */
-
-.info{
-    color:#64748b;
-    line-height:1.7;
-    font-size:14px;
-}
-
-.info-item{
-    display:flex;
-    gap:10px;
-    margin-bottom:12px;
-}
-
-.info-icon{
-    font-size:17px;
-}
-
-
-/* ================= BOTTOM NAV ================= */
+/* BOTTOM NAVIGATION */
 
 .bottom-nav{
     position:fixed;
@@ -359,288 +289,351 @@ input:focus{
     left:0;
     width:100%;
     height:76px;
-    background:rgba(255,255,255,.97);
-    backdrop-filter:blur(10px);
+    background:white;
     display:flex;
     justify-content:space-around;
     align-items:center;
-    box-shadow:0 -5px 20px rgba(0,0,0,.10);
-    border-top:1px solid #e2e8f0;
-    z-index:1000;
+    box-shadow:0 -5px 18px rgba(0,0,0,.10);
+    z-index:999;
 }
 
 .bottom-nav a{
-    width:33.33%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:4px;
+    flex:1;
     text-decoration:none;
     color:#64748b;
-    font-size:12px;
+    text-align:center;
     font-weight:bold;
-    transition:.2s;
-}
-
-.bottom-nav a .nav-icon{
-    font-size:22px;
-    line-height:1;
+    font-size:12px;
+    padding:8px 0;
 }
 
 .bottom-nav a.active{
     color:#2563eb;
 }
 
-.bottom-nav a:hover{
-    color:#2563eb;
+.bottom-nav .nav-icon{
+    display:block;
+    font-size:22px;
+    margin-bottom:4px;
 }
 
+</style></head><body><!-- HEADER --><div class="header"><h1>Withdraw</h1>
 
-/* ================= MOBILE ================= */
+<p>Request a withdrawal from your account</p>
 
-@media(max-width:380px){
-
-    .container{
-        padding:15px;
-    }
-
-    .card{
-        padding:18px;
-    }
-
-    .balance{
-        font-size:28px;
-    }
-
-    .quick-amounts{
-        gap:7px;
-    }
-
-}
-
-</style></head><body><!-- ================= HEADER ================= --><div class="header"><h1>Withdraw</h1><p>Request a withdrawal from your account</p></div><div class="container"><!-- ================= FLASH MESSAGES ================= -->{% with messages = get_flashed_messages(with_categories=true) %}
+</div><div class="container"><!-- FLASH MESSAGES -->{% with messages = get_flashed_messages(with_categories=true) %}
 
 {% for category, message in messages %}
 
-<div class="flash {{ category }}">
-{{ message }}
-</div>{% endfor %}
+    <div class="flash {{ category }}">
+        {{ message }}
+    </div>
+
+{% endfor %}
 
 {% endwith %}
 
-<!-- ================= BALANCE ================= --><div class="balance-card"><p>Available Withdrawal Balance</p><div class="balance">GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
+<!-- WITHDRAWAL BALANCE --><div class="balance-card"><p>Available Withdrawal Balance</p>
 
-</div></div><!-- ================= NOTICE ================= --><div class="notice">💡 Minimum withdrawal amount is
+<div class="balance">
+
+    GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
+
+</div>
+
+</div><!-- NOTICE --><div class="notice">💡 Minimum withdrawal amount is
 <strong>GHS 30.00</strong>.
 
-A <strong>16%</strong> withdrawal fee will be deducted
-from the amount you request.
+<br><br>
 
-</div><!-- ================= WITHDRAWAL ACCOUNT ================= --><div class="card"><h2>🏦 Select Withdrawal Account</h2>{% if accounts %}
+A <strong>16% withdrawal fee</strong> is deducted from the amount entered.
 
-{% for withdrawal_account in accounts %}
+</div><!-- WITHDRAWAL ACCOUNT --><div class="card"><h2>🏦 Select Withdrawal Account</h2>
 
-<label class="account"><div class="account-row"><input
-type="radio"
-name="account_id"
-value="{{ withdrawal_account.id }}"
-form="withdrawForm"
-{% if loop.first %}checked{% endif %}
-required
 
-«»
+{% if accounts %}
 
-<div><strong>
-{{ withdrawal_account.network }}
-</strong><div class="account-info">Account Name:
-{{ withdrawal_account.account_name }}
+    {% for withdrawal_account in accounts %}
 
-</div><div class="account-info">Number:
-{{ withdrawal_account.phone }}
+    <label class="account">
 
-</div></div></div></label>{% endfor %}
+        <div class="account-row">
+
+            <input
+                type="radio"
+                name="account_id"
+                value="{{ withdrawal_account.id }}"
+                form="withdrawForm"
+                {% if loop.first %}checked{% endif %}
+                required
+            >
+
+            <div>
+
+                <strong>
+                    {{ withdrawal_account.network }}
+                </strong>
+
+                <div class="account-info">
+                    Account Name:
+                    {{ withdrawal_account.account_name }}
+                </div>
+
+                <div class="account-info">
+                    Number:
+                    {{ withdrawal_account.phone }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </label>
+
+    {% endfor %}
 
 {% else %}
 
-<div class="empty"><p>You have no withdrawal account yet.</p><a
-href="{{ url_for('bind_account') }}"
-class="bind-btn"
+    <div class="empty">
 
-«»
+        <p>You have no withdrawal account yet.</p>
 
-➕ Bind Withdrawal Account
+        <a
+            href="{{ url_for('bind_account') }}"
+            class="bind-btn"
+        >
+            ➕ Bind Withdrawal Account
+        </a>
 
-</a></div>{% endif %}
+    </div>
 
-</div><!-- ================= WITHDRAWAL FORM ================= -->{% if accounts %}
+{% endif %}
 
-<div class="card"><h2>💸 Withdrawal Request</h2><form
-method="POST"
-action="{{ url_for('request_withdrawal') }}"
-id="withdrawForm"
-><label class="input-label">Withdrawal Amount
+</div><!-- WITHDRAWAL FORM -->{% if accounts %}
 
-</label><input
-type="number"
-id="withdrawAmount"
-name="amount"
-min="30"
-step="0.01"
-max="{{ account.withdraw_account or 0 }}"
-placeholder="Enter withdrawal amount"
-required
+<div class="card"><h2>💸 Withdrawal Request</h2>
 
-«»
 
-<!-- QUICK AMOUNTS --><div class="amount-title">Quick Amount
+<form
+    method="POST"
+    action="{{ url_for('request_withdrawal') }}"
+    id="withdrawForm"
+>
 
-</div><div class="quick-amounts"><button
-type="button"
-class="quick-btn"
-onclick="setAmount(30)"
 
-«»
+    <!-- AMOUNT -->
 
-GHS 30
+    <input
+        type="number"
+        id="withdrawAmount"
+        name="amount"
+        min="30"
+        step="0.01"
+        max="{{ account.withdraw_account or 0 }}"
+        placeholder="Enter withdrawal amount"
+        autocomplete="off"
+        required
+    >
 
-</button><button
-type="button"
-class="quick-btn"
-onclick="setAmount(50)"
 
-«»
+    <!-- QUICK AMOUNTS -->
 
-GHS 50
+    <div class="quick-title">
+        Quick Amount
+    </div>
 
-</button><button
-type="button"
-class="quick-btn"
-onclick="setAmount(100)"
+    <div class="quick-amounts">
 
-«»
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(30)"
+        >
+            GHS 30
+        </button>
 
-GHS 100
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(50)"
+        >
+            GHS 50
+        </button>
 
-</button><button
-type="button"
-class="quick-btn"
-onclick="setAmount(200)"
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(100)"
+        >
+            GHS 100
+        </button>
 
-«»
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(200)"
+        >
+            GHS 200
+        </button>
 
-GHS 200
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(300)"
+        >
+            GHS 300
+        </button>
 
-</button><button
-type="button"
-class="quick-btn"
-onclick="setAmount(300)"
+        <button
+            type="button"
+            class="quick-btn"
+            onclick="setAmount(400)"
+        >
+            GHS 400
+        </button>
 
-«»
+    </div>
 
-GHS 300
 
-</button><button
-type="button"
-class="quick-btn"
-onclick="setAmount(400)"
+    <!-- FEE CALCULATION -->
 
-«»
+    <div class="fee-box">
 
-GHS 400
+        <div class="fee-row">
 
-</button></div><!-- FEE CALCULATION --><div class="fee-box"><div class="fee-row"><span>
-Withdrawal Amount
-</span><strong id="displayAmount">
-GHS 0.00
-</strong></div><div class="fee-row"><span>
-Withdrawal Fee (16%)
-</span><strong id="displayFee">
-GHS 0.00
-</strong></div><div class="fee-row total"><span>
-You Receive
-</span><strong id="displayReceive">
-GHS 0.00
-</strong></div></div><!-- PASSWORD --><label class="input-label">Withdrawal Password
+            <span>
+                Withdrawal Amount
+            </span>
 
-</label><input
-type="password"
-name="password"
-placeholder="Enter withdrawal password"
-minlength="6"
-required
+            <strong id="displayAmount">
+                GHS 0.00
+            </strong>
 
-«»
+        </div>
 
-<!-- SUBMIT --><button
-type="submit"
-class="submit-btn"
 
-«»
+        <div class="fee-row">
 
-💸 Submit Withdrawal
+            <span>
+                Withdrawal Fee (16%)
+            </span>
 
-</button></form><a
-href="{{ url_for('bind_account') }}"
-class="bind-btn"
+            <strong id="displayFee">
+                GHS 0.00
+            </strong>
 
-«»
+        </div>
 
-⚙️ Manage Withdrawal Account
 
-</a></div>{% endif %}
+        <div class="fee-row total">
 
-<!-- ================= INFORMATION ================= --><div class="card"><h2>ℹ️ Withdrawal Information</h2><div class="info"><div class="info-item"><span class="info-icon">✓</span>
+            <span>
+                You Receive
+            </span>
 
-<span>
-Your withdrawal request will be submitted for review.
-</span></div><div class="info-item"><span class="info-icon">💰</span>
+            <strong id="displayReceive">
+                GHS 0.00
+            </strong>
 
-<span>
-A 16% withdrawal fee is deducted from the amount
-you request.
-</span></div><div class="info-item"><span class="info-icon">🔐</span>
+        </div>
 
-<span>
-Make sure your withdrawal password is correct.
-</span></div><div class="info-item"><span class="info-icon">🏦</span>
+    </div>
 
-<span>
-Check your selected withdrawal account before
-submitting your request.
-</span></div></div></div></div><!-- ================= BOTTOM NAV ================= --><div class="bottom-nav"><a
-href="{{ url_for('dashboard') }}"
-class="active"
 
-«»
+    <!-- PASSWORD -->
 
-<span class="nav-icon">🏠</span>
+    <input
+        type="password"
+        name="password"
+        placeholder="Enter withdrawal password"
+        minlength="6"
+        required
+    >
 
-<span>Home</span>
 
-</a><a
-href="/team"
+    <!-- SUBMIT -->
 
-«»
+    <button
+        type="submit"
+        class="submit-btn"
+    >
+        💸 Submit Withdrawal
+    </button>
 
-<span class="nav-icon">👥</span>
 
-<span>Invite</span>
+</form>
 
-</a><a
-href="{{ url_for('profile') }}"
 
-«»
+<a
+    href="{{ url_for('bind_account') }}"
+    class="bind-btn"
+>
+    ⚙️ Manage Withdrawal Account
+</a>
 
-<span class="nav-icon">👤</span>
+</div>{% endif %}
 
-<span>Profile</span>
+<!-- INFORMATION --><div class="card"><h2>ℹ️ Withdrawal Information</h2>
 
-</a></div><!-- ================= JAVASCRIPT ================= --><script>
+<div class="info">
+
+    <p>
+        Your withdrawal request will be submitted for review.
+    </p>
+
+    <br>
+
+    <p>
+        Make sure the selected account belongs to you and that
+        your withdrawal password is correct.
+    </p>
+
+    <br>
+
+    <p>
+        The 16% withdrawal fee is automatically calculated
+        before you submit your request.
+    </p>
+
+</div>
+
+</div></div><!-- BOTTOM NAVIGATION --><div class="bottom-nav"><a
+    href="{{ url_for('dashboard') }}"
+    class="active"
+>
+    <span class="nav-icon">🏠</span>
+    Home
+</a>
+
+
+<a
+    href="{{ url_for('team') }}"
+>
+    <span class="nav-icon">👥</span>
+    Invite
+</a>
+
+
+<a
+    href="{{ url_for('profile') }}"
+>
+    <span class="nav-icon">👤</span>
+    Profile
+</a>
+
+</div><!-- FEE CALCULATION JAVASCRIPT --><script>
 
 const amountInput =
-document.getElementById("withdrawAmount");
+    document.getElementById("withdrawAmount");
+
+const displayAmount =
+    document.getElementById("displayAmount");
+
+const displayFee =
+    document.getElementById("displayFee");
+
+const displayReceive =
+    document.getElementById("displayReceive");
 
 
 function calculateWithdrawal(){
@@ -661,40 +654,49 @@ function calculateWithdrawal(){
         amount - fee;
 
 
-    document.getElementById("displayAmount").textContent =
+    displayAmount.textContent =
         "GHS " + amount.toFixed(2);
 
 
-    document.getElementById("displayFee").textContent =
+    displayFee.textContent =
         "GHS " + fee.toFixed(2);
 
 
-    document.getElementById("displayReceive").textContent =
+    displayReceive.textContent =
         "GHS " + receive.toFixed(2);
 
 }
 
 
-/* CALCULATE WHILE TYPING */
+/* Calculate while typing */
 
-amountInput.addEventListener(
-    "input",
-    calculateWithdrawal
-);
+if(amountInput){
+
+    amountInput.addEventListener(
+        "input",
+        calculateWithdrawal
+    );
+
+}
 
 
-/* QUICK AMOUNT */
+/* Quick amount buttons */
 
 function setAmount(amount){
 
-    amountInput.value = amount;
+    if(!amountInput){
+        return;
+    }
+
+    amountInput.value =
+        amount.toFixed(2);
 
     calculateWithdrawal();
 
 }
 
 
-/* INITIAL CALCULATION */
+/* Initial calculation */
 
 calculateWithdrawal();
 
