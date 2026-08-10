@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My - Zenith Capital</title>
+    <title>Profile - Zenith Capital</title>
 
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -38,43 +37,11 @@
         }
 
         /* =========================
-           TOP HEADER
-        ========================= */
-
-        .top-header {
-            height: 55px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 1px solid #f1f5f9;
-            background: white;
-        }
-
-        .header-title {
-            text-align: center;
-            font-size: 13px;
-            color: #0f172a;
-        }
-
-        .header-title strong {
-            display: block;
-            font-size: 15px;
-        }
-
-        .header-title small {
-            display: block;
-            margin-top: 2px;
-            color: #94a3b8;
-            font-size: 10px;
-        }
-
-        /* =========================
            PROFILE SECTION
         ========================= */
 
         .profile-section {
-            padding: 24px 20px;
+            padding: 28px 20px 24px;
             background: linear-gradient(
                 to bottom,
                 #eff6ff,
@@ -194,7 +161,7 @@
         }
 
         /* =========================
-           INFORMATION CARD
+           INFORMATION
         ========================= */
 
         .section {
@@ -309,8 +276,6 @@
             color: #334155;
 
             font-size: 13px;
-
-            transition: background .15s;
         }
 
         .menu:active {
@@ -335,8 +300,6 @@
             color: #cbd5e1;
         }
 
-        /* Logout */
-
         .logout {
             color: #dc2626;
         }
@@ -346,16 +309,14 @@
         }
 
         /* =========================
-           BOTTOM NAVIGATION
+           FIXED BOTTOM NAVIGATION
         ========================= */
 
         .bottom-nav {
             position: fixed;
             bottom: 0;
-
             width: 100%;
             max-width: 440px;
-
             height: 65px;
 
             background: white;
@@ -382,7 +343,6 @@
             text-decoration: none;
 
             color: #94a3b8;
-
             font-size: 9px;
         }
 
@@ -400,9 +360,7 @@
             content: "";
 
             position: absolute;
-
             bottom: 0;
-
             left: 25%;
             right: 25%;
 
@@ -413,14 +371,10 @@
             border-radius: 4px 4px 0 0;
         }
 
-        /* =========================
-           SMALL PHONES
-        ========================= */
-
         @media(max-width:360px) {
 
             .profile-section {
-                padding: 20px 15px;
+                padding: 22px 15px;
             }
 
             .avatar {
@@ -446,20 +400,6 @@
 <body>
 
 <div class="phone">
-
-    <!-- =========================
-         HEADER
-    ========================= -->
-
-    <div class="top-header">
-
-        <div class="header-title">
-            <strong>My</strong>
-            <small>Zenith Capital</small>
-        </div>
-
-    </div>
-
 
     <!-- =========================
          PROFILE
@@ -533,7 +473,7 @@
 
 
     <!-- =========================
-         ACCOUNT INFORMATION
+         PERSONAL INFORMATION
     ========================= -->
 
     <div class="section">
@@ -545,43 +485,23 @@
         <div class="info-card">
 
             <div class="info-row">
-                <span class="info-label">
-                    Username
-                </span>
-
-                <span class="info-value">
-                    {{ user.username }}
-                </span>
+                <span class="info-label">Username</span>
+                <span class="info-value">{{ user.username }}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">
-                    User ID
-                </span>
-
-                <span class="info-value">
-                    {{ user.id }}
-                </span>
+                <span class="info-label">User ID</span>
+                <span class="info-value">{{ user.id }}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">
-                    Phone Number
-                </span>
-
-                <span class="info-value">
-                    {{ user.phone }}
-                </span>
+                <span class="info-label">Phone Number</span>
+                <span class="info-value">{{ user.phone }}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">
-                    Referral Code
-                </span>
-
-                <span class="info-value">
-                    {{ user.referral_code }}
-                </span>
+                <span class="info-label">Referral Code</span>
+                <span class="info-value">{{ user.referral_code }}</span>
             </div>
 
         </div>
@@ -590,7 +510,7 @@
 
 
     <!-- =========================
-         BALANCES
+         ACCOUNT BALANCES
     ========================= -->
 
     <div class="section">
@@ -602,54 +522,31 @@
         <div class="balance-grid">
 
             <div class="balance-box">
-
-                <div class="label">
-                    Deposit Account
-                </div>
-
+                <div class="label">Deposit Account</div>
                 <div class="amount">
                     GHS {{ "%.2f"|format(deposit_balance|float) }}
                 </div>
-
             </div>
 
-
             <div class="balance-box">
-
-                <div class="label">
-                    Withdrawal Account
-                </div>
-
+                <div class="label">Withdrawal Account</div>
                 <div class="amount">
                     GHS {{ "%.2f"|format(withdraw_balance|float) }}
                 </div>
-
             </div>
 
-
             <div class="balance-box">
-
-                <div class="label">
-                    Income Account
-                </div>
-
+                <div class="label">Income Account</div>
                 <div class="amount">
                     GHS {{ "%.2f"|format(income_balance|float) }}
                 </div>
-
             </div>
 
-
             <div class="balance-box">
-
-                <div class="label">
-                    Referral Account
-                </div>
-
+                <div class="label">Referral Account</div>
                 <div class="amount">
                     GHS {{ "%.2f"|format(referral_balance|float) }}
                 </div>
-
             </div>
 
         </div>
@@ -658,7 +555,7 @@
 
 
     <!-- =========================
-         MENU
+         ACCOUNT & SERVICES
     ========================= -->
 
     <div class="menu-area">
@@ -667,186 +564,94 @@
             Account & Services
         </div>
 
-
         <a href="/bind_account" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="landmark" class="menu-icon"></i>
-
-                <span>
-                    Bind Account
-                </span>
-
+                <span>Bind Account</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
-
 
         <a href="/deposit" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="credit-card" class="menu-icon"></i>
-
-                <span>
-                    Deposit
-                </span>
-
+                <span>Deposit</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
-
 
         <a href="/withdraw" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="wallet-cards" class="menu-icon"></i>
-
-                <span>
-                    Withdraw
-                </span>
-
+                <span>Withdraw</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
-
 
         <a href="/transaction_history" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="receipt-text" class="menu-icon"></i>
-
-                <span>
-                    Transaction History
-                </span>
-
+                <span>Transaction History</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
-
 
         <a href="/my_plan" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="package" class="menu-icon"></i>
-
-                <span>
-                    My Product
-                </span>
-
+                <span>My Product</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
-
 
         <a href="/support" class="menu">
-
             <div class="menu-left">
-
                 <i data-lucide="headphones" class="menu-icon"></i>
-
-                <span>
-                    Support Center
-                </span>
-
+                <span>Support Center</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
 
-
         <a href="/logout" class="menu logout">
-
             <div class="menu-left">
-
                 <i data-lucide="log-out" class="menu-icon"></i>
-
-                <span>
-                    Logout
-                </span>
-
+                <span>Logout</span>
             </div>
-
             <i data-lucide="chevron-right" class="arrow"></i>
-
         </a>
 
     </div>
 
 
     <!-- =========================
-         FIXED 5-ITEM NAVIGATION
+         FIXED BOTTOM NAVIGATION
     ========================= -->
 
     <div class="bottom-nav">
 
         <a href="/dashboard">
-
             <i data-lucide="home"></i>
-
-            <span>
-                Home
-            </span>
-
+            <span>Home</span>
         </a>
-
 
         <a href="/my_plan">
-
             <i data-lucide="trending-up"></i>
-
-            <span>
-                Income
-            </span>
-
+            <span>Income</span>
         </a>
 
-
         <a href="/team">
-
             <i data-lucide="users"></i>
-
-            <span>
-                Team
-            </span>
-
+            <span>Team</span>
         </a>
-
 
         <a href="/team">
-
             <i data-lucide="share-2"></i>
-
-            <span>
-                Share
-            </span>
-
+            <span>Share</span>
         </a>
-
 
         <a href="/profile" class="active">
-
             <i data-lucide="user"></i>
-
-            <span>
-                My
-            </span>
-
+            <span>My</span>
         </a>
 
     </div>
