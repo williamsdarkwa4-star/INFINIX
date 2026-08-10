@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Transaction History - Zenith Capital</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
+<!DOCTYPE html><html>
+<head><title>Transaction History - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
 
 *{
     margin:0;
@@ -20,86 +13,76 @@ body{
     padding-bottom:80px;
 }
 
-
-/* Header */
-
 .header{
-
     background:linear-gradient(135deg,#0f172a,#2563eb);
     color:white;
     padding:30px;
     text-align:center;
     border-radius:0 0 30px 30px;
-
 }
 
+.header h1{
+    font-size:25px;
+}
+
+.header p{
+    margin-top:8px;
+    color:#dbeafe;
+}
 
 .container{
     padding:20px;
 }
 
-
-
-/* Transaction Card */
-
 .transaction{
-
     background:white;
     padding:20px;
     border-radius:20px;
     margin-bottom:15px;
     box-shadow:0 5px 15px rgba(0,0,0,.08);
-
 }
-
 
 .transaction h3{
-
     margin-bottom:12px;
-
+    color:#2563eb;
 }
-
 
 .details{
-
     color:#475569;
     margin:8px 0;
-
+    line-height:1.5;
 }
-
-
-
-/* Status */
 
 .success{
-
     color:#10b981;
     font-weight:bold;
-
 }
-
 
 .pending{
-
     color:#f59e0b;
     font-weight:bold;
-
 }
-
 
 .failed{
-
     color:#ef4444;
     font-weight:bold;
-
 }
 
+.empty{
+    background:white;
+    padding:30px 20px;
+    border-radius:20px;
+    text-align:center;
+    color:#64748b;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
 
-
-/* Bottom Navigation */
+.empty h2{
+    color:#2563eb;
+    margin-bottom:10px;
+}
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
@@ -109,174 +92,126 @@ body{
     justify-content:space-around;
     padding:15px;
     box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
 }
 
-
 .bottom-nav a{
-
     text-decoration:none;
     color:#2563eb;
     text-align:center;
     font-weight:bold;
-
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="header">
-
-<h1>Transaction History</h1>
+</style></head><body><div class="header"><h1>Transaction History</h1>
 
 <p>All your activities</p>
 
-</div>
+</div><div class="container">{% for transaction in transactions %}
 
+<div class="transaction">{% if transaction.transaction_type == "deposit" %}
 
+    <h3>💳 Deposit</h3>
 
+{% elif transaction.transaction_type == "plan_purchase" %}
 
-<div class="container">
+    <h3>💼 Plan Purchase</h3>
 
+{% elif transaction.transaction_type == "income_claim" %}
 
+    <h3>📈 Income</h3>
 
-<!-- Plan Purchase -->
+{% elif transaction.transaction_type == "withdrawal" %}
 
-<div class="transaction">
+    <h3>💸 Withdrawal</h3>
 
-<h3>💼 Plan Purchase</h3>
+{% else %}
+
+    <h3>🔄 Transaction</h3>
+
+{% endif %}
+
 
 <div class="details">
-Plan: Zenith VIP 1
+    Amount:
+    <strong>
+        GHS {{ "%.2f"|format(transaction.amount or 0) }}
+    </strong>
 </div>
+
+
+{% if transaction.description %}
 
 <div class="details">
-Amount: GHS 50
+    {{ transaction.description }}
 </div>
 
-<div class="success">
-Status: Successful
-</div>
-
-</div>
+{% endif %}
 
 
-
-
-<!-- Deposit Pending -->
-
-<div class="transaction">
-
-<h3>💳 Deposit</h3>
+{% if transaction.reference %}
 
 <div class="details">
-Amount: GHS 100
+    Reference: {{ transaction.reference }}
 </div>
+
+{% endif %}
+
 
 <div class="details">
-Payment Method: Mobile Money
-</div>
 
-<div class="pending">
-Status: Pending
-</div>
+    Date:
+    {{ transaction.created_at.strftime("%d %b %Y, %H:%M") if transaction.created_at else "N/A" }}
 
 </div>
 
 
+{% if transaction.status == "successful" %}
 
+    <div class="success">
+        Status: Successful
+    </div>
 
-<!-- Deposit Approved -->
+{% elif transaction.status == "pending" %}
 
-<div class="transaction">
+    <div class="pending">
+        Status: Pending
+    </div>
 
-<h3>💳 Deposit</h3>
+{% elif transaction.status in ["failed", "rejected"] %}
 
-<div class="details">
-Amount: GHS 200
-</div>
+    <div class="failed">
+        Status: {{ transaction.status|capitalize }}
+    </div>
 
-<div class="success">
-Status: Successful
-</div>
+{% else %}
 
-</div>
+    <div class="details">
+        Status: {{ transaction.status|capitalize }}
+    </div>
 
+{% endif %}
 
+</div>{% else %}
 
+<div class="empty"><h2>📋 No Transactions</h2>
 
-<!-- Withdrawal Pending -->
+<p>Your transaction history will appear here when you make an activity.</p>
 
-<div class="transaction">
+</div>{% endfor %}
 
-<h3>💸 Withdrawal</h3>
-
-<div class="details">
-Amount: GHS 50
-</div>
-
-<div class="pending">
-Status: Pending
-</div>
-
-</div>
-
-
-
-
-<!-- Withdrawal Approved -->
-
-<div class="transaction">
-
-<h3>💸 Withdrawal</h3>
-
-<div class="details">
-Amount: GHS 80
-</div>
-
-<div class="success">
-Status: Successful
-</div>
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard">
-🏠<br>
-Home
+</div><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
+    🏠<br>
+    Home
 </a>
 
-
-<a href="/my_plan">
-💼<br>
-My Plan
+<a href="{{ url_for('my_plan') }}">
+    💼<br>
+    My Plan
 </a>
 
-
-<a href="/profile">
-👤<br>
-Profile
+<a href="{{ url_for('profile') }}">
+    👤<br>
+    Profile
 </a>
 
-
-</div>
-
-
-
-</body>
+</div></body>
 </html>
