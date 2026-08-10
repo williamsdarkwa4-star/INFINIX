@@ -1,354 +1,486 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>My Plan - Zenith Capital</title>
-
-
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Plan - Zenith Capital</title><style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
-
 
 body{
-
-background:#f4f7fb;
-padding-bottom:90px;
-
+    background:#f4f7fb;
+    padding-bottom:90px;
 }
-
-
 
 .header{
-
-background:linear-gradient(135deg,#0F172A,#2563EB);
-color:white;
-padding:30px;
-text-align:center;
-border-radius:0 0 30px 30px;
-
+    background:linear-gradient(135deg,#0F172A,#2563EB);
+    color:white;
+    padding:30px 20px;
+    text-align:center;
+    border-radius:0 0 30px 30px;
 }
 
+.header h1{
+    margin-bottom:7px;
+}
 
+.header p{
+    color:#dbeafe;
+    font-size:14px;
+}
 
 .container{
-
-padding:20px;
-
+    padding:20px;
+    max-width:500px;
+    margin:auto;
 }
-
-
 
 .card{
-
-background:white;
-padding:20px;
-border-radius:20px;
-margin-bottom:20px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-
+    background:white;
+    padding:22px;
+    border-radius:20px;
+    margin-bottom:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
-
-
 
 .card h2{
-
-color:#2563EB;
-margin-bottom:15px;
-
+    color:#2563EB;
+    margin-bottom:15px;
 }
-
-
 
 .info{
-
-line-height:32px;
-color:#475569;
-
+    line-height:32px;
+    color:#475569;
 }
 
+.value{
+    font-weight:bold;
+    color:#0f172a;
+}
 
+.status{
+    display:inline-block;
+    background:#dcfce7;
+    color:#15803d;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.timer-box{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    margin-top:10px;
+}
+
+.timer-label{
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+#timer{
+    font-size:34px;
+    font-weight:bold;
+    color:#2563eb;
+    letter-spacing:1px;
+}
+
+.claim-ready{
+    color:#15803d !important;
+}
 
 button{
-
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-background:#2563EB;
-color:white;
-font-weight:bold;
-font-size:16px;
-
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    background:#2563EB;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
 }
-
-
 
 button:disabled{
-
-background:#94a3b8;
-
+    background:#94a3b8;
+    cursor:not-allowed;
 }
 
+.claim-note{
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
+    margin-top:12px;
+    line-height:20px;
+}
 
+.empty-card{
+    text-align:center;
+    padding:35px 20px;
+}
+
+.empty-card h2{
+    margin-bottom:10px;
+}
+
+.empty-card p{
+    color:#64748b;
+    line-height:24px;
+}
+
+.plan-details{
+    margin-top:10px;
+}
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:11px 0;
+    border-bottom:1px solid #f1f5f9;
+}
+
+.detail-row:last-child{
+    border-bottom:none;
+}
+
+.detail-label{
+    color:#64748b;
+}
+
+.detail-value{
+    color:#0f172a;
+    font-weight:bold;
+    text-align:right;
+}
 
 .bottom-nav{
-
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:15px;
-box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:white;
+    display:flex;
+    justify-content:space-around;
+    padding:13px 8px;
+    box-shadow:0 -5px 15px rgba(0,0,0,.1);
+    z-index:100;
 }
-
-
 
 .bottom-nav a{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:bold;
-text-align:center;
-
+    text-decoration:none;
+    color:#2563EB;
+    font-weight:bold;
+    text-align:center;
+    font-size:13px;
 }
 
+.bottom-nav span{
+    font-size:20px;
+}
 
-</style>
+</style></head><body><div class="header"><h1>My Plan</h1>
+
+<p>
+    Manage your active plan and daily claim
+</p>
+
+</div><div class="container">{% if plan %}
+
+<!-- PLAN INFORMATION --><div class="card"><h2>
+    {{ plan.plan_name }}
+</h2>
 
 
-</head>
+<div class="plan-details">
+
+    <div class="detail-row">
+
+        <span class="detail-label">
+            Investment
+        </span>
+
+        <span class="detail-value">
+            GHS {{ "%.2f"|format(plan.investment) }}
+        </span>
+
+    </div>
 
 
+    <div class="detail-row">
 
-<body>
+        <span class="detail-label">
+            Daily Income
+        </span>
+
+        <span class="detail-value">
+            GHS {{ "%.2f"|format(plan.daily_income) }}
+        </span>
+
+    </div>
 
 
+    <div class="detail-row">
 
-<div class="header">
+        <span class="detail-label">
+            Duration
+        </span>
 
-<h1>My Plan</h1>
+        <span class="detail-value">
+            {{ plan.duration }} Days
+        </span>
 
-<p>Your active investment plan</p>
+    </div>
+
+
+    <div class="detail-row">
+
+        <span class="detail-label">
+            Status
+        </span>
+
+        <span class="status">
+            Active
+        </span>
+
+    </div>
 
 </div>
 
+</div><!-- CLAIM --><div class="card"><h2>
+    Daily Income Claim
+</h2>
 
 
+<div class="timer-box">
+
+    <div class="timer-label" id="timerLabel">
+        Next claim available in
+    </div>
 
 
-<div class="container">
+    <div id="timer">
+        24:00:00
+    </div>
 
+</div>
 
-
-{% if plan %}
-
-
-
-<div class="card">
-
-
-<h2>{{ plan.plan_name }}</h2>
-
-
-<div class="info">
-
-Daily Income:
-GHS {{ plan.daily_income }}
 
 <br>
 
-Duration:
-{{ plan.duration }} Days
 
-<br>
+<form
+    method="POST"
+    action="{{ url_for('my_plan') }}"
+    onsubmit="return confirmClaim();"
+>
 
-Status:
-Active
+    <button
+        type="submit"
+        id="claimButton"
+        {% if not can_claim %}disabled{% endif %}
+    >
 
+        {% if can_claim %}
+            Claim Income
+        {% else %}
+            Waiting For Next Claim
+        {% endif %}
 
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>Daily Income Claim</h2>
-
-
-<div class="info">
-
-Next claim:
-
-<span id="timer">
-
-24:00:00
-
-</span>
-
-
-</div>
-
-
-<br>
-
-
-<form method="POST"
-onsubmit="return confirm('Are you sure you want to claim your daily income?');">
-
-
-{% if can_claim %}
-
-<button type="submit">
-
-Claim Income
-
-</button>
-
-
-{% else %}
-
-
-<button disabled>
-
-Waiting For Next Claim
-
-</button>
-
-
-{% endif %}
-
+    </button>
 
 </form>
 
 
+<p class="claim-note">
 
-</div>
+    Your claim timer is saved on the server.
+    Refreshing or reopening this page will not
+    restart the countdown.
 
-
-
-
-{% else %}
-
-
-
-<div class="card">
-
-<h2>No Active Plan</h2>
-
-<p>
-You do not have an active plan.
 </p>
 
+</div>{% else %}
 
-</div>
+<div class="card empty-card"><h2>
+    No Active Plan
+</h2>
 
+<p>
+    You do not currently have an active plan.
+</p>
 
-
-{% endif %}
-
-
-
-
-</div>
-
-
-
-
-
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard">
-
-🏠
 <br>
-Dashboard
 
+<a
+    href="/plan"
+    style="
+    display:block;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    border-radius:13px;
+    font-weight:bold;
+    "
+>
+    View Available Plans
+</a>
+
+</div>{% endif %}
+
+</div><div class="bottom-nav"><a href="/dashboard">
+    <span>🏠</span>
+    <br>
+    Dashboard
 </a>
 
 
 <a href="/my_plan">
-
-📈
-<br>
-My Plan
-
+    <span>📈</span>
+    <br>
+    My Plan
 </a>
-
 
 
 <a href="/profile">
-
-👤
-<br>
-Profile
-
+    <span>👤</span>
+    <br>
+    Profile
 </a>
 
-
-</div>
-
-
-
-
+</div>{% if plan %}
 
 <script>
 
-let seconds = 86400;
+/*
+    IMPORTANT:
+
+    The countdown comes from the server.
+    It is NOT reset to 86400 when the page
+    is refreshed.
+*/
+
+const nextClaimAt =
+    new Date("{{ next_claim_at.isoformat() if next_claim_at else '' }}");
+
+const canClaimInitially =
+    {{ 'true' if can_claim else 'false' }};
 
 
-function countdown(){
+const timer =
+    document.getElementById("timer");
 
-let h = Math.floor(seconds / 3600);
+const timerLabel =
+    document.getElementById("timerLabel");
 
-let m = Math.floor((seconds % 3600)/60);
-
-let s = seconds % 60;
-
-
-document.getElementById("timer").innerHTML =
-
-h + ":" + m + ":" + s;
+const claimButton =
+    document.getElementById("claimButton");
 
 
+function updateCountdown(){
 
-if(seconds > 0){
+    if(canClaimInitially){
 
-seconds--;
+        timer.textContent = "READY";
+
+        timer.classList.add("claim-ready");
+
+        timerLabel.textContent =
+            "Your daily income is ready to claim";
+
+        claimButton.disabled = false;
+
+        claimButton.textContent =
+            "Claim Income";
+
+        return;
+
+    }
+
+
+    const now = new Date();
+
+    let difference =
+        nextClaimAt.getTime() - now.getTime();
+
+
+    if(difference <= 0){
+
+        timer.textContent = "READY";
+
+        timer.classList.add("claim-ready");
+
+        timerLabel.textContent =
+            "Your daily income is ready to claim";
+
+        claimButton.disabled = false;
+
+        claimButton.textContent =
+            "Claim Income";
+
+        return;
+
+    }
+
+
+    const totalSeconds =
+        Math.floor(difference / 1000);
+
+
+    const hours =
+        Math.floor(totalSeconds / 3600);
+
+
+    const minutes =
+        Math.floor((totalSeconds % 3600) / 60);
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    timer.textContent =
+        String(hours).padStart(2,"0")
+        + ":"
+        + String(minutes).padStart(2,"0")
+        + ":"
+        + String(seconds).padStart(2,"0");
+
+
+    claimButton.disabled = true;
+
+    claimButton.textContent =
+        "Waiting For Next Claim";
 
 }
 
 
+function confirmClaim(){
+
+    if(claimButton.disabled){
+
+        return false;
+
+    }
+
+    return confirm(
+        "Are you sure you want to claim your daily income?"
+    );
+
 }
 
 
-setInterval(countdown,1000);
+updateCountdown();
 
+setInterval(updateCountdown,1000);
 
-</script>
+</script>{% endif %}
 
-
-</body>
-
-</html>
+</body></html>
