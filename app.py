@@ -11,6 +11,7 @@ from flask import (
     session,
     flash,
 )
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 try:
@@ -18,10 +19,14 @@ try:
     from psycopg2.extras import RealDictCursor
 except ImportError:
     psycopg2 = None
-    RealDictCursor = None
 
+
+# ============================================================
+# APP
+# ============================================================
 
 app = Flask(__name__)
+
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "change-this-secret-key"
@@ -29,34 +34,9 @@ app.secret_key = os.environ.get(
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# ============================================================
-# DEMO CONFIGURATION
-# ============================================================
-
-# This application is a simulated/demo dashboard.
-# It does not process real-money investments or withdrawals.
-
-DEMO_DEPOSIT_NUMBER = os.environ.get(
-    "DEMO_DEPOSIT_NUMBER",
-    "0000000000"
-)
-
-MIN_DEPOSIT = Decimal("45")
-MIN_WITHDRAWAL = Decimal("30")
-
-ADMIN_USERNAME = os.environ.get(
-    "ADMIN_USERNAME",
-    "Williams"
-)
-
-ADMIN_PASSWORD = os.environ.get(
-    "ADMIN_PASSWORD",
-    "Williams12"
-)
-
 
 # ============================================================
-# PLANS
+# DEMO PLANS
 # ============================================================
 
 PLANS = {
@@ -106,12 +86,12 @@ PLANS = {
 
 
 # ============================================================
-# DATABASE
+# DATABASE CONNECTION
 # ============================================================
 
 def get_conn():
     if not DATABASE_URL:
-        raise RuntimeError("DATABASE_URL is missing.")
+        raise RuntimeError("DATABASE_URL is not configured.")
 
     if psycopg2 is None:
         raise RuntimeError("psycopg2 is not installed.")
@@ -122,29 +102,36 @@ def get_conn():
     )
 
 
+# ============================================================
+# DATABASE INITIALIZATION / MIGRATION
+# ============================================================
+
 def init_db():
+
     conn = get_conn()
     cur = conn.cursor()
 
     try:
+
         # ----------------------------------------------------
         # USERS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
-                username VARCHAR(80),
+                username VARCHAR(80) UNIQUE,
                 fullname VARCHAR(120) DEFAULT '',
-                phone VARCHAR(30),
+                phone VARCHAR(30) UNIQUE,
                 password_hash TEXT,
                 withdraw_password_hash TEXT,
-                referral_code VARCHAR(100),
+                referral_code VARCHAR(100) UNIQUE,
                 referred_by VARCHAR(100),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # Existing databases may contain these older columns.
+        # Existing installations may have older columns.
         cur.execute("""
             ALTER TABLE users
             ADD COLUMN IF NOT EXISTS username VARCHAR(80)
@@ -152,7 +139,7 @@ def init_db():
 
         cur.execute("""
             ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120) DEFAULT ''
+            ADD COLUMN IF NOT EXISTS fullname VARCHAR(120)
         """)
 
         cur.execute("""
@@ -163,6 +150,16 @@ def init_db():
         cur.execute("""
             ALTER TABLE users
             ADD COLUMN IF NOT EXISTS password_hash TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS password TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS login_password TEXT
         """)
 
         cur.execute("""
@@ -183,37 +180,53 @@ def init_db():
         cur.execute("""
             ALTER TABLE users
             ADD COLUMN IF NOT EXISTS created_at TIMESTAMP
-            DEFAULT CURRENT_TIMESTAMP
         """)
 
         # ----------------------------------------------------
-        # IMPORTANT: OLD LOGIN PASSWORD COLUMN
-        # ----------------------------------------------------
-        # Your existing database has:
-        #
-        # login_password NOT NULL
-        #
-        # The new application uses password_hash.
-        #
-        # We support BOTH columns so existing data remains
-        # compatible.
+        # FIX OLD COLUMN SIZES
         # ----------------------------------------------------
 
         cur.execute("""
             ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS login_password TEXT
+            ALTER COLUMN username TYPE VARCHAR(80)
+            USING username::VARCHAR(80)
         """)
 
-        # Copy password_hash into old login_password column
-        # for existing records.
+        cur.execute("""
+            ALTER TABLE users
+            ALTER COLUMN fullname TYPE VARCHAR(120)
+            USING fullname::VARCHAR(120)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ALTER COLUMN phone TYPE VARCHAR(30)
+            USING phone::VARCHAR(30)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ALTER COLUMN referral_code TYPE VARCHAR(100)
+            USING referral_code::VARCHAR(100)
+        """)
+
+        cur.execute("""
+            ALTER TABLE users
+            ALTER COLUMN referred_by TYPE VARCHAR(100)
+            USING referred_by::VARCHAR(100)
+        """)
+
+        # ----------------------------------------------------
+        # MIGRATE OLD PASSWORD COLUMNS
+        # ----------------------------------------------------
+
         cur.execute("""
             UPDATE users
-            SET login_password = password_hash
-            WHERE login_password IS NULL
-              AND password_hash IS NOT NULL
+            SET password_hash = password
+            WHERE password_hash IS NULL
+              AND password IS NOT NULL
         """)
 
-        # Copy old login_password into password_hash if needed.
         cur.execute("""
             UPDATE users
             SET password_hash = login_password
@@ -221,73 +234,45 @@ def init_db():
               AND login_password IS NOT NULL
         """)
 
-        # The application always supplies both values when
-        # creating a new user, so the old NOT NULL constraint
-        # will no longer cause registration to fail.
-        #
-        # For existing empty records, use a harmless placeholder
-        # rather than leaving the required column NULL.
         cur.execute("""
             UPDATE users
-            SET login_password = COALESCE(
-                login_password,
-                password_hash,
-                'legacy-password-not-set'
-            )
+            SET login_password = password_hash
             WHERE login_password IS NULL
+              AND password_hash IS NOT NULL
         """)
 
-        # ----------------------------------------------------
-        # USERS INDEXES
-        # ----------------------------------------------------
+        # Important for old databases where login_password
+        # was accidentally declared NOT NULL.
         cur.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS
-            idx_users_username_unique
-            ON users(username)
-            WHERE username IS NOT NULL
-        """)
-
-        cur.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS
-            idx_users_phone_unique
-            ON users(phone)
-            WHERE phone IS NOT NULL
+            ALTER TABLE users
+            ALTER COLUMN login_password DROP NOT NULL
         """)
 
         cur.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS
-            idx_users_referral_unique
-            ON users(referral_code)
-            WHERE referral_code IS NOT NULL
+            ALTER TABLE users
+            ALTER COLUMN password DROP NOT NULL
         """)
 
         # ----------------------------------------------------
         # ACCOUNTS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
+                    REFERENCES users(id) ON DELETE CASCADE,
 
-                deposit_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0,
-
-                income_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0,
-
-                referral_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0,
-
-                withdraw_account NUMERIC(14,2)
-                    NOT NULL DEFAULT 0
+                deposit_account NUMERIC(14,2) DEFAULT 5.00,
+                income_account NUMERIC(14,2) DEFAULT 0,
+                referral_account NUMERIC(14,2) DEFAULT 0,
+                withdraw_account NUMERIC(14,2) DEFAULT 0
             )
         """)
 
         cur.execute("""
             ALTER TABLE accounts
             ADD COLUMN IF NOT EXISTS deposit_account
-            NUMERIC(14,2) DEFAULT 0
+            NUMERIC(14,2) DEFAULT 5.00
         """)
 
         cur.execute("""
@@ -311,6 +296,7 @@ def init_db():
         # ----------------------------------------------------
         # PLANS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
                 id SERIAL PRIMARY KEY,
@@ -320,28 +306,25 @@ def init_db():
                     ON DELETE CASCADE,
 
                 plan_id INTEGER NOT NULL,
-
                 plan_name VARCHAR(120) NOT NULL,
 
                 investment_amount NUMERIC(14,2) NOT NULL,
-
                 daily_income NUMERIC(14,2) NOT NULL,
 
                 duration INTEGER NOT NULL,
 
-                started_at TIMESTAMP
-                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
                 last_claim_at TIMESTAMP,
 
-                active BOOLEAN
-                    NOT NULL DEFAULT TRUE
+                total_claims INTEGER DEFAULT 0,
+
+                active BOOLEAN DEFAULT TRUE
             )
         """)
 
-        # IMPORTANT:
-        # Existing databases may already have a "plans" table
-        # with a different structure.
+        # Critical fix for your previous:
+        # "column user_id does not exist"
         cur.execute("""
             ALTER TABLE plans
             ADD COLUMN IF NOT EXISTS user_id INTEGER
@@ -377,7 +360,6 @@ def init_db():
         cur.execute("""
             ALTER TABLE plans
             ADD COLUMN IF NOT EXISTS started_at TIMESTAMP
-            DEFAULT CURRENT_TIMESTAMP
         """)
 
         cur.execute("""
@@ -387,36 +369,32 @@ def init_db():
 
         cur.execute("""
             ALTER TABLE plans
-            ADD COLUMN IF NOT EXISTS active BOOLEAN
-            DEFAULT TRUE
+            ADD COLUMN IF NOT EXISTS total_claims INTEGER DEFAULT 0
+        """)
+
+        cur.execute("""
+            ALTER TABLE plans
+            ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE
         """)
 
         # ----------------------------------------------------
         # PLAN INDEX
         # ----------------------------------------------------
-        # This is the index that previously caused:
-        #
-        # psycopg2.errors.UndefinedColumn:
-        # column "user_id" does not exist
-        #
-        # We only create it AFTER guaranteeing user_id exists.
-        # ----------------------------------------------------
 
         cur.execute("""
-            CREATE INDEX IF NOT EXISTS
-            idx_plans_user_id
+            CREATE INDEX IF NOT EXISTS idx_plans_user_id
             ON plans(user_id)
         """)
 
         cur.execute("""
-            CREATE INDEX IF NOT EXISTS
-            idx_plans_active
+            CREATE INDEX IF NOT EXISTS idx_plans_active
             ON plans(user_id, active)
         """)
 
         # ----------------------------------------------------
         # TRANSACTIONS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
                 id SERIAL PRIMARY KEY,
@@ -426,7 +404,6 @@ def init_db():
                     ON DELETE CASCADE,
 
                 transaction_type VARCHAR(50) NOT NULL,
-
                 amount NUMERIC(14,2) NOT NULL,
 
                 status VARCHAR(30) NOT NULL,
@@ -435,8 +412,7 @@ def init_db():
 
                 description TEXT,
 
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
@@ -450,43 +426,10 @@ def init_db():
             ADD COLUMN IF NOT EXISTS description TEXT
         """)
 
-        cur.execute("""
-            ALTER TABLE transactions
-            ADD COLUMN IF NOT EXISTS created_at TIMESTAMP
-            DEFAULT CURRENT_TIMESTAMP
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS
-            idx_transactions_user
-            ON transactions(user_id, created_at DESC)
-        """)
-
         # ----------------------------------------------------
-        # WITHDRAWAL ACCOUNTS
+        # DEMO DEPOSIT REQUESTS
         # ----------------------------------------------------
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS withdrawal_accounts (
-                id SERIAL PRIMARY KEY,
 
-                user_id INTEGER
-                    REFERENCES users(id)
-                    ON DELETE CASCADE,
-
-                account_name VARCHAR(120) NOT NULL,
-
-                phone VARCHAR(30) NOT NULL,
-
-                network VARCHAR(40) NOT NULL,
-
-                created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-
-        # ----------------------------------------------------
-        # DEPOSIT REQUESTS
-        # ----------------------------------------------------
         cur.execute("""
             CREATE TABLE IF NOT EXISTS deposit_requests (
                 id SERIAL PRIMARY KEY,
@@ -499,66 +442,39 @@ def init_db():
 
                 reference VARCHAR(150),
 
-                payment_number VARCHAR(50),
-
-                screenshot BYTEA,
-
-                screenshot_filename VARCHAR(255),
-
-                screenshot_mimetype VARCHAR(100),
-
                 status VARCHAR(30)
                     NOT NULL DEFAULT 'pending',
 
                 created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP,
-
-                reviewed_at TIMESTAMP,
-
-                reviewed_by VARCHAR(80)
+                    DEFAULT CURRENT_TIMESTAMP
             )
         """)
 
-        # Migrate existing deposit table.
-        cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS payment_number VARCHAR(50)
-        """)
+        # ----------------------------------------------------
+        # WITHDRAWAL ACCOUNTS
+        # ----------------------------------------------------
 
         cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS screenshot BYTEA
-        """)
+            CREATE TABLE IF NOT EXISTS withdrawal_accounts (
+                id SERIAL PRIMARY KEY,
 
-        cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS screenshot_filename VARCHAR(255)
-        """)
+                user_id INTEGER
+                    REFERENCES users(id)
+                    ON DELETE CASCADE,
 
-        cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS screenshot_mimetype VARCHAR(100)
-        """)
+                account_name VARCHAR(120) NOT NULL,
+                phone VARCHAR(30) NOT NULL,
+                network VARCHAR(40) NOT NULL,
 
-        cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMP
-        """)
-
-        cur.execute("""
-            ALTER TABLE deposit_requests
-            ADD COLUMN IF NOT EXISTS reviewed_by VARCHAR(80)
-        """)
-
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS
-            idx_deposits_status
-            ON deposit_requests(status)
+                created_at TIMESTAMP
+                    DEFAULT CURRENT_TIMESTAMP
+            )
         """)
 
         # ----------------------------------------------------
         # WITHDRAWAL REQUESTS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_requests (
                 id SERIAL PRIMARY KEY,
@@ -577,27 +493,14 @@ def init_db():
                     NOT NULL DEFAULT 'pending',
 
                 created_at TIMESTAMP
-                    DEFAULT CURRENT_TIMESTAMP,
-
-                reviewed_at TIMESTAMP,
-
-                reviewed_by VARCHAR(80)
+                    DEFAULT CURRENT_TIMESTAMP
             )
-        """)
-
-        cur.execute("""
-            ALTER TABLE withdrawal_requests
-            ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMP
-        """)
-
-        cur.execute("""
-            ALTER TABLE withdrawal_requests
-            ADD COLUMN IF NOT EXISTS reviewed_by VARCHAR(80)
         """)
 
         # ----------------------------------------------------
         # ADMINS
         # ----------------------------------------------------
+
         cur.execute("""
             CREATE TABLE IF NOT EXISTS admins (
                 id SERIAL PRIMARY KEY,
@@ -610,12 +513,23 @@ def init_db():
 
         cur.execute("""
             ALTER TABLE admins
+            ADD COLUMN IF NOT EXISTS password TEXT
+        """)
+
+        cur.execute("""
+            ALTER TABLE admins
             ADD COLUMN IF NOT EXISTS password_hash TEXT
         """)
 
+        cur.execute("""
+            ALTER TABLE admins
+            ALTER COLUMN password DROP NOT NULL
+        """)
+
         # ----------------------------------------------------
-        # REFERRAL CODES
+        # CREATE REFERRAL CODES FOR OLD USERS
         # ----------------------------------------------------
+
         cur.execute("""
             SELECT id
             FROM users
@@ -623,15 +537,17 @@ def init_db():
                OR referral_code = ''
         """)
 
-        users_without_referral = cur.fetchall()
+        old_users = cur.fetchall()
 
-        for row in users_without_referral:
+        for row in old_users:
+
             user_id = row[0]
 
             referral_code = (
                 "ZEN"
+                + str(user_id)
                 + datetime.utcnow().strftime("%y%m%d%H%M%S")
-                + os.urandom(4).hex()
+                + os.urandom(3).hex()
             )
 
             cur.execute("""
@@ -641,8 +557,9 @@ def init_db():
             """, (referral_code, user_id))
 
         # ----------------------------------------------------
-        # ACCOUNT ROW FOR EVERY USER
+        # CREATE ACCOUNT ROWS
         # ----------------------------------------------------
+
         cur.execute("""
             INSERT INTO accounts (
                 user_id,
@@ -651,21 +568,26 @@ def init_db():
                 referral_account,
                 withdraw_account
             )
+
             SELECT
                 u.id,
-                0,
+                5.00,
                 0,
                 0,
                 0
+
             FROM users u
+
             LEFT JOIN accounts a
-                ON a.user_id=u.id
+                ON a.user_id = u.id
+
             WHERE a.user_id IS NULL
         """)
 
         # ----------------------------------------------------
         # ADMIN
         # ----------------------------------------------------
+
         admin_username = os.environ.get(
             "ADMIN_USERNAME",
             "Williams"
@@ -676,18 +598,22 @@ def init_db():
             "Williams12"
         )
 
-        admin_hash = generate_password_hash(admin_password)
+        admin_hash = generate_password_hash(
+            admin_password
+        )
 
         cur.execute("""
             INSERT INTO admins (
                 username,
                 password_hash
             )
+
             VALUES (%s,%s)
 
             ON CONFLICT (username)
+
             DO UPDATE SET
-                password_hash=EXCLUDED.password_hash
+                password_hash = EXCLUDED.password_hash
         """, (
             admin_username,
             admin_hash
@@ -701,14 +627,16 @@ def init_db():
         print("======================================")
 
     except Exception as exc:
+
         conn.rollback()
-        print("======================================")
-        print("DATABASE INITIALIZATION ERROR")
+
+        print("DATABASE INITIALIZATION ERROR:")
         print(exc)
-        print("======================================")
+
         raise
 
     finally:
+
         cur.close()
         conn.close()
 
@@ -718,34 +646,56 @@ def init_db():
 # ============================================================
 
 def query_one(sql, params=()):
+
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
+
         cur.execute(sql, params)
+
         return cur.fetchone()
+
     finally:
+
         cur.close()
         conn.close()
 
 
 def query_all(sql, params=()):
+
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
+
         cur.execute(sql, params)
+
         return cur.fetchall()
+
     finally:
+
         cur.close()
         conn.close()
 
 
-def execute(sql, params=(), fetchone=False):
+def execute(
+    sql,
+    params=(),
+    fetchone=False
+):
+
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
+
         cur.execute(sql, params)
 
         result = None
@@ -758,15 +708,22 @@ def execute(sql, params=(), fetchone=False):
         return result
 
     except Exception:
+
         conn.rollback()
         raise
 
     finally:
+
         cur.close()
         conn.close()
 
 
+# ============================================================
+# USER HELPERS
+# ============================================================
+
 def current_user():
+
     user_id = session.get("user_id")
 
     if not user_id:
@@ -780,34 +737,12 @@ def current_user():
 
 
 def current_account(user_id):
-    account = query_one("""
-        SELECT *
-        FROM accounts
-        WHERE user_id=%s
-    """, (user_id,))
-
-    if account:
-        return account
-
-    execute("""
-        INSERT INTO accounts (
-            user_id,
-            deposit_account,
-            income_account,
-            referral_account,
-            withdraw_account
-        )
-        VALUES (%s,0,0,0,0)
-        ON CONFLICT (user_id) DO NOTHING
-    """, (user_id,))
 
     return query_one("""
         SELECT *
         FROM accounts
         WHERE user_id=%s
     """, (user_id,))
-
-
 
 
 @app.context_processor
@@ -867,9 +802,7 @@ def register():
                 referral_code
             FROM users
             WHERE referral_code=%s
-        """, (
-            invite_code,
-        ))
+        """, (invite_code,))
 
     if request.method == "POST":
 
@@ -922,7 +855,7 @@ def register():
                 invite_code=invite_code
             )
 
-        existing_user = query_one("""
+        existing = query_one("""
             SELECT id
             FROM users
             WHERE username=%s
@@ -932,7 +865,7 @@ def register():
             phone
         ))
 
-        if existing_user:
+        if existing:
 
             flash(
                 "Username or phone number already exists.",
@@ -961,37 +894,54 @@ def register():
             + datetime.utcnow().strftime(
                 "%y%m%d%H%M%S"
             )
-            + os.urandom(4).hex()
+            + os.urandom(3).hex()
         )
 
+        password_hash = generate_password_hash(
+            password
+        )
+
+        withdraw_hash = generate_password_hash(
+            withdraw_password
+        )
+
+        # IMPORTANT:
+        # login_password is also populated because
+        # your existing database has that column.
         user = execute("""
             INSERT INTO users (
                 username,
                 fullname,
                 phone,
                 password_hash,
+                login_password,
+                password,
                 withdraw_password_hash,
                 referral_code,
-                referred_by
+                referred_by,
+                created_at
             )
+
             VALUES (
-                %s,%s,%s,%s,%s,%s,%s
+                %s,%s,%s,%s,%s,%s,%s,%s,%s,%s
             )
+
             RETURNING id
         """, (
             username,
             fullname,
             phone,
-            generate_password_hash(password),
-            generate_password_hash(
-                withdraw_password
-            ),
+            password_hash,
+            password_hash,
+            password_hash,
+            withdraw_hash,
             referral_code,
             (
                 referred_user["referral_code"]
                 if referred_user
                 else None
-            )
+            ),
+            datetime.utcnow()
         ), fetchone=True)
 
         execute("""
@@ -1002,12 +952,15 @@ def register():
                 referral_account,
                 withdraw_account
             )
+
             VALUES (
-                %s,5.00,0,0,0
+                %s,
+                5.00,
+                0,
+                0,
+                0
             )
-        """, (
-            user["id"],
-        ))
+        """, (user["id"],))
 
         flash(
             "Registration successful. Please log in.",
@@ -1046,24 +999,11 @@ def login():
             ""
         )
 
-        if not phone or not password:
-
-            flash(
-                "Please enter your phone number and password.",
-                "error"
-            )
-
-            return render_template(
-                "login.html"
-            )
-
         user = query_one("""
             SELECT *
             FROM users
             WHERE phone=%s
-        """, (
-            phone,
-        ))
+        """, (phone,))
 
         if not user:
 
@@ -1076,8 +1016,10 @@ def login():
                 "login.html"
             )
 
-        stored_password = user.get(
-            "password_hash"
+        stored_password = (
+            user.get("password_hash")
+            or user.get("login_password")
+            or user.get("password")
         )
 
         if not stored_password:
@@ -1163,60 +1105,74 @@ def dashboard():
 
 
 # ============================================================
-# DEPOSIT
+# DEMO DEPOSIT
 # ============================================================
 
 @app.route("/deposit")
 def deposit():
 
-    user = current_user()
+    if not current_user():
 
-    if not user:
         return redirect(
             url_for("login")
         )
 
     return render_template(
         "deposit.html",
-        minimum_deposit=MIN_DEPOSIT,
-        payment_number=DEMO_DEPOSIT_NUMBER
+        minimum_deposit=Decimal("45")
     )
 
 
 @app.route(
-    "/deposit/details",
-    methods=["POST"]
+    "/deposit_success",
+    methods=["GET", "POST"]
 )
-def deposit_details():
+def deposit_success():
 
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
 
-    raw_amount = request.form.get(
-        "amount",
-        "0"
-    ).strip()
+    if request.method == "POST":
+
+        raw_amount = request.form.get(
+            "amount",
+            "0"
+        )
+
+        reference = request.form.get(
+            "reference",
+            ""
+        ).strip()
+
+    else:
+
+        raw_amount = request.args.get(
+            "amount",
+            "0"
+        )
+
+        reference = request.args.get(
+            "reference",
+            ""
+        ).strip()
 
     try:
 
         amount = Decimal(raw_amount)
 
-    except (InvalidOperation, ValueError):
+    except (
+        InvalidOperation,
+        ValueError
+    ):
 
-        flash(
-            "Please enter a valid amount.",
-            "error"
-        )
+        amount = Decimal("0")
 
-        return redirect(
-            url_for("deposit")
-        )
-
-    if amount < MIN_DEPOSIT:
+    if amount < Decimal("45"):
 
         flash(
             "Minimum demo deposit is GHS 45.",
@@ -1227,118 +1183,24 @@ def deposit_details():
             url_for("deposit")
         )
 
-    return render_template(
-        "deposit_confirm.html",
-        amount=amount,
-        payment_number=DEMO_DEPOSIT_NUMBER
-    )
-
-
-@app.route(
-    "/deposit/submit",
-    methods=["POST"]
-)
-def submit_deposit():
-
-    user = current_user()
-
-    if not user:
-        return redirect(
-            url_for("login")
-        )
-
-    raw_amount = request.form.get(
-        "amount",
-        "0"
-    ).strip()
-
-    sender_phone = request.form.get(
-        "sender_phone",
-        ""
-    ).strip()
-
-    reference = request.form.get(
-        "reference",
-        ""
-    ).strip()
-
-    screenshot = request.form.get(
-        "screenshot",
-        ""
-    ).strip()
-
-    try:
-
-        amount = Decimal(raw_amount)
-
-    except (InvalidOperation, ValueError):
-
-        flash(
-            "Invalid deposit amount.",
-            "error"
-        )
-
-        return redirect(
-            url_for("deposit")
-        )
-
-    if amount < MIN_DEPOSIT:
-
-        flash(
-            "Minimum demo deposit is GHS 45.",
-            "error"
-        )
-
-        return redirect(
-            url_for("deposit")
-        )
-
-    if not sender_phone:
-
-        flash(
-            "Please enter the sender phone number.",
-            "error"
-        )
-
-        return redirect(
-            url_for("deposit")
-        )
-
-    if not reference:
-
-        flash(
-            "Please enter the transaction reference.",
-            "error"
-        )
-
-        return redirect(
-            url_for("deposit")
-        )
-
-    # Screenshot field is stored as text for now.
-    # If your HTML uses an actual file upload, this can later
-    # be changed to secure file storage.
+    # This creates only a simulated pending request.
+    # It does not process or verify real money.
 
     execute("""
         INSERT INTO deposit_requests (
             user_id,
             amount,
-            payment_number,
-            sender_phone,
             reference,
-            screenshot,
             status
         )
+
         VALUES (
-            %s,%s,%s,%s,%s,%s,'pending'
+            %s,%s,%s,'pending'
         )
     """, (
         user["id"],
         amount,
-        DEMO_DEPOSIT_NUMBER,
-        sender_phone,
-        reference,
-        screenshot
+        reference
     ))
 
     execute("""
@@ -1350,13 +1212,14 @@ def submit_deposit():
             reference,
             description
         )
+
         VALUES (
             %s,
-            'deposit',
+            'demo_deposit',
             %s,
             'pending',
             %s,
-            'Demo manual deposit request'
+            'Demo deposit request'
         )
     """, (
         user["id"],
@@ -1365,7 +1228,7 @@ def submit_deposit():
     ))
 
     flash(
-        "Deposit request submitted. Please wait for admin review.",
+        "Your demo deposit request has been submitted for review.",
         "success"
     )
 
@@ -1420,22 +1283,20 @@ def buy_plan(plan_id):
             }
         )
 
-    db_plan = {
-        "id": plan_id,
-        "plan_name": plan["name"],
-        "investment_amount":
-            plan["investment"],
-        "daily_income":
-            plan["daily"],
-        "duration":
-            plan["duration"],
-    }
-
     return render_template(
         "confirm_plan.html",
         user=user,
         account=account,
-        plan=db_plan
+        plan={
+            "id": plan_id,
+            "plan_name": plan["name"],
+            "investment_amount":
+                plan["investment"],
+            "daily_income":
+                plan["daily"],
+            "duration":
+                plan["duration"]
+        }
     )
 
 
@@ -1474,11 +1335,15 @@ def confirm_buy_plan(plan_id):
 
     try:
 
-        # Lock/check the balance during purchase.
+        now = datetime.utcnow()
+
+        # Atomically deduct balance.
         cur.execute("""
             UPDATE accounts
+
             SET deposit_account =
                 deposit_account - %s
+
             WHERE user_id=%s
               AND deposit_account >= %s
         """, (
@@ -1500,16 +1365,14 @@ def confirm_buy_plan(plan_id):
                 url_for("dashboard")
             )
 
-        purchase_time = datetime.utcnow()
-
         # IMPORTANT:
-        # last_claim_at is set immediately to purchase_time.
+        # last_claim_at is set to purchase time.
         #
         # Therefore:
-        # purchase at 15:00
-        # first claim available at 15:00 next day
+        # Purchase at 15:00
+        # First claim = 15:00 next day
         #
-        # Visiting /my_plan does NOT modify this value.
+        # Visiting the page does NOT modify this value.
 
         cur.execute("""
             INSERT INTO plans (
@@ -1521,10 +1384,12 @@ def confirm_buy_plan(plan_id):
                 duration,
                 started_at,
                 last_claim_at,
+                total_claims,
                 active
             )
+
             VALUES (
-                %s,%s,%s,%s,%s,%s,%s,%s,TRUE
+                %s,%s,%s,%s,%s,%s,%s,%s,0,TRUE
             )
         """, (
             user["id"],
@@ -1533,8 +1398,8 @@ def confirm_buy_plan(plan_id):
             plan["investment"],
             plan["daily"],
             plan["duration"],
-            purchase_time,
-            purchase_time
+            now,
+            now
         ))
 
         cur.execute("""
@@ -1545,6 +1410,7 @@ def confirm_buy_plan(plan_id):
                 status,
                 description
             )
+
             VALUES (
                 %s,
                 'plan_purchase',
@@ -1555,8 +1421,7 @@ def confirm_buy_plan(plan_id):
         """, (
             user["id"],
             plan["investment"],
-            "Demo plan purchase: "
-            + plan["name"]
+            "Demo plan selected"
         ))
 
         conn.commit()
@@ -1570,12 +1435,6 @@ def confirm_buy_plan(plan_id):
 
         cur.close()
         conn.close()
-
-    flash(
-        "Plan purchased successfully. "
-        "Your first claim will be available after 24 hours.",
-        "success"
-    )
 
     return redirect(
         url_for("my_plan")
@@ -1595,6 +1454,7 @@ def my_plan():
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
@@ -1602,66 +1462,74 @@ def my_plan():
     plan = query_one("""
         SELECT *
         FROM plans
+
         WHERE user_id=%s
           AND active=TRUE
+
         ORDER BY id DESC
+
         LIMIT 1
-    """, (
-        user["id"],
-    ))
+    """, (user["id"],))
 
     can_claim = False
-    next_claim_at = None
     seconds_remaining = 0
+    next_claim_at = None
 
     if plan:
 
-        # ------------------------------------------------------
-        # NEVER CHANGE last_claim_at when page is visited.
-        # ------------------------------------------------------
+        now = datetime.utcnow()
+
+        # ------------------------------------------------
+        # IMPORTANT TIMER LOGIC
+        # ------------------------------------------------
+        #
+        # Never update last_claim_at on GET.
+        #
+        # The timer comes from PostgreSQL.
+        #
+        # This means:
+        #
+        # Refresh page       -> timer continues
+        # Logout/login        -> timer continues
+        # Close browser       -> timer continues
+        # Visit tomorrow      -> timer continues
+        #
+        # ------------------------------------------------
 
         last_claim = plan["last_claim_at"]
 
         if last_claim is None:
 
-            # Safety migration for an old record.
-            last_claim = (
-                plan["started_at"]
-                or datetime.utcnow()
-            )
+            last_claim = plan["started_at"]
 
         next_claim_at = (
             last_claim
             + timedelta(hours=24)
         )
 
-        now = datetime.utcnow()
-
-        if now >= next_claim_at:
-
-            can_claim = True
-            seconds_remaining = 0
-
-        else:
-
-            can_claim = False
-
-            seconds_remaining = int(
+        seconds_remaining = max(
+            0,
+            int(
                 (
                     next_claim_at - now
                 ).total_seconds()
             )
+        )
 
-        # ------------------------------------------------------
+        can_claim = (
+            seconds_remaining == 0
+        )
+
+        # ------------------------------------------------
         # CLAIM
-        # ------------------------------------------------------
+        # ------------------------------------------------
 
         if request.method == "POST":
 
             if not can_claim:
 
                 flash(
-                    "Your next claim is not available yet.",
+                    "Your next claim is not ready yet.",
                     "error"
                 )
 
@@ -1669,17 +1537,76 @@ def my_plan():
                     url_for("my_plan")
                 )
 
+            # Re-read the plan immediately before
+            # processing the claim.
+            current_plan = query_one("""
+                SELECT *
+                FROM plans
+                WHERE id=%s
+                  AND user_id=%s
+                  AND active=TRUE
+                FOR UPDATE
+            """, (
+                plan["id"],
+                user["id"]
+            ))
+
+            # The FOR UPDATE above needs a transaction,
+            # so use a dedicated connection below instead.
+
             conn = get_conn()
             cur = conn.cursor()
 
             try:
 
-                # Re-check the timer inside the transaction.
+                now = datetime.utcnow()
+
+                cur.execute("""
+                    SELECT *
+                    FROM plans
+                    WHERE id=%s
+                      AND user_id=%s
+                      AND active=TRUE
+                    FOR UPDATE
+                """, (
+                    plan["id"],
+                    user["id"]
+                ))
+
+                locked_plan = cur.fetchone()
+
+                if not locked_plan:
+
+                    conn.rollback()
+
+                    flash(
+                        "This plan is no longer active.",
+                        "error"
+                    )
+
+                    return redirect(
+                        url_for("my_plan")
+                    )
+
+                locked_last_claim = (
+                    locked_plan[8]
+                    if len(locked_plan) > 8
+                    else None
+                )
+
+                # Safer lookup by column order:
                 cur.execute("""
                     SELECT
                         id,
+                        user_id,
+                        plan_id,
+                        plan_name,
+                        investment_amount,
                         daily_income,
+                        duration,
+                        started_at,
                         last_claim_at,
+                        total_claims,
                         active
                     FROM plans
                     WHERE id=%s
@@ -1706,30 +1633,35 @@ def my_plan():
                         url_for("my_plan")
                     )
 
-                locked_last_claim = (
-                    locked_plan[2]
-                )
+                (
+                    plan_db_id,
+                    plan_user_id,
+                    plan_plan_id,
+                    plan_name,
+                    investment_amount,
+                    daily_income,
+                    duration,
+                    started_at,
+                    last_claim_at,
+                    total_claims,
+                    active
+                ) = locked_plan
 
-                if locked_last_claim is None:
+                if last_claim_at is None:
 
-                    locked_last_claim = (
-                        plan["started_at"]
-                        or datetime.utcnow()
-                    )
+                    last_claim_at = started_at
 
-                locked_next_claim = (
-                    locked_last_claim
+                next_time = (
+                    last_claim_at
                     + timedelta(hours=24)
                 )
 
-                now = datetime.utcnow()
-
-                if now < locked_next_claim:
+                if now < next_time:
 
                     conn.rollback()
 
                     flash(
-                        "Your 24-hour claim timer is still running.",
+                        "Your 24-hour claim period has not completed.",
                         "error"
                     )
 
@@ -1737,17 +1669,42 @@ def my_plan():
                         url_for("my_plan")
                     )
 
-                daily_income = Decimal(
-                    locked_plan[1]
+                total_claims = (
+                    total_claims or 0
                 )
 
-                # Credit income.
+                # Prevent claims beyond duration.
+                if total_claims >= duration:
+
+                    cur.execute("""
+                        UPDATE plans
+                        SET active=FALSE
+                        WHERE id=%s
+                    """, (
+                        plan_db_id,
+                    ))
+
+                    conn.commit()
+
+                    flash(
+                        "This plan has completed its demo cycle.",
+                        "success"
+                    )
+
+                    return redirect(
+                        url_for("my_plan")
+                    )
+
+                # Add demo income.
                 cur.execute("""
                     UPDATE accounts
-                    SET income_account =
+                    SET
+                        income_account =
                             income_account + %s,
+
                         withdraw_account =
                             withdraw_account + %s
+
                     WHERE user_id=%s
                 """, (
                     daily_income,
@@ -1755,16 +1712,28 @@ def my_plan():
                     user["id"]
                 ))
 
-                # Reset the timer ONLY after a successful claim.
-                claim_time = datetime.utcnow()
+                new_claim_count = (
+                    total_claims + 1
+                )
+
+                new_active = (
+                    new_claim_count < duration
+                )
 
                 cur.execute("""
                     UPDATE plans
-                    SET last_claim_at=%s
+
+                    SET
+                        last_claim_at=%s,
+                        total_claims=%s,
+                        active=%s
+
                     WHERE id=%s
                 """, (
-                    claim_time,
-                    plan["id"]
+                    now,
+                    new_claim_count,
+                    new_active,
+                    plan_db_id
                 ))
 
                 cur.execute("""
@@ -1775,12 +1744,13 @@ def my_plan():
                         status,
                         description
                     )
+
                     VALUES (
                         %s,
                         'income_claim',
                         %s,
                         'successful',
-                        'Demo daily income claim'
+                        'Demo 24-hour income claim'
                     )
                 """, (
                     user["id"],
@@ -1788,6 +1758,11 @@ def my_plan():
                 ))
 
                 conn.commit()
+
+                flash(
+                    "Demo income claimed successfully.",
+                    "success"
+                )
 
             except Exception:
 
@@ -1799,12 +1774,6 @@ def my_plan():
                 cur.close()
                 conn.close()
 
-            flash(
-                "Daily demo income claimed successfully. "
-                "Your next claim will be available after 24 hours.",
-                "success"
-            )
-
             return redirect(
                 url_for("my_plan")
             )
@@ -1813,47 +1782,43 @@ def my_plan():
         "my_plan.html",
         plan=plan,
         can_claim=can_claim,
-        next_claim_at=next_claim_at,
-        seconds_remaining=seconds_remaining
+        seconds_remaining=seconds_remaining,
+        next_claim_at=next_claim_at
     )
 
 
 # ============================================================
-# WITHDRAW
+# TRANSACTION HISTORY
 # ============================================================
 
-@app.route("/withdraw")
-def withdraw():
+@app.route("/transaction_history")
+def transaction_history():
 
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
 
-    account = current_account(
-        user["id"]
-    )
-
-    accounts = query_all("""
+    transactions = query_all("""
         SELECT *
-        FROM withdrawal_accounts
+        FROM transactions
         WHERE user_id=%s
-        ORDER BY id DESC
+        ORDER BY created_at DESC
     """, (
         user["id"],
     ))
 
     return render_template(
-        "withdraw.html",
-        account=account,
-        accounts=accounts
+        "transaction_history.html",
+        transactions=transactions
     )
 
 
 # ============================================================
-# BIND ACCOUNT
+# WITHDRAWAL ACCOUNT
 # ============================================================
 
 @app.route(
@@ -1865,6 +1830,7 @@ def bind_account():
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
@@ -1886,11 +1852,7 @@ def bind_account():
             ""
         ).strip()
 
-        if (
-            not account_name
-            or not phone
-            or not network
-        ):
+        if not account_name or not phone or not network:
 
             flash(
                 "Please complete the account details.",
@@ -1906,6 +1868,7 @@ def bind_account():
                     phone,
                     network
                 )
+
                 VALUES (%s,%s,%s,%s)
             """, (
                 user["id"],
@@ -1935,7 +1898,42 @@ def bind_account():
 
 
 # ============================================================
-# WITHDRAWAL REQUEST
+# WITHDRAWAL PAGE
+# ============================================================
+
+@app.route("/withdraw")
+def withdraw():
+
+    user = current_user()
+
+    if not user:
+
+        return redirect(
+            url_for("login")
+        )
+
+    account = current_account(
+        user["id"]
+    )
+
+    accounts = query_all("""
+        SELECT *
+        FROM withdrawal_accounts
+        WHERE user_id=%s
+        ORDER BY id DESC
+    """, (
+        user["id"],
+    ))
+
+    return render_template(
+        "withdraw.html",
+        account=account,
+        accounts=accounts
+    )
+
+
+# ============================================================
+# DEMO WITHDRAWAL REQUEST
 # ============================================================
 
 @app.route(
@@ -1947,6 +1945,7 @@ def request_withdrawal():
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
@@ -1960,7 +1959,10 @@ def request_withdrawal():
             )
         )
 
-    except (InvalidOperation, ValueError):
+    except (
+        InvalidOperation,
+        ValueError
+    ):
 
         amount = Decimal("0")
 
@@ -1973,7 +1975,7 @@ def request_withdrawal():
         "account_id"
     )
 
-    if amount < MIN_WITHDRAWAL:
+    if amount < Decimal("30"):
 
         flash(
             "Minimum demo withdrawal is GHS 30.",
@@ -1984,7 +1986,11 @@ def request_withdrawal():
             url_for("withdraw")
         )
 
-    if not user["withdraw_password_hash"]:
+    stored_hash = user.get(
+        "withdraw_password_hash"
+    )
+
+    if not stored_hash:
 
         flash(
             "Withdrawal password is not configured.",
@@ -1997,16 +2003,16 @@ def request_withdrawal():
 
     try:
 
-        valid_password = check_password_hash(
-            user["withdraw_password_hash"],
+        valid = check_password_hash(
+            stored_hash,
             password
         )
 
     except Exception:
 
-        valid_password = False
+        valid = False
 
-    if not valid_password:
+    if not valid:
 
         flash(
             "Invalid withdrawal password.",
@@ -2028,7 +2034,7 @@ def request_withdrawal():
     if balance < amount:
 
         flash(
-            "Insufficient withdrawal balance.",
+            "Insufficient demo withdrawal balance.",
             "error"
         )
 
@@ -2066,8 +2072,10 @@ def request_withdrawal():
 
         cur.execute("""
             UPDATE accounts
+
             SET withdraw_account =
                 withdraw_account - %s
+
             WHERE user_id=%s
               AND withdraw_account >= %s
         """, (
@@ -2081,7 +2089,7 @@ def request_withdrawal():
             conn.rollback()
 
             flash(
-                "Insufficient withdrawal balance.",
+                "Insufficient balance.",
                 "error"
             )
 
@@ -2093,9 +2101,13 @@ def request_withdrawal():
             INSERT INTO withdrawal_requests (
                 user_id,
                 amount,
-                account_id
+                account_id,
+                status
             )
-            VALUES (%s,%s,%s)
+
+            VALUES (
+                %s,%s,%s,'pending'
+            )
         """, (
             user["id"],
             amount,
@@ -2110,9 +2122,10 @@ def request_withdrawal():
                 status,
                 description
             )
+
             VALUES (
                 %s,
-                'withdrawal',
+                'demo_withdrawal',
                 %s,
                 'pending',
                 'Demo withdrawal request'
@@ -2135,41 +2148,12 @@ def request_withdrawal():
         conn.close()
 
     flash(
-        "Withdrawal request submitted for review.",
+        "Demo withdrawal request submitted.",
         "success"
     )
 
     return redirect(
         url_for("transaction_history")
-    )
-
-
-# ============================================================
-# TRANSACTION HISTORY
-# ============================================================
-
-@app.route("/transaction_history")
-def transaction_history():
-
-    user = current_user()
-
-    if not user:
-        return redirect(
-            url_for("login")
-        )
-
-    transactions = query_all("""
-        SELECT *
-        FROM transactions
-        WHERE user_id=%s
-        ORDER BY created_at DESC
-    """, (
-        user["id"],
-    ))
-
-    return render_template(
-        "transaction_history.html",
-        transactions=transactions
     )
 
 
@@ -2183,6 +2167,7 @@ def team():
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
@@ -2193,8 +2178,11 @@ def team():
             username,
             phone,
             created_at
+
         FROM users
+
         WHERE referred_by=%s
+
         ORDER BY created_at DESC
     """, (
         user["referral_code"],
@@ -2207,7 +2195,7 @@ def team():
     referral_income = (
         account["referral_account"]
         if account
-        else 0
+        else Decimal("0")
     )
 
     return render_template(
@@ -2241,6 +2229,7 @@ def profile():
     user = current_user()
 
     if not user:
+
         return redirect(
             url_for("login")
         )
@@ -2252,20 +2241,35 @@ def profile():
     return render_template(
         "profile.html",
         user=user,
-        deposit_balance=
-            account["deposit_account"],
-        withdraw_balance=
-            account["withdraw_account"],
-        income_balance=
-            account["income_account"],
-        referral_balance=
-            account["referral_account"]
+        deposit_balance=account[
+            "deposit_account"
+        ],
+        withdraw_balance=account[
+            "withdraw_account"
+        ],
+        income_balance=account[
+            "income_account"
+        ],
+        referral_balance=account[
+            "referral_account"
+        ]
     )
 
 
 # ============================================================
-# ADMIN AUTH
+# ADMIN
 # ============================================================
+
+ADMIN_USERNAME = os.environ.get(
+    "ADMIN_USERNAME",
+    "Williams"
+)
+
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
+    "Williams12"
+)
+
 
 def admin_required():
 
@@ -2275,10 +2279,6 @@ def admin_required():
         ) is True
     )
 
-
-# ============================================================
-# ADMIN LOGIN
-# ============================================================
 
 @app.route(
     "/admin/login",
@@ -2327,6 +2327,14 @@ def admin_login():
 
                     valid = False
 
+        # Backward-compatible fallback.
+        if (
+            not valid
+            and username == ADMIN_USERNAME
+            and password == ADMIN_PASSWORD
+        ):
+            valid = True
+
         if valid:
 
             session["admin_logged_in"] = True
@@ -2349,10 +2357,6 @@ def admin_login():
         "admin_login.html"
     )
 
-
-# ============================================================
-# ADMIN LOGOUT
-# ============================================================
 
 @app.route("/admin/logout")
 def admin_logout():
@@ -2423,13 +2427,17 @@ def admin_users():
     users = query_all("""
         SELECT
             u.*,
+
             a.deposit_account,
             a.income_account,
             a.referral_account,
             a.withdraw_account
+
         FROM users u
+
         LEFT JOIN accounts a
             ON a.user_id=u.id
+
         ORDER BY u.id DESC
     """)
 
@@ -2440,7 +2448,7 @@ def admin_users():
 
 
 # ============================================================
-# ADMIN MANAGE USER
+# ADMIN USER MANAGEMENT
 # ============================================================
 
 @app.route(
@@ -2484,7 +2492,10 @@ def admin_manage_user(user_id):
                 or "0"
             )
 
-        except (InvalidOperation, ValueError):
+        except (
+            InvalidOperation,
+            ValueError
+        ):
 
             flash(
                 "Invalid amount.",
@@ -2499,73 +2510,32 @@ def admin_manage_user(user_id):
             )
 
         actions = {
-            "add_deposit":
-                ("deposit_account", 1),
+            "add_deposit": (
+                "deposit_account",
+                1
+            ),
 
-            "deduct_deposit":
-                ("deposit_account", -1),
+            "deduct_deposit": (
+                "deposit_account",
+                -1
+            ),
 
-            "add_withdraw":
-                ("withdraw_account", 1),
+            "add_withdraw": (
+                "withdraw_account",
+                1
+            ),
 
-            "deduct_withdraw":
-                ("withdraw_account", -1),
+            "deduct_withdraw": (
+                "withdraw_account",
+                -1
+            ),
         }
 
-        if action in actions:
-
-            if amount <= 0:
-
-                flash(
-                    "Amount must be greater than zero.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for(
-                        "admin_manage_user",
-                        user_id=user_id
-                    )
-                )
-
-            column, multiplier = actions[
-                action
-            ]
-
-            if multiplier == 1:
-
-                execute(
-                    f"""
-                    UPDATE accounts
-                    SET {column}={column}+%s
-                    WHERE user_id=%s
-                    """,
-                    (
-                        amount,
-                        user_id
-                    )
-                )
-
-            else:
-
-                execute(
-                    f"""
-                    UPDATE accounts
-                    SET {column}=GREATEST(
-                        0,
-                        {column}-%s
-                    )
-                    WHERE user_id=%s
-                    """,
-                    (
-                        amount,
-                        user_id
-                    )
-                )
+        if action not in actions:
 
             flash(
-                "User balance updated.",
-                "success"
+                "Unknown admin action.",
+                "error"
             )
 
             return redirect(
@@ -2575,9 +2545,65 @@ def admin_manage_user(user_id):
                 )
             )
 
+        if amount <= 0:
+
+            flash(
+                "Amount must be greater than zero.",
+                "error"
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id
+                )
+            )
+
+        column, multiplier = actions[
+            action
+        ]
+
+        if multiplier == 1:
+
+            execute(
+                f"""
+                UPDATE accounts
+                SET {column}={column}+%s
+                WHERE user_id=%s
+                """,
+                (
+                    amount,
+                    user_id
+                )
+            )
+
+        else:
+
+            execute(
+                f"""
+                UPDATE accounts
+                SET {column}=GREATEST(
+                    0,
+                    {column}-%s
+                )
+                WHERE user_id=%s
+                """,
+                (
+                    amount,
+                    user_id
+                )
+            )
+
         flash(
-            "Unknown admin action.",
-            "error"
+            "User balance updated.",
+            "success"
+        )
+
+        return redirect(
+            url_for(
+                "admin_manage_user",
+                user_id=user_id
+            )
         )
 
     account = current_account(
@@ -2608,18 +2634,9 @@ def admin_deposits():
     deposits = query_all("""
         SELECT
             d.*,
-
             u.username,
             u.fullname,
-            u.phone AS user_phone,
-
-            d.sender_phone,
-            d.payment_number,
-            d.reference,
-            d.screenshot,
-
-            d.status,
-            d.created_at
+            u.phone
 
         FROM deposit_requests d
 
@@ -2698,11 +2715,6 @@ def admin_deposit_action(
             url_for("admin_deposits")
         )
 
-    admin_note = request.form.get(
-        "admin_note",
-        ""
-    ).strip()
-
     conn = get_conn()
     cur = conn.cursor()
 
@@ -2710,11 +2722,12 @@ def admin_deposit_action(
 
         if action == "approve":
 
-            # Credit the user's demo deposit balance.
             cur.execute("""
                 UPDATE accounts
+
                 SET deposit_account =
                     deposit_account + %s
+
                 WHERE user_id=%s
             """, (
                 deposit["amount"],
@@ -2723,52 +2736,52 @@ def admin_deposit_action(
 
             cur.execute("""
                 UPDATE deposit_requests
-                SET
-                    status='approved',
-                    admin_note=%s,
-                    processed_at=CURRENT_TIMESTAMP
+
+                SET status='approved'
+
                 WHERE id=%s
             """, (
-                admin_note,
-                deposit_id
+                deposit_id,
             ))
 
             cur.execute("""
                 UPDATE transactions
+
                 SET status='successful'
+
                 WHERE user_id=%s
-                  AND reference=%s
-                  AND transaction_type='deposit'
+                  AND transaction_type='demo_deposit'
+                  AND amount=%s
                   AND status='pending'
             """, (
                 deposit["user_id"],
-                deposit["reference"]
+                deposit["amount"]
             ))
 
         else:
 
             cur.execute("""
                 UPDATE deposit_requests
-                SET
-                    status='rejected',
-                    admin_note=%s,
-                    processed_at=CURRENT_TIMESTAMP
+
+                SET status='rejected'
+
                 WHERE id=%s
             """, (
-                admin_note,
-                deposit_id
+                deposit_id,
             ))
 
             cur.execute("""
                 UPDATE transactions
+
                 SET status='failed'
+
                 WHERE user_id=%s
-                  AND reference=%s
-                  AND transaction_type='deposit'
+                  AND transaction_type='demo_deposit'
+                  AND amount=%s
                   AND status='pending'
             """, (
                 deposit["user_id"],
-                deposit["reference"]
+                deposit["amount"]
             ))
 
         conn.commit()
@@ -2810,7 +2823,9 @@ def admin_withdrawals():
     withdrawals = query_all("""
         SELECT
             w.*,
+
             u.username,
+            u.fullname,
             u.phone,
 
             wa.account_name,
@@ -2835,7 +2850,7 @@ def admin_withdrawals():
 
 
 # ============================================================
-# ADMIN WITHDRAW ACTION
+# ADMIN WITHDRAWAL ACTION
 # ============================================================
 
 @app.route(
@@ -2889,7 +2904,7 @@ def admin_withdraw_action(
     if withdrawal["status"] != "pending":
 
         flash(
-            "Withdrawal is no longer pending.",
+            "This withdrawal has already been processed.",
             "error"
         )
 
@@ -2906,7 +2921,9 @@ def admin_withdraw_action(
 
             cur.execute("""
                 UPDATE withdrawal_requests
+
                 SET status='approved'
+
                 WHERE id=%s
             """, (
                 withdrawal_id,
@@ -2914,9 +2931,11 @@ def admin_withdraw_action(
 
             cur.execute("""
                 UPDATE transactions
+
                 SET status='successful'
+
                 WHERE user_id=%s
-                  AND transaction_type='withdrawal'
+                  AND transaction_type='demo_withdrawal'
                   AND amount=%s
                   AND status='pending'
             """, (
@@ -2926,11 +2945,13 @@ def admin_withdraw_action(
 
         else:
 
-            # Return the demo balance if rejected.
+            # Return demo balance if rejected.
             cur.execute("""
                 UPDATE accounts
+
                 SET withdraw_account =
                     withdraw_account + %s
+
                 WHERE user_id=%s
             """, (
                 withdrawal["amount"],
@@ -2939,7 +2960,9 @@ def admin_withdraw_action(
 
             cur.execute("""
                 UPDATE withdrawal_requests
+
                 SET status='rejected'
+
                 WHERE id=%s
             """, (
                 withdrawal_id,
@@ -2947,9 +2970,11 @@ def admin_withdraw_action(
 
             cur.execute("""
                 UPDATE transactions
+
                 SET status='failed'
+
                 WHERE user_id=%s
-                  AND transaction_type='withdrawal'
+                  AND transaction_type='demo_withdrawal'
                   AND amount=%s
                   AND status='pending'
             """, (
@@ -2998,9 +3023,12 @@ def admin_bind_accounts():
             wa.*,
             u.username,
             u.phone AS user_phone
+
         FROM withdrawal_accounts wa
+
         JOIN users u
             ON u.id=wa.user_id
+
         ORDER BY wa.created_at DESC
     """)
 
@@ -3027,16 +3055,13 @@ def server_error(error):
 
 
 # ============================================================
-# DATABASE STARTUP
+# STARTUP
 # ============================================================
 
 with app.app_context():
+
     init_db()
 
-
-# ============================================================
-# RUN
-# ============================================================
 
 if __name__ == "__main__":
 
