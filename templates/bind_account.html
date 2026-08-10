@@ -1,347 +1,609 @@
-<!DOCTYPE html><html>
-<head><title>Bind Account - Zenith Capital</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+<!DOCTYPE html>
+<html lang="en">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-    background:#f4f7fb;
-    padding-bottom:90px;
-}
+    <title>Bind Account</title>
 
-.header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    color:white;
-    padding:30px 20px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
-}
+    <style>
 
-.header h1{
-    font-size:25px;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+        }
 
-.header p{
-    margin-top:8px;
-    color:#dbeafe;
-}
+        body {
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding-bottom: 75px;
+            color: #1e293b;
+        }
 
-.container{
-    padding:20px;
-    max-width:600px;
-    margin:auto;
-}
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            background: #f8fafc;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,.05);
+            padding-bottom: 75px;
+        }
 
-.card{
-    background:white;
-    padding:22px;
-    border-radius:20px;
-    margin-bottom:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
+        /* =========================
+           TOP HEADER
+        ========================= */
 
-.card h2{
-    color:#2563eb;
-    margin-bottom:16px;
-    font-size:20px;
-}
+        .top-header {
+            height: 55px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+        }
 
-.account{
-    background:#f8fafc;
-    padding:16px;
-    border-radius:15px;
-    margin-bottom:12px;
-    border:1px solid #e2e8f0;
-}
+        .top-title {
+            text-align: center;
+            color: #10144c;
+            font-size: 15px;
+            font-weight: 700;
+        }
 
-.account-row{
-    display:flex;
-    align-items:flex-start;
-    gap:12px;
-}
+        .top-title small {
+            display: block;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 400;
+            margin-top: 2px;
+        }
 
-.account input[type="radio"]{
-    width:20px;
-    height:20px;
-    margin-top:3px;
-}
+        /* =========================
+           PAGE HEADER
+        ========================= */
 
-.account strong{
-    color:#0f172a;
-    font-size:16px;
-}
+        .page-header {
+            background: #10144c;
+            color: white;
+            padding: 14px 18px;
+            text-align: center;
+        }
 
-.info{
-    color:#475569;
-    margin-top:7px;
-    line-height:1.5;
-    font-size:14px;
-}
+        .page-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
 
-input,
-select{
-    width:100%;
-    padding:15px;
-    margin:8px 0;
-    border-radius:15px;
-    border:1px solid #dbe1e8;
-    outline:none;
-    font-size:15px;
-}
+        .page-header p {
+            font-size: 11px;
+            color: #cbd5e1;
+            margin-top: 3px;
+        }
 
-input:focus,
-select:focus{
-    border-color:#2563eb;
-}
+        /* =========================
+           CONTENT
+        ========================= */
 
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    font-size:15px;
-    margin-top:10px;
-    cursor:pointer;
-}
+        .content {
+            padding: 15px;
+        }
 
-.notice{
-    background:#eff6ff;
-    color:#1e40af;
-    padding:14px;
-    border-radius:15px;
-    margin-bottom:18px;
-    line-height:1.5;
-    font-size:14px;
-}
+        /* =========================
+           BACK BUTTON
+        ========================= */
 
-.empty{
-    text-align:center;
-    color:#64748b;
-    padding:15px 5px;
-}
+        .back {
+            display: block;
+            text-decoration: none;
+            background: white;
+            color: #10144c;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 12px;
+        }
 
-.flash{
-    padding:14px;
-    border-radius:14px;
-    margin-bottom:15px;
-    font-weight:bold;
-}
+        /* =========================
+           FLASH MESSAGES
+        ========================= */
 
-.flash.success{
-    background:#dcfce7;
-    color:#166534;
-}
+        .flash {
+            padding: 12px;
+            border-radius: 11px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
 
-.flash.error{
-    background:#fee2e2;
-    color:#991b1b;
-}
+        .flash.success {
+            background: #dcfce7;
+            color: #166534;
+        }
 
-.back{
-    display:block;
-    text-align:center;
-    text-decoration:none;
-    background:#e2e8f0;
-    color:#0f172a;
-    padding:14px;
-    border-radius:15px;
-    margin-bottom:18px;
-    font-weight:bold;
-}
+        .flash.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-}
+        /* =========================
+           NOTICE
+        ========================= */
 
-.bottom-nav a{
-    text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
-    font-size:13px;
-}
+        .notice {
+            background: #eef2ff;
+            color: #373b7a;
+            border: 1px solid #e0e7ff;
+            padding: 13px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
 
-</style></head><body><div class="header"><h1>Bind Account</h1>
+        /* =========================
+           CARDS
+        ========================= */
 
-<p>Manage your withdrawal account</p>
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid #edf1f7;
+            margin-bottom: 12px;
+        }
 
-</div><div class="container"><a href="{{ url_for('withdraw') }}" class="back">
-    ← Back to Withdrawal
-</a>
+        .card-title {
+            color: #10144c;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* =========================
+           SAVED ACCOUNT
+        ========================= */
+
+        .account {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 9px;
+        }
+
+        .account:last-child {
+            margin-bottom: 0;
+        }
+
+        .account-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .account input[type="radio"] {
+            width: 19px;
+            height: 19px;
+            margin-top: 2px;
+            accent-color: #10144c;
+        }
+
+        .account strong {
+            display: block;
+            color: #10144c;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .empty {
+            text-align: center;
+            color: #94a3b8;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 11px;
+            font-size: 12px;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 11px;
+            border: 1px solid #dbe2ea;
+            background: white;
+            outline: none;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #10144c;
+            box-shadow: 0 0 0 2px rgba(16,20,76,.08);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 20px;
+            background: #10144c;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .save-btn:active {
+            transform: scale(.99);
+        }
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .information {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           FIXED BOTTOM NAVIGATION
+        ========================= */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 62px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0,0,0,.06);
+        }
+
+        .bottom-nav a {
+            position: relative;
+            text-decoration: none;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 500;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            line-height: 18px;
+        }
+
+        .bottom-nav a.active {
+            color: #10144c;
+            font-weight: 700;
+        }
+
+        .bottom-nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: #10144c;
+            border-radius: 3px 3px 0 0;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <!-- TOP HEADER -->
+
+    <div class="top-header">
+        <div class="top-title">
+            Bind Account
+            <small>Withdrawal Account</small>
+        </div>
+    </div>
 
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- PAGE HEADER -->
 
-    {% for category, message in messages %}
+    <div class="page-header">
+        <h1>Bind Account</h1>
+        <p>Manage your withdrawal account</p>
+    </div>
 
-        <div class="flash {{ category }}">
-            {{ message }}
+
+    <div class="content">
+
+        <!-- BACK -->
+
+        <a href="{{ url_for('withdraw') }}" class="back">
+            ← Back to Withdrawal
+        </a>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- NOTICE -->
+
+        <div class="notice">
+            🔐 Add your own withdrawal account. Make sure the
+            account name and mobile money number are correct
+            before saving.
         </div>
 
-    {% endfor %}
 
-{% endwith %}
+        <!-- SAVED ACCOUNTS -->
 
+        <div class="card">
 
-<div class="notice">
-    🔐 Add your own withdrawal account and make sure the account
-    name and mobile money number are correct before saving.
-</div>
+            <div class="card-title">
+                🏦 Saved Accounts
+            </div>
 
+            {% if accounts %}
 
-<!-- SAVED ACCOUNTS -->
+                {% for account in accounts %}
 
-<div class="card">
+                <div class="account">
 
-    <h2>🏦 Your Saved Accounts</h2>
+                    <div class="account-row">
 
-    {% if accounts %}
+                        <input
+                            type="radio"
+                            name="selected_account"
+                            value="{{ account.id }}"
+                        >
 
-        {% for account in accounts %}
+                        <div>
 
-        <div class="account">
+                            <strong>
+                                {{ account.network }}
+                            </strong>
 
-            <div class="account-row">
+                            <div class="info">
+                                Account Name:
+                                {{ account.account_name }}
+                            </div>
 
-                <input
-                    type="radio"
-                    name="selected_account"
-                    value="{{ account.id }}"
-                >
+                            <div class="info">
+                                Number:
+                                {{ account.phone }}
+                            </div>
 
-                <div>
+                        </div>
 
-                    <strong>
-                        {{ account.network }}
-                    </strong>
-
-                    <div class="info">
-                        Account Name:
-                        {{ account.account_name }}
-                    </div>
-
-                    <div class="info">
-                        Number:
-                        {{ account.phone }}
                     </div>
 
                 </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+                    No withdrawal account has been added yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ADD NEW ACCOUNT -->
+
+        <div class="card">
+
+            <div class="card-title">
+                ➕ Add New Account
+            </div>
+
+            <form
+                method="POST"
+                action="{{ url_for('bind_account') }}"
+            >
+
+                <div class="form-group">
+
+                    <label>
+                        Account Holder Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="account_name"
+                        placeholder="Enter account holder name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Money Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Enter mobile money number"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Money Network
+                    </label>
+
+                    <select name="network" required>
+
+                        <option value="">
+                            Select network
+                        </option>
+
+                        <option value="MTN Mobile Money">
+                            MTN Mobile Money
+                        </option>
+
+                        <option value="Telecel Cash">
+                            Telecel Cash
+                        </option>
+
+                        <option value="AirtelTigo Money">
+                            AirtelTigo Money
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button type="submit" class="save-btn">
+                    Save Withdrawal Account
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="card">
+
+            <div class="card-title">
+                ℹ️ Account Information
+            </div>
+
+            <div class="information">
+
+                Saved withdrawal accounts are linked to your
+                user account. You can select one when submitting
+                a withdrawal request.
 
             </div>
 
         </div>
 
-        {% endfor %}
-
-    {% else %}
-
-        <div class="empty">
-
-            No withdrawal account has been added yet.
-
-        </div>
-
-    {% endif %}
-
-</div>
+    </div>
 
 
-<!-- ADD ACCOUNT -->
+    <!-- FIXED BOTTOM NAVIGATION -->
 
-<div class="card">
+    <div class="bottom-nav">
 
-    <h2>➕ Add New Account</h2>
+        <a href="{{ url_for('dashboard') }}">
 
-    <form method="POST"
-          action="{{ url_for('bind_account') }}">
+            <div class="nav-icon">🏠</div>
 
-        <input
-            type="text"
-            name="account_name"
-            placeholder="Account holder name"
-            required
-        >
+            Home
 
-        <input
-            type="tel"
-            name="phone"
-            placeholder="Mobile Money number"
-            required
-        >
-
-        <select name="network" required>
-
-            <option value="">
-                Select Mobile Money Network
-            </option>
-
-            <option value="MTN Mobile Money">
-                MTN Mobile Money
-            </option>
-
-            <option value="Telecel Cash">
-                Telecel Cash
-            </option>
-
-            <option value="AirtelTigo Money">
-                AirtelTigo Money
-            </option>
-
-        </select>
-
-        <button type="submit">
-            Save Withdrawal Account
-        </button>
-
-    </form>
-
-</div>
+        </a>
 
 
-<!-- INFORMATION -->
+        <a href="{{ url_for('my_plan') }}">
 
-<div class="card">
+            <div class="nav-icon">📈</div>
 
-    <h2>ℹ️ Account Information</h2>
+            Income
 
-    <div class="info">
+        </a>
 
-        Saved withdrawal accounts are linked to your user account.
-        You can select one when submitting a withdrawal request.
+
+        <a href="{{ url_for('team') }}">
+
+            <div class="nav-icon">👥</div>
+
+            Team
+
+        </a>
+
+
+        <a href="{{ url_for('dashboard') }}">
+
+            <div class="nav-icon">🔗</div>
+
+            Share
+
+        </a>
+
+
+        <a href="{{ url_for('profile') }}" class="active">
+
+            <div class="nav-icon">👤</div>
+
+            My
+
+        </a>
 
     </div>
 
 </div>
 
-</div><div class="bottom-nav"><a href="{{ url_for('dashboard') }}">
-    🏠<br>
-    Home
-</a>
-
-<a href="{{ url_for('my_plan') }}">
-    💼<br>
-    My Plan
-</a>
-
-<a href="{{ url_for('profile') }}">
-    👤<br>
-    Profile
-</a>
-
-</div></body>
+</body>
 </html>
