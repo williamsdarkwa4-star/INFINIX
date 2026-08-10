@@ -1,746 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Zenith Capital Dashboard</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#f4f7fb;
-    padding-bottom:85px;
-    color:#0f172a;
-}
-
-
-/* =========================
-   TOP BANNER
-========================= */
-
-.top-banner{
-    height:230px;
-    position:relative;
-    overflow:hidden;
-    border-radius:0 0 30px 30px;
-}
-
-.top-banner img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(15,23,42,0.55);
-    color:white;
-
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-}
-
-.overlay h1{
-    font-size:32px;
-}
-
-.overlay p{
-    margin-top:10px;
-    font-size:15px;
-}
-
-
-/* =========================
-   CONTAINER
-========================= */
-
-.container{
-    padding:20px;
-    max-width:900px;
-    margin:auto;
-}
-
-
-/* =========================
-   ACCOUNT CARDS
-========================= */
-
-.accounts{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:-20px;
-    position:relative;
-}
-
-.account-card{
-    background:white;
-    padding:20px;
-    border-radius:18px;
-
-    box-shadow:
-        0 5px 15px rgba(0,0,0,.10);
-}
-
-.account-card h3{
-    color:#64748b;
-    font-size:14px;
-    font-weight:600;
-}
-
-.amount{
-    margin-top:10px;
-    color:#2563eb;
-    font-size:22px;
-    font-weight:bold;
-}
-
-
-/* =========================
-   ACTION BUTTONS
-========================= */
-
-.action{
-    display:flex;
-    gap:15px;
-    margin:25px 0;
-}
-
-.action a{
-    flex:1;
-    padding:15px;
-    text-align:center;
-
-    color:white;
-    text-decoration:none;
-
-    border-radius:15px;
-    font-weight:bold;
-}
-
-.deposit{
-    background:#10b981;
-}
-
-.deposit:hover{
-    background:#059669;
-}
-
-.withdraw{
-    background:#2563eb;
-}
-
-.withdraw:hover{
-    background:#1d4ed8;
-}
-
-
-/* =========================
-   PLAN TITLE
-========================= */
-
-.title{
-    color:#0f172a;
-    margin-bottom:15px;
-}
-
-
-/* =========================
-   PLAN CARD
-========================= */
-
-.plan{
-    background:white;
-    padding:20px;
-    margin-bottom:15px;
-
-    border-radius:20px;
-
-    box-shadow:
-        0 5px 15px rgba(0,0,0,.08);
-}
-
-.plan h3{
-    color:#2563eb;
-    margin-bottom:8px;
-}
-
-.plan p{
-    margin-top:7px;
-    color:#475569;
-}
-
-
-/* =========================
-   INVEST BUTTON
-========================= */
-
-.invest-btn{
-
-    display:block;
-
-    width:100%;
-
-    margin-top:15px;
-
-    padding:13px;
-
-    border:none;
-    border-radius:12px;
-
-    background:#2563eb;
-
-    color:white;
-
-    text-align:center;
-
-    text-decoration:none;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-}
-
-.invest-btn:hover{
-    background:#1d4ed8;
-}
-
-
-/* =========================
-   LOCKED PLANS
-========================= */
-
-.lock{
-    opacity:.5;
-}
-
-.lock button{
-    width:100%;
-
-    margin-top:15px;
-
-    padding:13px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#64748b;
-
-    color:white;
-
-    font-weight:bold;
-}
-
-
-/* =========================
-   BOTTOM NAVIGATION
-========================= */
-
-.bottom-nav{
-
-    position:fixed;
-
-    bottom:0;
-    left:0;
-
-    width:100%;
-
-    background:white;
-
-    display:flex;
-
-    justify-content:space-around;
-
-    padding:14px 5px;
-
-    box-shadow:
-        0 -5px 15px rgba(0,0,0,.10);
-
-    z-index:1000;
-}
-
-.bottom-nav a{
-
-    text-decoration:none;
-
-    color:#2563eb;
-
-    text-align:center;
-
-    font-weight:bold;
-
-    font-size:13px;
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:500px){
-
-    .accounts{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .overlay h1{
-        font-size:28px;
-    }
-
-    .container{
-        padding:15px;
-    }
-
-    .account-card{
-        padding:16px;
-    }
-
-    .amount{
-        font-size:19px;
-    }
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Investment Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Simulating the mobile phone container */
+        .mobile-container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #fcfdfe;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 70px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        /* Top Banner */
+        .top-banner {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #103067, #1c4a94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .top-banner h2 {
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .top-banner p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Quick Actions Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 20px 15px;
+            background: white;
+            margin-bottom: 10px;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .bg-deposit { background-color: #2ece72; }
+        .bg-withdraw { background-color: #ff9f43; }
+        .bg-service { background-color: #2575fc; }
+        .bg-channel { background-color: #6c5ce7; }
+
+        /* Investment Package Cards */
+        .package-card {
+            background: white;
+            margin: 10px 15px;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border: 1px solid #edf0f5;
+        }
+
+        .card-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 60%;
+        }
+
+        .metric-box {
+            background-color: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #1a2a40;
+        }
+
+        /* Product image block matching the layout */
+        .product-preview {
+            width: 35%;
+            height: 110px;
+            background-color: #f1f2f6;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 8px;
+            position: relative;
+            background-image: url('https://icons8.com');
+            background-repeat: no-repeat;
+            background-position: center 30%;
+            background-size: 60px;
+        }
+
+        .tag-times {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-top-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .vip-badge {
+            background-color: #103067;
+            color: #f1c40f;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        /* Action Buttons */
+        .btn-buy {
+            width: 100%;
+            background-color: #0b1a30;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-buy:active {
+            opacity: 0.9;
+        }
+
+        /* Navigation Bar fixed at bottom */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 450px;
+            height: 60px;
+            background: white;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            border-top: 1px solid #edf0f5;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: #103067;
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+    </style>
 </head>
-
-
 <body>
 
-
-<!-- =========================
-     TOP BANNER
-========================= -->
-
-<div class="top-banner">
-
-    <img
-        src="https://images.unsplash.com/photo-1559526324-593bc073d938"
-        alt="Zenith Capital"
-    >
-
-    <div class="overlay">
-
-        <h1>
-            Zenith Capital
-        </h1>
-
-        <p>
-            Welcome, {{ user.fullname }}
-        </p>
-
-    </div>
-
-</div>
-
-
-
-<div class="container">
-
-
-<!-- =========================
-     ACCOUNTS
-========================= -->
-
-<div class="accounts">
-
-
-    <div class="account-card">
-
-        <h3>
-            Deposit Account
-        </h3>
-
-        <div class="amount">
-
-            GHS
-            {{ "%.2f"|format(account.deposit_account|float) }}
-
+    <div class="mobile-container">
+        
+        <!-- Top Promotional Banner -->
+        <div class="top-banner">
+            <h2>GOLDEN GRAIN</h2>
+            <p>AGRICULTURE INVESTMENT 2026</p>
+            <div style="margin-top: 10px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 15px; font-size: 0.75rem;">
+                THE RHYTHM OF HARVEST
+            </div>
         </div>
 
-    </div>
-
-
-
-    <div class="account-card">
-
-        <h3>
-            Withdraw Account
-        </h3>
-
-        <div class="amount">
-
-            GHS
-            {{ "%.2f"|format(account.withdraw_account|float) }}
-
+        <!-- System Action Buttons -->
+        <div class="action-grid">
+            <div class="action-item">
+                <div class="icon-circle bg-deposit">📥</div>
+                Deposit
+            </div>
+            <div class="action-item">
+                <div class="icon-circle bg-withdraw">📤</div>
+                Withdraw
+            </div>
+            <div class="action-item">
+                <div class="icon-circle bg-service">🎧</div>
+                Service
+            </div>
+            <div class="action-item">
+                <div class="icon-circle bg-channel">📢</div>
+                Channel
+            </div>
         </div>
 
-    </div>
-
-
-
-    <div class="account-card">
-
-        <h3>
-            Income Account
-        </h3>
-
-        <div class="amount">
-
-            GHS
-            {{ "%.2f"|format(account.income_account|float) }}
-
+        <!-- VIP Tier 1 Item -->
+        <div class="package-card">
+            <div class="card-main">
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">Price</div>
+                        <div class="metric-value">₵ 120</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Daily profit</div>
+                        <div class="metric-value">₵ 20</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Days</div>
+                        <div class="metric-value">180</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total profit</div>
+                        <div class="metric-value">₵ 3600</div>
+                    </div>
+                </div>
+                
+                <div class="product-preview">
+                    <div class="tag-times">Times 1/1</div>
+                    <div class="vip-badge">VIP 1</div>
+                </div>
+            </div>
+            <button class="btn-buy">Buy now</button>
         </div>
 
-    </div>
-
-
-
-    <div class="account-card">
-
-        <h3>
-            Referral Account
-        </h3>
-
-        <div class="amount">
-
-            GHS
-            {{ "%.2f"|format(account.referral_account|float) }}
-
+        <!-- VIP Tier 2 Item -->
+        <div class="package-card">
+            <div class="card-main">
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label">Price</div>
+                        <div class="metric-value">₵ 240</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Daily profit</div>
+                        <div class="metric-value">₵ 42</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Days</div>
+                        <div class="metric-value">180</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total profit</div>
+                        <div class="metric-value">₵ 7560</div>
+                    </div>
+                </div>
+                
+                <div class="product-preview" style="background-image: url('https://icons8.com');">
+                    <div class="tag-times">Times 0/1</div>
+                    <div class="vip-badge">VIP 2</div>
+                </div>
+            </div>
+            <button class="btn-buy">Buy now</button>
         </div>
 
-    </div>
-
-
-</div>
-
-
-
-<!-- =========================
-     DEPOSIT / WITHDRAW
-========================= -->
-
-<div class="action">
-
-    <a
-        href="{{ url_for('deposit') }}"
-        class="deposit"
-    >
-        Deposit
-    </a>
-
-
-    <a
-        href="{{ url_for('withdraw') }}"
-        class="withdraw"
-    >
-        Withdraw
-    </a>
-
-</div>
-
-
-
-<!-- =========================
-     INVESTMENT PLANS
-========================= -->
-
-<h2 class="title">
-    Investment Plans
-</h2>
-
-
-
-<!-- PLAN 1 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 1
-    </h3>
-
-    <p>
-        Invest GHS 50
-    </p>
-
-    <p>
-        Receive GHS 8 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=1) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 2 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 2
-    </h3>
-
-    <p>
-        Invest GHS 100
-    </p>
-
-    <p>
-        Receive GHS 20 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=2) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 3 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 3
-    </h3>
-
-    <p>
-        Invest GHS 200
-    </p>
-
-    <p>
-        Receive GHS 40 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=3) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 4 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 4
-    </h3>
-
-    <p>
-        Invest GHS 300
-    </p>
-
-    <p>
-        Receive GHS 65 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=4) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 5 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 5
-    </h3>
-
-    <p>
-        Invest GHS 500
-    </p>
-
-    <p>
-        Receive GHS 100 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=5) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 6 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 6
-    </h3>
-
-    <p>
-        Invest GHS 600
-    </p>
-
-    <p>
-        Receive GHS 200 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=6) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- PLAN 7 -->
-
-<div class="plan">
-
-    <h3>
-        Plan 7
-    </h3>
-
-    <p>
-        Invest GHS 1000
-    </p>
-
-    <p>
-        Receive GHS 360 Daily
-    </p>
-
-    <a
-        href="{{ url_for('buy_plan', plan_id=7) }}"
-        class="invest-btn"
-    >
-        Invest
-    </a>
-
-</div>
-
-
-
-<!-- LOCKED PLAN -->
-
-<div class="plan lock">
-
-    <h3>
-        🔒 Locked
-    </h3>
-
-    <p>
-        Invest GHS 2000
-    </p>
-
-    <p>
-        Receive GHS 500 Daily
-    </p>
-
-    <button disabled>
-        Locked
-    </button>
-
-</div>
-
-
-
-<!-- LOCKED PLAN -->
-
-<div class="plan lock">
-
-    <h3>
-        🔒 Locked
-    </h3>
-
-    <p>
-        Invest GHS 4000
-    </p>
-
-    <p>
-        Receive GHS 800 Daily
-    </p>
-
-    <button disabled>
-        Locked
-    </button>
-
-</div>
-
-
-</div>
-
-
-
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
-
-<div class="bottom-nav">
-
-
-    <a href="{{ url_for('dashboard') }}">
-        🏠
-        <br>
-        Home
-    </a>
-
-
-    <a href="{{ url_for('team') }}">
-        👥
-        <br>
-        Team
-    </a>
-
-
-    <a href="{{ url_for('profile') }}">
-        👤
-        <br>
-        Profile
-    </a>
-
-
-</div>
-
-
-</body>
-
-</html>
+        <!-- Bottom Tab Navigation -->
+        <div class="nav-bar">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                Home
+            </div>
