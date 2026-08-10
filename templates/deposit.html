@@ -1,396 +1,563 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Deposit - Zenith Capital</title>
-
-<script src="https://js.paystack.co/v1/inline.js"></script>
-
-
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deposit - Zenith Capital</title><style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
-
 
 body{
-
-background:#f4f7fb;
-min-height:100vh;
-padding:20px;
-
+    background:#f4f7fb;
+    min-height:100vh;
+    padding:20px;
 }
-
-
 
 .card{
-
-background:white;
-max-width:400px;
-margin:auto;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 25px rgba(0,0,0,.15);
-
+    background:white;
+    max-width:430px;
+    margin:auto;
+    padding:28px;
+    border-radius:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
 }
-
-
 
 .logo{
-
-text-align:center;
-font-size:30px;
-font-weight:bold;
-color:#2563EB;
-margin-bottom:20px;
-
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#2563eb;
+    margin-bottom:8px;
 }
 
-
+.subtitle{
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:25px;
+}
 
 h2{
-
-text-align:center;
-margin-bottom:20px;
-color:#0F172A;
-
+    text-align:center;
+    margin-bottom:20px;
+    color:#0f172a;
 }
 
-
-
-input{
-
-width:100%;
-padding:15px;
-margin-bottom:15px;
-border:1px solid #ddd;
-border-radius:12px;
-outline:none;
-
+label{
+    display:block;
+    margin-bottom:7px;
+    font-size:14px;
+    font-weight:bold;
+    color:#334155;
 }
 
-
+input[type="text"],
+input[type="number"],
+input[type="file"]{
+    width:100%;
+    padding:14px;
+    margin-bottom:16px;
+    border:1px solid #dbe1e8;
+    border-radius:12px;
+    outline:none;
+    background:#f8fafc;
+}
 
 input:focus{
-
-border-color:#2563EB;
-
+    border-color:#2563eb;
+    background:white;
 }
-
-
 
 .amount-buttons{
-
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:15px;
-
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:18px;
 }
-
-
 
 .amount-buttons button{
-
-width:70px;
-padding:10px;
-border:none;
-border-radius:10px;
-background:#E0E7FF;
-color:#2563EB;
-font-weight:bold;
-
+    flex:1;
+    min-width:65px;
+    padding:11px 8px;
+    border:none;
+    border-radius:10px;
+    background:#e0e7ff;
+    color:#2563eb;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-
-
-.pay-button{
-
-width:100%;
-padding:15px;
-border:none;
-border-radius:12px;
-background:#2563EB;
-color:white;
-font-size:16px;
-font-weight:bold;
-
+.amount-buttons button:hover{
+    background:#c7d2fe;
 }
 
+.next-button,
+.submit-button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
+.next-button:hover,
+.submit-button:hover{
+    background:#1d4ed8;
+}
+
+.back-button{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    background:#e2e8f0;
+    color:#334155;
+    font-weight:bold;
+    cursor:pointer;
+}
 
 .note{
-
-text-align:center;
-color:#64748b;
-font-size:14px;
-margin-bottom:20px;
-
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:20px;
 }
 
+.payment-card{
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+}
 
+.payment-card h3{
+    color:#1e40af;
+    margin-bottom:15px;
+}
+
+.payment-number{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    font-size:20px;
+    font-weight:bold;
+    color:#0f172a;
+    text-align:center;
+    margin-bottom:10px;
+    word-break:break-word;
+}
+
+.copy-button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#1e40af;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.amount-display{
+    margin-bottom:15px;
+    padding:14px;
+    background:#f8fafc;
+    border-radius:12px;
+    color:#334155;
+}
+
+.upload-box{
+    padding:18px;
+    border:2px dashed #cbd5e1;
+    border-radius:15px;
+    margin-bottom:18px;
+    background:#f8fafc;
+}
+
+.upload-box p{
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:12px;
+}
 
 .guide{
-
-margin-top:25px;
-padding:20px;
-background:#f8fafc;
-border-radius:15px;
-line-height:28px;
-color:#475569;
-
+    margin-top:25px;
+    padding:20px;
+    background:#f8fafc;
+    border-radius:15px;
+    line-height:27px;
+    color:#475569;
+    font-size:14px;
 }
 
+.hidden{
+    display:none;
+}
 
+.warning{
+    background:#fff7ed;
+    color:#9a3412;
+    border:1px solid #fed7aa;
+    padding:12px;
+    border-radius:12px;
+    font-size:13px;
+    margin-bottom:15px;
+}
 
-</style>
-
-</head>
-
-
-
-<body>
-
-
-
-<div class="card">
-
-
-<div class="logo">
-
-ZC
-
+</style></head><body><div class="card"><div class="logo">
+    ZC
 </div>
 
-
-
-<h2>
-
-Deposit Funds
-
-</h2>
-
-
-
-<p class="note">
-
-Minimum Deposit: GHS 45
-
+<p class="subtitle">
+    Zenith Capital
 </p>
 
 
+<!-- STEP 1 -->
+
+<div id="stepOne">
+
+    <h2>
+        Deposit Funds
+    </h2>
+
+    <p class="note">
+        Minimum Deposit: <strong>GHS 45</strong>
+    </p>
 
 
-<input
+    <label for="phone">
+        Phone Number
+    </label>
 
-type="number"
-
-id="amount"
-
-placeholder="Enter Amount (GHS)"
-
-min="45"
-
-required>
-
+    <input
+        type="tel"
+        id="phone"
+        placeholder="Enter your phone number"
+        required
+    >
 
 
+    <label for="amount">
+        Deposit Amount
+    </label>
 
-<div class="amount-buttons">
-
-
-<button onclick="setAmount(45)">
-45
-</button>
-
-
-<button onclick="setAmount(50)">
-50
-</button>
-
-
-<button onclick="setAmount(100)">
-100
-</button>
+    <input
+        type="number"
+        id="amount"
+        placeholder="Enter Amount (GHS)"
+        min="45"
+        step="0.01"
+        required
+    >
 
 
-<button onclick="setAmount(200)">
-200
-</button>
+    <div class="amount-buttons">
+
+        <button type="button" onclick="setAmount(45)">
+            GHS 45
+        </button>
+
+        <button type="button" onclick="setAmount(50)">
+            GHS 50
+        </button>
+
+        <button type="button" onclick="setAmount(100)">
+            GHS 100
+        </button>
+
+        <button type="button" onclick="setAmount(200)">
+            GHS 200
+        </button>
+
+        <button type="button" onclick="setAmount(300)">
+            GHS 300
+        </button>
+
+        <button type="button" onclick="setAmount(400)">
+            GHS 400
+        </button>
+
+    </div>
 
 
-<button onclick="setAmount(300)">
-300
-</button>
+    <button
+        type="button"
+        class="next-button"
+        onclick="showPayment()"
+    >
+        Next
+    </button>
 
 
-<button onclick="setAmount(400)">
-400
-</button>
+    <div class="guide">
 
+        <strong>How it works</strong>
 
-</div>
+        <br><br>
 
+        1. Enter your phone number.<br>
 
+        2. Enter or select your deposit amount.<br>
 
+        3. Tap <strong>Next</strong>.<br>
 
-<input
+        4. Follow the payment instructions.<br>
 
-type="text"
+        5. Upload your payment screenshot.<br>
 
-id="phone"
+        6. Submit your request for review.
 
-placeholder="Enter Phone Number"
-
-required>
-
-
-
-
-
-<button class="pay-button" onclick="payWithPaystack()">
-
-Pay Now
-
-</button>
-
-
-
-
-
-
-<div class="guide">
-
-
-<h3>
-
-How to Recharge
-
-</h3>
-
-
-<br>
-
-
-1. Enter the amount you want to deposit.<br>
-
-2. Select an amount button or type your amount.<br>
-
-3. Enter your phone number.<br>
-
-4. Click the Pay Now button.<br>
-
-5. Complete payment through Paystack.<br>
-
-6. Your deposit will be updated after confirmation.
+    </div>
 
 </div>
 
 
+<!-- STEP 2 -->
+
+<div id="stepTwo" class="hidden">
+
+    <h2>
+        Complete Deposit
+    </h2>
+
+
+    <div class="amount-display">
+
+        Amount:
+
+        <strong>
+            GHS <span id="displayAmount">0.00</span>
+        </strong>
+
+    </div>
+
+
+    <div class="payment-card">
+
+        <h3>
+            Payment Instructions
+        </h3>
+
+        <p style="color:#475569;margin-bottom:12px;line-height:22px;">
+
+            Send exactly the amount shown above to the
+            payment number below.
+
+        </p>
+
+
+        <div class="payment-number" id="paymentNumber">
+
+            0550000000
+
+        </div>
+
+
+        <button
+            type="button"
+            class="copy-button"
+            onclick="copyNumber()"
+        >
+            📋 Copy Payment Number
+        </button>
+
+    </div>
+
+
+    <div class="warning">
+
+        ⚠️ Make sure the payment amount matches your
+        deposit request before submitting.
+
+    </div>
+
+
+    <form
+        method="POST"
+        action="{{ url_for('deposit') }}"
+        enctype="multipart/form-data"
+        onsubmit="return validateSubmission()"
+    >
+
+        <input
+            type="hidden"
+            name="phone"
+            id="hiddenPhone"
+        >
+
+        <input
+            type="hidden"
+            name="amount"
+            id="hiddenAmount"
+        >
+
+
+        <div class="upload-box">
+
+            <label for="screenshot">
+                Upload Payment Screenshot
+            </label>
+
+            <p>
+                Upload a clear screenshot showing your
+                payment confirmation.
+            </p>
+
+            <input
+                type="file"
+                id="screenshot"
+                name="screenshot"
+                accept="image/*"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="submit-button"
+        >
+            Submit Deposit Request
+        </button>
+
+    </form>
+
+
+    <button
+        type="button"
+        class="back-button"
+        onclick="goBack()"
+    >
+        ← Back
+    </button>
+
+
+    <div class="guide">
+
+        <strong>After submission</strong>
+
+        <br><br>
+
+        Your request will be marked as
+        <strong>Pending</strong>.
+
+        <br><br>
+
+        An administrator can review the submitted
+        amount, phone number and screenshot before
+        approving or rejecting the request.
+
+    </div>
 
 </div>
 
-
-
-
-
-<script>
-
+</div><script>
 
 function setAmount(value){
 
-document.getElementById("amount").value=value;
+    document.getElementById("amount").value = value;
 
 }
 
 
+function showPayment(){
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const amount =
+        parseFloat(document.getElementById("amount").value);
 
 
-function payWithPaystack(){
+    if(!phone){
+
+        alert("Please enter your phone number.");
+
+        return;
+
+    }
 
 
-let amount =
-document.getElementById("amount").value;
+    if(!amount || amount < 45){
+
+        alert("Minimum deposit is GHS 45.");
+
+        return;
+
+    }
 
 
-let phone =
-document.getElementById("phone").value;
+    document.getElementById("hiddenPhone").value = phone;
+
+    document.getElementById("hiddenAmount").value = amount;
+
+    document.getElementById("displayAmount").textContent =
+        amount.toFixed(2);
 
 
+    document.getElementById("stepOne").classList.add("hidden");
 
-
-if(amount < 45){
-
-alert("Minimum deposit is GHS 45");
-
-return;
-
-}
-
-
-
-let handler = PaystackPop.setup({
-
-
-key:"pk_test_3df2d10b907775bc4c2e6e47008137af71ab1bde",
-
-
-email: phone + "@zenith.com",
-
-
-amount: amount * 100,
-
-
-currency:"GHS",
-
-
-
-callback:function(response){
-
-
-window.location.href =
-"/deposit_success?reference="
-+response.reference
-+"&amount="
-+amount
-+"&phone="
-+phone;
-
-
-},
-
-
-
-onClose:function(){
-
-alert("Payment cancelled");
+    document.getElementById("stepTwo").classList.remove("hidden");
 
 }
 
 
-});
+function goBack(){
 
+    document.getElementById("stepTwo").classList.add("hidden");
 
-
-handler.openIframe();
-
+    document.getElementById("stepOne").classList.remove("hidden");
 
 }
 
 
+function copyNumber(){
 
-</script>
+    const number =
+        document.getElementById("paymentNumber").textContent.trim();
 
 
+    navigator.clipboard.writeText(number)
+        .then(function(){
 
-</body>
+            alert("Payment number copied.");
 
-</html>
+        })
+        .catch(function(){
+
+            alert("Please copy the number manually: " + number);
+
+        });
+
+}
+
+
+function validateSubmission(){
+
+    const screenshot =
+        document.getElementById("screenshot").files[0];
+
+
+    if(!screenshot){
+
+        alert("Please upload your payment screenshot.");
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+</script></body></html>
