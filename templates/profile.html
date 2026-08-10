@@ -1,45 +1,862 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile</title>
-<script src="https://jsdelivr.net"></script><script src="https://unpkg.com"></script>
-<style>body{-webkit-tap-highlight-color:transparent;font-family:system-ui,-apple-system,sans-serif;}
-.row{display:flex;align-items:center;justify-content:between;background:#fff;padding:14px 16px;border-radius:12px;border:1px solid #f1f5f9;cursor:pointer;}
-.row:active{background:#f8fafc;}</style></head><body class="bg-gray-100 flex justify-center min-h-screen">
-<div class="w-full max-w-[440px] bg-white min-h-screen flex flex-col relative pb-20 shadow-lg select-none">
-    <!-- Header -->
-    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <div class="flex space-x-4"><i data-lucide="x" class="w-5 h-5"></i><i data-lucide="chevron-down" class="w-5 h-5"></i></div>
-        <div class="text-center text-xs text-slate-800"><b class="block text-sm">My</b>paint-col08.com</div>
-        <div class="flex space-x-4"><i data-lucide="share-2" class="w-5 h-5"></i><i data-lucide="share" class="w-5 h-5"></i><i data-lucide="more-vertical" class="w-5 h-5"></i></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My - Zenith Capital</title>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+            color: #334155;
+            padding-bottom: 70px;
+        }
+
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            background: white;
+            position: relative;
+            padding-bottom: 75px;
+            box-shadow: 0 0 18px rgba(0,0,0,.06);
+        }
+
+        /* =========================
+           TOP HEADER
+        ========================= */
+
+        .top-header {
+            height: 55px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #f1f5f9;
+            background: white;
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 13px;
+            color: #0f172a;
+        }
+
+        .header-title strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .header-title small {
+            display: block;
+            margin-top: 2px;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        /* =========================
+           PROFILE SECTION
+        ========================= */
+
+        .profile-section {
+            padding: 24px 20px;
+            background: linear-gradient(
+                to bottom,
+                #eff6ff,
+                #ffffff
+            );
+
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-wrap {
+            position: relative;
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #e2e8f0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            box-shadow: 0 3px 10px rgba(0,0,0,.06);
+            color: #2563eb;
+        }
+
+        .avatar svg {
+            width: 34px;
+            height: 34px;
+        }
+
+        .vip {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            background: #10144c;
+            color: white;
+
+            font-size: 9px;
+            font-weight: bold;
+
+            padding: 3px 10px;
+            border-radius: 20px;
+
+            white-space: nowrap;
+        }
+
+        .profile-info h2 {
+            font-size: 20px;
+            color: #334155;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .profile-info .user-id {
+            display: inline-block;
+            background: #eef2ff;
+            color: #4c64bc;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 5px;
+        }
+
+        .phone-number {
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* =========================
+           DARK STATISTICS BOX
+        ========================= */
+
+        .stats-container {
+            padding: 0 16px;
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            background: #10144c;
+            border-radius: 13px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            padding: 15px 5px;
+            color: white;
+
+            box-shadow: 0 5px 15px rgba(16,20,76,.16);
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .stat:not(:last-child) {
+            border-right: 1px solid rgba(255,255,255,.15);
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+
+        .stat span {
+            color: #cbd5e1;
+            font-size: 10px;
+        }
+
+        /* =========================
+           INFORMATION CARD
+        ========================= */
+
+        .section {
+            padding: 0 16px;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 13px 14px;
+
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #64748b;
+        }
+
+        .info-value {
+            color: #334155;
+            font-weight: 600;
+            max-width: 55%;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        /* =========================
+           BALANCES
+        ========================= */
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .balance-box {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .balance-box .label {
+            color: #8c96a3;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .balance-box .amount {
+            color: #0e2954;
+            font-size: 13px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        /* =========================
+           MENU
+        ========================= */
+
+        .menu-area {
+            background: #f8fafc;
+            padding: 10px 16px 15px;
+        }
+
+        .menu-title {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .menu {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: white;
+
+            padding: 13px 14px;
+            margin-bottom: 7px;
+
+            border-radius: 11px;
+            border: 1px solid #f1f5f9;
+
+            text-decoration: none;
+            color: #334155;
+
+            font-size: 13px;
+
+            transition: background .15s;
+        }
+
+        .menu:active {
+            background: #f8fafc;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            color: #475569;
+        }
+
+        .arrow {
+            width: 17px;
+            height: 17px;
+            color: #cbd5e1;
+        }
+
+        /* Logout */
+
+        .logout {
+            color: #dc2626;
+        }
+
+        .logout .menu-icon {
+            color: #dc2626;
+        }
+
+        /* =========================
+           BOTTOM NAVIGATION
+        ========================= */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+
+            width: 100%;
+            max-width: 440px;
+
+            height: 65px;
+
+            background: white;
+            border-top: 1px solid #e2e8f0;
+
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+
+            z-index: 1000;
+
+            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
+        }
+
+        .bottom-nav a {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 3px;
+
+            text-decoration: none;
+
+            color: #94a3b8;
+
+            font-size: 9px;
+        }
+
+        .bottom-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bottom-nav a.active {
+            color: #10144c;
+            font-weight: bold;
+        }
+
+        .bottom-nav a.active::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+
+            left: 25%;
+            right: 25%;
+
+            height: 3px;
+
+            background: #10144c;
+
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* =========================
+           SMALL PHONES
+        ========================= */
+
+        @media(max-width:360px) {
+
+            .profile-section {
+                padding: 20px 15px;
+            }
+
+            .avatar {
+                width: 68px;
+                height: 68px;
+            }
+
+            .profile-info h2 {
+                font-size: 18px;
+            }
+
+            .menu {
+                padding: 12px;
+            }
+
+            .balance-box .amount {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="top-header">
+
+        <div class="header-title">
+            <strong>My</strong>
+            <small>Zenith Capital</small>
+        </div>
+
     </div>
-    <!-- Profile -->
-    <div class="px-5 py-6 bg-gradient-to-b from-blue-50/50 to-transparent flex items-center space-x-4">
-        <div class="relative"><div class="w-20 h-20 bg-white rounded-full border border-slate-100 flex items-center justify-center shadow-sm">
-            <div class="text-center font-black"><span class="text-[#e0533c] text-sm block">Coral</span><span class="text-emerald-600 text-[9px] tracking-widest block">RICE</span></div>
-        </div><span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#7084d4] text-white text-[9px] font-bold px-3 py-0.5 rounded-full">VIP0</span></div>
-        <div><h2 class="text-2xl font-bold text-slate-700">233246551897</h2><span class="bg-indigo-50 text-[#4c64bc] text-xs font-semibold px-2 py-0.5 rounded">ID 10243</span></div>
+
+
+    <!-- =========================
+         PROFILE
+    ========================= -->
+
+    <div class="profile-section">
+
+        <div class="avatar-wrap">
+
+            <div class="avatar">
+                <i data-lucide="user"></i>
+            </div>
+
+            <span class="vip">
+                VIP0
+            </span>
+
+        </div>
+
+        <div class="profile-info">
+
+            <h2>
+                {{ user.username }}
+            </h2>
+
+            <span class="user-id">
+                ID {{ user.id }}
+            </span>
+
+            <div class="phone-number">
+                {{ user.phone }}
+            </div>
+
+        </div>
+
     </div>
-    <!-- Dark Counter Box -->
-    <div class="px-4 mb-4"><div class="bg-[#10144c] rounded-xl py-4 grid grid-cols-3 text-center text-white shadow">
-        <div class="border-r border-slate-600/40"><b class="text-xl">10</b><p class="text-[11px] text-slate-300">Balance</p></div>
-        <div class="border-r border-slate-600/40"><b class="text-xl">120</b><p class="text-[11px] text-slate-300">Deposit</p></div>
-        <div><b class="text-xl">10</b><p class="text-[11px] text-slate-300">Total income</p></div>
-    </div></div>
-    <!-- Options Rows -->
-    <div class="px-4 space-y-2 flex-grow bg-slate-50/50 pt-2 text-slate-700 text-[15px]">
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="message-square-text" class="w-5 h-5"></i><span>Messages</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="user-round" class="w-5 h-5"></i><span>Personal information</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="text-quote" class="w-5 h-5"></i><span>Income details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="package-plus" class="w-5 h-5"></i><span>Deposit details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="package-minus" class="w-5 h-5"></i><span>Withdrawal details</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="info" class="w-5 h-5"></i><span>About us</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
-        <div class="row"> <div class="flex items-center space-x-4"><i data-lucide="download" class="w-5 h-5"></i><span>Download</span></div> <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i></div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <div class="stats-container">
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong>
+                    GHS {{ "%.2f"|format(withdraw_balance|float) }}
+                </strong>
+                <span>Balance</span>
+            </div>
+
+            <div class="stat">
+                <strong>
+                    GHS {{ "%.2f"|format(deposit_balance|float) }}
+                </strong>
+                <span>Deposit</span>
+            </div>
+
+            <div class="stat">
+                <strong>
+                    GHS {{ "%.2f"|format(income_balance|float) }}
+                </strong>
+                <span>Total Income</span>
+            </div>
+
+        </div>
+
     </div>
-    <!-- Navigation Bottom Bar -->
-    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 grid grid-cols-5 py-2 text-center text-[10px] text-slate-400">
-        <div class="cursor-pointer"><i data-lucide="home" class="w-5 h-5 mx-auto"></i><span>Home</span></div>
-        <div class="cursor-pointer"><i data-lucide="trending-up" class="w-5 h-5 mx-auto"></i><span>Income</span></div>
-        <div class="cursor-pointer"><i data-lucide="users-2" class="w-5 h-5 mx-auto"></i><span>Team</span></div>
-        <div class="cursor-pointer"><i data-lucide="share-2" class="w-5 h-5 mx-auto"></i><span>Share</span></div>
-        <div class="cursor-pointer text-[#10144c] font-bold relative"><i data-lucide="user" class="w-5 h-5 mx-auto"></i><span>My</span><div class="absolute bottom-0 left-1/4 right-1/4 h-[3px] bg-[#10144c]"></div></div>
+
+
+    <!-- =========================
+         ACCOUNT INFORMATION
+    ========================= -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Personal Information
+        </div>
+
+        <div class="info-card">
+
+            <div class="info-row">
+                <span class="info-label">
+                    Username
+                </span>
+
+                <span class="info-value">
+                    {{ user.username }}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    User ID
+                </span>
+
+                <span class="info-value">
+                    {{ user.id }}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    Phone Number
+                </span>
+
+                <span class="info-value">
+                    {{ user.phone }}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">
+                    Referral Code
+                </span>
+
+                <span class="info-value">
+                    {{ user.referral_code }}
+                </span>
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- =========================
+         BALANCES
+    ========================= -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Account Balances
+        </div>
+
+        <div class="balance-grid">
+
+            <div class="balance-box">
+
+                <div class="label">
+                    Deposit Account
+                </div>
+
+                <div class="amount">
+                    GHS {{ "%.2f"|format(deposit_balance|float) }}
+                </div>
+
+            </div>
+
+
+            <div class="balance-box">
+
+                <div class="label">
+                    Withdrawal Account
+                </div>
+
+                <div class="amount">
+                    GHS {{ "%.2f"|format(withdraw_balance|float) }}
+                </div>
+
+            </div>
+
+
+            <div class="balance-box">
+
+                <div class="label">
+                    Income Account
+                </div>
+
+                <div class="amount">
+                    GHS {{ "%.2f"|format(income_balance|float) }}
+                </div>
+
+            </div>
+
+
+            <div class="balance-box">
+
+                <div class="label">
+                    Referral Account
+                </div>
+
+                <div class="amount">
+                    GHS {{ "%.2f"|format(referral_balance|float) }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MENU
+    ========================= -->
+
+    <div class="menu-area">
+
+        <div class="menu-title">
+            Account & Services
+        </div>
+
+
+        <a href="/bind_account" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="landmark" class="menu-icon"></i>
+
+                <span>
+                    Bind Account
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/deposit" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="credit-card" class="menu-icon"></i>
+
+                <span>
+                    Deposit
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/withdraw" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="wallet-cards" class="menu-icon"></i>
+
+                <span>
+                    Withdraw
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/transaction_history" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="receipt-text" class="menu-icon"></i>
+
+                <span>
+                    Transaction History
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/my_plan" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="package" class="menu-icon"></i>
+
+                <span>
+                    My Product
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/support" class="menu">
+
+            <div class="menu-left">
+
+                <i data-lucide="headphones" class="menu-icon"></i>
+
+                <span>
+                    Support Center
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/logout" class="menu logout">
+
+            <div class="menu-left">
+
+                <i data-lucide="log-out" class="menu-icon"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         FIXED 5-ITEM NAVIGATION
+    ========================= -->
+
+    <div class="bottom-nav">
+
+        <a href="/dashboard">
+
+            <i data-lucide="home"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a href="/my_plan">
+
+            <i data-lucide="trending-up"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <a href="/team">
+
+            <i data-lucide="users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <a href="/team">
+
+            <i data-lucide="share-2"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <a href="/profile" class="active">
+
+            <i data-lucide="user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
+
+    </div>
+
 </div>
-<script>lucide.createIcons();</script></body></html>
+
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+</html>
