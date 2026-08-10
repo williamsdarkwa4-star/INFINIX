@@ -19,7 +19,6 @@
             justify-content: center;
         }
 
-        /* Fixed Mobile Wrapper Layout */
         .mobile-container {
             width: 100%;
             max-width: 450px;
@@ -32,7 +31,6 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
         }
 
-        /* Top Header Navigation Layout */
         .app-header {
             background-color: #ffffff;
             padding: 12px 15px;
@@ -55,7 +53,6 @@
             margin-top: 2px;
         }
 
-        /* Top Brand Header Section */
         .top-banner {
             width: 100%;
             height: 165px;
@@ -99,7 +96,6 @@
             background: white;
         }
 
-        /* Shortcuts Panel Grid Elements */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -139,7 +135,6 @@
         .bg-service { background-color: #3884ff; }
         .bg-channel { background-color: #705ec8; }
 
-        /* Investment Product Box Standard Styling */
         .package-card {
             background: white;
             margin: 10px 15px;
@@ -155,7 +150,6 @@
             align-items: center;
         }
 
-        /* Statistics Layout Segment */
         .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -182,7 +176,6 @@
             color: #0e2954;
         }
 
-        /* Inline SVG Rice Graphic Elements */
         .product-preview {
             width: 34%;
             height: 115px;
@@ -226,7 +219,6 @@
             width: 85%;
         }
 
-        /* CTA Operations Footer Buttons */
         .btn-action {
             width: 100%;
             border: none;
@@ -245,12 +237,11 @@
         }
 
         .btn-disabled {
-            background-color: #9da4b0;
+            background-color: #8a8e94;
             color: white;
             cursor: not-allowed;
         }
 
-        /* Fixed Navigation Tab Layout */
         .nav-bar {
             position: fixed;
             bottom: 0;
@@ -289,7 +280,6 @@
 
     <div class="mobile-container">
         
-        <!-- App Bar Navigation -->
         <div class="app-header">
             <span>✕</span>
             <div class="header-center">
@@ -299,7 +289,6 @@
             <span style="font-weight: bold; font-size: 1.2rem;">⋮</span>
         </div>
         
-        <!-- Premium Brand Slider -->
         <div class="top-banner">
             <h2>GOLDEN GRAIN CO.</h2>
             <p>AGRICULTURE HARVEST & LOGISTICS 2026</p>
@@ -310,7 +299,6 @@
             </div>
         </div>
 
-        <!-- Shortcuts Panel Grid -->
         <div class="action-grid">
             <div class="action-item">
                 <div class="icon-circle bg-deposit">📋</div>
@@ -330,17 +318,14 @@
             </div>
         </div>
 
-        <!-- REUSABLE SVG ASSET MAP DEFINITION -->
-        <div style="display: none;">
-            <svg id="rice-sack" viewBox="0 0 64 64">
-                <path d="M18,16 C22,12 42,12 46,16 C50,22 48,52 44,56 C38,60 26,60 20,56 C16,52 14,22 18,16 Z" fill="#e5c298" stroke="#bd9a73" stroke-width="2"/>
-                <path d="M22,15 C26,19 38,19 42,15" fill="none" stroke="#ba946a" stroke-width="2"/>
-                <path d="M19,25 L45,25 L43,45 L21,45 Z" fill="#f4edd2"/>
-                <text x="32" y="37" font-size="9" font-weight="bold" fill="#a0522d" text-anchor="middle">RICE</text>
-                <circle cx="28" cy="21" r="1.5" fill="#a0522d"/>
-                <circle cx="36" cy="21" r="1.5" fill="#a0522d"/>
-            </svg>
-        </div>
+        <svg style="display: none;">
+            <g id="rice-sack-icon">
+                <path d="M16,12 C20,8 44,8 48,12 C52,18 50,54 45,58 C38,62 26,62 19,58 C14,54 12,18 16,12 Z" fill="#f5dab1" stroke="#cfa670" stroke-width="2"/>
+                <path d="M20,13 C24,18 40,18 44,13" fill="none" stroke="#bfa076" stroke-width="2"/>
+                <path d="M17,25 L47,25 L45,46 L19,46 Z" fill="#ffffff" opacity="0.6"/>
+                <text x="32" y="38" font-size="8" font-weight="bold" fill="#784b1d" text-anchor="middle">RICE</text>
+            </g>
+        </svg>
 
         <!-- VIP 1 -->
         <div class="package-card">
@@ -348,3 +333,17 @@
                 <div class="metrics-grid">
                     <div class="metric-box"><div class="metric-label">Price</div><div class="metric-value">₵ 120</div></div>
                     <div class="metric-box"><div class="metric-label">Daily profit</div><div class="metric-value">₵ 20</div></div>
+                    <div class="metric-box"><div class="metric-label">Days</div><div class="metric-value">180</div></div>
+                    <div class="metric-box"><div class="metric-label">Total profit</div><div class="metric-value">₵ 3600</div></div>
+                </div>
+                <div class="product-preview">
+                    <div class="tag-times">Times 1/1</div>
+                    <svg class="rice-svg"><use href="#rice-sack-icon"/></svg>
+                    <div class="vip-badge">VIP 1</div>
+                </div>
+            </div>
+            <button class="btn-action btn-active">Buy now</button>
+        </div>
+
+        <!-- VIP 2 -->
+        <div class="package-card">
