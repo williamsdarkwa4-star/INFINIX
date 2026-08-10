@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Rice Distribution Dashboard</title>
+    <title>Golden Grain Full Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -32,7 +32,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
         }
 
-        /* Header Header Section */
+        /* Top Header Navigation Layout */
         .app-header {
             background-color: #ffffff;
             padding: 12px 15px;
@@ -55,11 +55,11 @@
             margin-top: 2px;
         }
 
-        /* Top Brand Slider Area */
+        /* Top Brand Header Section */
         .top-banner {
             width: 100%;
-            height: 155px;
-            background: linear-gradient(135deg, #0f2c59, #1c4b8f);
+            height: 165px;
+            background: linear-gradient(135deg, #0e2954, #1c4b8f);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -71,7 +71,7 @@
         }
 
         .top-banner h2 {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
@@ -99,7 +99,7 @@
             background: white;
         }
 
-        /* Top Navigation Grid Action Cards */
+        /* Shortcuts Panel Grid Elements */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -179,10 +179,10 @@
         .metric-value {
             font-size: 0.95rem;
             font-weight: bold;
-            color: #0f2c59;
+            color: #0e2954;
         }
 
-        /* Product Graphic Frame Mockup */
+        /* Inline SVG Rice Graphic Elements */
         .product-preview {
             width: 34%;
             height: 115px;
@@ -194,10 +194,12 @@
             align-items: center;
             padding-bottom: 10px;
             position: relative;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="%230f2c59" width="48" height="48"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: center 30%;
-            background-size: 45px;
+        }
+
+        .rice-svg {
+            width: 55px;
+            height: 55px;
+            margin-bottom: 8px;
         }
 
         .tag-times {
@@ -213,13 +215,15 @@
         }
 
         .vip-badge {
-            background: linear-gradient(90deg, #133363, #1f4882);
+            background: linear-gradient(90deg, #0e2954, #1c4b8f);
             color: #ffd700;
             font-size: 0.72rem;
             font-weight: bold;
             padding: 4px 14px;
             border-radius: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 85%;
         }
 
         /* CTA Operations Footer Buttons */
@@ -271,7 +275,7 @@
         }
 
         .nav-item.active {
-            color: #0f2c59;
+            color: #0e2954;
             font-weight: bold;
         }
 
@@ -317,7 +321,7 @@
                 Withdraw
             </div>
             <div class="action-item">
-                <div class="icon-circle bg-service">🛠️</div>
+                <div class="icon-circle bg-service">🎧</div>
                 Service
             </div>
             <div class="action-item">
@@ -326,8 +330,18 @@
             </div>
         </div>
 
-        <!-- Dynamic Loop Structure Generation for Packages VIP 1 to 10 -->
-        
+        <!-- REUSABLE SVG ASSET MAP DEFINITION -->
+        <div style="display: none;">
+            <svg id="rice-sack" viewBox="0 0 64 64">
+                <path d="M18,16 C22,12 42,12 46,16 C50,22 48,52 44,56 C38,60 26,60 20,56 C16,52 14,22 18,16 Z" fill="#e5c298" stroke="#bd9a73" stroke-width="2"/>
+                <path d="M22,15 C26,19 38,19 42,15" fill="none" stroke="#ba946a" stroke-width="2"/>
+                <path d="M19,25 L45,25 L43,45 L21,45 Z" fill="#f4edd2"/>
+                <text x="32" y="37" font-size="9" font-weight="bold" fill="#a0522d" text-anchor="middle">RICE</text>
+                <circle cx="28" cy="21" r="1.5" fill="#a0522d"/>
+                <circle cx="36" cy="21" r="1.5" fill="#a0522d"/>
+            </svg>
+        </div>
+
         <!-- VIP 1 -->
         <div class="package-card">
             <div class="card-main">
