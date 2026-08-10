@@ -825,7 +825,7 @@ def request_withdrawal():
         # transaction history can show the calculation.
 
         description = (
-            f" withdrawal request | "
+            f"Demo withdrawal request | "
             f"Fee: GHS {fee:.2f} (16%) | "
             f"User receives: GHS {receive_amount:.2f}"
         )
