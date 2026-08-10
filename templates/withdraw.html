@@ -313,7 +313,99 @@ before submitting your request.
         placeholder="Enter withdrawal amount"
         required
     >
+<!-- Withdrawal Fee -->
 
+<div class="fee-box">
+
+    <div class="fee-row">
+        <span>Withdrawal Amount</span>
+        <strong id="displayAmount">GHS 0.00</strong>
+    </div>
+
+    <div class="fee-row">
+        <span>Withdrawal Fee (16%)</span>
+        <strong id="displayFee">GHS 0.00</strong>
+    </div>
+
+    <div class="fee-row total">
+        <span>You Receive</span>
+        <strong id="displayReceive">GHS 0.00</strong>
+    </div>
+
+</div>
+
+
+<style>
+
+.fee-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    padding:16px;
+    margin-top:15px;
+}
+
+.fee-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    color:#475569;
+}
+
+.fee-row strong{
+    color:#0f172a;
+}
+
+.fee-row.total{
+    border-top:1px solid #e2e8f0;
+    margin-top:8px;
+    padding-top:14px;
+    font-size:16px;
+}
+
+.fee-row.total strong{
+    color:#2563eb;
+}
+
+</style>
+
+
+<script>
+
+const amountInput = document.getElementById("withdrawAmount");
+
+function calculateWithdrawal(){
+
+    const amount = parseFloat(amountInput.value) || 0;
+
+    const fee = amount * 0.16;
+
+    const receive = amount - fee;
+
+    document.getElementById("displayAmount").textContent =
+        "GHS " + amount.toFixed(2);
+
+    document.getElementById("displayFee").textContent =
+        "GHS " + fee.toFixed(2);
+
+    document.getElementById("displayReceive").textContent =
+        "GHS " + receive.toFixed(2);
+}
+
+
+amountInput.addEventListener("input", calculateWithdrawal);
+
+
+function setAmount(amount){
+
+    amountInput.value = amount;
+
+    calculateWithdrawal();
+
+}
+
+</script>
 
     <input
         type="password"
