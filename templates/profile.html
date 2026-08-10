@@ -1,242 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Profile - Zenith Capital</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#f4f7fb;
-padding-bottom:90px;
-}
-
-.header{
-background:linear-gradient(135deg,#0f172a,#2563eb);
-padding:35px 20px;
-color:white;
-text-align:center;
-border-radius:0 0 30px 30px;
-}
-
-.avatar{
-width:90px;
-height:90px;
-border-radius:50%;
-background:white;
-margin:15px auto;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:40px;
-color:#2563eb;
-}
-
-.container{
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:20px;
-margin-bottom:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
-
-.card h2{
-color:#2563eb;
-margin-bottom:15px;
-}
-
-.info{
-display:flex;
-justify-content:space-between;
-padding:12px 0;
-border-bottom:1px solid #eee;
-}
-
-.balance-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
-
-.balance-box{
-background:#f8fafc;
-padding:18px;
-border-radius:15px;
-text-align:center;
-}
-
-.balance-box h3{
-color:#2563eb;
-margin-bottom:10px;
-font-size:15px;
-}
-
-.amount{
-font-size:22px;
-font-weight:bold;
-color:#16a34a;
-}
-
-.menu{
-display:block;
-padding:15px;
-margin-bottom:12px;
-background:#f8fafc;
-border-radius:15px;
-text-decoration:none;
-color:#0f172a;
-font-weight:bold;
-}
-
-.logout{
-background:#ef4444;
-color:white;
-}
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:15px 0;
-box-shadow:0 -5px 15px rgba(0,0,0,.1);
-}
-
-.bottom-nav a{
-text-decoration:none;
-color:#2563eb;
-font-size:14px;
-font-weight:bold;
-text-align:center;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rice Profile Dashboard</title>
+    <!-- Tailwind CSS for modern, production-ready styling -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- Lucide Icons for clean visual layout anchors -->
+    <script src="https://unpkg.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
 </head>
+<body class="bg-gray-100 min-h-screen flex justify-center">
 
-<body>
+    <!-- Mobile Screen Wrapper Container -->
+    <div class="w-full max-w-md bg-slate-50 min-h-screen shadow-lg flex flex-col relative pb-20 select-none">
+        
+        <!-- Top Custom App Header Bar -->
+        <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
+            <div class="flex items-center space-x-4">
+                <i data-lucide="x" class="w-6 h-6 text-gray-700 cursor-pointer"></i>
+                <i data-lucide="chevron-down" class="w-6 h-6 text-gray-700 cursor-pointer"></i>
+            </div>
+            <div class="text-center">
+                <span class="text-sm font-medium text-gray-800 block leading-none">My</span>
+                <span class="text-[10px] text-gray-400 block mt-0.5">rice-portal.com</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <i data-lucide="share-2" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
+                <i data-lucide="share" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
+                <i data-lucide="more-vertical" class="w-5 h-5 text-gray-700 cursor-pointer"></i>
+            </div>
+        </div>
 
-<div class="header">
+        <!-- Upper Profile Header Section -->
+        <div class="px-5 pt-6 pb-4 bg-gradient-to-b from-blue-50/50 to-transparent">
+            <div class="flex items-center space-x-4">
+                <!-- Brand Avatar Design Container -->
+                <div class="relative">
+                    <div class="w-20 h-20 bg-white rounded-full border-2 border-indigo-200 p-1 flex items-center justify-center shadow-sm overflow-hidden">
+                        <div class="text-center">
+                            <span class="text-amber-600 font-black text-xs tracking-tighter block">RICE</span>
+                            <span class="text-emerald-600 font-bold text-[10px] tracking-widest block -mt-1">CORAL</span>
+                        </div>
+                    </div>
+                    <!-- VIP Badge Position overlay -->
+                    <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-indigo-400 text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-sm tracking-wide">VIP0</span>
+                </div>
 
-<div class="avatar">
+                <!-- Account Credentials Block -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-slate-700 tracking-wide">233246551897</h2>
+                    <div class="mt-1 inline-flex items-center bg-indigo-100/70 text-indigo-600 text-[11px] font-medium px-2 py-0.5 rounded">
+                        ID 10243
+                    </div>
+                </div>
+            </div>
+        </div>
 
-👤
+        <!-- Central Performance Metric Cards Row -->
+        <div class="px-4 mb-4">
+            <div class="bg-[#11165c] rounded-xl py-5 px-3 grid grid-cols-3 text-center text-white shadow-md">
+                <!-- Column 1: Rice Bag Balance -->
+                <div class="border-r border-slate-600/50">
+                    <div class="text-xl font-bold">10</div>
+                    <div class="text-[11px] text-slate-300 font-light mt-1">Balance</div>
+                </div>
+                <!-- Column 2: Total Bag Deposits -->
+                <div class="border-r border-slate-600/50">
+                    <div class="text-xl font-bold">120</div>
+                    <div class="text-[11px] text-slate-300 font-light mt-1">Deposit</div>
+                </div>
+                <!-- Column 3: Total Income Output -->
+                <div>
+                    <div class="text-xl font-bold">10</div>
+                    <div class="text-[11px] text-slate-300 font-light mt-1">Total income</div>
+                </div>
+            </div>
+        </div>
 
-</div>
+        <!-- Vertical Menu Navigation Links List -->
+        <div class="px-4 space-y-2 flex-grow">
+            <!-- Messages Link Container -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="message-square" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Messages</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-<h2>{{ user.username }}</h2>
+            <!-- Personal Data Settings -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="user-round" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Personal information</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-<p>{{ user.phone }}</p>
+            <!-- Revenue Status Matrix Link -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="book-open" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Income details</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-</div>
+            <!-- Inward Transaction Log -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="arrow-down-left-from-circle" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Deposit details</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-<div class="container">
+            <!-- Outward Payout Log -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="arrow-up-right-from-circle" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Withdrawal details</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-<div class="card">
+            <!-- Corporate Overview Link -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="building-2" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">About us</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
 
-<h2>Account Information</h2>
+            <!-- Application Binary Installer Download -->
+            <div class="flex items-center justify-between bg-white px-4 py-3.5 rounded-xl shadow-xs border border-gray-100/50 cursor-pointer active:bg-gray-50 transition-colors">
+                <div class="flex items-center space-x-3.5">
+                    <i data-lucide="download" class="w-[22px] h-[22px] text-slate-600 stroke-[1.5]"></i>
+                    <span class="text-[15px] font-normal text-slate-700">Download</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300"></i>
+            </div>
+        </div>
 
-<div class="info">
-<span>User ID</span>
-<span>{{ user.id }}</span>
-</div>
-
-<div class="info">
-<span>Referral Code</span>
-<span>{{ user.referral_code }}</span>
-</div>
-
-<div class="info">
-<span>Phone Number</span>
-<span>{{ user.phone }}</span>
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Account Balances</h2>
-
-<div class="balance-grid">
-
-<div class="balance-box">
-<h3>Deposit Account</h3>
-<div class="amount">GHS {{ deposit_balance }}</div>
-</div>
-
-<div class="balance-box">
-<h3>Withdrawal Account</h3>
-<div class="amount">GHS {{ withdraw_balance }}</div>
-</div>
-
-<div class="balance-box">
-<h3>Income Account</h3>
-<div class="amount">GHS {{ income_balance }}</div>
-</div>
-
-<div class="balance-box">
-<h3>Referral Account</h3>
-<div class="amount">GHS {{ referral_balance }}</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Account Settings</h2>
-
-<a class="menu" href="/bind_account">🏦 Bind Account</a>
-
-<a class="menu" href="/deposit">💳 Deposit</a>
-
-<a class="menu" href="/withdraw">💸 Withdraw</a>
-
-<a class="menu" href="/transaction_history">📜 Transaction History</a>
-
-<a class="menu" href="/my_plan">🖼 My Product</a>
-
-<a class="menu" href="/support">🎧 Support Center</a>
-  
-<a class="menu logout" href="/logout">Logout</a>
-
-</div>
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/dashboard">
-🏠<br>Home
-</a>
-
-<a href="/team">
-👥<br>Invite
-</a>
-
-<a href="/profile">
-👤<br>Profile
-</a>
-
-</div>
-
-</body>
-</html>
+        <!-- Sticky Persistent Application Bottom Navigation Tab-Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 grid grid-cols-5 py-2 px-1 text-center shadow-lg">
+            <!-- Navigation Action Item 1 -->
+            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[10px] mt-1 font-medium">Home</span>
+            </div>
+            <!-- Navigation Action Item 2 -->
+            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                <span class="text-[10px] mt-1 font-medium">Income</span>
+            </div>
+            <!-- Navigation Action Item 3 -->
+            <div class="flex flex-col items-center cursor-pointer text-gray-400 hover:text-gray-600">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span class="text-[10px] mt-1 font-medium">Team</span>
