@@ -5,80 +5,156 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:Roboto, Arial, sans-serif;
 }
 
 body{
     min-height:100vh;
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    padding:25px 15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:#f9efe3;
+    color:#1e1f4b;
 }
 
-.register-container{
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.register-page{
     width:100%;
-    max-width:430px;
+    max-width:480px;
+    margin:auto;
+    min-height:100vh;
+    background:#f9efe3;
 }
 
-.logo{
+
+/* =========================
+   TOP HERO
+========================= */
+
+.hero{
+    height:245px;
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #eef2ff
+        );
+}
+
+
+/* Decorative sections */
+
+.hero-left{
+    position:absolute;
+    left:-50px;
+    top:-70px;
+    width:260px;
+    height:260px;
+    border-radius:50%;
+    background:#c7d2fe;
+    opacity:.65;
+}
+
+.hero-right{
+    position:absolute;
+    right:-80px;
+    top:-40px;
+    width:260px;
+    height:260px;
+    border-radius:50%;
+    background:#bfdbfe;
+    opacity:.7;
+}
+
+
+/* Brand */
+
+.brand{
+    position:absolute;
+    top:35px;
+    left:0;
+    right:0;
     text-align:center;
-    color:white;
-    margin-bottom:20px;
+    z-index:2;
 }
 
-.logo-icon{
-    width:65px;
-    height:65px;
-    margin:0 auto 12px;
-    border-radius:18px;
-    background:rgba(255,255,255,.15);
+.brand-icon{
+    width:82px;
+    height:82px;
+    margin:auto;
+    border-radius:50%;
+    background:white;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:30px;
-    border:1px solid rgba(255,255,255,.2);
-}
 
-.logo h1{
+    color:#191b5c;
     font-size:28px;
-    margin-bottom:6px;
+    font-weight:800;
+
+    box-shadow:
+        0 8px 20px rgba(25,27,92,.12);
 }
 
-.logo p{
-    font-size:14px;
-    color:#dbeafe;
+.brand h1{
+    margin-top:12px;
+    font-size:24px;
+    font-weight:800;
+    color:#191b5c;
 }
 
-.card{
-    background:white;
-    padding:28px;
-    border-radius:25px;
-    box-shadow:0 15px 40px rgba(0,0,0,.2);
+.brand p{
+    margin-top:5px;
+    font-size:13px;
+    color:#64748b;
 }
 
-.card-header{
-    text-align:center;
-    margin-bottom:22px;
+
+/* =========================
+   FORM AREA
+========================= */
+
+.form-area{
+    padding:32px 24px 35px;
 }
 
-.card-header h2{
-    color:#0f172a;
+
+/* =========================
+   HEADER
+========================= */
+
+.form-header{
+    margin-bottom:24px;
+}
+
+.form-header h2{
+    font-size:25px;
+    font-weight:800;
+    color:#1e1f4b;
     margin-bottom:7px;
 }
 
-.card-header p{
-    color:#64748b;
+.form-header p{
     font-size:14px;
+    color:#64748b;
 }
+
+
+/* =========================
+   MESSAGES
+========================= */
 
 .message{
     padding:13px 15px;
-    border-radius:13px;
+    border-radius:14px;
     margin-bottom:16px;
-    font-size:14px;
-    line-height:1.4;
+
+    font-size:13px;
+    line-height:1.5;
     text-align:center;
 }
 
@@ -94,129 +170,323 @@ body{
     border:1px solid #fecaca;
 }
 
+
+/* =========================
+   REFERRAL NOTICE
+========================= */
+
 .referral-box{
-    background:#eff6ff;
-    border:1px solid #bfdbfe;
-    color:#1e40af;
-    padding:13px;
-    border-radius:14px;
-    margin-bottom:18px;
-    font-size:14px;
-    line-height:1.5;
+    background:#ebf3ff;
+    border-radius:16px;
+
+    padding:15px;
+
+    margin-bottom:22px;
+
+    color:#475569;
+    font-size:13px;
+    line-height:1.6;
+
+    border:1px solid #dbeafe;
 }
 
 .referral-box strong{
-    color:#2563eb;
+    color:#191b5c;
 }
 
+
+/* =========================
+   FORM GROUP
+========================= */
+
 .form-group{
-    margin-bottom:15px;
+    margin-bottom:17px;
 }
+
+
+/* =========================
+   LABEL
+========================= */
 
 label{
     display:block;
-    margin-bottom:7px;
-    color:#334155;
+
+    margin-bottom:8px;
+
     font-size:14px;
-    font-weight:bold;
+    font-weight:600;
+
+    color:#30314d;
 }
 
-input{
+
+/* =========================
+   INPUT
+========================= */
+
+.input-box{
     width:100%;
-    padding:14px 15px;
-    border:1px solid #dbe1e8;
-    border-radius:13px;
-    outline:none;
-    background:#f8fafc;
-    color:#0f172a;
-    font-size:15px;
+
+    height:58px;
+
+    display:flex;
+    align-items:center;
+
+    background:#ebf3ff;
+
+    border-radius:16px;
+
     transition:.2s;
 }
 
-input:focus{
-    border-color:#2563eb;
-    background:white;
-    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+.input-box:focus-within{
+    background:#e4edff;
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.08);
 }
 
-input::placeholder{
+
+/* Icon */
+
+.input-icon{
+    width:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#64748b;
+
+    font-size:18px;
+}
+
+
+/* Input */
+
+.input-box input{
+    flex:1;
+
+    width:100%;
+
+    height:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:#1e293b;
+
+    font-size:15px;
+
+    padding:0 15px 0 0;
+}
+
+.input-box input::placeholder{
     color:#94a3b8;
 }
 
-.referral-input{
-    background:#eff6ff;
-    border-color:#bfdbfe;
+
+/* Password toggle */
+
+.password-toggle{
+    width:48px;
+    height:100%;
+
+    border:none;
+
+    background:transparent;
+
+    color:#94a3b8;
+
+    cursor:pointer;
+
+    font-size:16px;
 }
 
+
+/* =========================
+   PASSWORD NOTE
+========================= */
+
 .password-note{
-    color:#64748b;
-    font-size:12px;
-    margin-top:5px;
+    margin-top:6px;
+
+    color:#94a3b8;
+
+    font-size:11px;
 }
+
+
+/* =========================
+   REFERRAL INPUT
+========================= */
+
+.referral-input{
+    background:#eaf2ff;
+}
+
+
+/* =========================
+   REGISTER BUTTON
+========================= */
 
 .register-btn{
     width:100%;
+
+    height:58px;
+
+    margin-top:8px;
+
     border:none;
-    padding:15px;
-    margin-top:5px;
-    border-radius:14px;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    border-radius:30px;
+
+    background:#191b5c;
+
     color:white;
-    font-size:16px;
-    font-weight:bold;
+
+    font-size:15px;
+    font-weight:700;
+
+    letter-spacing:.7px;
+
     cursor:pointer;
-    box-shadow:0 7px 15px rgba(37,99,235,.25);
+
+    box-shadow:
+        0 6px 14px rgba(25,27,92,.18);
+
+    transition:.2s;
 }
 
-.register-btn:hover{
-    background:linear-gradient(135deg,#1d4ed8,#1e40af);
+.register-btn:active{
+    transform:scale(.98);
 }
+
+
+/* =========================
+   LOGIN
+========================= */
 
 .login-link{
     text-align:center;
-    margin-top:20px;
+
+    margin-top:22px;
+
     color:#64748b;
+
     font-size:14px;
 }
 
 .login-link a{
-    color:#2563eb;
-    font-weight:bold;
+    color:#191b5c;
+
+    font-weight:700;
+
     text-decoration:none;
 }
 
+
+/* =========================
+   SECURITY
+========================= */
+
 .security{
-    margin-top:18px;
-    padding-top:15px;
-    border-top:1px solid #e2e8f0;
     text-align:center;
+
+    margin-top:25px;
+    padding-top:18px;
+
+    border-top:1px solid #e5ded6;
+
     color:#94a3b8;
+
     font-size:12px;
 }
 
-</style></head><body><div class="register-container"><div class="logo">
 
-    <div class="logo-icon">
-        Z
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:380px){
+
+    .hero{
+        height:225px;
+    }
+
+    .brand-icon{
+        width:72px;
+        height:72px;
+        font-size:24px;
+    }
+
+    .brand h1{
+        font-size:21px;
+    }
+
+    .form-area{
+        padding:28px 18px 30px;
+    }
+
+    .form-header h2{
+        font-size:22px;
+    }
+
+}
+
+</style></head><body><div class="register-page"><!-- =========================
+     TOP BRAND SECTION
+========================= -->
+
+<div class="hero">
+
+    <div class="hero-left"></div>
+
+    <div class="hero-right"></div>
+
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            Z
+        </div>
+
+        <h1>
+            Zenith Capital
+        </h1>
+
+        <p>
+            Welcome to Zenith Capital
+        </p>
+
     </div>
-
-    <h1>Zenith Capital</h1>
-
-    <p>Welcome to Zenith Capital</p>
 
 </div>
 
 
-<div class="card">
 
-    <div class="card-header">
+<!-- =========================
+     FORM
+========================= -->
 
-        <h2>Create Account</h2>
+<div class="form-area">
 
-        <p>Register your account to continue</p>
+
+    <div class="form-header">
+
+        <h2>
+            Create Account
+        </h2>
+
+        <p>
+            Register your account to continue
+        </p>
 
     </div>
 
+
+
+    <!-- FLASH MESSAGES -->
 
     {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -230,6 +500,11 @@ input::placeholder{
 
     {% endwith %}
 
+
+
+    <!-- =========================
+         REFERRAL INFORMATION
+    ========================= -->
 
     {% if invite_code %}
 
@@ -258,9 +533,18 @@ input::placeholder{
     {% endif %}
 
 
-    <form method="POST"
-          action="{{ url_for('register') }}">
 
+    <!-- =========================
+         REGISTER FORM
+    ========================= -->
+
+    <form
+        method="POST"
+        action="{{ url_for('register') }}"
+    >
+
+
+        <!-- FULL NAME -->
 
         <div class="form-group">
 
@@ -268,17 +552,28 @@ input::placeholder{
                 Full Name
             </label>
 
-            <input
-                type="text"
-                id="fullname"
-                name="fullname"
-                placeholder="Enter your full name"
-                autocomplete="name"
-                required
-            >
+            <div class="input-box">
+
+                <div class="input-icon">
+                    👤
+                </div>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
+
+            </div>
 
         </div>
 
+
+
+        <!-- USERNAME -->
 
         <div class="form-group">
 
@@ -286,17 +581,28 @@ input::placeholder{
                 Username
             </label>
 
-            <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Choose a username"
-                autocomplete="username"
-                required
-            >
+            <div class="input-box">
+
+                <div class="input-icon">
+                    @
+                </div>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
 
         </div>
 
+
+
+        <!-- PHONE -->
 
         <div class="form-group">
 
@@ -304,17 +610,28 @@ input::placeholder{
                 Phone Number
             </label>
 
-            <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="Enter your phone number"
-                autocomplete="tel"
-                required
-            >
+            <div class="input-box">
+
+                <div class="input-icon">
+                    📱
+                </div>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                    required
+                >
+
+            </div>
 
         </div>
 
+
+
+        <!-- LOGIN PASSWORD -->
 
         <div class="form-group">
 
@@ -322,15 +639,31 @@ input::placeholder{
                 Login Password
             </label>
 
-            <input
-                type="password"
-                id="login_password"
-                name="login_password"
-                placeholder="Create a login password"
-                autocomplete="new-password"
-                minlength="6"
-                required
-            >
+            <div class="input-box">
+
+                <div class="input-icon">
+                    🔒
+                </div>
+
+                <input
+                    type="password"
+                    id="login_password"
+                    name="login_password"
+                    placeholder="Create a login password"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword('login_password', this)"
+                >
+                    ◉
+                </button>
+
+            </div>
 
             <div class="password-note">
                 Use at least 6 characters.
@@ -339,21 +672,40 @@ input::placeholder{
         </div>
 
 
+
+        <!-- WITHDRAWAL PASSWORD -->
+
         <div class="form-group">
 
             <label for="withdrawal_password">
                 Withdrawal Password
             </label>
 
-            <input
-                type="password"
-                id="withdrawal_password"
-                name="withdrawal_password"
-                placeholder="Create withdrawal password"
-                autocomplete="new-password"
-                minlength="6"
-                required
-            >
+            <div class="input-box">
+
+                <div class="input-icon">
+                    🔐
+                </div>
+
+                <input
+                    type="password"
+                    id="withdrawal_password"
+                    name="withdrawal_password"
+                    placeholder="Create withdrawal password"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword('withdrawal_password', this)"
+                >
+                    ◉
+                </button>
+
+            </div>
 
             <div class="password-note">
                 Used to authorize withdrawal requests.
@@ -361,6 +713,9 @@ input::placeholder{
 
         </div>
 
+
+
+        <!-- REFERRAL CODE -->
 
         <div class="form-group">
 
@@ -374,28 +729,43 @@ input::placeholder{
 
             </label>
 
-            <input
-                class="referral-input"
-                type="text"
-                id="referred_by"
-                name="referred_by"
-                value="{{ invite_code or '' }}"
-                placeholder="Enter referral code"
-            >
+            <div class="input-box referral-input">
+
+                <div class="input-icon">
+                    🎁
+                </div>
+
+                <input
+                    type="text"
+                    id="referred_by"
+                    name="referred_by"
+                    value="{{ invite_code or '' }}"
+                    placeholder="Enter referral code"
+                >
+
+            </div>
 
         </div>
 
 
+
+        <!-- REGISTER -->
+
         <button
             type="submit"
-            class="register-btn">
+            class="register-btn"
+        >
 
-            Create Account
+            CREATE ACCOUNT
 
         </button>
 
+
     </form>
 
+
+
+    <!-- LOGIN -->
 
     <div class="login-link">
 
@@ -408,12 +778,39 @@ input::placeholder{
     </div>
 
 
+
+    <!-- SECURITY -->
+
     <div class="security">
 
         🔒 Your account information is protected.
 
     </div>
 
+
 </div>
 
-</div></body></html>
+</div><script>
+
+function togglePassword(id, button){
+
+    const input =
+        document.getElementById(id);
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        button.textContent = "○";
+
+    }else{
+
+        input.type = "password";
+
+        button.textContent = "◉";
+
+    }
+
+}
+
+</script></body></html>
