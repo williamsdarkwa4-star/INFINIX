@@ -1,924 +1,839 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Income - Zenith Capital</title>
 
-    <title>My Plan - Zenith Capital</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, Arial, sans-serif;
+    body {
+        background: #f1f5f9;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        color: #334155;
+        padding-bottom: 75px;
+    }
+
+    .phone {
+        width: 100%;
+        max-width: 440px;
+        min-height: 100vh;
+        background: #ffffff;
+        position: relative;
+        padding-bottom: 75px;
+        box-shadow: 0 0 18px rgba(0,0,0,.06);
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        background: #10144c;
+        color: white;
+        padding: 17px 20px;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .header p {
+        margin-top: 3px;
+        font-size: 11px;
+        color: #cbd5e1;
+    }
+
+    /* =========================
+       INCOME SUMMARY
+    ========================= */
+
+    .summary {
+        margin: 15px 16px;
+        background: linear-gradient(
+            135deg,
+            #10144c,
+            #17206b
+        );
+        color: white;
+        border-radius: 14px;
+        padding: 17px;
+        box-shadow: 0 5px 15px rgba(16,20,76,.15);
+    }
+
+    .summary-title {
+        font-size: 11px;
+        color: #cbd5e1;
+        margin-bottom: 5px;
+    }
+
+    .summary-amount {
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+    .summary-note {
+        margin-top: 5px;
+        font-size: 10px;
+        color: #cbd5e1;
+    }
+
+    /* =========================
+       PRODUCT CARD
+    ========================= */
+
+    .section {
+        padding: 0 16px;
+        margin-bottom: 15px;
+    }
+
+    .section-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .income-card {
+        background: white;
+        border: 1px solid #f1f5f9;
+        border-radius: 13px;
+        padding: 14px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.035);
+    }
+
+    .product-top {
+        display: flex;
+        gap: 12px;
+    }
+
+    /* =========================
+       DETAILS
+    ========================= */
+
+    .details {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        background: #f8fafc;
+        border-radius: 7px;
+
+        padding: 8px 9px;
+
+        font-size: 11px;
+    }
+
+    .detail-label {
+        color: #64748b;
+    }
+
+    .detail-value {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    /* =========================
+       MACHINE IMAGE
+    ========================= */
+
+    .preview {
+        width: 125px;
+        height: 150px;
+
+        border-radius: 10px;
+        overflow: hidden;
+
+        position: relative;
+        background: #f3f4f6;
+
+        flex-shrink: 0;
+    }
+
+    .preview img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+        object-position: center;
+
+        display: block;
+    }
+
+    .tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        background: #444;
+        color: white;
+
+        font-size: 9px;
+        padding: 4px 7px;
+
+        border-bottom-left-radius: 6px;
+    }
+
+    .badge {
+        position: absolute;
+
+        bottom: 7px;
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        white-space: nowrap;
+
+        background: #10144c;
+        color: #ffd700;
+
+        font-size: 9px;
+        font-weight: 800;
+
+        padding: 4px 9px;
+        border-radius: 12px;
+    }
+
+    /* =========================
+       COUNTDOWN
+    ========================= */
+
+    .countdown-box {
+        margin-top: 13px;
+
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+
+        border-radius: 11px;
+
+        padding: 12px 13px;
+    }
+
+    .countdown-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 8px;
+    }
+
+    .countdown-label {
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .countdown-status {
+        color: #16a34a;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .timer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .time-box {
+        min-width: 48px;
+        text-align: center;
+
+        background: white;
+        border: 1px solid #e2e8f0;
+
+        border-radius: 7px;
+        padding: 7px 4px;
+
+        box-shadow: 0 2px 5px rgba(0,0,0,.03);
+    }
+
+    .time-box strong {
+        display: block;
+        font-size: 17px;
+        color: #10144c;
+    }
+
+    .time-box span {
+        display: block;
+        margin-top: 1px;
+
+        font-size: 8px;
+        color: #94a3b8;
+        text-transform: uppercase;
+    }
+
+    .colon {
+        font-size: 17px;
+        font-weight: bold;
+        color: #94a3b8;
+    }
+
+    /* =========================
+       PROGRESS
+    ========================= */
+
+    .progress-area {
+        margin-top: 10px;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+
+        font-size: 9px;
+        color: #94a3b8;
+
+        margin-bottom: 5px;
+    }
+
+    .progress {
+        height: 5px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: #10144c;
+        border-radius: 10px;
+        transition: width 1s linear;
+    }
+
+    /* =========================
+       CREDIT NOTICE
+    ========================= */
+
+    .credit-notice {
+        margin-top: 10px;
+
+        padding: 9px 11px;
+
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+
+        border-radius: 8px;
+
+        color: #1e40af;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .completed {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    /* =========================
+       BOTTOM NAVIGATION
+    ========================= */
+
+    .bottom-nav {
+        position: fixed;
+
+        bottom: 0;
+        width: 100%;
+        max-width: 440px;
+
+        height: 65px;
+
+        background: white;
+        border-top: 1px solid #e2e8f0;
+
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+
+        z-index: 1000;
+
+        box-shadow: 0 -3px 12px rgba(0,0,0,.05);
+    }
+
+    .bottom-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 3px;
+
+        text-decoration: none;
+
+        color: #94a3b8;
+        font-size: 9px;
+    }
+
+    .bottom-nav svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .bottom-nav a.active {
+        color: #10144c;
+        font-weight: bold;
+    }
+
+    .bottom-nav a.active::after {
+        content: "";
+
+        position: absolute;
+
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+
+        height: 3px;
+
+        background: #10144c;
+
+        border-radius: 4px 4px 0 0;
+    }
+
+    @media(max-width:360px) {
+
+        .preview {
+            width: 110px;
+            height: 140px;
         }
 
-        body {
-            background: #f1f5f9;
-            color: #334155;
-            min-height: 100vh;
-            padding-bottom: 80px;
-            -webkit-tap-highlight-color: transparent;
+        .time-box {
+            min-width: 43px;
         }
 
-        .phone {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            margin: auto;
-            background: #ffffff;
-            position: relative;
-            padding-bottom: 80px;
-            box-shadow: 0 0 18px rgba(0,0,0,.05);
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-            background: linear-gradient(
-                135deg,
-                #0f172a,
-                #2563eb
-            );
-
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-
-            border-radius: 0 0 25px 25px;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 6px;
-        }
-
-        .header p {
-            font-size: 13px;
-            color: #dbeafe;
-        }
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .container {
-            width: 100%;
-            padding: 16px;
-        }
-
-        /* =========================
-           PLAN CARD
-        ========================= */
-
-        .plan-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05);
-            margin-bottom: 15px;
-        }
-
-        /* =========================
-           MACHINE PHOTO
-        ========================= */
-
-        .machine-photo {
-            width: 100%;
-            height: 190px;
-            background: #f8fafc;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .machine-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .machine-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(
-                135deg,
-                #eff6ff,
-                #dbeafe
-            );
-            color: #1e3a8a;
-        }
-
-        .machine-placeholder .icon {
-            font-size: 58px;
-            margin-bottom: 8px;
-        }
-
-        .machine-placeholder strong {
-            font-size: 14px;
-        }
-
-        .machine-placeholder small {
-            margin-top: 4px;
-            color: #64748b;
-        }
-
-        /* =========================
-           PLAN CONTENT
-        ========================= */
-
-        .plan-content {
-            padding: 17px;
-        }
-
-        .plan-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .plan-name {
-            color: #0f172a;
-            font-size: 19px;
-            font-weight: 700;
-        }
-
-        .active-badge {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        /* =========================
-           PLAN DETAILS
-        ========================= */
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-
-            padding: 12px 0;
-
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #64748b;
-            font-size: 13px;
-        }
-
-        .detail-value {
-            color: #0f172a;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        /* =========================
-           COUNTDOWN CARD
-        ========================= */
-
-        .countdown-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 15px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05);
-        }
-
-        .countdown-title {
-            color: #0f172a;
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
-
-        .timer-box {
-            background: #f8fafc;
-            border: 1px solid #dbeafe;
-            border-radius: 13px;
-            padding: 18px 10px;
-            text-align: center;
-        }
-
-        .timer-label {
-            color: #64748b;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-
-        #timer {
-            color: #0b1c4d;
-            font-size: 34px;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-
-        #timer.ready {
-            color: #16a34a;
-            font-size: 28px;
-        }
-
-        /* =========================
-           CLAIM BUTTON
-        ========================= */
-
-        .claim-btn {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-
-            margin-top: 14px;
-
-            background: #0b1c4d;
-            color: white;
-
+        .time-box strong {
             font-size: 15px;
-            font-weight: 700;
-
-            cursor: pointer;
         }
+    }
+</style>
 
-        .claim-btn:disabled {
-            background: #cbd5e1;
-            color: #64748b;
-            cursor: not-allowed;
-        }
+</head><body><div class="phone"><!-- HEADER -->
 
-        .claim-note {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 11px;
-            line-height: 18px;
-            margin-top: 10px;
-        }
+<div class="header">
+    <h1>Income</h1>
+    <p>Product income details</p>
+</div>
 
-        /* =========================
-           NO PLAN
-        ========================= */
 
-        .empty-card {
-            background: white;
-            border-radius: 15px;
-            padding: 35px 20px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05);
-        }
+<!-- SUMMARY -->
 
-        .empty-icon {
-            font-size: 45px;
-            margin-bottom: 10px;
-        }
+<div class="summary">
 
-        .empty-card h2 {
-            color: #0f172a;
-            font-size: 19px;
-            margin-bottom: 8px;
-        }
-
-        .empty-card p {
-            color: #64748b;
-            font-size: 13px;
-            line-height: 20px;
-            margin-bottom: 18px;
-        }
-
-        .plans-btn {
-            display: block;
-            width: 100%;
-            background: #0b1c4d;
-            color: white;
-            text-decoration: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        /* =========================
-           FIXED 5-ITEM NAVIGATION
-           SAME AS PROFILE PAGE
-        ========================= */
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 440px;
-            height: 65px;
-
-            background: white;
-            border-top: 1px solid #e2e8f0;
-
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-
-            z-index: 1000;
-
-            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
-        }
-
-        .bottom-nav a {
-            position: relative;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            gap: 3px;
-
-            text-decoration: none;
-
-            color: #94a3b8;
-            font-size: 9px;
-        }
-
-        .bottom-nav svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .bottom-nav a.active {
-            color: #10144c;
-            font-weight: bold;
-        }
-
-        .bottom-nav a.active::after {
-            content: "";
-
-            position: absolute;
-            bottom: 0;
-            left: 25%;
-            right: 25%;
-
-            height: 3px;
-
-            background: #10144c;
-
-            border-radius: 4px 4px 0 0;
-        }
-
-        /* =========================
-           SMALL SCREEN
-        ========================= */
-
-        @media(max-width:360px) {
-
-            .header {
-                padding: 22px 15px;
-            }
-
-            .header h1 {
-                font-size: 21px;
-            }
-
-            .container {
-                padding: 12px;
-            }
-
-            .machine-photo {
-                height: 160px;
-            }
-
-            #timer {
-                font-size: 29px;
-            }
-
-            .detail-row {
-                padding: 10px 0;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="phone">
-
-    <!-- HEADER -->
-
-    <div class="header">
-
-        <h1>My Plan</h1>
-
-        <p>
-            View your current plan and claim status
-        </p>
-
+    <div class="summary-title">
+        Current Income Balance
     </div>
 
+    <div class="summary-amount">
+        GHS {{ "%.2f"|format(income_balance|float) }}
+    </div>
 
-    <div class="container">
+    <div class="summary-note">
+        Your account balance is updated by the server after each completed cycle.
+    </div>
 
-        {% if plan %}
-
-        <!-- =========================
-             ACTIVE PLAN
-        ========================= -->
-
-        <div class="plan-card">
-
-            <!-- MACHINE PHOTO -->
-
-            <div class="machine-photo">
-
-                <img
-                    src="{{ url_for('static', filename='images/machine.jpg') }}"
-                    alt="Machine"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                    class="machine-placeholder"
-                    style="display:none;"
-                >
-                    <div class="icon">🏭</div>
-                    <strong>Machine Plan</strong>
-                    <small>Active Product</small>
-                </div>
-
-            </div>
+</div>
 
 
-            <!-- PLAN INFORMATION -->
+<!-- PRODUCT -->
 
-            <div class="plan-content">
+<div class="section">
 
-                <div class="plan-top">
+    <div class="section-title">
+        Active Product
+    </div>
 
-                    <div class="plan-name">
-                        {{ plan.plan_name or "My Plan" }}
-                    </div>
+    <div class="income-card">
 
-                    <div class="active-badge">
-                        ACTIVE
-                    </div>
+        <div class="product-top">
 
-                </div>
+            <!-- DETAILS -->
 
+            <div class="details">
 
                 <div class="detail-row">
-
                     <span class="detail-label">
-                        Investment
+                        Price
                     </span>
 
                     <span class="detail-value">
-                        GHS {{ "%.2f"|format((plan.investment or 0)|float) }}
+                        GHS {{ "%.2f"|format(plan.price|float) }}
                     </span>
-
                 </div>
 
 
                 <div class="detail-row">
-
                     <span class="detail-label">
                         Daily Income
                     </span>
 
                     <span class="detail-value">
-                        GHS {{ "%.2f"|format((plan.daily_income or 0)|float) }}
+                        GHS {{ "%.2f"|format(plan.daily_income|float) }}
                     </span>
-
                 </div>
 
 
                 <div class="detail-row">
-
                     <span class="detail-label">
-                        Duration
+                        Days
                     </span>
 
                     <span class="detail-value">
-                        {{ plan.duration or 0 }} Days
+                        {{ plan.duration }}
                     </span>
-
                 </div>
 
 
                 <div class="detail-row">
-
                     <span class="detail-label">
-                        Status
+                        Total Income
                     </span>
 
-                    <span class="detail-value" style="color:#16a34a;">
-                        Active
+                    <span class="detail-value">
+                        GHS {{ "%.2f"|format(
+                            (plan.daily_income|float * plan.duration|int)
+                        ) }}
                     </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =========================
-             DAILY CLAIM
-        ========================= -->
-
-        <div class="countdown-card">
-
-            <div class="countdown-title">
-                Daily Income Claim
-            </div>
-
-
-            <div class="timer-box">
-
-                <div
-                    class="timer-label"
-                    id="timerLabel"
-                >
-                    {% if can_claim %}
-                        Your income is ready
-                    {% else %}
-                        Next claim available in
-                    {% endif %}
-                </div>
-
-
-                <div id="timer">
-
-                    {% if can_claim %}
-                        READY
-                    {% else %}
-                        --:--:--
-                    {% endif %}
-
                 </div>
 
             </div>
 
 
-            <form
-                method="POST"
-                action="{{ url_for('my_plan') }}"
-                onsubmit="return confirmClaim();"
-            >
+            <!-- MACHINE PICTURE — UNCHANGED -->
 
-                <button
-                    type="submit"
-                    id="claimButton"
-                    class="claim-btn"
-                    {% if not can_claim %}disabled{% endif %}
+            <div class="preview">
+
+                <div class="tag">
+                    1/1
+                </div>
+
+                <img
+                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+                    alt="Factory machinery"
                 >
 
-                    {% if can_claim %}
-                        Claim Income
-                    {% else %}
-                        Waiting For Next Claim
-                    {% endif %}
-
-                </button>
-
-            </form>
-
-
-            <div class="claim-note">
-
-                Your claim time is controlled by the server.
-                Refreshing the page does not restart the countdown.
+                <div class="badge">
+                    PLAN 1
+                </div>
 
             </div>
 
         </div>
 
 
-        {% else %}
+        <!-- COUNTDOWN -->
 
-        <!-- =========================
-             NO ACTIVE PLAN
-        ========================= -->
+        <div class="countdown-box">
 
-        <div class="empty-card">
+            <div class="countdown-top">
 
-            <div class="empty-icon">
-                📦
+                <span class="countdown-label">
+                    Next income credit
+                </span>
+
+                <span
+                    class="countdown-status"
+                    id="statusText"
+                >
+                    RUNNING
+                </span>
+
             </div>
 
-            <h2>
-                No Active Plan
-            </h2>
 
-            <p>
-                You currently do not have an active plan.
-                Purchase a plan to see it here.
-            </p>
+            <div class="timer">
 
-            <a
-                href="{{ url_for('plan') }}"
-                class="plans-btn"
+                <div class="time-box">
+                    <strong id="hours">24</strong>
+                    <span>Hours</span>
+                </div>
+
+                <div class="colon">:</div>
+
+                <div class="time-box">
+                    <strong id="minutes">00</strong>
+                    <span>Minutes</span>
+                </div>
+
+                <div class="colon">:</div>
+
+                <div class="time-box">
+                    <strong id="seconds">00</strong>
+                    <span>Seconds</span>
+                </div>
+
+            </div>
+
+
+            <div class="progress-area">
+
+                <div class="progress-label">
+                    <span>24-hour cycle</span>
+                    <span id="progressText">0%</span>
+                </div>
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        id="progressBar"
+                    ></div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="credit-notice"
+                id="creditNotice"
             >
-                View Available Plans
-            </a>
+                Your next account credit will be processed when the
+                24-hour cycle is completed.
+            </div>
 
         </div>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- =========================
-         SAME PROFILE BOTTOM NAV
-         5 ITEMS
-    ========================= -->
-
-    <div class="bottom-nav">
-
-        <a href="{{ url_for('dashboard') }}">
-
-            <i data-lucide="home"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('my_plan') }}"
-            class="active"
-        >
-
-            <i data-lucide="trending-up"></i>
-
-            <span>
-                Income
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i data-lucide="users"></i>
-
-            <span>
-                Team
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i data-lucide="share-2"></i>
-
-            <span>
-                Share
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('profile') }}">
-
-            <i data-lucide="user"></i>
-
-            <span>
-                My
-            </span>
-
-        </a>
 
     </div>
 
 </div>
 
 
-{% if plan %}
+<!-- BOTTOM NAVIGATION -->
 
-<script>
+<div class="bottom-nav">
+
+    <a href="{{ url_for('dashboard') }}">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+    </a>
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="active"
+    >
+        <i data-lucide="trending-up"></i>
+        <span>Income</span>
+    </a>
+
+    <a href="{{ url_for('team') }}">
+        <i data-lucide="users"></i>
+        <span>Team</span>
+    </a>
+
+    <a href="{{ url_for('team') }}">
+        <i data-lucide="share-2"></i>
+        <span>Share</span>
+    </a>
+
+    <a href="{{ url_for('profile') }}">
+        <i data-lucide="user"></i>
+        <span>My</span>
+    </a>
+
+</div>
+
+</div><script>
+
+    lucide.createIcons();
 
     /*
-     * Server-controlled countdown.
-     *
-     * Flask should provide:
-     *
-     * can_claim
-     * next_claim_at
-     */
+       IMPORTANT:
 
-    const timer =
-        document.getElementById("timer");
+       The backend should provide the actual next-credit timestamp.
 
-    const timerLabel =
-        document.getElementById("timerLabel");
+       Example Flask variable:
 
-    const claimButton =
-        document.getElementById("claimButton");
+           next_credit_at
 
+       Expected value:
+           ISO timestamp representing the next server-side
+           credit time.
 
-    const canClaimInitially =
-        {{ 'true' if can_claim else 'false' }};
+       The browser countdown is only a visual display.
+    */
+
+    const nextCreditAt =
+        "{{ next_credit_at|default('', true) }}";
 
 
-    /*
-     * Safely receive the server date.
-     */
+    const hoursEl =
+        document.getElementById("hours");
 
-    const nextClaimString =
-        "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
+    const minutesEl =
+        document.getElementById("minutes");
+
+    const secondsEl =
+        document.getElementById("seconds");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const statusText =
+        document.getElementById("statusText");
+
+    const creditNotice =
+        document.getElementById("creditNotice");
 
 
-    let nextClaimAt = null;
+    const CYCLE_SECONDS =
+        24 * 60 * 60;
 
 
-    if (nextClaimString) {
+    function pad(number) {
 
-        nextClaimAt =
-            new Date(nextClaimString);
+        return String(number).padStart(2, "0");
 
     }
 
 
-    function showReady() {
-
-        timer.textContent = "READY";
-
-        timer.classList.add("ready");
-
-        timerLabel.textContent =
-            "Your income is ready to claim";
-
-        claimButton.disabled = false;
-
-        claimButton.textContent =
-            "Claim Income";
-
-    }
-
-
-    function updateCountdown() {
+    function showCountdown() {
 
         /*
-         * If Flask already says the claim
-         * is available, show READY.
-         */
+           Do not invent the server time.
 
-        if (canClaimInitially) {
+           If Flask has not supplied a next-credit timestamp,
+           display a safe fallback.
+        */
 
-            showReady();
+        if (!nextCreditAt) {
+
+            hoursEl.textContent = "24";
+            minutesEl.textContent = "00";
+            secondsEl.textContent = "00";
+
+            progressBar.style.width = "0%";
+            progressText.textContent = "Waiting";
 
             return;
 
         }
 
 
-        /*
-         * Prevent JavaScript errors when
-         * next_claim_at is missing.
-         */
-
-        if (!nextClaimAt || isNaN(nextClaimAt.getTime())) {
-
-            timer.textContent =
-                "WAIT";
-
-            timerLabel.textContent =
-                "Claim time is being checked";
-
-            claimButton.disabled = true;
-
-            claimButton.textContent =
-                "Waiting For Next Claim";
-
-            return;
-
-        }
-
+        const target =
+            new Date(nextCreditAt).getTime();
 
         const now =
-            new Date();
+            Date.now();
 
 
-        const difference =
-            nextClaimAt.getTime() - now.getTime();
-
-
-        /*
-         * Countdown finished.
-         */
-
-        if (difference <= 0) {
-
-            showReady();
-
-            return;
-
-        }
-
-
-        const totalSeconds =
-            Math.floor(difference / 1000);
+        let remaining =
+            Math.max(
+                0,
+                Math.floor(
+                    (target - now) / 1000
+                )
+            );
 
 
         const hours =
-            Math.floor(totalSeconds / 3600);
+            Math.floor(
+                remaining / 3600
+            );
 
 
         const minutes =
             Math.floor(
-                (totalSeconds % 3600) / 60
+                (remaining % 3600) / 60
             );
 
 
         const seconds =
-            totalSeconds % 60;
+            remaining % 60;
 
 
-        timer.textContent =
-            String(hours).padStart(2, "0")
-            + ":"
-            + String(minutes).padStart(2, "0")
-            + ":"
-            + String(seconds).padStart(2, "0");
+        hoursEl.textContent =
+            pad(hours);
+
+        minutesEl.textContent =
+            pad(minutes);
+
+        secondsEl.textContent =
+            pad(seconds);
 
 
-        timer.classList.remove("ready");
+        /*
+           Calculate progress through
+           the current 24-hour cycle.
+        */
+
+        const elapsed =
+            CYCLE_SECONDS - remaining;
 
 
-        timerLabel.textContent =
-            "Next claim available in";
+        const percentage =
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    (elapsed / CYCLE_SECONDS) * 100
+                )
+            );
 
 
-        claimButton.disabled =
-            true;
+        progressBar.style.width =
+            percentage + "%";
+
+        progressText.textContent =
+            Math.floor(percentage) + "%";
 
 
-        claimButton.textContent =
-            "Waiting For Next Claim";
+        if (remaining <= 0) {
 
-    }
+            statusText.textContent =
+                "PROCESSING";
 
+            creditNotice.textContent =
+                "The 24-hour cycle has completed. Your account credit is being processed by the server.";
 
-    function confirmClaim() {
+            creditNotice.classList.add(
+                "completed"
+            );
 
-        if (claimButton.disabled) {
-
-            return false;
+            return;
 
         }
 
 
-        return confirm(
-            "Are you sure you want to claim your daily income?"
+        statusText.textContent =
+            "RUNNING";
+
+        creditNotice.textContent =
+            "Your next account credit will be processed when the 24-hour cycle is completed.";
+
+        creditNotice.classList.remove(
+            "completed"
         );
 
     }
 
 
-    updateCountdown();
+    showCountdown();
 
 
     setInterval(
-        updateCountdown,
+        showCountdown,
         1000
     );
 
-</script>
-
-{% endif %}
-
-
-<script>
-
-    /*
-     * Activate Lucide icons.
-     */
-
-    lucide.createIcons();
-
-</script>
-
-</body>
+</script></body>
 </html>
