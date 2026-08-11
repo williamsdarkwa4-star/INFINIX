@@ -1751,9 +1751,9 @@ def my_plan():
     if not user:
         return redirect(url_for("login"))
 
-    # --------------------------------------------------------
-    # POST CLAIM
-    # --------------------------------------------------------
+    # ========================================================
+    # CLAIM DAILY INCOME
+    # ========================================================
 
     if request.method == "POST":
 
@@ -1764,11 +1764,14 @@ def my_plan():
 
         try:
 
+            # Lock the active plan so two simultaneous requests
+            # cannot claim the same daily income.
+
             cur.execute("""
                 SELECT *
                 FROM plans
                 WHERE user_id=%s
-                AND active=TRUE
+                  AND active=TRUE
                 ORDER BY id DESC
                 LIMIT 1
                 FOR UPDATE
@@ -1783,7 +1786,7 @@ def my_plan():
                 conn.rollback()
 
                 flash(
-                    "No active demo plan found.",
+                    "You do not have an active plan.",
                     "error",
                 )
 
@@ -1794,6 +1797,10 @@ def my_plan():
             now = utcnow()
 
             started_at = plan["started_at"]
+
+            # ------------------------------------------------
+            # CHECK PLAN EXPIRATION
+            # ------------------------------------------------
 
             end_time = (
                 started_at
@@ -1815,7 +1822,7 @@ def my_plan():
                 conn.commit()
 
                 flash(
-                    "Your demo plan has ended.",
+                    "Your plan has completed its duration.",
                     "error",
                 )
 
@@ -1823,40 +1830,45 @@ def my_plan():
                     url_for("my_plan")
                 )
 
+            # ------------------------------------------------
+            # CHECK 24-HOUR CLAIM INTERVAL
+            # ------------------------------------------------
+
             last_claim_at = plan["last_claim_at"]
 
             if last_claim_at is None:
 
-                allowed_time = (
+                next_claim_time = (
                     started_at
                     + timedelta(hours=24)
                 )
 
             else:
 
-                allowed_time = (
+                next_claim_time = (
                     last_claim_at
                     + timedelta(hours=24)
                 )
 
-            if now < allowed_time:
-
-                conn.rollback()
+            if now < next_claim_time:
 
                 remaining = int(
                     (
-                        allowed_time - now
+                        next_claim_time - now
                     ).total_seconds()
                 )
 
                 hours = remaining // 3600
+
                 minutes = (
                     remaining % 3600
                 ) // 60
 
+                conn.rollback()
+
                 flash(
-                    f"Next claim is available in "
-                    f"{hours}h {minutes}m.",
+                    f"Your next income can be claimed "
+                    f"in {hours}h {minutes}m.",
                     "error",
                 )
 
@@ -1864,14 +1876,33 @@ def my_plan():
                     url_for("my_plan")
                 )
 
+            # ------------------------------------------------
+            # DAILY INCOME
+            # ------------------------------------------------
+
             daily_income = money(
                 plan["daily_income"]
             )
 
-            # Lock account.
+            if daily_income <= 0:
+
+                conn.rollback()
+
+                flash(
+                    "This plan has no valid daily income.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for("my_plan")
+                )
+
+            # ------------------------------------------------
+            # LOCK USER ACCOUNT
+            # ------------------------------------------------
 
             cur.execute("""
-                SELECT user_id
+                SELECT *
                 FROM accounts
                 WHERE user_id=%s
                 FOR UPDATE
@@ -1891,26 +1922,46 @@ def my_plan():
                         referral_account,
                         withdraw_account
                     )
-                    VALUES (%s,%s,0,0,0)
+                    VALUES (
+                        %s,
+                        %s,
+                        0,
+                        0,
+                        0
+                    )
+                    RETURNING *
                 """, (
                     user["id"],
                     STARTING_DEPOSIT_BALANCE,
                 ))
 
+                account = cur.fetchone()
+
+            # ------------------------------------------------
+            # CREDIT INCOME
+            # ------------------------------------------------
+
             cur.execute("""
                 UPDATE accounts
-                SET income_account =
-                        COALESCE(income_account,0)
+                SET
+                    income_account =
+                        COALESCE(income_account, 0)
                         + %s,
+
                     withdraw_account =
-                        COALESCE(withdraw_account,0)
+                        COALESCE(withdraw_account, 0)
                         + %s
+
                 WHERE user_id=%s
             """, (
                 daily_income,
                 daily_income,
                 user["id"],
             ))
+
+            # ------------------------------------------------
+            # UPDATE LAST CLAIM
+            # ------------------------------------------------
 
             cur.execute("""
                 UPDATE plans
@@ -1920,6 +1971,10 @@ def my_plan():
                 now,
                 plan["id"],
             ))
+
+            # ------------------------------------------------
+            # TRANSACTION RECORD
+            # ------------------------------------------------
 
             cur.execute("""
                 INSERT INTO transactions (
@@ -1936,18 +1991,21 @@ def my_plan():
                     %s,
                     'successful',
                     %s,
-                    'Demo daily income claim'
+                    %s
                 )
             """, (
                 user["id"],
                 daily_income,
                 generate_reference("INC"),
+                "Daily income claim for "
+                + str(plan["plan_name"]),
             ))
 
             conn.commit()
 
             flash(
-                "Demo daily income claimed successfully.",
+                f"GHS {daily_income:.2f} income "
+                "claimed successfully.",
                 "success",
             )
 
@@ -1958,22 +2016,34 @@ def my_plan():
         except Exception:
 
             conn.rollback()
-            raise
+
+            app.logger.exception(
+                "MY PLAN CLAIM ERROR"
+            )
+
+            flash(
+                "Unable to process your income claim.",
+                "error",
+            )
+
+            return redirect(
+                url_for("my_plan")
+            )
 
         finally:
 
             cur.close()
             conn.close()
 
-    # --------------------------------------------------------
-    # GET
-    # --------------------------------------------------------
+    # ========================================================
+    # GET ACTIVE PLAN
+    # ========================================================
 
     plan = query_one("""
         SELECT *
         FROM plans
         WHERE user_id=%s
-        AND active=TRUE
+          AND active=TRUE
         ORDER BY id DESC
         LIMIT 1
     """, (
@@ -1981,8 +2051,18 @@ def my_plan():
     ))
 
     can_claim = False
+
     seconds_remaining = 0
+
+    cycle_seconds_remaining = 0
+
     cycle_ended = False
+
+    next_claim_timestamp = 0
+
+    # ========================================================
+    # PROCESS ACTIVE PLAN
+    # ========================================================
 
     if plan:
 
@@ -1997,6 +2077,10 @@ def my_plan():
             )
         )
 
+        # ----------------------------------------------------
+        # PLAN EXPIRED
+        # ----------------------------------------------------
+
         if now >= end_time:
 
             execute("""
@@ -2008,9 +2092,27 @@ def my_plan():
             ))
 
             plan = None
+
             cycle_ended = True
 
         else:
+
+            # ------------------------------------------------
+            # PLAN TIME REMAINING
+            # ------------------------------------------------
+
+            cycle_seconds_remaining = max(
+                0,
+                int(
+                    (
+                        end_time - now
+                    ).total_seconds()
+                ),
+            )
+
+            # ------------------------------------------------
+            # NEXT CLAIM TIME
+            # ------------------------------------------------
 
             last_claim_at = plan["last_claim_at"]
 
@@ -2028,28 +2130,67 @@ def my_plan():
                     + timedelta(hours=24)
                 )
 
+            seconds_remaining = max(
+                0,
+                int(
+                    (
+                        next_claim_time - now
+                    ).total_seconds()
+                ),
+            )
+
             if now >= next_claim_time:
 
                 can_claim = True
 
+                seconds_remaining = 0
+
             else:
 
-                seconds_remaining = max(
-                    0,
-                    int(
-                        (
-                            next_claim_time - now
-                        ).total_seconds()
-                    ),
+                next_claim_timestamp = int(
+                    next_claim_time.timestamp()
                 )
+
+    # ========================================================
+    # AVAILABLE PLANS
+    # ========================================================
+
+    available_plans = []
+
+    for plan_id, plan_data in PLANS.items():
+
+        available_plans.append({
+            "id": plan_id,
+            "plan_name": plan_data["name"],
+            "investment_amount": plan_data["investment"],
+            "daily_income": plan_data["daily"],
+            "duration": plan_data["duration"],
+        })
+
+    # ========================================================
+    # RENDER
+    # ========================================================
 
     return render_template(
         "my_plan.html",
+
         user_plan=plan,
+
+        available_plans=available_plans,
+
         can_claim=can_claim,
+
         seconds_remaining=seconds_remaining,
+
+        cycle_seconds_remaining=cycle_seconds_remaining,
+
+        next_claim_timestamp=next_claim_timestamp,
+
         cycle_ended=cycle_ended,
     )
+                        
+
+
 
 
 # ============================================================
