@@ -1410,10 +1410,7 @@ def confirm_buy_plan(plan_id):
 # MY PLAN
 # ============================================================
 
-@app.route(
-    "/my_plan",
-    methods=["GET", "POST"]
-)
+ @app.route("/my_plan", methods=["GET", "POST"])
 def my_plan():
 
     user = current_user()
@@ -1421,15 +1418,16 @@ def my_plan():
     if not user:
         return redirect(url_for("login"))
 
+    # ========================================================
+    # GET ONLY THE LOGGED-IN USER'S ACTIVE PLAN
+    # ========================================================
+
     plan = query_one("""
         SELECT *
         FROM plans
-
         WHERE user_id=%s
-        AND active=TRUE
-
+          AND active=TRUE
         ORDER BY id DESC
-
         LIMIT 1
     """, (user["id"],))
 
@@ -1443,20 +1441,16 @@ def my_plan():
 
         started_at = plan["started_at"]
 
-        last_claim_at = plan["last_claim_at"]
-
-        # ------------------------------------------------
-        # PLAN END TIME
-        # ------------------------------------------------
+        # ====================================================
+        # CHECK PLAN EXPIRATION
+        # ====================================================
 
         end_time = (
-            started_at
-            + timedelta(days=plan["duration"])
+            started_at +
+            timedelta(days=plan["duration"])
         )
 
         if now >= end_time:
-
-            cycle_ended = True
 
             execute("""
                 UPDATE plans
@@ -1464,114 +1458,56 @@ def my_plan():
                 WHERE id=%s
             """, (plan["id"],))
 
-            plan["active"] = False
+            # IMPORTANT:
+            # Do not display the expired plan.
+            plan = None
+            cycle_ended = True
 
         else:
 
-            # ------------------------------------------------
-            # CLAIM TIMER
-            # ------------------------------------------------
+            # =================================================
+            # NEXT CLAIM TIME
+            # =================================================
+
+            last_claim_at = plan["last_claim_at"]
 
             if last_claim_at is None:
 
-                # First claim is available only after
-                # 24 hours from plan purchase.
-
                 next_claim_time = (
-                    started_at
-                    + timedelta(hours=24)
+                    started_at +
+                    timedelta(hours=24)
                 )
 
             else:
 
                 next_claim_time = (
-                    last_claim_at
-                    + timedelta(hours=24)
+                    last_claim_at +
+                    timedelta(hours=24)
                 )
 
             if now >= next_claim_time:
 
                 can_claim = True
-
                 seconds_remaining = 0
 
             else:
 
-                seconds_remaining = int(
-                    (
-                        next_claim_time - now
-                    ).total_seconds()
+                seconds_remaining = max(
+                    0,
+                    int(
+                        (
+                            next_claim_time - now
+                        ).total_seconds()
+                    )
                 )
 
-        # ------------------------------------------------
-        # CLAIM
-        # ------------------------------------------------
+            # =================================================
+            # CLAIM DAILY DEMO INCOME
+            # =================================================
 
-        if (
-            request.method == "POST"
-            and can_claim
-            and not cycle_ended
-        ):
+            if request.method == "POST":
 
-            claim_time = datetime.utcnow()
-
-            conn = get_conn()
-            cur = conn.cursor()
-
-            try:
-
-                # Re-check inside the transaction.
-                cur.execute("""
-                    SELECT *
-                    FROM plans
-                    WHERE id=%s
-                    FOR UPDATE
-                """, (plan["id"],))
-
-                locked_plan = cur.fetchone()
-
-                if not locked_plan:
-
-                    conn.rollback()
-
-                    flash(
-                        "Plan not found.",
-                        "error"
-                    )
-
-                    return redirect(
-                        url_for("my_plan")
-                    )
-
-                locked_last_claim = (
-                    locked_plan[10]
-                    if len(locked_plan) > 10
-                    else None
-                )
-
-                locked_started = (
-                    locked_plan[8]
-                    if len(locked_plan) > 8
-                    else started_at
-                )
-
-                if locked_last_claim is None:
-
-                    allowed_time = (
-                        locked_started
-                        + timedelta(hours=24)
-                    )
-
-                else:
-
-                    allowed_time = (
-                        locked_last_claim
-                        + timedelta(hours=24)
-                    )
-
-                if claim_time < allowed_time:
-
-                    conn.rollback()
+                if not can_claim:
 
                     flash(
                         "Your next claim is not ready yet.",
@@ -1582,86 +1518,188 @@ def my_plan():
                         url_for("my_plan")
                     )
 
-                daily_income = Decimal(
-                    plan["daily_income"]
+                claim_time = datetime.utcnow()
+
+                conn = get_conn()
+                cur = conn.cursor(
+                    cursor_factory=RealDictCursor
                 )
 
-                # Credit balances.
+                try:
 
-                cur.execute("""
-                    UPDATE accounts
+                    # Lock the plan so two requests
+                    # cannot claim the same cycle.
 
-                    SET income_account =
-                            income_account + %s,
+                    cur.execute("""
+                        SELECT *
+                        FROM plans
+                        WHERE id=%s
+                          AND user_id=%s
+                          AND active=TRUE
+                        FOR UPDATE
+                    """, (
+                        plan["id"],
+                        user["id"]
+                    ))
 
-                        withdraw_account =
-                            withdraw_account + %s
+                    locked_plan = cur.fetchone()
 
-                    WHERE user_id=%s
-                """, (
-                    daily_income,
-                    daily_income,
-                    user["id"]
-                ))
+                    if not locked_plan:
 
-                # Store exact claim time.
+                        conn.rollback()
 
-                cur.execute("""
-                    UPDATE plans
+                        flash(
+                            "Active plan not found.",
+                            "error"
+                        )
 
-                    SET last_claim_at=%s
+                        return redirect(
+                            url_for("my_plan")
+                        )
 
-                    WHERE id=%s
-                """, (
-                    claim_time,
-                    plan["id"]
-                ))
-
-                cur.execute("""
-                    INSERT INTO transactions (
-                        user_id,
-                        transaction_type,
-                        amount,
-                        status,
-                        description
+                    locked_started = (
+                        locked_plan["started_at"]
                     )
 
-                    VALUES (
-                        %s,
-                        'income_claim',
-                        %s,
-                        'successful',
-                        'Demo daily income claim'
+                    locked_last_claim = (
+                        locked_plan["last_claim_at"]
                     )
-                """, (
-                    user["id"],
-                    daily_income
-                ))
 
-                conn.commit()
+                    # Re-check expiration.
 
-                flash(
-                    "Daily demo income claimed successfully.",
-                    "success"
-                )
+                    locked_end = (
+                        locked_started +
+                        timedelta(
+                            days=locked_plan["duration"]
+                        )
+                    )
 
-                return redirect(
-                    url_for("my_plan")
-                )
+                    if claim_time >= locked_end:
 
-            except Exception:
+                        cur.execute("""
+                            UPDATE plans
+                            SET active=FALSE
+                            WHERE id=%s
+                        """, (
+                            locked_plan["id"],
+                        ))
 
-                conn.rollback()
-                raise
+                        conn.commit()
 
-            finally:
+                        flash(
+                            "Your demo plan has ended.",
+                            "error"
+                        )
 
-                cur.close()
-                conn.close()
+                        return redirect(
+                            url_for("my_plan")
+                        )
+
+                    # Re-check the 24-hour timer.
+
+                    if locked_last_claim is None:
+
+                        allowed_time = (
+                            locked_started +
+                            timedelta(hours=24)
+                        )
+
+                    else:
+
+                        allowed_time = (
+                            locked_last_claim +
+                            timedelta(hours=24)
+                        )
+
+                    if claim_time < allowed_time:
+
+                        conn.rollback()
+
+                        flash(
+                            "Your next claim is not ready yet.",
+                            "error"
+                        )
+
+                        return redirect(
+                            url_for("my_plan")
+                        )
+
+                    daily_income = Decimal(
+                        str(locked_plan["daily_income"])
+                    )
+
+                    # Credit demo balances.
+
+                    cur.execute("""
+                        UPDATE accounts
+                        SET income_account =
+                                income_account + %s,
+                            withdraw_account =
+                                withdraw_account + %s
+                        WHERE user_id=%s
+                    """, (
+                        daily_income,
+                        daily_income,
+                        user["id"]
+                    ))
+
+                    # Save claim time.
+
+                    cur.execute("""
+                        UPDATE plans
+                        SET last_claim_at=%s
+                        WHERE id=%s
+                    """, (
+                        claim_time,
+                        locked_plan["id"]
+                    ))
+
+                    # Transaction record.
+
+                    cur.execute("""
+                        INSERT INTO transactions (
+                            user_id,
+                            transaction_type,
+                            amount,
+                            status,
+                            description
+                        )
+                        VALUES (
+                            %s,
+                            'income_claim',
+                            %s,
+                            'successful',
+                            'Demo daily income claim'
+                        )
+                    """, (
+                        user["id"],
+                        daily_income
+                    ))
+
+                    conn.commit()
+
+                    flash(
+                        "Demo daily income claimed successfully.",
+                        "success"
+                    )
+
+                    return redirect(
+                        url_for("my_plan")
+                    )
+
+                except Exception:
+
+                    conn.rollback()
+                    raise
+
+                finally:
+
+                    cur.close()
+                    conn.close()
 
     return render_template(
         "my_plan.html",
-        plan=plan,
+        user_plan=plan,
         can_claim=can_claim,
         seconds_remaining=seconds_remaining,
         cycle_ended=cycle_ended
