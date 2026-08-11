@@ -1,392 +1,795 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Plan - Zenith Capital</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
+<title>My Plan - Zenith Capital</title>
 
-body{
-    background:#f4f7fb;
-    padding-bottom:90px;
-}
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-.header{
-    background:linear-gradient(135deg,#0F172A,#2563EB);
-    color:white;
-    padding:30px 20px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
-}
+<style>
 
-.header h1{
-    margin-bottom:7px;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, Arial, sans-serif;
+    }
 
-.header p{
-    color:#dbeafe;
-    font-size:14px;
-}
+    body {
+        background: #f1f5f9;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        padding-bottom: 75px;
+        color: #334155;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-.container{
-    padding:20px;
-    max-width:500px;
-    margin:auto;
-}
+    .phone {
+        width: 100%;
+        max-width: 440px;
+        min-height: 100vh;
+        background: #f8fafc;
+        position: relative;
+        padding-bottom: 75px;
+        box-shadow: 0 0 18px rgba(0,0,0,.06);
+    }
 
-.card{
-    background:white;
-    padding:22px;
-    border-radius:20px;
-    margin-bottom:20px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+    /* =========================
+       TOP HEADER
+    ========================= */
 
-.card h2{
-    color:#2563EB;
-    margin-bottom:15px;
-}
+    .top-header {
+        height: 55px;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-bottom: 1px solid #f1f5f9;
+    }
 
-.info{
-    line-height:32px;
-    color:#475569;
-}
+    .header-title {
+        text-align: center;
+        color: #0f172a;
+        font-size: 13px;
+    }
 
-.value{
-    font-weight:bold;
-    color:#0f172a;
-}
+    .header-title strong {
+        display: block;
+        font-size: 15px;
+    }
 
-.status{
-    display:inline-block;
-    background:#dcfce7;
-    color:#15803d;
-    padding:4px 10px;
-    border-radius:20px;
-    font-size:13px;
-    font-weight:bold;
-}
+    .header-title small {
+        display: block;
+        margin-top: 2px;
+        color: #94a3b8;
+        font-size: 10px;
+    }
 
-.timer-box{
-    background:#eff6ff;
-    border:1px solid #bfdbfe;
-    border-radius:18px;
-    padding:20px;
-    text-align:center;
-    margin-top:10px;
-}
+    /* =========================
+       CONTENT
+    ========================= */
 
-.timer-label{
-    color:#64748b;
-    font-size:14px;
-    margin-bottom:8px;
-}
+    .content {
+        padding: 16px;
+    }
 
-#timer{
-    font-size:34px;
-    font-weight:bold;
-    color:#2563eb;
-    letter-spacing:1px;
-}
+    .intro {
+        margin-bottom: 14px;
+    }
 
-.claim-ready{
-    color:#15803d !important;
-}
+    .intro h1 {
+        color: #0f172a;
+        font-size: 19px;
+        margin-bottom: 4px;
+    }
 
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    background:#2563EB;
-    color:white;
-    font-weight:bold;
-    font-size:16px;
-    cursor:pointer;
-}
+    .intro p {
+        color: #64748b;
+        font-size: 12px;
+    }
 
-button:disabled{
-    background:#94a3b8;
-    cursor:not-allowed;
-}
+    /* =========================
+       PLAN CARD
+    ========================= */
 
-.claim-note{
-    text-align:center;
-    color:#64748b;
-    font-size:13px;
-    margin-top:12px;
-    line-height:20px;
-}
+    .card {
+        background: white;
+        border: 1px solid #f1f5f9;
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 12px rgba(15,23,42,.05);
+    }
 
-.empty-card{
-    text-align:center;
-    padding:35px 20px;
-}
+    .card-title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 13px;
+    }
 
-.empty-card h2{
-    margin-bottom:10px;
-}
+    .title-icon {
+        width: 22px;
+        height: 22px;
+        color: #10144c;
+    }
 
-.empty-card p{
-    color:#64748b;
-    line-height:24px;
-}
+    .card h2 {
+        color: #10144c;
+        font-size: 16px;
+        font-weight: 700;
+    }
 
-.plan-details{
-    margin-top:10px;
-}
+    /* =========================
+       PLAN STATUS
+    ========================= */
 
-.detail-row{
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    padding:11px 0;
-    border-bottom:1px solid #f1f5f9;
-}
+    .plan-status {
+        background: #dcfce7;
+        color: #15803d;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        margin-left: auto;
+    }
 
-.detail-row:last-child{
-    border-bottom:none;
-}
+    /* =========================
+       PLAN DETAILS
+    ========================= */
 
-.detail-label{
-    color:#64748b;
-}
+    .plan-details {
+        background: #f8fafc;
+        border-radius: 11px;
+        overflow: hidden;
+    }
 
-.detail-value{
-    color:#0f172a;
-    font-weight:bold;
-    text-align:right;
-}
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 12px;
+    }
 
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:13px 8px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-    z-index:100;
-}
+    .detail-row:last-child {
+        border-bottom: none;
+    }
 
-.bottom-nav a{
-    text-decoration:none;
-    color:#2563EB;
-    font-weight:bold;
-    text-align:center;
-    font-size:13px;
-}
+    .detail-label {
+        color: #64748b;
+    }
 
-.bottom-nav span{
-    font-size:20px;
-}
+    .detail-value {
+        color: #0f172a;
+        font-weight: 700;
+        text-align: right;
+    }
 
-</style></head><body><div class="header"><h1>My Plan</h1>
+    /* =========================
+       CLAIM CARD
+    ========================= */
 
-<p>
-    Manage your active plan and daily claim
-</p>
+    .timer-box {
+        background: linear-gradient(
+            to bottom,
+            #eff6ff,
+            #ffffff
+        );
 
-</div><div class="container">{% if plan %}
+        border: 1px solid #dbeafe;
+        border-radius: 14px;
+        padding: 20px 12px;
+        text-align: center;
+        margin-top: 5px;
+    }
 
-<!-- PLAN INFORMATION --><div class="card"><h2>
-    {{ plan.plan_name }}
-</h2>
+    .timer-label {
+        color: #64748b;
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
 
+    #timer {
+        color: #10144c;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        font-family: monospace;
+    }
 
-<div class="plan-details">
+    .claim-ready {
+        color: #15803d !important;
+    }
 
-    <div class="detail-row">
+    .claim-button {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 13px;
+        margin-top: 13px;
 
-        <span class="detail-label">
-            Investment
-        </span>
+        background: #10144c;
+        color: white;
 
-        <span class="detail-value">
-            GHS {{ "%.2f"|format(plan.investment) }}
-        </span>
+        font-size: 13px;
+        font-weight: 700;
 
-    </div>
+        cursor: pointer;
+    }
 
+    .claim-button:active {
+        transform: scale(.99);
+    }
 
-    <div class="detail-row">
+    .claim-button:disabled {
+        background: #cbd5e1;
+        color: #64748b;
+        cursor: not-allowed;
+    }
 
-        <span class="detail-label">
-            Daily Income
-        </span>
+    .claim-note {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.5;
+        margin-top: 10px;
+    }
 
-        <span class="detail-value">
-            GHS {{ "%.2f"|format(plan.daily_income) }}
-        </span>
+    /* =========================
+       EMPTY STATE
+    ========================= */
 
-    </div>
+    .empty-card {
+        text-align: center;
+        padding: 35px 20px;
+    }
 
+    .empty-icon {
+        width: 42px;
+        height: 42px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+    }
 
-    <div class="detail-row">
+    .empty-card h2 {
+        color: #0f172a;
+        font-size: 17px;
+        margin-bottom: 7px;
+    }
 
-        <span class="detail-label">
-            Duration
-        </span>
+    .empty-card p {
+        color: #64748b;
+        font-size: 12px;
+        line-height: 20px;
+        margin-bottom: 15px;
+    }
 
-        <span class="detail-value">
-            {{ plan.duration }} Days
-        </span>
+    .plan-button {
+        display: block;
+        text-decoration: none;
+        background: #10144c;
+        color: white;
+        padding: 12px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 700;
+    }
 
-    </div>
+    /* =========================
+       INFORMATION
+    ========================= */
 
+    .info-box {
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 11px;
+        padding: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+    }
 
-    <div class="detail-row">
+    .info-icon {
+        width: 18px;
+        height: 18px;
+        color: #64748b;
+        flex-shrink: 0;
+    }
 
-        <span class="detail-label">
-            Status
-        </span>
+    .info-box p {
+        color: #64748b;
+        font-size: 11px;
+        line-height: 1.6;
+    }
 
-        <span class="status">
-            Active
-        </span>
+    /* =========================
+       BOTTOM NAVIGATION
+    ========================= */
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+
+        width: 100%;
+        max-width: 440px;
+
+        height: 65px;
+
+        background: white;
+        border-top: 1px solid #e2e8f0;
+
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+
+        z-index: 1000;
+
+        box-shadow: 0 -3px 12px rgba(0,0,0,.05);
+    }
+
+    .bottom-nav a {
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 3px;
+
+        text-decoration: none;
+
+        color: #94a3b8;
+
+        font-size: 9px;
+    }
+
+    .bottom-nav svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .bottom-nav a.active {
+        color: #10144c;
+        font-weight: 700;
+    }
+
+    .bottom-nav a.active::after {
+        content: "";
+
+        position: absolute;
+
+        bottom: 0;
+
+        left: 25%;
+        right: 25%;
+
+        height: 3px;
+
+        background: #10144c;
+
+        border-radius: 4px 4px 0 0;
+    }
+
+    /* =========================
+       SMALL PHONES
+    ========================= */
+
+    @media(max-width:360px) {
+
+        .content {
+            padding: 14px;
+        }
+
+        .detail-row {
+            padding: 10px;
+        }
+
+        #timer {
+            font-size: 27px;
+        }
+
+    }
+
+</style>
+
+</head><body><div class="phone"><!-- =========================
+     HEADER
+========================= -->
+
+<div class="top-header">
+
+    <div class="header-title">
+
+        <strong>My Plan</strong>
+
+        <small>Zenith Capital</small>
 
     </div>
 
 </div>
 
-</div><!-- CLAIM --><div class="card"><h2>
-    Daily Income Claim
-</h2>
 
+<div class="content">
 
-<div class="timer-box">
+    <!-- =========================
+         INTRO
+    ========================= -->
 
-    <div class="timer-label" id="timerLabel">
-        Next claim available in
+    <div class="intro">
+
+        <h1>My Plan</h1>
+
+        <p>
+            Manage your active plan and daily income claim.
+        </p>
+
     </div>
 
 
-    <div id="timer">
-        24:00:00
+    {% if plan %}
+
+    <!-- =========================
+         PLAN INFORMATION
+    ========================= -->
+
+    <div class="card">
+
+        <div class="card-title-row">
+
+            <i
+                data-lucide="package"
+                class="title-icon">
+            </i>
+
+            <h2>
+                {{ plan.plan_name }}
+            </h2>
+
+            <span class="plan-status">
+                Active
+            </span>
+
+        </div>
+
+
+        <div class="plan-details">
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Investment
+                </span>
+
+                <span class="detail-value">
+                    GHS {{ "%.2f"|format(plan.investment|float) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Daily Income
+                </span>
+
+                <span class="detail-value">
+                    GHS {{ "%.2f"|format(plan.daily_income|float) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Duration
+                </span>
+
+                <span class="detail-value">
+                    {{ plan.duration }} Days
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Total Scheduled Income
+                </span>
+
+                <span class="detail-value">
+                    GHS {{ "%.2f"|format((plan.daily_income|float * plan.duration|int)) }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Status
+                </span>
+
+                <span class="detail-value" style="color:#15803d;">
+                    Active
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- =========================
+         DAILY CLAIM
+    ========================= -->
+
+    <div class="card">
+
+        <div class="card-title-row">
+
+            <i
+                data-lucide="clock-3"
+                class="title-icon">
+            </i>
+
+            <h2>
+                Daily Income Claim
+            </h2>
+
+        </div>
+
+
+        <div class="timer-box">
+
+            <div
+                class="timer-label"
+                id="timerLabel">
+
+                Next claim available in
+
+            </div>
+
+
+            <div id="timer">
+
+                {% if can_claim %}
+                    READY
+                {% else %}
+                    24:00:00
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ url_for('my_plan') }}"
+            onsubmit="return confirmClaim();"
+        >
+
+            <button
+                type="submit"
+                id="claimButton"
+                class="claim-button"
+                {% if not can_claim %}disabled{% endif %}
+            >
+
+                {% if can_claim %}
+                    Claim Income
+                {% else %}
+                    Waiting For Next Claim
+                {% endif %}
+
+            </button>
+
+        </form>
+
+
+        <p class="claim-note">
+
+            The claim time is controlled by the server.
+            Refreshing this page will not restart the timer.
+
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         INFORMATION
+    ========================= -->
+
+    <div class="card">
+
+        <div class="card-title-row">
+
+            <i
+                data-lucide="info"
+                class="title-icon">
+            </i>
+
+            <h2>
+                Claim Information
+            </h2>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <i
+                data-lucide="shield-check"
+                class="info-icon">
+            </i>
+
+            <p>
+                Daily income can only be claimed when the
+                server confirms that the required claim
+                interval has passed.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    {% else %}
+
+    <!-- =========================
+         NO ACTIVE PLAN
+    ========================= -->
+
+    <div class="card empty-card">
+
+        <i
+            data-lucide="package-open"
+            class="empty-icon">
+        </i>
+
+        <h2>
+            No Active Plan
+        </h2>
+
+        <p>
+            You do not currently have an active plan.
+            View the available plans to get started.
+        </p>
+
+
+        <a
+            href="{{ url_for('plan') }}"
+            class="plan-button">
+
+            View Available Plans
+
+        </a>
+
+    </div>
+
+    {% endif %}
 
 </div>
 
 
-<br>
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<div class="bottom-nav">
+
+    <a href="{{ url_for('dashboard') }}">
+
+        <i data-lucide="home"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
 
 
-<form
-    method="POST"
-    action="{{ url_for('my_plan') }}"
-    onsubmit="return confirmClaim();"
->
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="active">
 
-    <button
-        type="submit"
-        id="claimButton"
-        {% if not can_claim %}disabled{% endif %}
-    >
+        <i data-lucide="trending-up"></i>
 
-        {% if can_claim %}
-            Claim Income
-        {% else %}
-            Waiting For Next Claim
-        {% endif %}
+        <span>
+            Income
+        </span>
 
-    </button>
-
-</form>
+    </a>
 
 
-<p class="claim-note">
+    <a href="{{ url_for('team') }}">
 
-    Your claim timer is saved on the server.
-    Refreshing or reopening this page will not
-    restart the countdown.
+        <i data-lucide="users"></i>
 
-</p>
+        <span>
+            Team
+        </span>
 
-</div>{% else %}
-
-<div class="card empty-card"><h2>
-    No Active Plan
-</h2>
-
-<p>
-    You do not currently have an active plan.
-</p>
-
-<br>
-
-<a
-    href="/plan"
-    style="
-    display:block;
-    padding:14px;
-    background:#2563eb;
-    color:white;
-    text-decoration:none;
-    border-radius:13px;
-    font-weight:bold;
-    "
->
-    View Available Plans
-</a>
-
-</div>{% endif %}
-
-</div><div class="bottom-nav"><a href="/dashboard">
-    <span>🏠</span>
-    <br>
-    Dashboard
-</a>
+    </a>
 
 
-<a href="/my_plan">
-    <span>📈</span>
-    <br>
-    My Plan
-</a>
+    <a href="{{ url_for('team') }}">
+
+        <i data-lucide="share-2"></i>
+
+        <span>
+            Share
+        </span>
+
+    </a>
 
 
-<a href="/profile">
-    <span>👤</span>
-    <br>
-    Profile
-</a>
+    <a href="{{ url_for('profile') }}">
+
+        <i data-lucide="user"></i>
+
+        <span>
+            My
+        </span>
+
+    </a>
+
+</div>
 
 </div>{% if plan %}
 
 <script>
 
-/*
-    IMPORTANT:
+    /*
+        SERVER-SIDE CLAIM TIME
 
-    The countdown comes from the server.
-    It is NOT reset to 86400 when the page
-    is refreshed.
-*/
+        The server supplies next_claim_at.
+        JavaScript only displays the countdown.
+    */
 
-const nextClaimAt =
-    new Date("{{ next_claim_at.isoformat() if next_claim_at else '' }}");
+    const nextClaimAtString =
+        "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
 
-const canClaimInitially =
-    {{ 'true' if can_claim else 'false' }};
+    const canClaimInitially =
+        {{ 'true' if can_claim else 'false' }};
 
+    const timer =
+        document.getElementById("timer");
 
-const timer =
-    document.getElementById("timer");
+    const timerLabel =
+        document.getElementById("timerLabel");
 
-const timerLabel =
-    document.getElementById("timerLabel");
-
-const claimButton =
-    document.getElementById("claimButton");
+    const claimButton =
+        document.getElementById("claimButton");
 
 
-function updateCountdown(){
+    let nextClaimAt = null;
 
-    if(canClaimInitially){
+    if (nextClaimAtString) {
+
+        const parsedDate =
+            new Date(nextClaimAtString);
+
+        if (!isNaN(parsedDate.getTime())) {
+
+            nextClaimAt = parsedDate;
+
+        }
+
+    }
+
+
+    function setReadyState(){
 
         timer.textContent = "READY";
 
@@ -400,87 +803,144 @@ function updateCountdown(){
         claimButton.textContent =
             "Claim Income";
 
-        return;
-
     }
 
 
-    const now = new Date();
+    function setWaitingState(
+        hours,
+        minutes,
+        seconds
+    ){
 
-    let difference =
-        nextClaimAt.getTime() - now.getTime();
-
-
-    if(difference <= 0){
-
-        timer.textContent = "READY";
-
-        timer.classList.add("claim-ready");
+        timer.classList.remove("claim-ready");
 
         timerLabel.textContent =
-            "Your daily income is ready to claim";
+            "Next claim available in";
 
-        claimButton.disabled = false;
+        timer.textContent =
+            String(hours).padStart(2,"0")
+            + ":"
+            + String(minutes).padStart(2,"0")
+            + ":"
+            + String(seconds).padStart(2,"0");
+
+        claimButton.disabled = true;
 
         claimButton.textContent =
-            "Claim Income";
-
-        return;
+            "Waiting For Next Claim";
 
     }
 
 
-    const totalSeconds =
-        Math.floor(difference / 1000);
+    function updateCountdown(){
+
+        /*
+            If the server already says the claim
+            is available, show READY immediately.
+        */
+
+        if(canClaimInitially){
+
+            setReadyState();
+
+            return;
+
+        }
 
 
-    const hours =
-        Math.floor(totalSeconds / 3600);
+        /*
+            Prevent JavaScript errors if the
+            server does not provide a valid date.
+        */
+
+        if(!nextClaimAt){
+
+            timer.textContent = "--:--:--";
+
+            timerLabel.textContent =
+                "Claim time unavailable";
+
+            claimButton.disabled = true;
+
+            claimButton.textContent =
+                "Please Try Again";
+
+            return;
+
+        }
 
 
-    const minutes =
-        Math.floor((totalSeconds % 3600) / 60);
+        const now =
+            new Date();
+
+        const difference =
+            nextClaimAt.getTime()
+            - now.getTime();
 
 
-    const seconds =
-        totalSeconds % 60;
+        if(difference <= 0){
+
+            setReadyState();
+
+            return;
+
+        }
 
 
-    timer.textContent =
-        String(hours).padStart(2,"0")
-        + ":"
-        + String(minutes).padStart(2,"0")
-        + ":"
-        + String(seconds).padStart(2,"0");
+        const totalSeconds =
+            Math.floor(difference / 1000);
 
 
-    claimButton.disabled = true;
-
-    claimButton.textContent =
-        "Waiting For Next Claim";
-
-}
+        const hours =
+            Math.floor(totalSeconds / 3600);
 
 
-function confirmClaim(){
+        const minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
 
-    if(claimButton.disabled){
 
-        return false;
+        const seconds =
+            totalSeconds % 60;
+
+
+        setWaitingState(
+            hours,
+            minutes,
+            seconds
+        );
 
     }
 
-    return confirm(
-        "Are you sure you want to claim your daily income?"
+
+    function confirmClaim(){
+
+        if(claimButton.disabled){
+
+            return false;
+
+        }
+
+
+        return confirm(
+            "Are you sure you want to claim your daily income?"
+        );
+
+    }
+
+
+    updateCountdown();
+
+    setInterval(
+        updateCountdown,
+        1000
     );
-
-}
-
-
-updateCountdown();
-
-setInterval(updateCountdown,1000);
 
 </script>{% endif %}
 
-</body></html>
+<script>
+
+    lucide.createIcons();
+
+</script></body></html>
