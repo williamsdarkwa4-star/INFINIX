@@ -1,913 +1,681 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>My Plan - Zenith Capital</title>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, Arial, sans-serif;
-        }
-
-        body {
-            background: #f1f5f9;
-            color: #334155;
-            min-height: 100vh;
-            padding-bottom: 80px;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .phone {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            margin: auto;
-            background: white;
-            position: relative;
-            padding-bottom: 85px;
-            box-shadow: 0 0 18px rgba(0,0,0,.05);
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-            padding: 25px 20px 22px;
-            background: linear-gradient(
-                to bottom,
-                #eff6ff,
-                #ffffff
-            );
-            text-align: center;
-        }
-
-        .header h1 {
-            color: #0f172a;
-            font-size: 22px;
-            font-weight: 750;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .container {
-            padding: 0 16px;
-        }
-
-        /* =========================
-           PLAN CARD
-        ========================= */
-
-        .plan-card {
-            background: white;
-            border: 1px solid #edf1f7;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,.04);
-            margin-bottom: 14px;
-        }
-
-        /* =========================
-           MACHINE IMAGE
-        ========================= */
-
-        .machine-photo {
-            width: 100%;
-            height: 190px;
-            background: #f8fafc;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .machine-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .machine-label {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #10144c;
-            color: white;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 700;
-        }
-
-        /* =========================
-           PLAN CONTENT
-        ========================= */
-
-        .plan-content {
-            padding: 16px;
-        }
-
-        .plan-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .plan-name {
-            color: #0f172a;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .active-badge {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 700;
-        }
-
-        /* =========================
-           PLAN DETAILS
-        ========================= */
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            padding: 11px 0;
-
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        .detail-value {
-            color: #0f172a;
-            font-size: 13px;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        /* =========================
-           COUNTDOWN
-        ========================= */
-
-        .countdown-card {
-            background: #10144c;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
-            box-shadow: 0 5px 15px rgba(16,20,76,.14);
-            color: white;
-        }
-
-        .countdown-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .countdown-title {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .daily-label {
-            font-size: 9px;
-            background: rgba(255,255,255,.12);
-            padding: 5px 8px;
-            border-radius: 20px;
-            color: #dbeafe;
-        }
-
-        .timer-box {
-            background: white;
-            border-radius: 12px;
-            padding: 17px 10px;
-            text-align: center;
-        }
-
-        .timer-label {
-            color: #64748b;
-            font-size: 11px;
-            margin-bottom: 6px;
-        }
-
-        #timer {
-            color: #10144c;
-            font-size: 34px;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: 2px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        #timer.ready {
-            color: #16a34a;
-            font-size: 26px;
-            letter-spacing: 0;
-        }
-
-        /* =========================
-           CLAIM BUTTON
-        ========================= */
-
-        .claim-btn {
-            width: 100%;
-            border: none;
-            border-radius: 11px;
-            padding: 13px;
-
-            margin-top: 12px;
-
-            background: white;
-            color: #10144c;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-        .claim-btn:disabled {
-            background: rgba(255,255,255,.25);
-            color: #cbd5e1;
-            cursor: not-allowed;
-        }
-
-        .claim-note {
-            text-align: center;
-            color: #cbd5e1;
-            font-size: 10px;
-            line-height: 16px;
-            margin-top: 9px;
-        }
-
-        /* =========================
-           NO PLAN
-        ========================= */
-
-        .empty-card {
-            background: white;
-            border-radius: 14px;
-            padding: 35px 20px;
-            text-align: center;
-            border: 1px solid #edf1f7;
-        }
-
-        .empty-icon {
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
-
-        .empty-card h2 {
-            color: #0f172a;
-            font-size: 18px;
-            margin-bottom: 7px;
-        }
-
-        .empty-card p {
-            color: #64748b;
-            font-size: 12px;
-            line-height: 19px;
-            margin-bottom: 17px;
-        }
-
-        .plans-btn {
-            display: block;
-            width: 100%;
-            background: #10144c;
-            color: white;
-            text-decoration: none;
-            padding: 13px;
-            border-radius: 11px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        /* =========================
-           BOTTOM NAV
-        ========================= */
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 440px;
-            height: 65px;
-
-            background: white;
-            border-top: 1px solid #e2e8f0;
-
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-
-            z-index: 1000;
-
-            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
-        }
-
-        .bottom-nav a {
-            position: relative;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            gap: 3px;
-
-            text-decoration: none;
-
-            color: #94a3b8;
-            font-size: 9px;
-        }
-
-        .bottom-nav svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .bottom-nav a.active {
-            color: #10144c;
-            font-weight: bold;
-        }
-
-        .bottom-nav a.active::after {
-            content: "";
-
-            position: absolute;
-            bottom: 0;
-            left: 25%;
-            right: 25%;
-
-            height: 3px;
-
-            background: #10144c;
-
-            border-radius: 4px 4px 0 0;
-        }
-
-        @media(max-width:360px) {
-
-            .header {
-                padding: 22px 15px;
-            }
-
-            .machine-photo {
-                height: 165px;
-            }
-
-            #timer {
-                font-size: 29px;
-            }
-
-            .container {
-                padding: 0 12px;
-            }
-        }
-    </style>
-</head>
-
-<body>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Plan - Zenith Capital</title><style>
 
-<div class="phone">
-
-    <!-- =========================
-         HEADER
-    ========================= -->
-
-    <div class="header">
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        <h1>My Plan</h1>
+body{
+    min-height:100vh;
+    background:#f4f7fb;
+    padding:20px 15px;
+    padding-bottom:40px;
+}
 
-        <p>
-            View your active plan and daily claim
-        </p>
+.container{
+    width:100%;
+    max-width:430px;
+    margin:auto;
+}
 
-    </div>
 
+/* =========================
+   HEADER
+========================= */
 
-    <div class="container">
+.header{
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    color:white;
 
-        {% if plan %}
+    padding:25px 20px;
 
-        <!-- =========================
-             ACTIVE PLAN
-        ========================= -->
+    border-radius:25px;
 
-        <div class="plan-card">
+    margin-bottom:18px;
 
-            <!-- KEEPING YOUR MACHINE PICTURE -->
+    box-shadow:0 10px 25px rgba(15,23,42,.18);
+}
 
-            <div class="machine-photo">
+.header-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-                <img
-                    src="{{ url_for('static', filename='images/machine.jpg') }}"
-                    alt="Machine"
-                >
+.header h1{
+    font-size:24px;
+    margin-bottom:5px;
+}
 
-                <div class="machine-label">
-                    ACTIVE PLAN
-                </div>
+.header p{
+    color:#dbeafe;
+    font-size:13px;
+}
 
-            </div>
+.status{
+    background:#dcfce7;
+    color:#15803d;
 
+    padding:7px 11px;
 
-            <div class="plan-content">
+    border-radius:20px;
 
-                <div class="plan-top">
+    font-size:11px;
+    font-weight:bold;
+}
 
-                    <div class="plan-name">
-                        {{ plan.plan_name or "My Plan" }}
-                    </div>
 
-                    <div class="active-badge">
-                        ACTIVE
-                    </div>
+/* =========================
+   PLAN CARD
+========================= */
 
-                </div>
+.plan-card{
+    background:white;
 
+    border-radius:25px;
 
-                <div class="detail-row">
+    padding:22px;
 
-                    <span class="detail-label">
-                        Investment
-                    </span>
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 
-                    <span class="detail-value">
-                        GHS {{ "%.2f"|format((plan.investment or 0)|float) }}
-                    </span>
+    margin-bottom:18px;
+}
 
-                </div>
 
+/* =========================
+   PLAN HEADER
+========================= */
 
-                <div class="detail-row">
+.plan-header{
+    display:flex;
+    align-items:center;
+    gap:15px;
 
-                    <span class="detail-label">
-                        Daily Income
-                    </span>
+    margin-bottom:20px;
+}
 
-                    <span class="detail-value">
-                        GHS {{ "%.2f"|format((plan.daily_income or 0)|float) }}
-                    </span>
+.plan-icon{
+    width:65px;
+    height:65px;
 
-                </div>
+    border-radius:18px;
 
+    background:linear-gradient(
+        135deg,
+        #dbeafe,
+        #eff6ff
+    );
 
-                <div class="detail-row">
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-                    <span class="detail-label">
-                        Duration
-                    </span>
+    font-size:30px;
+}
 
-                    <span class="detail-value">
-                        {{ plan.duration or 0 }} Days
-                    </span>
+.plan-title h2{
+    color:#0f172a;
+    font-size:20px;
+    margin-bottom:5px;
+}
 
-                </div>
+.plan-title p{
+    color:#64748b;
+    font-size:13px;
+}
 
 
-                <div class="detail-row">
+/* =========================
+   RUNNING BADGE
+========================= */
 
-                    <span class="detail-label">
-                        Status
-                    </span>
+.running{
+    display:flex;
+    align-items:center;
+    gap:7px;
 
-                    <span class="detail-value" style="color:#16a34a;">
-                        Active
-                    </span>
+    background:#f0fdf4;
 
-                </div>
+    border:1px solid #bbf7d0;
 
-            </div>
+    color:#15803d;
 
-        </div>
+    padding:10px 12px;
 
+    border-radius:12px;
 
-        <!-- =========================
-             24 HOUR COUNTDOWN
-        ========================= -->
+    font-size:13px;
+    font-weight:bold;
 
-        <div class="countdown-card">
+    margin-bottom:18px;
+}
 
-            <div class="countdown-heading">
+.dot{
+    width:8px;
+    height:8px;
 
-                <div class="countdown-title">
-                    Daily Income
-                </div>
+    background:#22c55e;
 
-                <div class="daily-label">
-                    24 HOUR CYCLE
-                </div>
+    border-radius:50%;
 
-            </div>
+    box-shadow:0 0 0 4px rgba(34,197,94,.12);
+}
 
 
-            <div class="timer-box">
+/* =========================
+   COUNTDOWN
+========================= */
 
-                <div
-                    class="timer-label"
-                    id="timerLabel"
-                >
-                    {% if can_claim %}
-                        Your daily income is ready
-                    {% else %}
-                        Next income available in
-                    {% endif %}
-                </div>
+.countdown-box{
+    background:#0f172a;
 
+    color:white;
 
-                <div id="timer">
+    border-radius:18px;
 
-                    {% if can_claim %}
-                        READY
-                    {% else %}
-                        24:00:00
-                    {% endif %}
+    padding:18px;
 
-                </div>
+    text-align:center;
 
-            </div>
+    margin-bottom:20px;
+}
 
+.countdown-label{
+    color:#94a3b8;
 
-            <form
-                method="POST"
-                action="{{ url_for('my_plan') }}"
-                onsubmit="return confirmClaim();"
-            >
+    font-size:12px;
 
-                <button
-                    type="submit"
-                    id="claimButton"
-                    class="claim-btn"
-                    {% if not can_claim %}disabled{% endif %}
-                >
+    margin-bottom:8px;
+}
 
-                    {% if can_claim %}
-                        Claim Daily Income
-                    {% else %}
-                        Waiting For Next Income
-                    {% endif %}
+.countdown{
+    font-size:32px;
 
-                </button>
+    font-weight:bold;
 
-            </form>
+    letter-spacing:2px;
 
+    color:white;
+}
 
-            <div class="claim-note">
-                The countdown is controlled by the server.
-                Refreshing this page will not reset the timer.
-            </div>
+.countdown-sub{
+    color:#94a3b8;
 
-        </div>
+    font-size:11px;
 
+    margin-top:7px;
+}
 
-        {% else %}
 
-        <!-- =========================
-             NO ACTIVE PLAN
-        ========================= -->
+/* =========================
+   DETAILS
+========================= */
 
-        <div class="empty-card">
+.details{
+    display:grid;
 
-            <div class="empty-icon">
-                📦
-            </div>
+    grid-template-columns:1fr 1fr;
 
-            <h2>
-                No Active Plan
-            </h2>
+    gap:10px;
+}
+
+.detail{
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:14px;
+
+    padding:14px;
+}
+
+.detail span{
+    display:block;
+
+    color:#64748b;
+
+    font-size:12px;
+
+    margin-bottom:6px;
+}
+
+.detail strong{
+    color:#0f172a;
+
+    font-size:16px;
+}
+
+
+/* =========================
+   DAILY INCOME
+========================= */
+
+.income-box{
+    margin-top:12px;
+
+    background:#eff6ff;
+
+    border:1px solid #bfdbfe;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.income-box span{
+    color:#475569;
+
+    font-size:13px;
+}
+
+.income-box strong{
+    color:#2563eb;
+
+    font-size:19px;
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.info{
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.info h3{
+    color:#0f172a;
+
+    font-size:17px;
+
+    margin-bottom:12px;
+}
+
+.info p{
+    color:#64748b;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   EMPTY PLAN
+========================= */
+
+.empty{
+    text-align:center;
+
+    padding:30px 15px;
+
+    color:#64748b;
+}
+
+.empty-icon{
+    font-size:45px;
+
+    margin-bottom:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:360px){
+
+    body{
+        padding:12px 10px;
+    }
+
+    .plan-card{
+        padding:18px;
+    }
+
+    .countdown{
+        font-size:27px;
+    }
+
+}
+
+</style></head><body><div class="container"><!-- HEADER -->
+
+<div class="header">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>
+                My Income
+            </h1>
 
             <p>
-                You currently do not have an active plan.
-                Purchase a plan to see it here.
+                Track your active plan
             </p>
-
-            <a
-                href="{{ url_for('plan') }}"
-                class="plans-btn"
-            >
-                View Available Plans
-            </a>
 
         </div>
 
-        {% endif %}
-
-    </div>
-
-
-    <!-- =========================
-         5 ITEM BOTTOM NAVIGATION
-         SAME AS PROFILE
-    ========================= -->
-
-    <div class="bottom-nav">
-
-        <a href="{{ url_for('dashboard') }}">
-
-            <i data-lucide="home"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('my_plan') }}"
-            class="active"
-        >
-
-            <i data-lucide="trending-up"></i>
-
-            <span>
-                Income
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i data-lucide="users"></i>
-
-            <span>
-                Team
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i data-lucide="share-2"></i>
-
-            <span>
-                Share
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('profile') }}">
-
-            <i data-lucide="user"></i>
-
-            <span>
-                My
-            </span>
-
-        </a>
+        <div class="status">
+            ACTIVE
+        </div>
 
     </div>
 
 </div>
 
 
-{% if plan %}
+{% if user_plan %}
 
-<script>
+<!-- PLAN -->
 
-    /*
-     * SERVER-CONTROLLED 24-HOUR COUNTDOWN
-     *
-     * Flask should provide:
-     *
-     * can_claim
-     * next_claim_at
-     */
+<div class="plan-card">
 
-    const timer =
-        document.getElementById("timer");
 
-    const timerLabel =
-        document.getElementById("timerLabel");
+    <div class="plan-header">
 
-    const claimButton =
-        document.getElementById("claimButton");
+        <div class="plan-icon">
+            💼
+        </div>
 
+        <div class="plan-title">
 
-    const canClaim =
-        {{ 'true' if can_claim else 'false' }};
+            <h2>
+                {{ user_plan.plan_name }}
+            </h2>
 
+            <p>
+                Your active plan
+            </p>
 
-    const nextClaimString =
-        "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
+        </div>
 
+    </div>
 
-    let nextClaimAt = null;
 
+    <!-- RUNNING -->
 
-    if (nextClaimString) {
+    <div class="running">
 
-        nextClaimAt =
-            new Date(nextClaimString);
+        <span class="dot"></span>
 
-    }
+        Running
 
+    </div>
 
-    /*
-     * Show READY when 24 hours
-     * have elapsed.
-     */
 
-    function showReady() {
+    <!-- COUNTDOWN -->
 
-        timer.textContent =
-            "READY";
+    <div class="countdown-box">
 
-        timer.classList.add("ready");
+        <div class="countdown-label">
+            NEXT INCOME IN
+        </div>
 
-        timerLabel.textContent =
-            "Your daily income is ready";
+        <div
+            class="countdown"
+            id="countdown"
+        >
+            24:00:00
+        </div>
 
-        claimButton.disabled =
-            false;
+        <div class="countdown-sub">
+            Settlement countdown
+        </div>
 
-        claimButton.textContent =
-            "Claim Daily Income";
+    </div>
 
-    }
 
+    <!-- DETAILS -->
 
-    /*
-     * Update countdown every second.
-     */
+    <div class="details">
 
-    function updateCountdown() {
+        <div class="detail">
 
-        if (canClaim) {
+            <span>
+                Investment
+            </span>
 
-            showReady();
+            <strong>
+                GHS {{ "%.2f"|format(user_plan.investment) }}
+            </strong>
 
-            return;
+        </div>
 
-        }
 
+        <div class="detail">
 
-        /*
-         * If Flask did not provide
-         * a valid next claim time.
-         */
+            <span>
+                Daily Income
+            </span>
 
-        if (
-            !nextClaimAt ||
-            isNaN(nextClaimAt.getTime())
-        ) {
+            <strong>
+                GHS {{ "%.2f"|format(user_plan.daily_income) }}
+            </strong>
 
-            timer.textContent =
-                "WAIT";
+        </div>
 
-            timerLabel.textContent =
-                "Checking next claim time";
 
-            claimButton.disabled =
-                true;
+        <div class="detail">
 
-            claimButton.textContent =
-                "Waiting For Next Income";
+            <span>
+                Duration
+            </span>
 
-            return;
+            <strong>
+                {{ user_plan.duration }} Days
+            </strong>
 
-        }
+        </div>
 
 
-        const now =
-            new Date();
+        <div class="detail">
 
+            <span>
+                Status
+            </span>
 
-        const difference =
-            nextClaimAt.getTime()
-            - now.getTime();
+            <strong>
+                Active
+            </strong>
 
+        </div>
 
-        /*
-         * 24 hours completed.
-         */
+    </div>
 
-        if (difference <= 0) {
 
-            showReady();
+    <div class="income-box">
 
-            return;
+        <span>
+            Expected Daily Income
+        </span>
 
-        }
+        <strong>
+            GHS {{ "%.2f"|format(user_plan.daily_income) }}
+        </strong>
 
+    </div>
 
-        const totalSeconds =
-            Math.floor(
-                difference / 1000
-            );
 
+</div>
 
-        const hours =
-            Math.floor(
-                totalSeconds / 3600
-            );
 
+{% else %}
 
-        const minutes =
-            Math.floor(
-                (totalSeconds % 3600) / 60
-            );
 
+<!-- NO PLAN -->
 
-        const seconds =
-            totalSeconds % 60;
+<div class="plan-card">
 
+    <div class="empty">
 
-        timer.textContent =
-            String(hours).padStart(2, "0")
-            + ":"
-            + String(minutes).padStart(2, "0")
-            + ":"
-            + String(seconds).padStart(2, "0");
+        <div class="empty-icon">
+            💼
+        </div>
 
+        <h2>
+            No Active Plan
+        </h2>
 
-        timer.classList.remove("ready");
+        <p style="margin-top:8px;">
+            You currently don't have an active plan.
+        </p>
 
+    </div>
 
-        timerLabel.textContent =
-            "Next income available in";
+</div>
 
-
-        claimButton.disabled =
-            true;
-
-        claimButton.textContent =
-            "Waiting For Next Income";
-
-    }
-
-
-    function confirmClaim() {
-
-        if (claimButton.disabled) {
-
-            return false;
-
-        }
-
-
-        return confirm(
-            "Are you sure you want to claim your daily income?"
-        );
-
-    }
-
-
-    updateCountdown();
-
-
-    setInterval(
-        updateCountdown,
-        1000
-    );
-
-</script>
 
 {% endif %}
 
 
-<script>
+<!-- INFORMATION -->
+
+<div class="info">
+
+    <h3>
+        Income Information
+    </h3>
+
+    <p>
+        Your countdown shows the time remaining until
+        the next scheduled settlement. The timer continues
+        running when you refresh the page.
+    </p>
+
+</div>
+
+</div><script>
+
+/*
+   24-HOUR COUNTDOWN
+
+   The first time the page opens, an end time is created.
+   The end time is stored in the browser so refreshing
+   the page does not reset the countdown.
+*/
+
+const STORAGE_KEY = "zenith_capital_income_end";
+
+const countdown =
+    document.getElementById("countdown");
+
+
+function createEndTime(){
+
+    const end =
+        Date.now() + (24 * 60 * 60 * 1000);
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        end
+    );
+
+    return end;
+}
+
+
+function getEndTime(){
+
+    let end =
+        localStorage.getItem(STORAGE_KEY);
+
+    if(!end){
+
+        end = createEndTime();
+
+    }
+
+    return parseInt(end);
+
+}
+
+
+function updateCountdown(){
+
+    if(!countdown){
+        return;
+    }
+
+    let end =
+        getEndTime();
+
+    let remaining =
+        end - Date.now();
+
 
     /*
-     * Activate Lucide icons.
-     */
+       When the countdown reaches zero,
+       start another 24-hour cycle.
+    */
 
-    lucide.createIcons();
+    if(remaining <= 0){
 
-</script>
+        end =
+            createEndTime();
 
-</body>
-</html>
+        remaining =
+            end - Date.now();
+
+    }
+
+
+    const totalSeconds =
+        Math.floor(
+            remaining / 1000
+        );
+
+
+    const hours =
+        Math.floor(
+            totalSeconds / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    countdown.textContent =
+
+        String(hours).padStart(2,"0")
+        + ":" +
+
+        String(minutes).padStart(2,"0")
+        + ":" +
+
+        String(seconds).padStart(2,"0");
+
+}
+
+
+updateCountdown();
+
+setInterval(
+    updateCountdown,
+    1000
+);
+
+</script></body></html>
