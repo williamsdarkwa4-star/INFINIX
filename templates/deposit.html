@@ -2,10 +2,17 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Deposit - Zenith Capital</title>
+
+<!-- Font Awesome -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
 
 <style>
 
@@ -20,17 +27,39 @@ body{
     background:#f4f7fb;
     min-height:100vh;
     padding:20px;
-    padding-bottom:40px;
+    padding-bottom:100px;
 }
+
+
+/* =========================
+   MAIN PHONE FRAME
+========================= */
+
+.phone{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    margin:auto;
+    position:relative;
+}
+
+
+/* =========================
+   DEPOSIT CARD
+========================= */
 
 .card{
     background:white;
-    max-width:430px;
-    margin:auto;
+    width:100%;
     padding:28px;
     border-radius:25px;
     box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
+
+
+/* =========================
+   LOGO
+========================= */
 
 .logo{
     text-align:center;
@@ -47,11 +76,21 @@ body{
     margin-bottom:25px;
 }
 
+
+/* =========================
+   TITLE
+========================= */
+
 h2{
     text-align:center;
     color:#0f172a;
     margin-bottom:18px;
 }
+
+
+/* =========================
+   LABELS
+========================= */
 
 label{
     display:block;
@@ -60,6 +99,11 @@ label{
     color:#334155;
     margin-bottom:7px;
 }
+
+
+/* =========================
+   INPUTS
+========================= */
 
 input[type="number"],
 input[type="tel"],
@@ -78,6 +122,11 @@ input:focus{
     border-color:#2563eb;
     background:white;
 }
+
+
+/* =========================
+   QUICK AMOUNTS
+========================= */
 
 .amount-buttons{
     display:flex;
@@ -98,6 +147,15 @@ input:focus{
     cursor:pointer;
 }
 
+.amount-buttons button:active{
+    transform:scale(.97);
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
 .next-button,
 .submit-button{
     width:100%;
@@ -116,6 +174,16 @@ input:focus{
     cursor:not-allowed;
 }
 
+.submit-button:active,
+.next-button:active{
+    transform:scale(.99);
+}
+
+
+/* =========================
+   PAYMENT CARD
+========================= */
+
 .payment-card{
     display:none;
     margin-top:25px;
@@ -129,6 +197,11 @@ input:focus{
     color:#1e40af;
     margin-bottom:15px;
 }
+
+
+/* =========================
+   PAYMENT NUMBER
+========================= */
 
 .payment-number{
     display:flex;
@@ -154,12 +227,22 @@ input:focus{
     cursor:pointer;
 }
 
+
+/* =========================
+   AMOUNT DISPLAY
+========================= */
+
 .amount-display{
     font-size:20px;
     font-weight:bold;
     color:#2563eb;
     margin-bottom:12px;
 }
+
+
+/* =========================
+   WARNING
+========================= */
 
 .warning{
     background:#fff7ed;
@@ -172,6 +255,11 @@ input:focus{
     margin-bottom:18px;
 }
 
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
 .success-message{
     display:none;
     background:#dcfce7;
@@ -182,6 +270,11 @@ input:focus{
     margin-bottom:15px;
     text-align:center;
 }
+
+
+/* =========================
+   NOTE
+========================= */
 
 .note{
     text-align:center;
@@ -195,226 +288,497 @@ input:focus{
     margin-top:15px;
 }
 
+
+/* =========================
+   5-ITEM BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:67px;
+
+    background:white;
+    border-top:1px solid #e5e7eb;
+
+    display:flex;
+    justify-content:center;
+
+    z-index:9999;
+
+    box-shadow:0 -3px 12px rgba(0,0,0,.04);
+}
+
+.bottom-nav-inner{
+    width:100%;
+    max-width:440px;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    align-items:center;
+}
+
+.bottom-nav a{
+    height:100%;
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    gap:3px;
+
+    text-decoration:none;
+
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:500;
+}
+
+.bottom-nav i{
+    font-size:17px;
+}
+
+.bottom-nav a.active{
+    color:#0b1c4d;
+    font-weight:700;
+}
+
+.bottom-nav a.active::after{
+    content:"";
+
+    position:absolute;
+    bottom:0;
+    left:25%;
+    right:25%;
+
+    height:3px;
+
+    background:#0b1c4d;
+
+    border-radius:4px 4px 0 0;
+}
+
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+    body{
+        padding:12px;
+        padding-bottom:90px;
+    }
+
+    .card{
+        padding:20px;
+        border-radius:20px;
+    }
+
+    .logo{
+        font-size:27px;
+    }
+
+    .bottom-nav{
+        height:64px;
+    }
+
+    .bottom-nav i{
+        font-size:16px;
+    }
+
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<div class="card">
-
-    <div class="logo">
-        ZC
-    </div>
-
-    <p class="subtitle">
-        Zenith Capital Deposit
-    </p>
-
-    <h2>
-        Deposit Funds
-    </h2>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <div class="success-message"
-                 style="display:block;">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endwith %}
+<div class="phone">
 
 
-    <!-- STEP 1 -->
+    <!-- =========================
+         MAIN DEPOSIT CARD
+    ========================= -->
 
-    <div id="stepOne">
+    <div class="card">
 
-        <label for="phone">
-            Phone Number
-        </label>
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Enter your phone number"
-            required
-        >
-
-
-        <label for="amount">
-            Deposit Amount
-        </label>
-
-        <input
-            type="number"
-            id="amount"
-            placeholder="Minimum GHS 45"
-            min="45"
-            step="0.01"
-            required
-        >
-
-
-        <div class="amount-buttons">
-
-            <button type="button" onclick="setAmount(45)">
-                GHS 45
-            </button>
-
-            <button type="button" onclick="setAmount(50)">
-                GHS 50
-            </button>
-
-            <button type="button" onclick="setAmount(100)">
-                GHS 100
-            </button>
-
-            <button type="button" onclick="setAmount(200)">
-                GHS 200
-            </button>
-
-            <button type="button" onclick="setAmount(300)">
-                GHS 300
-            </button>
-
-            <button type="button" onclick="setAmount(400)">
-                GHS 400
-            </button>
-
+        <div class="logo">
+            ZC
         </div>
 
 
-        <button
-            type="button"
-            class="next-button"
-            onclick="showPaymentCard()">
-
-            Next
-
-        </button>
-
-    </div>
-
-
-    <!-- STEP 2 -->
-
-    <div
-        class="payment-card"
-        id="paymentCard">
-
-        <h3>
-            Payment Instructions
-        </h3>
-
-
-        <div class="amount-display">
-            Amount: GHS
-            <span id="displayAmount">0.00</span>
-        </div>
-
-
-        <p>
-            Send the exact amount to the payment number below.
+        <p class="subtitle">
+            Zenith Capital Deposit
         </p>
 
 
-        <div class="payment-number">
-
-            <input
-                type="text"
-                id="paymentNumber"
-                value="0257425844"
-                readonly
-            >
-
-            <button
-                type="button"
-                class="copy-button"
-                onclick="copyNumber()">
-
-                Copy
-
-            </button>
-
-        </div>
+        <h2>
+            Deposit Funds
+        </h2>
 
 
-        <div class="warning">
+        <!-- FLASH MESSAGES -->
 
-            ⚠️ After making the payment, take a clear screenshot
-            showing the successful transaction. Upload the screenshot
-            below and submit your deposit request.
+        {% with messages = get_flashed_messages(with_categories=true) %}
 
-        </div>
+            {% for category, message in messages %}
 
+                <div
+                    class="success-message"
+                    style="display:block;"
+                >
+                    {{ message }}
+                </div>
 
-        <form
-            method="POST"
-            action="{{ url_for('deposit') }}"
-            enctype="multipart/form-data"
-            onsubmit="return validateDeposit()">
+            {% endfor %}
 
-
-            <input
-                type="hidden"
-                name="amount"
-                id="finalAmount"
-            >
+        {% endwith %}
 
 
-            <input
-                type="hidden"
-                name="phone"
-                id="finalPhone"
-            >
+        <!-- =========================
+             STEP 1
+        ========================= -->
+
+        <div id="stepOne">
 
 
-            <label class="file-label"
-                   for="screenshot">
-
-                Payment Screenshot
-
+            <label for="phone">
+                Phone Number
             </label>
 
 
             <input
-                type="file"
-                id="screenshot"
-                name="screenshot"
-                accept="image/*"
+                type="tel"
+                id="phone"
+                placeholder="Enter your phone number"
                 required
             >
 
 
-            <button
-                type="submit"
-                class="submit-button">
+            <label for="amount">
+                Deposit Amount
+            </label>
 
-                Submit Deposit Request
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Minimum GHS 45"
+                min="45"
+                step="0.01"
+                required
+            >
+
+
+            <!-- QUICK AMOUNTS -->
+
+            <div class="amount-buttons">
+
+                <button
+                    type="button"
+                    onclick="setAmount(45)"
+                >
+                    GHS 45
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setAmount(50)"
+                >
+                    GHS 50
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setAmount(100)"
+                >
+                    GHS 100
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setAmount(200)"
+                >
+                    GHS 200
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setAmount(300)"
+                >
+                    GHS 300
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setAmount(400)"
+                >
+                    GHS 400
+                </button>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="next-button"
+                onclick="showPaymentCard()"
+            >
+
+                Next
 
             </button>
 
-        </form>
+        </div>
+
+
+        <!-- =========================
+             STEP 2
+        ========================= -->
+
+        <div
+            class="payment-card"
+            id="paymentCard"
+        >
+
+            <h3>
+                Payment Instructions
+            </h3>
+
+
+            <div class="amount-display">
+
+                Amount: GHS
+
+                <span id="displayAmount">
+                    0.00
+                </span>
+
+            </div>
+
+
+            <p>
+                Send the exact amount to the payment number below.
+            </p>
+
+
+            <!-- PAYMENT NUMBER -->
+
+            <div class="payment-number">
+
+                <input
+                    type="text"
+                    id="paymentNumber"
+                    value="0257425844"
+                    readonly
+                >
+
+
+                <button
+                    type="button"
+                    class="copy-button"
+                    onclick="copyNumber()"
+                >
+
+                    Copy
+
+                </button>
+
+            </div>
+
+
+            <!-- WARNING -->
+
+            <div class="warning">
+
+                ⚠️ After making the payment, take a clear screenshot
+                showing the successful transaction. Upload the screenshot
+                below and submit your deposit request.
+
+            </div>
+
+
+            <!-- DEPOSIT FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('deposit') }}"
+                enctype="multipart/form-data"
+                onsubmit="return validateDeposit()"
+            >
+
+
+                <input
+                    type="hidden"
+                    name="amount"
+                    id="finalAmount"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="phone"
+                    id="finalPhone"
+                >
+
+
+                <label
+                    class="file-label"
+                    for="screenshot"
+                >
+
+                    Payment Screenshot
+
+                </label>
+
+
+                <input
+                    type="file"
+                    id="screenshot"
+                    name="screenshot"
+                    accept="image/*"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+
+                    Submit Deposit Request
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- NOTE -->
+
+        <div class="note">
+
+            Minimum deposit: GHS 45.<br>
+
+            Your balance will only be credited after the
+            deposit has been reviewed and approved.
+
+        </div>
 
     </div>
 
 
-    <div class="note">
+    <!-- =========================
+         5-ITEM BOTTOM NAVIGATION
+    ========================= -->
 
-        Minimum deposit: GHS 45.<br>
-        Your balance will only be credited after the
-        deposit has been reviewed and approved.
+    <nav class="bottom-nav">
 
-    </div>
+        <div class="bottom-nav-inner">
+
+
+            <!-- HOME -->
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="active"
+            >
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <!-- INCOME -->
+
+            <a
+                href="{{ url_for('my_plan') }}"
+            >
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    Income
+                </span>
+
+            </a>
+
+
+            <!-- TEAM -->
+
+            <a
+                href="{{ url_for('team') }}"
+            >
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>
+                    Team
+                </span>
+
+            </a>
+
+
+            <!-- SHARE -->
+
+            <a
+                href="{{ url_for('team') }}"
+            >
+
+                <i class="fa-solid fa-share-nodes"></i>
+
+                <span>
+                    Share
+                </span>
+
+            </a>
+
+
+            <!-- MY -->
+
+            <a
+                href="{{ url_for('profile') }}"
+            >
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>
+                    My
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </nav>
 
 </div>
 
 
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
 <script>
+
 
 function setAmount(value){
 
-    document.getElementById("amount").value = value;
+    document.getElementById("amount").value =
+        value;
 
 }
 
@@ -424,13 +788,18 @@ function showPaymentCard(){
     const phone =
         document.getElementById("phone").value.trim();
 
+
     const amount =
-        parseFloat(document.getElementById("amount").value);
+        parseFloat(
+            document.getElementById("amount").value
+        );
 
 
     if(!phone){
 
-        alert("Please enter your phone number.");
+        alert(
+            "Please enter your phone number."
+        );
 
         return;
 
@@ -439,34 +808,51 @@ function showPaymentCard(){
 
     if(!amount || amount < 45){
 
-        alert("Minimum deposit is GHS 45.");
+        alert(
+            "Minimum deposit is GHS 45."
+        );
 
         return;
 
     }
 
 
-    document.getElementById("displayAmount").textContent =
+    document.getElementById(
+        "displayAmount"
+    ).textContent =
         amount.toFixed(2);
 
-    document.getElementById("finalAmount").value =
+
+    document.getElementById(
+        "finalAmount"
+    ).value =
         amount.toFixed(2);
 
-    document.getElementById("finalPhone").value =
+
+    document.getElementById(
+        "finalPhone"
+    ).value =
         phone;
 
 
-    document.getElementById("paymentCard").style.display =
+    document.getElementById(
+        "paymentCard"
+    ).style.display =
         "block";
 
 
-    document.getElementById("stepOne").style.display =
+    document.getElementById(
+        "stepOne"
+    ).style.display =
         "none";
 
 
     window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
     });
 
 }
@@ -475,27 +861,38 @@ function showPaymentCard(){
 function copyNumber(){
 
     const number =
-        document.getElementById("paymentNumber").value;
+        document.getElementById(
+            "paymentNumber"
+        ).value;
 
 
     if(!number){
 
-        alert("Payment number has not been configured.");
+        alert(
+            "Payment number has not been configured."
+        );
 
         return;
 
     }
 
 
-    navigator.clipboard.writeText(number)
+    navigator.clipboard
+        .writeText(number)
+
         .then(function(){
 
-            alert("Payment number copied.");
+            alert(
+                "Payment number copied."
+            );
 
         })
+
         .catch(function(){
 
-            alert("Please copy the number manually.");
+            alert(
+                "Please copy the number manually."
+            );
 
         });
 
@@ -505,15 +902,24 @@ function copyNumber(){
 function validateDeposit(){
 
     const amount =
-        parseFloat(document.getElementById("finalAmount").value);
+        parseFloat(
+            document.getElementById(
+                "finalAmount"
+            ).value
+        );
+
 
     const screenshot =
-        document.getElementById("screenshot").files[0];
+        document.getElementById(
+            "screenshot"
+        ).files[0];
 
 
     if(!amount || amount < 45){
 
-        alert("Minimum deposit is GHS 45.");
+        alert(
+            "Minimum deposit is GHS 45."
+        );
 
         return false;
 
@@ -522,7 +928,9 @@ function validateDeposit(){
 
     if(!screenshot){
 
-        alert("Please upload your payment screenshot.");
+        alert(
+            "Please upload your payment screenshot."
+        );
 
         return false;
 
@@ -534,6 +942,7 @@ function validateDeposit(){
 }
 
 </script>
+
 
 </body>
 
