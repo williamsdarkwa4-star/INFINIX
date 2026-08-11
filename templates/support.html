@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>Support Center - Zenith Capital</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Support Center - Zenith Capital</title><!-- Font Awesome --><link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+><style>
 
 *{
     margin:0;
@@ -16,280 +11,708 @@
     font-family:Arial,sans-serif;
 }
 
-
 body{
-    background:#f4f7fb;
-    padding-bottom:80px;
+    background:#f1f4f9;
+    min-height:100vh;
+    padding-bottom:85px;
+    color:#334155;
 }
 
 
+/* =========================
+   PHONE FRAME
+========================= */
+
+.phone{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    margin:auto;
+    background:#f1f4f9;
+    position:relative;
+}
+
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
-
-    background:linear-gradient(135deg,#0f172a,#2563eb);
+    background:#0b1c4d;
     color:white;
-    padding:30px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
+    padding:25px 20px 28px;
+    border-radius:0 0 24px 24px;
+    box-shadow:0 5px 15px rgba(11,28,77,.15);
+}
 
+.header-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+.header-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:rgba(255,255,255,.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.header-text{
+    flex:1;
+    margin-left:14px;
+}
+
+.header-text h1{
+    font-size:21px;
+    margin-bottom:5px;
+}
+
+.header-text p{
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+.header-badge{
+    background:#2563eb;
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:bold;
 }
 
 
+/* =========================
+   INTRODUCTION
+========================= */
 
-.container{
+.intro{
+    padding:18px 16px 5px;
+}
 
-    padding:20px;
+.intro-card{
+    background:white;
+    border-radius:16px;
+    padding:17px;
+    border:1px solid #e8edf3;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 3px 10px rgba(0,0,0,.04);
+}
 
+.intro-icon{
+    width:45px;
+    height:45px;
+    flex-shrink:0;
+    border-radius:13px;
+    background:#eff6ff;
+    color:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+}
+
+.intro-text h3{
+    font-size:14px;
+    color:#0f172a;
+    margin-bottom:4px;
+}
+
+.intro-text p{
+    font-size:11px;
+    color:#64748b;
+    line-height:1.5;
 }
 
 
+/* =========================
+   SUPPORT SECTION
+========================= */
+
+.section{
+    padding:16px;
+}
+
+.section-title{
+    font-size:14px;
+    font-weight:bold;
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+
+/* =========================
+   SUPPORT CARDS
+========================= */
 
 .support-card{
-
     background:white;
-    padding:25px;
-    border-radius:20px;
-    margin-bottom:18px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    text-align:center;
-
-}
-
-
-
-.icon{
-
-    font-size:35px;
-    margin-bottom:15px;
-
-}
-
-
-
-.support-card h2{
-
-    color:#2563eb;
+    border-radius:16px;
+    padding:17px;
     margin-bottom:10px;
-
+    border:1px solid #e8edf3;
+    box-shadow:0 3px 10px rgba(0,0,0,.04);
 }
 
+.support-top{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    margin-bottom:14px;
+}
 
+.support-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    flex-shrink:0;
+}
 
-.support-card p{
+.telegram{
+    background:#e8f4ff;
+    color:#229ed9;
+}
 
+.whatsapp{
+    background:#eafaf0;
+    color:#16a34a;
+}
+
+.customer{
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+.support-info{
+    flex:1;
+}
+
+.support-info h2{
+    font-size:15px;
+    color:#0f172a;
+    margin-bottom:4px;
+}
+
+.support-info p{
+    font-size:11px;
     color:#64748b;
-    margin-bottom:15px;
+    line-height:1.4;
+}
 
+.status{
+    font-size:9px;
+    font-weight:bold;
+    color:#16a34a;
+    background:#dcfce7;
+    padding:4px 7px;
+    border-radius:20px;
 }
 
 
+/* =========================
+   SUPPORT BUTTON
+========================= */
 
-.btn{
-
-    display:block;
+.support-btn{
     width:100%;
-    padding:15px;
-    border-radius:15px;
-    background:#2563eb;
+    height:43px;
+    border:none;
+    border-radius:11px;
+    background:#0b1c4d;
     color:white;
     text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-size:12px;
     font-weight:bold;
+}
 
+.support-btn:active{
+    transform:scale(.98);
+}
+
+.support-btn i{
+    font-size:13px;
 }
 
 
+/* =========================
+   INFORMATION CARD
+========================= */
+
+.info-card{
+    background:#0b1c4d;
+    color:white;
+    border-radius:17px;
+    padding:18px;
+    margin-top:3px;
+    box-shadow:0 5px 15px rgba(11,28,77,.15);
+}
+
+.info-card h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.info-card p{
+    color:#cbd5e1;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.info-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:13px;
+}
+
+.info-row i{
+    color:#60a5fa;
+    font-size:14px;
+}
+
+.info-row span{
+    font-size:11px;
+    color:#e2e8f0;
+}
 
 
-/* Bottom Navigation */
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
 
 .bottom-nav{
-
     position:fixed;
     bottom:0;
     left:0;
-    width:100%;
+    right:0;
+    height:67px;
     background:white;
+    border-top:1px solid #e2e8f0;
     display:flex;
-    justify-content:space-around;
-    padding:15px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-
+    justify-content:center;
+    z-index:9999;
+    box-shadow:0 -3px 12px rgba(0,0,0,.05);
 }
 
-
+.bottom-nav-inner{
+    width:100%;
+    max-width:440px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    align-items:center;
+}
 
 .bottom-nav a{
-
+    height:100%;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
     text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
+    color:#94a3b8;
+    font-size:9px;
+    font-weight:500;
+}
 
+.bottom-nav i{
+    font-size:18px;
+}
+
+.bottom-nav a.active{
+    color:#0b1c4d;
+    font-weight:bold;
+}
+
+.bottom-nav a.active::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:25%;
+    right:25%;
+    height:3px;
+    background:#0b1c4d;
+    border-radius:4px 4px 0 0;
 }
 
 
-</style>
+/* =========================
+   SMALL SCREEN
+========================= */
 
-</head>
+@media(max-width:360px){
+
+    .header{
+        padding:22px 15px 25px;
+    }
+
+    .section,
+    .intro{
+        padding-left:12px;
+        padding-right:12px;
+    }
+
+    .support-card{
+        padding:14px;
+    }
+
+    .header-text h1{
+        font-size:19px;
+    }
+
+    .bottom-nav{
+        height:64px;
+    }
+
+    .bottom-nav i{
+        font-size:16px;
+    }
+
+}
+
+</style></head><body><div class="phone"><!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="header-top">
+
+        <div class="header-icon">
+            <i class="fa-solid fa-headset"></i>
+        </div>
+
+        <div class="header-text">
+
+            <h1>
+                Support Center
+            </h1>
+
+            <p>
+                Zenith Capital assistance
+            </p>
+
+        </div>
+
+        <div class="header-badge">
+            ONLINE
+        </div>
+
+    </div>
+
+</header>
 
 
-<body>
+<!-- =========================
+     INTRO
+========================= -->
 
+<div class="intro">
 
+    <div class="intro-card">
 
-<div class="header">
+        <div class="intro-icon">
+            <i class="fa-solid fa-circle-question"></i>
+        </div>
 
-<h1>Support Center</h1>
+        <div class="intro-text">
 
-<p>Get help and stay connected</p>
+            <h3>
+                How can we help?
+            </h3>
+
+            <p>
+                Choose a support option below to get assistance
+                or receive the latest platform updates.
+            </p>
+
+        </div>
+
+    </div>
 
 </div>
 
 
+<!-- =========================
+     SUPPORT OPTIONS
+========================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        Contact & Community
+    </div>
 
 
+    <!-- TELEGRAM -->
 
-<div class="container">
+    <div class="support-card">
+
+        <div class="support-top">
+
+            <div class="support-icon telegram">
+                <i class="fa-brands fa-telegram"></i>
+            </div>
+
+            <div class="support-info">
+
+                <h2>
+                    Telegram Community
+                </h2>
+
+                <p>
+                    Get announcements, updates and community
+                    information.
+                </p>
+
+            </div>
+
+            <span class="status">
+                ACTIVE
+            </span>
+
+        </div>
+
+        <a
+            class="support-btn"
+            href="https://t.me/ZenithCapital5567"
+            target="_blank"
+            rel="noopener"
+        >
+
+            <i class="fa-brands fa-telegram"></i>
+
+            Join Telegram
+
+        </a>
+
+    </div>
 
 
+    <!-- WHATSAPP -->
+
+    <div class="support-card">
+
+        <div class="support-top">
+
+            <div class="support-icon whatsapp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </div>
+
+            <div class="support-info">
+
+                <h2>
+                    WhatsApp Community
+                </h2>
+
+                <p>
+                    Connect with the community and receive
+                    important updates.
+                </p>
+
+            </div>
+
+            <span class="status">
+                ACTIVE
+            </span>
+
+        </div>
+
+        <a
+            class="support-btn"
+            href="https://t.me/ZenithCapital5567"
+            target="_blank"
+            rel="noopener"
+        >
+
+            <i class="fa-brands fa-whatsapp"></i>
+
+            Join WhatsApp
+
+        </a>
+
+    </div>
 
 
+    <!-- CUSTOMER SERVICE -->
 
-<!-- Telegram -->
+    <div class="support-card">
 
-<div class="support-card">
+        <div class="support-top">
 
-<div class="icon">
-📢
+            <div class="support-icon customer">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+
+            <div class="support-info">
+
+                <h2>
+                    Customer Service
+                </h2>
+
+                <p>
+                    Contact the support team for assistance
+                    with your account.
+                </p>
+
+            </div>
+
+            <span class="status">
+                ONLINE
+            </span>
+
+        </div>
+
+        <a
+            class="support-btn"
+            href="https://t.me/ZenithCapital6556"
+            target="_blank"
+            rel="noopener"
+        >
+
+            <i class="fa-brands fa-telegram"></i>
+
+            Contact Support
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         SUPPORT INFORMATION
+    ========================= -->
+
+    <div class="info-card">
+
+        <h3>
+            Support Information
+        </h3>
+
+        <p>
+            For account-related assistance, please use the
+            official support channel and provide the relevant
+            information needed to identify your request.
+        </p>
+
+        <div class="info-row">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Never share your password or security PIN.
+            </span>
+
+        </div>
+
+        <div class="info-row">
+
+            <i class="fa-solid fa-clock"></i>
+
+            <span>
+                Please allow time for your request to be reviewed.
+            </span>
+
+        </div>
+
+    </div>
+
 </div>
 
 
-<h2>
-Join Telegram Group
-</h2>
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
 
+<nav class="bottom-nav">
 
-<p>
-Get latest updates and announcements.
-</p>
+    <div class="bottom-nav-inner">
 
 
-<a class="btn" href="https://t.me/ZenithCapital5567" target="_blank">
+        <a
+            href="{{ url_for('dashboard') }}"
+        >
 
-Join Telegram
+            <i class="fa-solid fa-house"></i>
 
-</a>
+            <span>
+                Home
+            </span>
 
+        </a>
 
-</div>
 
+        <a
+            href="{{ url_for('my_plan') }}"
+        >
 
+            <i class="fa-solid fa-chart-line"></i>
 
+            <span>
+                Income
+            </span>
 
+        </a>
 
 
+        <a
+            href="{{ url_for('team') }}"
+        >
 
-<!-- WhatsApp -->
+            <i class="fa-solid fa-users"></i>
 
-<div class="support-card">
+            <span>
+                Team
+            </span>
 
-<div class="icon">
-💬
-</div>
+        </a>
 
 
-<h2>
-Join WhatsApp Group
-</h2>
+        <a
+            href="{{ url_for('team') }}"
+        >
 
+            <i class="fa-solid fa-share-nodes"></i>
 
-<p>
-Connect with members and receive updates.
-</p>
+            <span>
+                Share
+            </span>
 
+        </a>
 
-<a class="btn" href="https://t.me/ZenithCapital5567" target="_blank">
 
-Join WhatsApp
+        <a
+            href="{{ url_for('profile') }}"
+            class="active"
+        >
 
-</a>
+            <i class="fa-solid fa-user"></i>
 
+            <span>
+                My
+            </span>
 
-</div>
+        </a>
 
 
+    </div>
 
+</nav>
 
-
-
-
-
-<!-- Customer Service -->
-
-<div class="support-card">
-
-<div class="icon">
-👨‍💼
-</div>
-
-
-<h2>
-Contact Customer Service
-</h2>
-
-
-<p>
-Get assistance from our support team.
-</p>
-
-
-<a class="btn" href="https://t.me/ZenithCapital6556" target="_blank">
-
-Contact Support
-
-</a>
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-<!-- Bottom Buttons -->
-
-<div class="bottom-nav">
-
-
-<a href="/dashboard">
-🏠<br>
-Home
-</a>
-
-
-<a href="/my_plan">
-💼<br>
-My Plan
-</a>
-
-
-<a href="/profile">
-👤<br>
-Profile
-</a>
-
-
-</div>
-
-
-
-</body>
-</html>
+</div></body></html>
