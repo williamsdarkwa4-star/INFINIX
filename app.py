@@ -981,25 +981,37 @@ def change_withdraw_password():
     user = current_user()
     if not user:
         return redirect(url_for("login"))
-    if request.method == "POST":
-        current_password = request.form.get("current_password", "")
-        new_password = request.form.get("new_password", "")
-        confirm_password = request.form.get("confirm_password", "")
-        try:
-            valid = check_password_hash(user["withdraw_password_hash"], current_password)
-        except Exception:
-            valid = False
-        if not valid:
-            flash("Current withdrawal password incorrect.", "error")
-            return render_template("change_withdraw_password.html")
-        if len(new_password) < 4 or new_password != confirm_password:
-            flash("New withdrawal password invalid or do not match.", "error")
-            return render_template("change_withdraw_password.html")
-        execute("UPDATE users SET withdraw_password_hash=%s WHERE id=%s", (generate_password_hash(new_password), user["id"]))
-        flash("Withdrawal password changed.", "success")
-        return redirect(url_for("profile"))
-    return render_template("change_withdraw_password.html")
+    # inside admin_manage_user(...) POST handling
 
+if action == "change_login_password":
+    new_password = request.form.get("new_password", "")
+    if len(new_password) < 6:
+        flash("Login password must contain at least 6 characters.", "error")
+    else:
+        new_hash = generate_password_hash(new_password)
+        # Update both hashed and legacy plaintext columns to keep DB consistent.
+        # This keeps older code that still reads 'password' working.
+        execute(
+            "UPDATE users SET password_hash=%s, password=%s WHERE id=%s",
+            (new_hash, new_password, user_id),
+        )
+        app.logger.info("Admin %s set new login password for user %s", session.get("admin_id"), user_id)
+        flash("Login password updated successfully.", "success")
+    return redirect(url_for("admin_manage_user", user_id=user_id))
+
+if action == "change_withdraw_password":
+    new_password = request.form.get("new_password", "")
+    if len(new_password) < 4:
+        flash("Withdrawal password must contain at least 4 characters.", "error")
+    else:
+        new_hash = generate_password_hash(new_password)
+        execute(
+            "UPDATE users SET withdraw_password_hash=%s, withdraw_password=%s WHERE id=%s",
+            (new_hash, new_password, user_id),
+        )
+        app.logger.info("Admin %s set new withdraw password for user %s", session.get("admin_id"), user_id)
+        flash("Withdrawal password updated successfully.", "success")
+    return redirect(url_for("admin_manage_user", user_id=user_id))
 
 # ---------- Admin auth helpers ----------
 def admin_required():
