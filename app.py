@@ -931,6 +931,23 @@ def current_account(user_id):
     )
 
 
+def withdrawable_balance(account):
+    """Return the amount currently available for withdrawal, including referral balance."""
+    if not account:
+        return Decimal("0.00")
+    return money(account.get("withdraw_account")) + money(account.get("referral_account"))
+
+
+def account_for_display(account):
+    """Copy an account row and expose referral funds as part of the withdrawal balance."""
+    if not account:
+        return account
+    result = dict(account)
+    result["withdraw_account"] = withdrawable_balance(account)
+    result["withdrawable_balance"] = result["withdraw_account"]
+    return result
+
+
 # ============================================================
 # GLOBAL TEMPLATE USER
 # ============================================================
@@ -969,344 +986,158 @@ def index():
 # REGISTER
 # ============================================================
 
-@app.route(
-    "/register",
-    methods=["GET", "POST"]
-)
+@app.route("/register", methods=["GET", "POST"])
 def register():
-
     invite_code = (
         request.args.get("ref", "").strip()
-        or
-        request.form.get(
-            "referred_by",
-            ""
-        ).strip()
+        or request.form.get("referred_by", "").strip()
+        or request.form.get("referral_code", "").strip()
     )
 
     referred_user = None
-
     if invite_code:
-
         referred_user = query_one(
             """
-            SELECT
-                id,
-                username,
-                referral_code
+            SELECT id, username, referral_code
             FROM users
             WHERE referral_code=%s
             """,
-            (invite_code,)
+            (invite_code,),
         )
-
 
     if request.method == "POST":
+        fullname = request.form.get("fullname", "").strip()
+        username = request.form.get("username", "").strip()
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "")
+        withdraw_password = request.form.get("withdraw_password", "")
 
-        fullname = request.form.get(
-            "fullname",
-            ""
-        ).strip()
-
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
-
-        phone = request.form.get(
-            "phone",
-            ""
-        ).strip()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-        withdraw_password = request.form.get(
-            "withdraw_password",
-            ""
-        )
-
-
-        if (
-            not fullname
-            or not username
-            or not phone
-        ):
-
-            flash(
-                "Please complete all required fields.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+        if not fullname or not username or not phone:
+            flash("Please complete all required fields.", "error")
+            return render_template("register.html", invite_code=invite_code)
 
         if len(password) < 6:
-
-            flash(
-                "Password must contain at least 6 characters.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+            flash("Password must contain at least 6 characters.", "error")
+            return render_template("register.html", invite_code=invite_code)
 
         if len(withdraw_password) < 4:
-
-            flash(
-                "Withdrawal password must contain at least 4 characters.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+            flash("Withdrawal password must contain at least 4 characters.", "error")
+            return render_template("register.html", invite_code=invite_code)
 
         existing = query_one(
-            """
-            SELECT id
-            FROM users
-            WHERE username=%s
-               OR phone=%s
-            """,
-            (
-                username,
-                phone
-            )
+            "SELECT id FROM users WHERE username=%s OR phone=%s",
+            (username, phone),
         )
-
         if existing:
-
-            flash(
-                "Username or phone number already exists.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+            flash("Username or phone number already exists.", "error")
+            return render_template("register.html", invite_code=invite_code)
 
         if invite_code and not referred_user:
-
-            flash(
-                "Invalid referral code.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+            flash("Invalid referral code.", "error")
+            return render_template("register.html", invite_code=invite_code)
 
         referral_code = generate_referral_code()
-
-
         conn = get_conn()
         cur = conn.cursor()
-
         try:
-
             cur.execute(
                 """
                 INSERT INTO users (
-                    username,
-                    fullname,
-                    phone,
-                    password_hash,
-                    withdraw_password_hash,
-                    referral_code,
-                    referred_by
+                    username, fullname, phone,
+                    password_hash, withdraw_password_hash,
+                    referral_code, referred_by
                 )
-                VALUES (
-                    %s,%s,%s,%s,%s,%s,%s,%s
-                )
+                VALUES (%s,%s,%s,%s,%s,%s,%s)
                 RETURNING id
                 """,
                 (
                     username,
                     fullname,
                     phone,
-                    generate_password_hash(
-                        password
-                    ),
-                    generate_password_hash(
-                        withdraw_password
-                    ),
-                    password,
-                    withdraw_password,
+                    generate_password_hash(password),
+                    generate_password_hash(withdraw_password),
                     referral_code,
-                    (
-                        referred_user["referral_code"]
-                        if referred_user
-                        else None
-                    ),
-                )
+                    referred_user["referral_code"] if referred_user else None,
+                ),
             )
-
             new_user_id = cur.fetchone()[0]
-
 
             cur.execute(
                 """
                 INSERT INTO accounts (
-                    user_id,
-                    deposit_account
+                    user_id, deposit_account, income_account,
+                    referral_account, withdraw_account
                 )
-                VALUES (
-                    %s,
-                    %s
-                )
-                ON CONFLICT (user_id)
-                DO NOTHING
+                VALUES (%s,%s,0,0,0)
+                ON CONFLICT (user_id) DO NOTHING
                 """,
-                (
-                    new_user_id,
-                    STARTING_DEPOSIT_BALANCE
-                )
+                (new_user_id, STARTING_DEPOSIT_BALANCE),
             )
-
 
             conn.commit()
-
         except Exception:
-
             conn.rollback()
-
-            app.logger.exception(
-                "REGISTRATION ERROR"
-            )
-
-            flash(
-                "Unable to register at this time.",
-                "error"
-            )
-
-            return render_template(
-                "register.html",
-                invite_code=invite_code
-            )
-
+            app.logger.exception("REGISTRATION ERROR")
+            flash("Unable to register at this time.", "error")
+            return render_template("register.html", invite_code=invite_code)
         finally:
-
             cur.close()
             conn.close()
 
+        flash("Registration successful. Please log in.", "success")
+        return redirect(url_for("login"))
 
-        flash(
-            "Registration successful. Please log in.",
-            "success"
-        )
-
-        return redirect(
-            url_for("login")
-        )
-
-
-    return render_template(
-        "register.html",
-        invite_code=invite_code
-    )
+    return render_template("register.html", invite_code=invite_code)
 
 
 # ============================================================
 # LOGIN
 # ============================================================
 
-@app.route(
-    "/login",
-    methods=["GET", "POST"]
-)
+@app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "POST":
+        phone = request.form.get("phone", "").strip()
+        password = request.form.get("password", "")
 
-        phone = request.form.get(
-            "phone",
-            ""
-        ).strip()
+        if not phone or not password:
+            flash("Please enter your phone number and password.", "error")
+            return render_template("login.html")
 
-        password = request.form.get(
-            "password",
-            ""
-        )
-
-        user = query_one(
-            """
-            SELECT *
-            FROM users
-            WHERE phone=%s
-            """,
-            (phone,)
-        )
-
+        user = query_one("SELECT * FROM users WHERE phone=%s", (phone,))
         valid = False
+        used_legacy_password = False
 
         if user:
-
-            password_hash = user.get(
-                "password_hash"
-            )
-
-            if password_hash:
-
+            stored_hash = user.get("password_hash")
+            if stored_hash:
                 try:
-
-                    valid = check_password_hash(
-                        password_hash,
-                        password
-                    )
-
+                    valid = check_password_hash(stored_hash, password)
                 except Exception:
-
                     valid = False
-
-            else:
-
-                legacy_password = user.get(
-                    "password"
-                )
-
-                if legacy_password is not None:
-
-                    valid = (
-                        legacy_password
-                        == password
-                    )
-
+            elif user.get("password") is not None:
+                valid = user.get("password") == password
+                used_legacy_password = valid
 
         if valid:
+            # Upgrade old plaintext-password records the first time they log in.
+            if used_legacy_password:
+                execute(
+                    """
+                    UPDATE users
+                    SET password_hash=%s, password=NULL
+                    WHERE id=%s
+                    """,
+                    (generate_password_hash(password), user["id"]),
+                )
 
             session.clear()
-
             session["user_id"] = user["id"]
+            return redirect(url_for("dashboard"))
 
-            return redirect(
-                url_for("dashboard")
-            )
+        flash("Invalid phone number or password.", "error")
 
-
-        flash(
-            "Invalid phone number or password.",
-            "error"
-        )
-
-
-    return render_template(
-        "login.html"
-    )
+    return render_template("login.html")
 
 
 # ============================================================
@@ -1337,9 +1168,7 @@ def dashboard():
             url_for("login")
         )
 
-    account = current_account(
-        user["id"]
-    )
+    account = account_for_display(current_account(user["id"]))
 
     return render_template(
         "dashboard.html",
@@ -1419,76 +1248,22 @@ def buy_plan(plan_id):
 # CONFIRM BUY PLAN
 # ============================================================
 
-@app.route(
-    "/confirm_buy_plan/<int:plan_id>",
-    methods=["POST"]
-)
+@app.route("/confirm_buy_plan/<int:plan_id>", methods=["POST"])
 def confirm_buy_plan(plan_id):
-
     user = current_user()
-
     if not user:
-        return redirect(
-            url_for("login")
-        )
-
+        return redirect(url_for("login"))
 
     if plan_id not in PLANS:
-
-        flash(
-            "Plan not found.",
-            "error"
-        )
-
-        return redirect(
-            url_for("dashboard")
-        )
-
+        flash("Plan not found.", "error")
+        return redirect(url_for("dashboard"))
 
     plan = PLANS[plan_id]
-
-
-    active = query_one(
-        """
-        SELECT id
-        FROM plans
-        WHERE user_id=%s
-          AND active=TRUE
-        LIMIT 1
-        """,
-        (user["id"],)
-    )
-
-
-    if active:
-
-        flash(
-            "You already have an active plan. "
-            "Please finish it or contact support "
-            "before buying a new plan.",
-            "error"
-        )
-
-        return redirect(
-            url_for("dashboard")
-        )
-
-
     conn = get_conn()
-
-    cur = conn.cursor(
-        cursor_factory=RealDictCursor
-    )
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-
-        ensure_account(
-            cur,
-            user["id"]
-        )
-
-
-        # Lock account
+        ensure_account(cur, user["id"], STARTING_DEPOSIT_BALANCE)
         cur.execute(
             """
             SELECT deposit_account
@@ -1496,333 +1271,124 @@ def confirm_buy_plan(plan_id):
             WHERE user_id=%s
             FOR UPDATE
             """,
-            (user["id"],)
+            (user["id"],),
         )
-
         row = cur.fetchone()
-
-
-        balance = money(
-            row["deposit_account"]
-            if row
-            and "deposit_account" in row
-            else None
-        )
-
+        balance = money(row["deposit_account"] if row else 0)
 
         if balance < plan["investment"]:
-
             conn.rollback()
+            flash("Insufficient deposit balance.", "error")
+            return redirect(url_for("dashboard"))
 
-            flash(
-                "Insufficient balance.",
-                "error"
-            )
-
-            return redirect(
-                url_for("dashboard")
-            )
-
-
-        # Deduct plan investment
         cur.execute(
             """
             UPDATE accounts
-            SET deposit_account =
-                deposit_account - %s
-            WHERE user_id=%s
-              AND deposit_account >= %s
+            SET deposit_account = deposit_account - %s
+            WHERE user_id=%s AND deposit_account >= %s
             """,
-            (
-                plan["investment"],
-                user["id"],
-                plan["investment"]
-            )
+            (plan["investment"], user["id"], plan["investment"]),
         )
-
-
         if cur.rowcount != 1:
-
             conn.rollback()
-
-            flash(
-                "Insufficient balance.",
-                "error"
-            )
-
-            return redirect(
-                url_for("dashboard")
-            )
-
+            flash("Insufficient deposit balance.", "error")
+            return redirect(url_for("dashboard"))
 
         started_at = utcnow()
-
-
-        # Create plan
         cur.execute(
             """
             INSERT INTO plans (
-                user_id,
-                plan_id,
-                plan_name,
-                investment_amount,
-                daily_income,
-                duration,
-                started_at,
-                last_claim_at,
-                active
+                user_id, plan_id, plan_name, investment_amount,
+                daily_income, duration, started_at, last_claim_at, active
             )
-            VALUES (
-                %s,%s,%s,%s,%s,%s,%s,NULL,TRUE
-            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,NULL,TRUE)
             RETURNING id
             """,
             (
-                user["id"],
-                plan_id,
-                plan["name"],
-                plan["investment"],
-                plan["daily"],
-                plan["duration"],
-                started_at
-            )
+                user["id"], plan_id, plan["name"], plan["investment"],
+                plan["daily"], plan["duration"], started_at,
+            ),
         )
-
-        cur.fetchone()
-
-
-        # Purchase transaction
-        purchase_ref = generate_reference(
-            "PLAN"
-        )
+        new_plan = cur.fetchone()
+        purchase_ref = generate_reference("PLAN")
 
         cur.execute(
             """
             INSERT INTO transactions (
-                user_id,
-                transaction_type,
-                amount,
-                status,
-                reference,
-                description
+                user_id, transaction_type, amount, status, reference, description
             )
-            VALUES (
-                %s,
-                'plan_purchase',
-                %s,
-                'successful',
-                %s,
-                %s
-            )
+            VALUES (%s,'plan_purchase',%s,'successful',%s,%s)
             """,
             (
-                user["id"],
-                plan["investment"],
-                purchase_ref,
-                f"Demo plan purchase: "
-                f"{plan['name']}"
-            )
+                user["id"], plan["investment"], purchase_ref,
+                f"Plan purchase: {plan['name']} (plan record #{new_plan['id']})",
+            ),
         )
 
-
-        # ====================================================
-        # REFERRAL DISTRIBUTION
-        #
-        # Level 1 = 20%
-        # Level 2 = 3%
-        # Level 3 = 1%
-        # ====================================================
-
+        # Referral bonuses are awarded for every purchase, not only the first plan.
         purchaser_id = user["id"]
-
-        current_ref_code = user.get(
-            "referred_by"
-        )
-
-
-        for level_index, pct in enumerate(
-            REFERRAL_PERCENTS,
-            start=1
-        ):
-
+        current_ref_code = user.get("referred_by")
+        for level_index, pct in enumerate(REFERRAL_PERCENTS, start=1):
             if not current_ref_code:
                 break
 
-
+            owner_row = None
             cur.execute(
                 """
-                SELECT
-                    id,
-                    referred_by,
-                    referral_code
+                SELECT id, referred_by, referral_code
                 FROM users
                 WHERE referral_code=%s
                 """,
-                (current_ref_code,)
+                (current_ref_code,),
             )
-
             owner_row = cur.fetchone()
-
-
             if not owner_row:
                 break
 
-
             owner_id = owner_row["id"]
-
-
-            # Prevent self-referral
-            if owner_id == purchaser_id:
-
-                current_ref_code = (
-                    owner_row.get(
-                        "referred_by"
-                    )
-                )
-
-                continue
-
-
-            description = (
-                f"Referral bonus "
-                f"(level {level_index}) "
-                f"for purchase by "
-                f"user_id:{purchaser_id} "
-                f"plan_purchase_ref:"
-                f"{purchase_ref}"
-            )
-
-
-            cur.execute(
-                """
-                SELECT id
-                FROM transactions
-                WHERE user_id=%s
-                  AND transaction_type=
-                      'referral_bonus_invest'
-                  AND description=%s
-                LIMIT 1
-                """,
-                (
-                    owner_id,
-                    description
-                )
-            )
-
-
-            already = cur.fetchone()
-
-
-            if not already:
-
-                bonus_amount = (
-                    money(
-                        plan["investment"]
-                    )
-                    * pct
-                ).quantize(
-                    Decimal("0.01")
-                )
-
-
+            if owner_id != purchaser_id:
+                bonus_amount = money(plan["investment"] * pct)
                 if bonus_amount > 0:
-
-                    ensure_account(
-                        cur,
-                        owner_id,
-                        STARTING_DEPOSIT_BALANCE
-                    )
-
-
+                    ensure_account(cur, owner_id, Decimal("0.00"))
                     cur.execute(
                         """
                         UPDATE accounts
-                        SET referral_account =
-                            COALESCE(
-                                referral_account,
-                                0
-                            ) + %s
+                        SET referral_account = COALESCE(referral_account,0) + %s
                         WHERE user_id=%s
                         """,
-                        (
-                            bonus_amount,
-                            owner_id
-                        )
+                        (bonus_amount, owner_id),
                     )
-
-
                     cur.execute(
                         """
                         INSERT INTO transactions (
-                            user_id,
-                            transaction_type,
-                            amount,
-                            status,
-                            reference,
-                            description
+                            user_id, transaction_type, amount, status, reference, description
                         )
-                        VALUES (
-                            %s,
-                            'referral_bonus_invest',
-                            %s,
-                            'successful',
-                            %s,
-                            %s
-                        )
+                        VALUES (%s,'referral_bonus_invest',%s,'successful',%s,%s)
                         """,
                         (
                             owner_id,
                             bonus_amount,
-                            generate_reference(
-                                "RINV"
-                            ),
-                            description
-                        )
+                            generate_reference("RINV"),
+                            f"Referral bonus level {level_index} for plan purchase {purchase_ref}",
+                        ),
                     )
 
-
-            # Move upward to next referral level
-            current_ref_code = (
-                owner_row.get(
-                    "referred_by"
-                )
-            )
-
+            current_ref_code = owner_row.get("referred_by")
 
         conn.commit()
-
-
-    except Exception:
-
-        conn.rollback()
-
-        app.logger.exception(
-            "PLAN PURCHASE ERROR"
-        )
-
         flash(
-            "Unable to activate the plan.",
-            "error"
+            f"{plan['name']} activated successfully. You can buy additional plans anytime your deposit balance is sufficient.",
+            "success",
         )
-
-        return redirect(
-            url_for("dashboard")
-        )
-
+    except Exception:
+        conn.rollback()
+        app.logger.exception("PLAN PURCHASE ERROR")
+        flash("Unable to activate the plan.", "error")
     finally:
-
         cur.close()
         conn.close()
 
-
-    flash(
-        "Demo plan activated successfully.",
-        "success"
-    )
-
-    return redirect(
-        url_for("my_plan")
-    )
+    return redirect(url_for("my_plan"))
 
 
 # ============================================================
@@ -1931,418 +1497,156 @@ def deactivate_expired_plans(user_id):
 # MY PLAN
 # ============================================================
 
-@app.route(
-    "/my_plan",
-    methods=["GET", "POST"]
-)
+@app.route("/my_plan", methods=["GET", "POST"])
 def my_plan():
-
     user = current_user()
-
     if not user:
-        return redirect(
-            url_for("login")
-        )
-
+        return redirect(url_for("login"))
 
     try:
-
-        deactivate_expired_plans(
-            user["id"]
-        )
-
+        deactivate_expired_plans(user["id"])
     except Exception:
-
-        app.logger.exception(
-            "PLAN EXPIRY CHECK ERROR"
-        )
-
-
-    # --------------------------------------------------------
-    # CLAIM DAILY INCOME
-    # --------------------------------------------------------
+        app.logger.exception("PLAN EXPIRY CHECK ERROR")
 
     if request.method == "POST":
-
         conn = get_conn()
-
-        cur = conn.cursor(
-            cursor_factory=RealDictCursor
-        )
-
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        claimed_total = Decimal("0.00")
+        claimed_count = 0
         try:
-
             cur.execute(
                 """
-                SELECT *
-                FROM plans
-                WHERE user_id=%s
-                  AND active=TRUE
-                ORDER BY id DESC
-                LIMIT 1
+                SELECT * FROM plans
+                WHERE user_id=%s AND active=TRUE
+                ORDER BY id ASC
                 FOR UPDATE
                 """,
-                (user["id"],)
+                (user["id"],),
             )
-
-            plan = cur.fetchone()
-
-
-            if not plan:
-
-                conn.rollback()
-
-                flash(
-                    "You do not have an active plan.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("my_plan")
-                )
-
-
+            plans_to_claim = cur.fetchall()
             now = utcnow()
+            ensure_account(cur, user["id"], STARTING_DEPOSIT_BALANCE)
 
-            end_time, next_claim = (
-                plan_times(
-                    plan,
-                    now
-                )
-            )
+            for plan in plans_to_claim:
+                end_time, next_claim = plan_times(plan, now)
+                if now >= end_time:
+                    cur.execute("UPDATE plans SET active=FALSE WHERE id=%s", (plan["id"],))
+                    continue
+                if now < next_claim:
+                    continue
 
-
-            if now >= end_time:
+                daily_income = money(plan["daily_income"])
+                if daily_income <= 0:
+                    continue
 
                 cur.execute(
                     """
-                    UPDATE plans
-                    SET active=FALSE
-                    WHERE id=%s
+                    UPDATE accounts
+                    SET income_account=COALESCE(income_account,0)+%s,
+                        withdraw_account=COALESCE(withdraw_account,0)+%s
+                    WHERE user_id=%s
                     """,
-                    (plan["id"],)
+                    (daily_income, daily_income, user["id"]),
                 )
-
-                conn.commit()
-
-                flash(
-                    "Your plan has completed its duration.",
-                    "error"
+                claim_time = now
+                cur.execute(
+                    "UPDATE plans SET last_claim_at=%s WHERE id=%s",
+                    (claim_time, plan["id"]),
                 )
-
-                return redirect(
-                    url_for("my_plan")
-                )
-
-
-            if now < next_claim:
-
-                remaining = max(
-                    0,
-                    int(
-                        (
-                            next_claim
-                            - now
-                        ).total_seconds()
+                cur.execute(
+                    """
+                    INSERT INTO transactions (
+                        user_id, transaction_type, amount, status, reference, description
                     )
-                )
-
-
-                hours, rem = divmod(
-                    remaining,
-                    3600
-                )
-
-                minutes, _ = divmod(
-                    rem,
-                    60
-                )
-
-
-                conn.rollback()
-
-                flash(
-                    f"Your next income can "
-                    f"be claimed in "
-                    f"{hours}h {minutes}m.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("my_plan")
-                )
-
-
-            daily_income = money(
-                plan["daily_income"]
-            )
-
-
-            if daily_income <= 0:
-
-                conn.rollback()
-
-                flash(
-                    "This plan has no valid daily income.",
-                    "error"
-                )
-
-                return redirect(
-                    url_for("my_plan")
-                )
-
-
-            ensure_account(
-                cur,
-                user["id"]
-            )
-
-
-            # Credit both income and withdrawal balance
-            cur.execute(
-                """
-                UPDATE accounts
-                SET
-                    income_account =
-                        COALESCE(
-                            income_account,
-                            0
-                        ) + %s,
-
-                    withdraw_account =
-                        COALESCE(
-                            withdraw_account,
-                            0
-                        ) + %s
-
-                WHERE user_id=%s
-                """,
-                (
-                    daily_income,
-                    daily_income,
-                    user["id"]
-                )
-            )
-
-
-            claim_time = utcnow()
-
-
-            cur.execute(
-                """
-                UPDATE plans
-                SET last_claim_at=%s
-                WHERE id=%s
-                """,
-                (
-                    claim_time,
-                    plan["id"]
-                )
-            )
-
-
-            cur.execute(
-                """
-                INSERT INTO transactions (
-                    user_id,
-                    transaction_type,
-                    amount,
-                    status,
-                    reference,
-                    description
-                )
-                VALUES (
-                    %s,
-                    'income_claim',
-                    %s,
-                    'successful',
-                    %s,
-                    %s
-                )
-                """,
-                (
-                    user["id"],
-                    daily_income,
-                    generate_reference("INC"),
+                    VALUES (%s,'income_claim',%s,'successful',%s,%s)
+                    """,
                     (
-                        "Daily demo income claim: "
-                        + plan["plan_name"]
-                    )
+                        user["id"], daily_income, generate_reference("INC"),
+                        f"Daily income claim: {plan['plan_name']} (plan #{plan['id']})",
+                    ),
                 )
-            )
-
+                claimed_total += daily_income
+                claimed_count += 1
 
             conn.commit()
-
-
-            flash(
-                f"GHS {daily_income:.2f} "
-                f"income claimed successfully.",
-                "success"
-            )
-
-
+            if claimed_count:
+                flash(
+                    f"GHS {claimed_total:.2f} income claimed from {claimed_count} plan(s).",
+                    "success",
+                )
+            else:
+                flash("No plan is ready for a 24-hour income claim yet.", "error")
         except Exception:
-
             conn.rollback()
-
-            app.logger.exception(
-                "MY PLAN CLAIM ERROR"
-            )
-
-            flash(
-                "Unable to process your income claim.",
-                "error"
-            )
-
+            app.logger.exception("MY PLAN CLAIM ERROR")
+            flash("Unable to process your income claim.", "error")
         finally:
-
             cur.close()
             conn.close()
+        return redirect(url_for("my_plan"))
 
-
-        return redirect(
-            url_for("my_plan")
-        )
-
-
-    # --------------------------------------------------------
-    # DISPLAY ACTIVE PLAN
-    # --------------------------------------------------------
-
-    plan = query_one(
+    all_plans = query_all(
         """
-        SELECT *
-        FROM plans
+        SELECT * FROM plans
         WHERE user_id=%s
-          AND active=TRUE
         ORDER BY id DESC
-        LIMIT 1
         """,
-        (user["id"],)
+        (user["id"],),
     )
-
+    active_plans = [p for p in all_plans if p.get("active")]
+    plan = active_plans[0] if active_plans else (all_plans[0] if all_plans else None)
 
     can_claim = False
-
     seconds_remaining = 0
-
     cycle_seconds_remaining = 0
-
     next_claim_timestamp = 0
-
+    next_claim = None
     cycle_ended = False
 
-    next_claim = None
-
-
-    if plan:
-
+    if active_plans:
         now = utcnow()
-
-        end_time, nextc = plan_times(
-            plan,
-            now
-        )
-
-
-        if now >= end_time:
-
-            execute(
-                """
-                UPDATE plans
-                SET active=FALSE
-                WHERE id=%s
-                """,
-                (plan["id"],)
-            )
-
-            plan = None
-
-            cycle_ended = True
-
-
-        else:
-
-            cycle_seconds_remaining = max(
-                0,
-                int(
-                    (
-                        end_time
-                        - now
-                    ).total_seconds()
-                )
-            )
-
-
-            seconds_remaining = max(
-                0,
-                int(
-                    (
-                        nextc
-                        - now
-                    ).total_seconds()
-                )
-            )
-
-
+        next_claims = []
+        for active in active_plans:
+            end_time, nextc = plan_times(active, now)
+            if now >= end_time:
+                continue
             if now >= nextc:
-
                 can_claim = True
-
-                seconds_remaining = 0
-
             else:
+                next_claims.append(nextc)
 
-                next_claim_timestamp = int(
-                    nextc.timestamp()
-                )
-
-                next_claim = nextc
-
+        if next_claims:
+            next_claim = min(next_claims)
+            seconds_remaining = max(0, int((next_claim - now).total_seconds()))
+            next_claim_timestamp = int(next_claim.timestamp())
+        if plan:
+            end_time, _ = plan_times(plan, now)
+            cycle_seconds_remaining = max(0, int((end_time - now).total_seconds()))
+    elif all_plans:
+        cycle_ended = True
 
     available_plans = [
-
         {
             "id": plan_id,
             "plan_name": data["name"],
-            "investment_amount":
-                data["investment"],
-            "daily_income":
-                data["daily"],
-            "duration":
-                data["duration"]
+            "investment_amount": data["investment"],
+            "daily_income": data["daily"],
+            "duration": data["duration"],
         }
-
-        for plan_id, data
-        in PLANS.items()
+        for plan_id, data in PLANS.items()
     ]
-
-
-    active_plans = query_all(
-        """
-        SELECT *
-        FROM plans
-        WHERE user_id=%s
-          AND active=TRUE
-        ORDER BY id DESC
-        """,
-        (user["id"],)
-    )
-
 
     return render_template(
         "my_plan.html",
         user_plan=plan,
-        active_plans=active_plans,
+        active_plans=all_plans,  # Keep old template variable but include every historical purchase.
+        all_plans=all_plans,
         plans=available_plans,
         available_plans=available_plans,
         can_claim=can_claim,
         seconds_remaining=seconds_remaining,
-        cycle_seconds_remaining=
-            cycle_seconds_remaining,
-        next_claim_timestamp=
-            next_claim_timestamp,
+        cycle_seconds_remaining=cycle_seconds_remaining,
+        next_claim_timestamp=next_claim_timestamp,
         next_income_at=next_claim,
         server_now=utcnow(),
         cycle_ended=cycle_ended,
@@ -2755,10 +2059,7 @@ def withdraw():
         )
 
 
-    account = current_account(
-        user["id"]
-    )
-
+    account = account_for_display(current_account(user["id"]))
 
     accounts = query_all(
         """
@@ -2875,338 +2176,123 @@ def bind_account():
 # REQUEST WITHDRAWAL
 # ============================================================
 
-@app.route(
-    "/request_withdrawal",
-    methods=["POST"]
-)
+@app.route("/request_withdrawal", methods=["POST"])
 def request_withdrawal():
-
     user = current_user()
-
     if not user:
-        return redirect(
-            url_for("login")
-        )
+        return redirect(url_for("login"))
 
+    amount = parse_amount(request.form.get("amount", "0"))
+    password = request.form.get("password", "")
+    account_id = request.form.get("account_id")
 
-    amount = parse_amount(
-        request.form.get(
-            "amount",
-            "0"
-        )
-    )
+    if amount is None or amount < MIN_WITHDRAWAL:
+        flash(f"Minimum demo withdrawal is GHS {MIN_WITHDRAWAL:.2f}.", "error")
+        return redirect(url_for("withdraw"))
 
-    password = request.form.get(
-        "password",
-        ""
-    )
-
-    account_id = request.form.get(
-        "account_id"
-    )
-
-
-    if (
-        amount is None
-        or amount < MIN_WITHDRAWAL
-    ):
-
-        flash(
-            f"Minimum demo withdrawal is "
-            f"GHS {MIN_WITHDRAWAL:.2f}.",
-            "error"
-        )
-
-        return redirect(
-            url_for("withdraw")
-        )
-
-
-    if (
-        not user.get(
-            "withdraw_password_hash"
-        )
-        and not user.get(
-            "withdraw_password"
-        )
-    ):
-
-        flash(
-            "Withdrawal password is not configured.",
-            "error"
-        )
-
-        return redirect(
-            url_for("withdraw")
-        )
-
-
-    # Verify withdrawal password
-    try:
-
-        valid = False
-
-        if user.get(
-            "withdraw_password_hash"
-        ):
-
-            valid = check_password_hash(
-                user[
-                    "withdraw_password_hash"
-                ],
-                password
-            )
-
-        else:
-
-            valid = (
-                user.get(
-                    "withdraw_password"
-                )
-                == password
-            )
-
-    except Exception:
-
-        valid = False
-
+    stored_hash = user.get("withdraw_password_hash")
+    valid = False
+    if stored_hash:
+        try:
+            valid = check_password_hash(stored_hash, password)
+        except Exception:
+            valid = False
+    elif user.get("withdraw_password") is not None:
+        valid = user.get("withdraw_password") == password
 
     if not valid:
-
-        flash(
-            "Invalid withdrawal password.",
-            "error"
-        )
-
-        return redirect(
-            url_for("withdraw")
-        )
-
-
-    # Find withdrawal account
-    selected = None
-
+        flash("Invalid withdrawal password.", "error")
+        return redirect(url_for("withdraw"))
 
     if account_id:
-
         selected = query_one(
-            """
-            SELECT id
-            FROM withdrawal_accounts
-            WHERE id=%s
-              AND user_id=%s
-            """,
-            (
-                account_id,
-                user["id"]
-            )
+            "SELECT id FROM withdrawal_accounts WHERE id=%s AND user_id=%s",
+            (account_id, user["id"]),
         )
-
     else:
-
         selected = query_one(
             """
-            SELECT id
-            FROM withdrawal_accounts
-            WHERE user_id=%s
-            ORDER BY id DESC
-            LIMIT 1
+            SELECT id FROM withdrawal_accounts
+            WHERE user_id=%s ORDER BY id DESC LIMIT 1
             """,
-            (user["id"],)
+            (user["id"],),
         )
-
 
     if not selected:
-
-        flash(
-            "Please bind a withdrawal account first.",
-            "error"
-        )
-
-        return redirect(
-            url_for("bind_account")
-        )
-
+        flash("Please bind a withdrawal account first.", "error")
+        return redirect(url_for("bind_account"))
 
     conn = get_conn()
-
-    cur = conn.cursor(
-        cursor_factory=RealDictCursor
-    )
-
-
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-
-        ensure_account(
-            cur,
-            user["id"]
-        )
-
-
+        ensure_account(cur, user["id"], STARTING_DEPOSIT_BALANCE)
         cur.execute(
             """
-            SELECT withdraw_account
+            SELECT withdraw_account, referral_account
             FROM accounts
             WHERE user_id=%s
             FOR UPDATE
             """,
-            (user["id"],)
+            (user["id"],),
         )
+        row = cur.fetchone() or {}
+        withdraw_balance = money(row.get("withdraw_account"))
+        referral_balance = money(row.get("referral_account"))
+        total_available = withdraw_balance + referral_balance
 
-
-        row = cur.fetchone()
-
-
-        balance = money(
-            row["withdraw_account"]
-            if row
-            and "withdraw_account" in row
-            else None
-        )
-
-
-        if balance < amount:
-
+        if total_available < amount:
             conn.rollback()
+            flash("Insufficient withdrawal/referral balance.", "error")
+            return redirect(url_for("withdraw"))
 
-            flash(
-                "Insufficient withdrawal balance.",
-                "error"
-            )
-
-            return redirect(
-                url_for("withdraw")
-            )
-
-
-        # Deduct withdrawal amount
+        # Use normal withdrawal balance first, then referral balance.
+        from_withdraw = min(withdraw_balance, amount)
+        from_referral = amount - from_withdraw
         cur.execute(
             """
             UPDATE accounts
-            SET withdraw_account =
-                withdraw_account - %s
+            SET withdraw_account=COALESCE(withdraw_account,0)-%s,
+                referral_account=COALESCE(referral_account,0)-%s
             WHERE user_id=%s
-              AND withdraw_account >= %s
             """,
-            (
-                amount,
-                user["id"],
-                amount
-            )
+            (from_withdraw, from_referral, user["id"]),
         )
 
-
-        if cur.rowcount != 1:
-
-            conn.rollback()
-
-            flash(
-                "Insufficient withdrawal balance.",
-                "error"
-            )
-
-            return redirect(
-                url_for("withdraw")
-            )
-
-
-        # Create withdrawal request
         cur.execute(
             """
-            INSERT INTO withdrawal_requests (
-                user_id,
-                amount,
-                account_id,
-                status
-            )
-            VALUES (
-                %s,%s,%s,'pending'
-            )
+            INSERT INTO withdrawal_requests (user_id, amount, account_id, status)
+            VALUES (%s,%s,%s,'pending')
             RETURNING id
             """,
-            (
-                user["id"],
-                amount,
-                selected["id"]
-            )
+            (user["id"], amount, selected["id"]),
         )
-
-
         withdrawal_id = cur.fetchone()["id"]
-
-
-        reference = generate_reference(
-            "WDR"
-        )
-
+        reference = generate_reference("WDR")
 
         cur.execute(
             """
             INSERT INTO transactions (
-                user_id,
-                transaction_type,
-                amount,
-                status,
-                reference,
-                description
+                user_id, transaction_type, amount, status, reference, description
             )
-            VALUES (
-                %s,
-                'withdrawal',
-                %s,
-                'pending',
-                %s,
-                %s
-            )
+            VALUES (%s,'withdrawal',%s,'pending',%s,%s)
             """,
             (
-                user["id"],
-                amount,
-                reference,
-                (
-                    "Demo withdrawal request #"
-                    f"{withdrawal_id}"
-                )
-            )
+                user["id"], amount, reference,
+                f"Demo withdrawal request #{withdrawal_id}",
+            ),
         )
-
-
         conn.commit()
-
-
     except Exception:
-
         conn.rollback()
-
-        app.logger.exception(
-            "WITHDRAWAL REQUEST ERROR"
-        )
-
-        flash(
-            "Unable to submit the withdrawal.",
-            "error"
-        )
-
-        return redirect(
-            url_for("withdraw")
-        )
-
+        app.logger.exception("WITHDRAWAL REQUEST ERROR")
+        flash("Unable to submit the withdrawal.", "error")
+        return redirect(url_for("withdraw"))
     finally:
-
         cur.close()
         conn.close()
 
-
-    flash(
-        "Withdrawal request submitted for review.",
-        "success"
-    )
-
-    return redirect(
-        url_for(
-            "transaction_history"
-        )
-    )
+    flash("Withdrawal request submitted successfully.", "success")
+    return redirect(url_for("transaction_history"))
 
 
 # ============================================================
@@ -3556,10 +2642,7 @@ def profile():
         )
 
 
-    account = current_account(
-        user["id"]
-    )
-
+    account = current_account(user["id"])
 
     return render_template(
         "profile.html",
@@ -3569,8 +2652,7 @@ def profile():
         deposit_balance=
             account["deposit_account"],
 
-        withdraw_balance=
-            account["withdraw_account"],
+        withdraw_balance=withdrawable_balance(account),
 
         income_balance=
             account["income_account"],
@@ -3584,284 +2666,90 @@ def profile():
 # CHANGE LOGIN PASSWORD
 # ============================================================
 
-@app.route(
-    "/admin_change_password",
-    methods=["GET", "POST"]
-)
+@app.route("/admin_change_password", methods=["GET", "POST"])
+@app.route("/change_login_password", methods=["GET", "POST"])
 def admin_change_password():
-
     user = current_user()
-
     if not user:
-
-        return redirect(
-            url_for("login")
-        )
-
+        return redirect(url_for("login"))
 
     if request.method == "POST":
+        current_password = request.form.get("current_password", "")
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        
-
-        new_password = request.form.get(
-            "new_password",
-            ""
-        )
-
-        confirm_password = request.form.get(
-            "confirm_password",
-            ""
-        )
-
-
-        try:
-
-            valid = False
-
-
-            if user.get(
-                "password_hash"
-            ):
-
-                valid = check_password_hash(
-                    user[
-                        "password_hash"
-                    ],
-                    current_password
-                )
-
-            else:
-
-                valid = (
-                    user.get(
-                        "password"
-                    )
-                    == current_password
-                )
-
-
-        except Exception:
-
-            valid = False
-
+        valid = False
+        if user.get("password_hash"):
+            try:
+                valid = check_password_hash(user["password_hash"], current_password)
+            except Exception:
+                valid = False
+        else:
+            valid = user.get("password") == current_password
 
         if not valid:
-
-            flash(
-                "Current password is incorrect.",
-                "error"
-            )
-
-            return render_template(
-                "admin_change_password.html"
-            )
-
-
+            flash("Current password is incorrect.", "error")
+            return render_template("change_login_password.html")
         if len(new_password) < 6:
-
-            flash(
-                "New password must contain at least 6 characters.",
-                "error"
-            )
-
-            return render_template(
-                "change_login_password.html"
-            )
-
-
-        if (
-            new_password
-            != confirm_password
-        ):
-
-            flash(
-                "New passwords do not match.",
-                "error"
-            )
-
-            return render_template(
-                "change_login_password.html"
-            )
-
-
-        new_hash = generate_password_hash(
-            new_password
-        )
-
+            flash("New password must contain at least 6 characters.", "error")
+            return render_template("change_login_password.html")
+        if new_password != confirm_password:
+            flash("New passwords do not match.", "error")
+            return render_template("change_login_password.html")
 
         execute(
-            """
-            UPDATE users
-            SET
-                password_hash=%s,
-                password=%s
-            WHERE id=%s
-            """,
-            (
-                new_hash,
-                new_password,
-                user["id"]
-            )
+            "UPDATE users SET password_hash=%s, password=NULL WHERE id=%s",
+            (generate_password_hash(new_password), user["id"]),
         )
+        flash("Login password changed successfully.", "success")
+        return redirect(url_for("profile"))
 
-
-        flash(
-            "Login password changed successfully.",
-            "success"
-        )
-
-
-        return redirect(
-            url_for("profile")
-        )
-
-
-    return render_template(
-        "change_login_password.html"
-    )
+    return render_template("change_login_password.html")
 
 
 # ============================================================
 # CHANGE WITHDRAWAL PASSWORD
 # ============================================================
 
-@app.route(
-    "/admin_withdraw_password",
-    methods=["GET", "POST"]
-)
+@app.route("/admin_withdraw_password", methods=["GET", "POST"])
+@app.route("/change_withdraw_password", methods=["GET", "POST"])
 def admin_change_withdraw_password():
-
     user = current_user()
-
     if not user:
-
-        return redirect(
-            url_for("login")
-        )
-
+        return redirect(url_for("login"))
 
     if request.method == "POST":
+        current_password = request.form.get("current_password", "")
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        
-            ""
-        )
-
-        new_password = request.form.get(
-            "new_password",
-            ""
-        )
-
-        confirm_password = request.form.get(
-            "confirm_password",
-            ""
-        )
-
-
-        try:
-
-            valid = False
-
-
-            if user.get(
-                "withdraw_password_hash"
-            ):
-
-                valid = check_password_hash(
-                    user[
-                        "withdraw_password_hash"
-                    ],
-                    current_password
-                )
-
-            else:
-
-                valid = (
-                    user.get(
-                        "withdraw_password"
-                    )
-                    == current_password
-                )
-
-
-        except Exception:
-
-            valid = False
-
+        valid = False
+        if user.get("withdraw_password_hash"):
+            try:
+                valid = check_password_hash(user["withdraw_password_hash"], current_password)
+            except Exception:
+                valid = False
+        else:
+            valid = user.get("withdraw_password") == current_password
 
         if not valid:
-
-            flash(
-                "Current withdrawal password is incorrect.",
-                "error"
-            )
-
-            return render_template(
-                "change_withdraw_password.html"
-            )
-
-
-        if len(new_password) < 6:
-
-            flash(
-                "New withdrawal password must contain at least 4 characters.",
-                "error"
-            )
-
-            return render_template(
-                "change_withdraw_password.html"
-            )
-
-
-        if (
-            new_password
-            != confirm_password
-        ):
-
-            flash(
-                "New passwords do not match.",
-                "error"
-            )
-
-            return render_template(
-                "change_withdraw_password.html"
-            )
-
-
-        new_hash = generate_password_hash(
-            new_password
-        )
-
+            flash("Current withdrawal password is incorrect.", "error")
+            return render_template("change_withdraw_password.html")
+        if len(new_password) < 4:
+            flash("New withdrawal password must contain at least 4 characters.", "error")
+            return render_template("change_withdraw_password.html")
+        if new_password != confirm_password:
+            flash("New passwords do not match.", "error")
+            return render_template("change_withdraw_password.html")
 
         execute(
-            """
-            UPDATE users
-            SET
-                withdraw_password_hash=%s,
-                withdraw_password=%s
-            WHERE id=%s
-            """,
-            (
-                new_hash,
-                new_password,
-                user["id"]
-            )
+            "UPDATE users SET withdraw_password_hash=%s, withdraw_password=NULL WHERE id=%s",
+            (generate_password_hash(new_password), user["id"]),
         )
+        flash("Withdrawal password changed successfully.", "success")
+        return redirect(url_for("profile"))
 
-
-        flash(
-            "Withdrawal password changed successfully.",
-            "success"
-        )
-
-
-        return redirect(
-            url_for("profile")
-        )
-
-
-    return render_template(
-        "change_withdraw_password.html"
-    )
+    return render_template("change_withdraw_password.html")
 
 
 # ============================================================
@@ -4351,12 +3239,11 @@ def admin_manage_user(user_id):
                     UPDATE users
                     SET
                         password_hash=%s,
-                        password=%s
+                        password=NULL
                     WHERE id=%s
                     """,
                     (
                         new_hash,
-                        new_password,
                         user_id
                     )
                 )
@@ -4417,12 +3304,11 @@ def admin_manage_user(user_id):
                     UPDATE users
                     SET
                         withdraw_password_hash=%s,
-                        withdraw_password=%s
+                        withdraw_password=NULL
                     WHERE id=%s
                     """,
                     (
                         new_hash,
-                        new_password,
                         user_id
                     )
                 )
