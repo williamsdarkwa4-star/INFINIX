@@ -10,103 +10,106 @@
 
 body{
     min-height:100vh;
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    padding:25px 15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:#f9efe3;
+    color:#1e1f4b;
 }
 
 
 /* =========================
-   MAIN CONTAINER
+   PAGE
 ========================= */
 
-.login-container{
+.page{
     width:100%;
-    max-width:430px;
+    max-width:470px;
+    margin:auto;
+    padding:24px 18px 35px;
 }
 
 
 /* =========================
-   BRAND SECTION
+   BRAND
 ========================= */
 
-.logo{
+.brand{
     text-align:center;
-    color:white;
-    margin-bottom:20px;
+    padding:12px 0 28px;
 }
 
-.logo-icon{
-    width:65px;
-    height:65px;
+.brand-logo{
+    width:76px;
+    height:76px;
 
-    margin:0 auto 12px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.15);
+    margin:0 auto 13px;
 
     display:flex;
     align-items:center;
     justify-content:center;
+
+    border-radius:24px;
+
+    background:#191b5c;
+
+    color:white;
 
     font-size:30px;
-    font-weight:bold;
-
-    border:1px solid rgba(255,255,255,.2);
+    font-weight:800;
 
     box-shadow:
-        0 8px 20px rgba(0,0,0,.15);
+        0 10px 25px rgba(25,27,92,.20);
 }
 
-.logo h1{
-    font-size:28px;
+.brand h1{
+    font-size:25px;
+    font-weight:800;
+
+    color:#191b5c;
+
     margin-bottom:6px;
 }
 
-.logo p{
-    font-size:14px;
-    color:#dbeafe;
+.brand p{
+    color:#7b8191;
+    font-size:13px;
 }
 
 
 /* =========================
-   LOGIN CARD
+   CARD
 ========================= */
 
 .card{
-    background:white;
+    background:#ffffff;
 
-    padding:28px;
+    border-radius:28px;
 
-    border-radius:25px;
+    padding:28px 23px 25px;
 
     box-shadow:
-        0 15px 40px rgba(0,0,0,.2);
+        0 12px 35px rgba(30,31,75,.08);
 }
 
 
 /* =========================
-   CARD HEADER
+   HEADER
 ========================= */
 
 .card-header{
-    text-align:center;
     margin-bottom:22px;
 }
 
 .card-header h2{
-    color:#0f172a;
+    color:#1e1f4b;
+
     font-size:24px;
+    font-weight:800;
+
     margin-bottom:7px;
 }
 
 .card-header p{
-    color:#64748b;
-    font-size:14px;
+    color:#8a8f9d;
+    font-size:13px;
 }
 
 
@@ -115,28 +118,29 @@ body{
 ========================= */
 
 .message{
-    padding:13px 15px;
+    padding:13px 14px;
 
-    border-radius:13px;
+    border-radius:14px;
 
-    margin-bottom:16px;
+    margin-bottom:17px;
 
-    font-size:14px;
-    line-height:1.4;
+    font-size:13px;
 
     text-align:center;
+
+    line-height:1.5;
 }
 
 .success{
-    background:#dcfce7;
-    color:#15803d;
-    border:1px solid #bbf7d0;
+    background:#eaf8ef;
+    color:#16803c;
+    border:1px solid #c9efd5;
 }
 
 .error{
-    background:#fee2e2;
-    color:#b91c1c;
-    border:1px solid #fecaca;
+    background:#fff0f0;
+    color:#c62828;
+    border:1px solid #ffd1d1;
 }
 
 
@@ -145,80 +149,126 @@ body{
 ========================= */
 
 .form-group{
-    margin-bottom:16px;
+    margin-bottom:17px;
 }
 
 label{
     display:block;
 
-    margin-bottom:7px;
+    color:#353750;
 
-    color:#334155;
+    font-size:13px;
 
-    font-size:14px;
-    font-weight:bold;
+    font-weight:700;
+
+    margin-bottom:8px;
 }
 
 
 /* =========================
-   INPUTS
+   INPUT BOX
 ========================= */
 
-.input-wrapper{
-    position:relative;
-}
+.input-box{
+    height:56px;
 
-.input-wrapper input{
     width:100%;
 
-    padding:15px 45px 15px 15px;
+    display:flex;
 
-    border:1px solid #dbe1e8;
+    align-items:center;
 
-    border-radius:14px;
+    background:#f1f5ff;
 
-    outline:none;
+    border:1px solid transparent;
 
-    background:#f8fafc;
-
-    color:#0f172a;
-
-    font-size:15px;
+    border-radius:16px;
 
     transition:.2s;
 }
 
-.input-wrapper input:focus{
-    border-color:#2563eb;
+.input-box:focus-within{
+    background:#ffffff;
 
-    background:white;
+    border-color:#b9c7ff;
 
     box-shadow:
-        0 0 0 3px rgba(37,99,235,.1);
-}
-
-.input-wrapper input::placeholder{
-    color:#94a3b8;
+        0 0 0 3px rgba(37,99,235,.07);
 }
 
 
 /* =========================
-   INPUT ICON
+   ICON
 ========================= */
 
 .input-icon{
-    position:absolute;
+    width:48px;
 
-    right:15px;
-    top:50%;
+    display:flex;
 
-    transform:translateY(-50%);
+    align-items:center;
 
-    color:#94a3b8;
+    justify-content:center;
+
+    color:#7b84a4;
 
     font-size:17px;
+}
 
-    pointer-events:none;
+
+/* =========================
+   INPUT
+========================= */
+
+.input-box input{
+    flex:1;
+
+    width:100%;
+
+    height:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:#1e293b;
+
+    font-size:14px;
+
+    padding-right:5px;
+}
+
+.input-box input::placeholder{
+    color:#a1a7b5;
+}
+
+
+/* =========================
+   PASSWORD EYE
+========================= */
+
+.password-toggle{
+    width:48px;
+
+    height:100%;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:#9aa1b2;
+
+    cursor:pointer;
+
+    font-size:17px;
+}
+
+.password-toggle:hover{
+    color:#191b5c;
 }
 
 
@@ -229,44 +279,38 @@ label{
 .login-btn{
     width:100%;
 
+    height:57px;
+
+    margin-top:7px;
+
     border:none;
 
-    padding:15px;
+    border-radius:30px;
 
-    margin-top:5px;
-
-    border-radius:14px;
-
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-    );
+    background:#191b5c;
 
     color:white;
 
-    font-size:16px;
+    font-size:15px;
 
-    font-weight:bold;
+    font-weight:800;
+
+    letter-spacing:.8px;
 
     cursor:pointer;
 
     box-shadow:
-        0 7px 15px rgba(37,99,235,.25);
+        0 8px 18px rgba(25,27,92,.18);
 
     transition:.2s;
 }
 
 .login-btn:hover{
-    background:linear-gradient(
-        135deg,
-        #1d4ed8,
-        #1e40af
-    );
+    background:#111344;
 }
 
 .login-btn:active{
-    transform:scale(.99);
+    transform:scale(.98);
 }
 
 
@@ -277,17 +321,17 @@ label{
 .register-link{
     text-align:center;
 
-    margin-top:20px;
+    margin-top:22px;
 
-    color:#64748b;
+    color:#858b99;
 
-    font-size:14px;
+    font-size:13px;
 }
 
 .register-link a{
-    color:#2563eb;
+    color:#191b5c;
 
-    font-weight:bold;
+    font-weight:800;
 
     text-decoration:none;
 }
@@ -298,49 +342,60 @@ label{
 ========================= */
 
 .security{
-    margin-top:18px;
+    margin-top:22px;
 
-    padding-top:15px;
+    padding-top:17px;
 
-    border-top:1px solid #e2e8f0;
+    border-top:1px solid #eee8e1;
 
     text-align:center;
 
-    color:#94a3b8;
+    color:#a0a5b0;
 
-    font-size:12px;
+    font-size:11px;
 }
 
 
 /* =========================
-   SMALL SCREENS
+   SMALL DEVICES
 ========================= */
 
 @media(max-width:360px){
 
-    body{
-        padding:18px 12px;
+    .page{
+        padding:18px 13px 30px;
+    }
+
+    .brand-logo{
+        width:68px;
+        height:68px;
+
+        border-radius:21px;
+    }
+
+    .brand h1{
+        font-size:22px;
     }
 
     .card{
-        padding:22px;
+        padding:24px 18px;
 
-        border-radius:22px;
+        border-radius:24px;
     }
 
-    .logo h1{
-        font-size:25px;
+    .card-header h2{
+        font-size:22px;
     }
 
 }
 
-</style></head><body><div class="login-container"><!-- =========================
+</style></head><body><div class="page"><!-- =========================
      BRAND
 ========================= -->
 
-<div class="logo">
+<div class="brand">
 
-    <div class="logo-icon">
+    <div class="brand-logo">
         Z
     </div>
 
@@ -349,10 +404,11 @@ label{
     </h1>
 
     <p>
-        Welcome back to Zenith Capital
+        Build your financial journey
     </p>
 
 </div>
+
 
 
 <!-- =========================
@@ -375,18 +431,15 @@ label{
     </div>
 
 
-    <!-- =========================
-         FLASH MESSAGES
-    ========================= -->
+
+    <!-- FLASH MESSAGES -->
 
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% for category, message in messages %}
 
             <div class="message {{ category }}">
-
                 {{ message }}
-
             </div>
 
         {% endfor %}
@@ -394,11 +447,13 @@ label{
     {% endwith %}
 
 
-    <!-- =========================
-         LOGIN FORM
-    ========================= -->
 
-    <form method="POST">
+    <!-- LOGIN FORM -->
+
+    <form
+        method="POST"
+        action="{{ url_for('login') }}"
+    >
 
 
         <!-- PHONE -->
@@ -409,7 +464,11 @@ label{
                 Phone Number
             </label>
 
-            <div class="input-wrapper">
+            <div class="input-box">
+
+                <div class="input-icon">
+                    📱
+                </div>
 
                 <input
                     type="tel"
@@ -420,13 +479,10 @@ label{
                     required
                 >
 
-                <span class="input-icon">
-                    ☎
-                </span>
-
             </div>
 
         </div>
+
 
 
         <!-- PASSWORD -->
@@ -437,7 +493,11 @@ label{
                 Login Password
             </label>
 
-            <div class="input-wrapper">
+            <div class="input-box">
+
+                <div class="input-icon">
+                    🔒
+                </div>
 
                 <input
                     type="password"
@@ -448,36 +508,37 @@ label{
                     required
                 >
 
-                <span
-                    class="input-icon"
+                <button
+                    type="button"
+                    class="password-toggle"
+                    id="passwordToggle"
                     onclick="togglePassword()"
-                    style="cursor:pointer;pointer-events:auto;"
-                    id="eye"
+                    aria-label="Show or hide password"
                 >
                     👁
-                </span>
+                </button>
 
             </div>
 
         </div>
 
 
-        <!-- LOGIN -->
+
+        <!-- LOGIN BUTTON -->
 
         <button
             type="submit"
             class="login-btn"
         >
-            Login
+            LOGIN
         </button>
 
 
     </form>
 
 
-    <!-- =========================
-         REGISTER
-    ========================= -->
+
+    <!-- REGISTER -->
 
     <div class="register-link">
 
@@ -490,9 +551,8 @@ label{
     </div>
 
 
-    <!-- =========================
-         SECURITY
-    ========================= -->
+
+    <!-- SECURITY -->
 
     <div class="security">
 
@@ -510,21 +570,21 @@ function togglePassword(){
     const password =
         document.getElementById("password");
 
-    const eye =
-        document.getElementById("eye");
+    const button =
+        document.getElementById("passwordToggle");
 
 
     if(password.type === "password"){
 
         password.type = "text";
 
-        eye.textContent = "🙈";
+        button.textContent = "🙈";
 
     }else{
 
         password.type = "password";
 
-        eye.textContent = "👁";
+        button.textContent = "👁";
 
     }
 
