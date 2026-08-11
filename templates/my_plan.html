@@ -1,693 +1,924 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Plan - Zenith Capital</title>
+    <title>My Plan - Zenith Capital</title>
 
-<style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Arial, sans-serif;
+        }
 
-    body {
-        background: #f1f4fa;
-        color: #111827;
-        padding-bottom: 85px;
-    }
+        body {
+            background: #f1f5f9;
+            color: #334155;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    /* HEADER */
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            margin: auto;
+            background: #ffffff;
+            position: relative;
+            padding-bottom: 80px;
+            box-shadow: 0 0 18px rgba(0,0,0,.05);
+        }
 
-    .header {
-        width: 100%;
-        background: #0b1c4d;
-        color: white;
-        padding: 17px 15px;
-        text-align: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,.12);
-    }
+        /* =========================
+           HEADER
+        ========================= */
 
-    .header h1 {
-        font-size: 19px;
-        font-weight: 600;
-    }
+        .header {
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #2563eb
+            );
 
-    .header p {
-        font-size: 11px;
-        color: #cbd5e1;
-        margin-top: 4px;
-    }
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
 
-    /* MAIN */
+            border-radius: 0 0 25px 25px;
+        }
 
-    .container {
-        width: 100%;
-        max-width: 520px;
-        margin: auto;
-        padding: 15px;
-    }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
 
-    /* PLAN CARD */
+        .header p {
+            font-size: 13px;
+            color: #dbeafe;
+        }
 
-    .plan-card {
-        background: white;
-        border-radius: 16px;
-        padding: 15px;
-        box-shadow: 0 3px 12px rgba(0,0,0,.07);
-        border: 1px solid #e5e7eb;
-        margin-bottom: 14px;
-    }
+        /* =========================
+           CONTENT
+        ========================= */
 
-    .plan-top {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 15px;
-    }
+        .container {
+            width: 100%;
+            padding: 16px;
+        }
 
-    /* MACHINE IMAGE */
+        /* =========================
+           PLAN CARD
+        ========================= */
 
-    .machine-image {
-        width: 125px;
-        min-width: 125px;
-        height: 145px;
-        border-radius: 13px;
-        overflow: hidden;
-        background: linear-gradient(
-            to bottom,
-            #eff6ff,
-            #dbeafe
-        );
-        border: 1px solid #bfdbfe;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        text-align: center;
-    }
+        .plan-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,.05);
+            margin-bottom: 15px;
+        }
 
-    .running {
-        background: #10b981;
-        color: white;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 6px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
+        /* =========================
+           MACHINE PHOTO
+        ========================= */
 
-    .machine-icon {
-        font-size: 42px;
-    }
+        .machine-photo {
+            width: 100%;
+            height: 190px;
+            background: #f8fafc;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .machine-name {
-        font-size: 10px;
-        font-weight: bold;
-        color: #1e3a8a;
-        padding-bottom: 8px;
-    }
+        .machine-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-    .vip {
-        background: #111827;
-        color: white;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 7px;
-        letter-spacing: 1px;
-    }
+        .machine-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(
+                135deg,
+                #eff6ff,
+                #dbeafe
+            );
+            color: #1e3a8a;
+        }
 
-    /* DETAILS */
+        .machine-placeholder .icon {
+            font-size: 58px;
+            margin-bottom: 8px;
+        }
 
-    .details {
-        flex: 1;
-    }
+        .machine-placeholder strong {
+            font-size: 14px;
+        }
 
-    .plan-name {
-        font-size: 18px;
-        color: #0b1c4d;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
+        .machine-placeholder small {
+            margin-top: 4px;
+            color: #64748b;
+        }
 
-    .active {
-        display: inline-block;
-        background: #dcfce7;
-        color: #15803d;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 5px 9px;
-        border-radius: 20px;
-        margin-bottom: 8px;
-    }
+        /* =========================
+           PLAN CONTENT
+        ========================= */
 
-    .detail-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        background: #f8fafc;
-        border-radius: 8px;
-        padding: 8px;
-        margin-bottom: 6px;
-        font-size: 12px;
-    }
+        .plan-content {
+            padding: 17px;
+        }
 
-    .detail-label {
-        color: #64748b;
-    }
+        .plan-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
 
-    .detail-value {
-        color: #111827;
-        font-weight: bold;
-        text-align: right;
-    }
+        .plan-name {
+            color: #0f172a;
+            font-size: 19px;
+            font-weight: 700;
+        }
 
-    /* COUNTDOWN */
+        .active-badge {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
 
-    .countdown-card {
-        background: white;
-        border-radius: 16px;
-        padding: 15px;
-        box-shadow: 0 3px 12px rgba(0,0,0,.07);
-        border: 1px solid #e5e7eb;
-    }
+        /* =========================
+           PLAN DETAILS
+        ========================= */
 
-    .countdown-title {
-        font-size: 17px;
-        font-weight: bold;
-        color: #0b1c4d;
-        margin-bottom: 12px;
-    }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
 
-    .countdown-box {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 13px;
-    }
+            padding: 12px 0;
 
-    .countdown-label {
-        color: #64748b;
-        font-size: 12px;
-    }
+            border-bottom: 1px solid #f1f5f9;
+        }
 
-    #countdown {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 7px;
-        padding: 6px 9px;
-        font-family: monospace;
-        font-weight: bold;
-        font-size: 16px;
-        color: #111827;
-    }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
 
-    #countdown.ready {
-        color: #16a34a;
-    }
+        .detail-label {
+            color: #64748b;
+            font-size: 13px;
+        }
 
-    /* CLAIM */
+        .detail-value {
+            color: #0f172a;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+        }
 
-    .claim-button {
-        width: 100%;
-        border: none;
-        background: #0b1c4d;
-        color: white;
-        padding: 13px;
-        border-radius: 11px;
-        margin-top: 13px;
-        font-size: 14px;
-        font-weight: bold;
-    }
+        /* =========================
+           COUNTDOWN CARD
+        ========================= */
 
-    .claim-button:disabled {
-        background: #94a3b8;
-    }
+        .countdown-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.05);
+        }
 
-    .note {
-        color: #64748b;
-        font-size: 11px;
-        text-align: center;
-        line-height: 17px;
-        margin-top: 9px;
-    }
+        .countdown-title {
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
 
-    /* NO PLAN */
+        .timer-box {
+            background: #f8fafc;
+            border: 1px solid #dbeafe;
+            border-radius: 13px;
+            padding: 18px 10px;
+            text-align: center;
+        }
 
-    .empty {
-        background: white;
-        border-radius: 16px;
-        padding: 35px 20px;
-        text-align: center;
-        box-shadow: 0 3px 12px rgba(0,0,0,.07);
-    }
+        .timer-label {
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
 
-    .empty-icon {
-        font-size: 45px;
-        margin-bottom: 10px;
-    }
+        #timer {
+            color: #0b1c4d;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
 
-    .empty h2 {
-        color: #0b1c4d;
-        font-size: 19px;
-        margin-bottom: 8px;
-    }
+        #timer.ready {
+            color: #16a34a;
+            font-size: 28px;
+        }
 
-    .empty p {
-        color: #64748b;
-        font-size: 13px;
-        margin-bottom: 18px;
-    }
+        /* =========================
+           CLAIM BUTTON
+        ========================= */
 
-    .plans-button {
-        display: block;
-        background: #0b1c4d;
-        color: white;
-        text-decoration: none;
-        padding: 13px;
-        border-radius: 11px;
-        font-weight: bold;
-        font-size: 14px;
-    }
+        .claim-btn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
 
-    /* 5 ITEM BOTTOM NAVIGATION */
+            margin-top: 14px;
 
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: white;
-        border-top: 1px solid #e5e7eb;
-        padding: 7px 3px;
-        box-shadow: 0 -2px 10px rgba(0,0,0,.05);
-        z-index: 1000;
-    }
+            background: #0b1c4d;
+            color: white;
 
-    .nav-inner {
-        width: 100%;
-        max-width: 520px;
-        margin: auto;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-    }
+            font-size: 15px;
+            font-weight: 700;
 
-    .bottom-nav a {
-        text-decoration: none;
-        color: #9ca3af;
-        width: 20%;
-        text-align: center;
-        font-size: 10px;
-        font-weight: 500;
-        padding: 5px 2px;
-        border-radius: 10px;
-    }
+            cursor: pointer;
+        }
 
-    .bottom-nav a span {
-        display: block;
-        font-size: 19px;
-        line-height: 22px;
-        margin-bottom: 2px;
-    }
+        .claim-btn:disabled {
+            background: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+        }
 
-    .bottom-nav a.active {
-        background: #f1f5f9;
-        color: #0b1c4d;
-        font-weight: bold;
-    }
+        .claim-note {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 18px;
+            margin-top: 10px;
+        }
 
-</style>
+        /* =========================
+           NO PLAN
+        ========================= */
 
-</head><body><div class="header"><h1>My Plan</h1>
+        .empty-card {
+            background: white;
+            border-radius: 15px;
+            padding: 35px 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,.05);
+        }
 
-<p>
-    View your current machine plan and claim status
-</p>
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
 
-</div><div class="container">{% if plan %}
+        .empty-card h2 {
+            color: #0f172a;
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
 
-<!-- MACHINE PLAN --><div class="plan-card"><div class="plan-top">
+        .empty-card p {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 20px;
+            margin-bottom: 18px;
+        }
 
+        .plans-btn {
+            display: block;
+            width: 100%;
+            background: #0b1c4d;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+        }
 
-    <div class="machine-image">
+        /* =========================
+           FIXED 5-ITEM NAVIGATION
+           SAME AS PROFILE PAGE
+        ========================= */
 
-        <div class="running">
-            Running
-        </div>
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 65px;
 
-        <div class="machine-icon">
-            ⚙️
-        </div>
+            background: white;
+            border-top: 1px solid #e2e8f0;
 
-        <div class="machine-name">
-            PREMIUM MACHINE
-        </div>
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
 
-        <div class="vip">
-            {{ plan.plan_name or "VIP 1" }}
-        </div>
+            z-index: 1000;
+
+            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
+        }
+
+        .bottom-nav a {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 3px;
+
+            text-decoration: none;
+
+            color: #94a3b8;
+            font-size: 9px;
+        }
+
+        .bottom-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bottom-nav a.active {
+            color: #10144c;
+            font-weight: bold;
+        }
+
+        .bottom-nav a.active::after {
+            content: "";
+
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+
+            height: 3px;
+
+            background: #10144c;
+
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* =========================
+           SMALL SCREEN
+        ========================= */
+
+        @media(max-width:360px) {
+
+            .header {
+                padding: 22px 15px;
+            }
+
+            .header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            .machine-photo {
+                height: 160px;
+            }
+
+            #timer {
+                font-size: 29px;
+            }
+
+            .detail-row {
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>My Plan</h1>
+
+        <p>
+            View your current plan and claim status
+        </p>
 
     </div>
 
 
-    <div class="details">
+    <div class="container">
 
-        <div class="active">
-            ACTIVE PLAN
+        {% if plan %}
+
+        <!-- =========================
+             ACTIVE PLAN
+        ========================= -->
+
+        <div class="plan-card">
+
+            <!-- MACHINE PHOTO -->
+
+            <div class="machine-photo">
+
+                <img
+                    src="{{ url_for('static', filename='images/machine.jpg') }}"
+                    alt="Machine"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+
+                <div
+                    class="machine-placeholder"
+                    style="display:none;"
+                >
+                    <div class="icon">🏭</div>
+                    <strong>Machine Plan</strong>
+                    <small>Active Product</small>
+                </div>
+
+            </div>
+
+
+            <!-- PLAN INFORMATION -->
+
+            <div class="plan-content">
+
+                <div class="plan-top">
+
+                    <div class="plan-name">
+                        {{ plan.plan_name or "My Plan" }}
+                    </div>
+
+                    <div class="active-badge">
+                        ACTIVE
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Investment
+                    </span>
+
+                    <span class="detail-value">
+                        GHS {{ "%.2f"|format((plan.investment or 0)|float) }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Daily Income
+                    </span>
+
+                    <span class="detail-value">
+                        GHS {{ "%.2f"|format((plan.daily_income or 0)|float) }}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Duration
+                    </span>
+
+                    <span class="detail-value">
+                        {{ plan.duration or 0 }} Days
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Status
+                    </span>
+
+                    <span class="detail-value" style="color:#16a34a;">
+                        Active
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="plan-name">
-            {{ plan.plan_name or "My Plan" }}
+
+        <!-- =========================
+             DAILY CLAIM
+        ========================= -->
+
+        <div class="countdown-card">
+
+            <div class="countdown-title">
+                Daily Income Claim
+            </div>
+
+
+            <div class="timer-box">
+
+                <div
+                    class="timer-label"
+                    id="timerLabel"
+                >
+                    {% if can_claim %}
+                        Your income is ready
+                    {% else %}
+                        Next claim available in
+                    {% endif %}
+                </div>
+
+
+                <div id="timer">
+
+                    {% if can_claim %}
+                        READY
+                    {% else %}
+                        --:--:--
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('my_plan') }}"
+                onsubmit="return confirmClaim();"
+            >
+
+                <button
+                    type="submit"
+                    id="claimButton"
+                    class="claim-btn"
+                    {% if not can_claim %}disabled{% endif %}
+                >
+
+                    {% if can_claim %}
+                        Claim Income
+                    {% else %}
+                        Waiting For Next Claim
+                    {% endif %}
+
+                </button>
+
+            </form>
+
+
+            <div class="claim-note">
+
+                Your claim time is controlled by the server.
+                Refreshing the page does not restart the countdown.
+
+            </div>
+
         </div>
 
 
-        <div class="detail-row">
+        {% else %}
 
-            <span class="detail-label">
-                Investment
-            </span>
+        <!-- =========================
+             NO ACTIVE PLAN
+        ========================= -->
 
-            <span class="detail-value">
-                GHS {{ "%.2f"|format((plan.investment or 0)|float) }}
-            </span>
+        <div class="empty-card">
 
-        </div>
+            <div class="empty-icon">
+                📦
+            </div>
 
+            <h2>
+                No Active Plan
+            </h2>
 
-        <div class="detail-row">
+            <p>
+                You currently do not have an active plan.
+                Purchase a plan to see it here.
+            </p>
 
-            <span class="detail-label">
-                Daily profit
-            </span>
-
-            <span class="detail-value">
-                GHS {{ "%.2f"|format((plan.daily_income or 0)|float) }}
-            </span>
-
-        </div>
-
-
-        <div class="detail-row">
-
-            <span class="detail-label">
-                Days
-            </span>
-
-            <span class="detail-value">
-                {{ plan.duration or 0 }}
-            </span>
+            <a
+                href="{{ url_for('plan') }}"
+                class="plans-btn"
+            >
+                View Available Plans
+            </a>
 
         </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =========================
+         SAME PROFILE BOTTOM NAV
+         5 ITEMS
+    ========================= -->
+
+    <div class="bottom-nav">
+
+        <a href="{{ url_for('dashboard') }}">
+
+            <i data-lucide="home"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="active"
+        >
+
+            <i data-lucide="trending-up"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('team') }}">
+
+            <i data-lucide="users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('team') }}">
+
+            <i data-lucide="share-2"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('profile') }}">
+
+            <i data-lucide="user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
 
     </div>
 
 </div>
 
 
-<div class="detail-row">
-
-    <span class="detail-label">
-        Plan status
-    </span>
-
-    <span
-        class="detail-value"
-        style="color:#16a34a;"
-    >
-        Running
-    </span>
-
-</div>
-
-</div><!-- COUNTDOWN --><div class="countdown-card"><div class="countdown-title">
-    Daily Income
-</div>
-
-
-<div class="countdown-box">
-
-    <span
-        class="countdown-label"
-        id="countdownLabel"
-    >
-
-        {% if can_claim %}
-            Income available
-        {% else %}
-            Next claim available in
-        {% endif %}
-
-    </span>
-
-
-    <span id="countdown">
-
-        {% if can_claim %}
-            READY
-        {% else %}
-            24:00:00
-        {% endif %}
-
-    </span>
-
-</div>
-
-
-<form
-    method="POST"
-    action="{{ url_for('my_plan') }}"
-    onsubmit="return confirmClaim();"
->
-
-    <button
-        type="submit"
-        id="claimButton"
-        class="claim-button"
-        {% if not can_claim %}disabled{% endif %}
-    >
-
-        {% if can_claim %}
-            Claim Income
-        {% else %}
-            Waiting For Next Claim
-        {% endif %}
-
-    </button>
-
-</form>
-
-
-<div class="note">
-
-    Your countdown is based on the claim time
-    saved by the server.
-
-</div>
-
-</div>{% else %}
-
-<div class="empty"><div class="empty-icon">
-    ⚙️
-</div>
-
-<h2>
-    No Active Plan
-</h2>
-
-<p>
-    You currently do not have an active machine plan.
-</p>
-
-<a
-    href="{{ url_for('plan') }}"
-    class="plans-button"
->
-    View Available Plans
-</a>
-
-</div>{% endif %}
-
-</div><!-- 5 BOTTOM NAVIGATION --><nav class="bottom-nav"><div class="nav-inner">
-
-
-    <a href="{{ url_for('dashboard') }}">
-
-        <span>🏠</span>
-
-        Home
-
-    </a>
-
-
-    <a href="{{ url_for('income') }}">
-
-        <span>📈</span>
-
-        Income
-
-    </a>
-
-
-    <a href="{{ url_for('team') }}">
-
-        <span>👥</span>
-
-        Team
-
-    </a>
-
-
-    <a href="{{ url_for('share') }}">
-
-        <span>🔗</span>
-
-        Share
-
-    </a>
-
-
-    <a
-        href="{{ url_for('profile') }}"
-        class="active"
-    >
-
-        <span>👤</span>
-
-        My
-
-    </a>
-
-
-</div>
-
-</nav>{% if plan %}
+{% if plan %}
 
 <script>
 
-const canClaim =
-    {{ 'true' if can_claim else 'false' }};
+    /*
+     * Server-controlled countdown.
+     *
+     * Flask should provide:
+     *
+     * can_claim
+     * next_claim_at
+     */
 
-const nextClaimAt =
-    "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
+    const timer =
+        document.getElementById("timer");
 
+    const timerLabel =
+        document.getElementById("timerLabel");
 
-const countdown =
-    document.getElementById("countdown");
-
-const countdownLabel =
-    document.getElementById("countdownLabel");
-
-const claimButton =
-    document.getElementById("claimButton");
-
-
-function showReady() {
-
-    countdown.innerText = "READY";
-
-    countdown.classList.add("ready");
-
-    countdownLabel.innerText =
-        "Income available";
-
-    claimButton.disabled = false;
-
-    claimButton.innerText =
-        "Claim Income";
-}
+    const claimButton =
+        document.getElementById("claimButton");
 
 
-function updateCountdown() {
+    const canClaimInitially =
+        {{ 'true' if can_claim else 'false' }};
 
-    if (canClaim) {
 
-        showReady();
+    /*
+     * Safely receive the server date.
+     */
 
-        return;
+    const nextClaimString =
+        "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
+
+
+    let nextClaimAt = null;
+
+
+    if (nextClaimString) {
+
+        nextClaimAt =
+            new Date(nextClaimString);
+
     }
 
 
-    if (!nextClaimAt) {
+    function showReady() {
 
-        countdown.innerText =
-            "24:00:00";
+        timer.textContent = "READY";
 
-        return;
+        timer.classList.add("ready");
+
+        timerLabel.textContent =
+            "Your income is ready to claim";
+
+        claimButton.disabled = false;
+
+        claimButton.textContent =
+            "Claim Income";
+
     }
 
 
-    const target =
-        new Date(nextClaimAt).getTime();
+    function updateCountdown() {
 
-    const now =
-        new Date().getTime();
+        /*
+         * If Flask already says the claim
+         * is available, show READY.
+         */
 
-    const difference =
-        target - now;
+        if (canClaimInitially) {
+
+            showReady();
+
+            return;
+
+        }
 
 
-    if (difference <= 0) {
+        /*
+         * Prevent JavaScript errors when
+         * next_claim_at is missing.
+         */
 
-        showReady();
+        if (!nextClaimAt || isNaN(nextClaimAt.getTime())) {
 
-        return;
+            timer.textContent =
+                "WAIT";
+
+            timerLabel.textContent =
+                "Claim time is being checked";
+
+            claimButton.disabled = true;
+
+            claimButton.textContent =
+                "Waiting For Next Claim";
+
+            return;
+
+        }
+
+
+        const now =
+            new Date();
+
+
+        const difference =
+            nextClaimAt.getTime() - now.getTime();
+
+
+        /*
+         * Countdown finished.
+         */
+
+        if (difference <= 0) {
+
+            showReady();
+
+            return;
+
+        }
+
+
+        const totalSeconds =
+            Math.floor(difference / 1000);
+
+
+        const hours =
+            Math.floor(totalSeconds / 3600);
+
+
+        const minutes =
+            Math.floor(
+                (totalSeconds % 3600) / 60
+            );
+
+
+        const seconds =
+            totalSeconds % 60;
+
+
+        timer.textContent =
+            String(hours).padStart(2, "0")
+            + ":"
+            + String(minutes).padStart(2, "0")
+            + ":"
+            + String(seconds).padStart(2, "0");
+
+
+        timer.classList.remove("ready");
+
+
+        timerLabel.textContent =
+            "Next claim available in";
+
+
+        claimButton.disabled =
+            true;
+
+
+        claimButton.textContent =
+            "Waiting For Next Claim";
+
     }
 
 
-    const totalSeconds =
-        Math.floor(difference / 1000);
+    function confirmClaim() {
 
-    const hours =
-        Math.floor(totalSeconds / 3600);
+        if (claimButton.disabled) {
 
-    const minutes =
-        Math.floor(
-            (totalSeconds % 3600) / 60
+            return false;
+
+        }
+
+
+        return confirm(
+            "Are you sure you want to claim your daily income?"
         );
 
-    const seconds =
-        totalSeconds % 60;
-
-
-    countdown.innerText =
-        String(hours).padStart(2, "0")
-        + ":"
-        + String(minutes).padStart(2, "0")
-        + ":"
-        + String(seconds).padStart(2, "0");
-
-
-    claimButton.disabled = true;
-
-    claimButton.innerText =
-        "Waiting For Next Claim";
-
-}
-
-
-function confirmClaim() {
-
-    if (claimButton.disabled) {
-        return false;
     }
 
-    return confirm(
-        "Are you sure you want to claim your daily income?"
+
+    updateCountdown();
+
+
+    setInterval(
+        updateCountdown,
+        1000
     );
 
-}
+</script>
+
+{% endif %}
 
 
-updateCountdown();
+<script>
 
-setInterval(
-    updateCountdown,
-    1000
-);
+    /*
+     * Activate Lucide icons.
+     */
 
-</script>{% endif %}
+    lucide.createIcons();
 
-</body></html>
+</script>
+
+</body>
+</html>
