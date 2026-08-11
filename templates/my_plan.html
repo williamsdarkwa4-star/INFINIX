@@ -1,24 +1,54 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Plan - Zenith Capital</title><style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Plan - Zenith Capital</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:system-ui,-apple-system,Arial,sans-serif;
 }
 
 body{
+    background:#f1f4fa;
+    color:#334155;
     min-height:100vh;
-    background:#f4f7fb;
-    padding:20px 15px;
-    padding-bottom:40px;
+    padding-bottom:85px;
+    -webkit-tap-highlight-color:transparent;
+
+    display:flex;
+    justify-content:center;
 }
 
-.container{
+
+/* =========================
+   PHONE
+========================= */
+
+.phone{
     width:100%;
-    max-width:430px;
-    margin:auto;
+    max-width:440px;
+    min-height:100vh;
+    background:#f1f4fa;
+    position:relative;
+    padding-bottom:80px;
 }
 
 
@@ -27,61 +57,92 @@ body{
 ========================= */
 
 .header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
+    background:#0b1c4d;
     color:white;
+    padding:20px 18px;
 
-    padding:25px 20px;
-
-    border-radius:25px;
-
-    margin-bottom:18px;
-
-    box-shadow:0 10px 25px rgba(15,23,42,.18);
+    box-shadow:0 4px 12px rgba(0,0,0,.10);
 }
 
 .header-top{
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
 }
 
 .header h1{
-    font-size:24px;
-    margin-bottom:5px;
+    font-size:20px;
+    font-weight:800;
 }
 
 .header p{
-    color:#dbeafe;
-    font-size:13px;
+    margin-top:4px;
+    color:#cbd5e1;
+    font-size:11px;
 }
 
 .status{
     background:#dcfce7;
     color:#15803d;
 
-    padding:7px 11px;
-
+    padding:6px 10px;
     border-radius:20px;
 
-    font-size:11px;
-    font-weight:bold;
+    font-size:9px;
+    font-weight:800;
 }
 
 
 /* =========================
-   PLAN CARD
+   CONTENT
+========================= */
+
+.content{
+    padding:16px;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin:5px 2px 10px;
+}
+
+.section-title h2{
+    color:#0f172a;
+    font-size:15px;
+    font-weight:800;
+}
+
+.section-title span{
+    color:#94a3b8;
+    font-size:10px;
+}
+
+
+/* =========================
+   ACTIVE PLAN CARD
 ========================= */
 
 .plan-card{
     background:white;
 
-    border-radius:25px;
+    border-radius:20px;
 
-    padding:22px;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    padding:18px;
 
     margin-bottom:18px;
+
+    border:1px solid #edf0f5;
+
+    box-shadow:
+        0 7px 22px rgba(15,23,42,.07);
 }
 
 
@@ -92,44 +153,50 @@ body{
 .plan-header{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:13px;
 
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 .plan-icon{
-    width:65px;
-    height:65px;
+    width:55px;
+    height:55px;
 
-    border-radius:18px;
+    flex-shrink:0;
 
-    background:linear-gradient(
-        135deg,
-        #dbeafe,
-        #eff6ff
-    );
+    border-radius:15px;
+
+    background:#eef2ff;
+    color:#0b1c4d;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    font-size:30px;
+    font-size:22px;
+}
+
+.plan-title{
+    min-width:0;
 }
 
 .plan-title h2{
     color:#0f172a;
-    font-size:20px;
-    margin-bottom:5px;
+    font-size:18px;
+    font-weight:800;
+
+    word-break:break-word;
 }
 
 .plan-title p{
     color:#64748b;
-    font-size:13px;
+    font-size:11px;
+    margin-top:3px;
 }
 
 
 /* =========================
-   RUNNING BADGE
+   RUNNING
 ========================= */
 
 .running{
@@ -138,30 +205,30 @@ body{
     gap:7px;
 
     background:#f0fdf4;
-
     border:1px solid #bbf7d0;
 
     color:#15803d;
 
-    padding:10px 12px;
+    padding:9px 11px;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    font-size:13px;
-    font-weight:bold;
+    font-size:11px;
+    font-weight:700;
 
-    margin-bottom:18px;
+    margin-bottom:14px;
 }
 
 .dot{
-    width:8px;
-    height:8px;
+    width:7px;
+    height:7px;
 
     background:#22c55e;
 
     border-radius:50%;
 
-    box-shadow:0 0 0 4px rgba(34,197,94,.12);
+    box-shadow:
+        0 0 0 4px rgba(34,197,94,.10);
 }
 
 
@@ -170,43 +237,38 @@ body{
 ========================= */
 
 .countdown-box{
-    background:#0f172a;
-
+    background:#0b1c4d;
     color:white;
 
-    border-radius:18px;
+    border-radius:15px;
 
-    padding:18px;
+    padding:16px;
 
     text-align:center;
 
-    margin-bottom:20px;
+    margin-bottom:14px;
 }
 
 .countdown-label{
     color:#94a3b8;
-
-    font-size:12px;
-
-    margin-bottom:8px;
+    font-size:10px;
+    font-weight:600;
 }
 
 .countdown{
-    font-size:32px;
+    margin-top:5px;
 
-    font-weight:bold;
+    font-size:29px;
+    font-weight:800;
 
     letter-spacing:2px;
-
-    color:white;
 }
 
 .countdown-sub{
+    margin-top:5px;
+
     color:#94a3b8;
-
-    font-size:11px;
-
-    margin-top:7px;
+    font-size:9px;
 }
 
 
@@ -219,17 +281,17 @@ body{
 
     grid-template-columns:1fr 1fr;
 
-    gap:10px;
+    gap:8px;
 }
 
 .detail{
     background:#f8fafc;
 
-    border:1px solid #e2e8f0;
+    border:1px solid #edf0f5;
 
-    border-radius:14px;
+    border-radius:11px;
 
-    padding:14px;
+    padding:11px;
 }
 
 .detail span{
@@ -237,15 +299,15 @@ body{
 
     color:#64748b;
 
-    font-size:12px;
+    font-size:10px;
 
-    margin-bottom:6px;
+    margin-bottom:5px;
 }
 
 .detail strong{
     color:#0f172a;
 
-    font-size:16px;
+    font-size:13px;
 }
 
 
@@ -254,33 +316,277 @@ body{
 ========================= */
 
 .income-box{
-    margin-top:12px;
+    margin-top:9px;
 
-    background:#eff6ff;
+    background:#eef2ff;
 
-    border:1px solid #bfdbfe;
+    border:1px solid #dbeafe;
 
-    border-radius:14px;
+    border-radius:11px;
 
-    padding:15px;
+    padding:12px;
 
     display:flex;
 
     justify-content:space-between;
 
     align-items:center;
+
+    gap:10px;
 }
 
 .income-box span{
     color:#475569;
-
-    font-size:13px;
+    font-size:11px;
 }
 
 .income-box strong{
-    color:#2563eb;
+    color:#0b1c4d;
+    font-size:15px;
+}
 
-    font-size:19px;
+
+/* =========================
+   PLAN CENTER
+========================= */
+
+.plan-center{
+    margin-top:3px;
+}
+
+.available-plan{
+
+    background:white;
+
+    border:1px solid #edf0f5;
+
+    border-radius:16px;
+
+    padding:15px;
+
+    margin-bottom:9px;
+
+    box-shadow:
+        0 3px 10px rgba(15,23,42,.035);
+}
+
+
+/* =========================
+   AVAILABLE PLAN TOP
+========================= */
+
+.available-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.available-name{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    min-width:0;
+}
+
+.available-icon{
+    width:38px;
+    height:38px;
+
+    flex-shrink:0;
+
+    border-radius:11px;
+
+    background:#eef2ff;
+    color:#0b1c4d;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:15px;
+}
+
+.available-name h3{
+    color:#0f172a;
+    font-size:14px;
+    font-weight:800;
+
+    word-break:break-word;
+}
+
+.available-name p{
+    color:#94a3b8;
+    font-size:9px;
+    margin-top:2px;
+}
+
+
+/* =========================
+   PLAN BADGE
+========================= */
+
+.plan-badge{
+    background:#f1f5f9;
+    color:#64748b;
+
+    padding:5px 8px;
+
+    border-radius:15px;
+
+    font-size:8px;
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+
+/* =========================
+   AVAILABLE DETAILS
+========================= */
+
+.available-details{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:6px;
+
+    margin-bottom:12px;
+}
+
+.available-detail{
+
+    background:#f8fafc;
+
+    border-radius:9px;
+
+    padding:9px 6px;
+
+    text-align:center;
+}
+
+.available-detail span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:8px;
+
+    margin-bottom:4px;
+}
+
+.available-detail strong{
+
+    color:#0b1c4d;
+
+    font-size:11px;
+
+    word-break:break-word;
+}
+
+
+/* =========================
+   SELECT BUTTON
+========================= */
+
+.select-plan{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:7px;
+
+    padding:11px;
+
+    border-radius:10px;
+
+    background:#0b1c4d;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:800;
+}
+
+.select-plan:active{
+    transform:scale(.99);
+}
+
+
+/* =========================
+   CURRENT PLAN BADGE
+========================= */
+
+.current-plan{
+    background:#dcfce7;
+
+    color:#15803d;
+
+    padding:5px 8px;
+
+    border-radius:15px;
+
+    font-size:8px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+
+/* =========================
+   NO PLAN
+========================= */
+
+.empty{
+    text-align:center;
+
+    padding:25px 15px;
+
+    color:#64748b;
+}
+
+.empty-icon{
+    width:55px;
+    height:55px;
+
+    margin:0 auto 10px;
+
+    border-radius:15px;
+
+    background:#eef2ff;
+    color:#0b1c4d;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:23px;
+}
+
+.empty h2{
+    color:#0f172a;
+    font-size:17px;
+}
+
+.empty p{
+    margin-top:5px;
+    font-size:11px;
 }
 
 
@@ -291,46 +597,124 @@ body{
 .info{
     background:white;
 
-    border-radius:20px;
+    border:1px solid #edf0f5;
 
-    padding:20px;
+    border-radius:16px;
 
-    box-shadow:0 8px 25px rgba(0,0,0,.06);
+    padding:15px;
+
+    margin-top:15px;
 }
 
-.info h3{
+.info-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
     color:#0f172a;
 
-    font-size:17px;
+    font-size:13px;
+    font-weight:800;
 
-    margin-bottom:12px;
+    margin-bottom:7px;
+}
+
+.info-title i{
+    color:#0b1c4d;
 }
 
 .info p{
     color:#64748b;
 
-    font-size:13px;
+    font-size:11px;
 
-    line-height:1.6;
+    line-height:1.55;
 }
 
 
 /* =========================
-   EMPTY PLAN
+   BOTTOM NAVIGATION
 ========================= */
 
-.empty{
-    text-align:center;
+.bottom-nav{
+    position:fixed;
 
-    padding:30px 15px;
+    bottom:0;
+    left:0;
+    right:0;
 
-    color:#64748b;
+    height:67px;
+
+    background:white;
+
+    border-top:1px solid #e2e8f0;
+
+    display:flex;
+    justify-content:center;
+
+    z-index:9999;
+
+    box-shadow:
+        0 -4px 14px rgba(0,0,0,.05);
 }
 
-.empty-icon{
-    font-size:45px;
+.bottom-nav-inner{
+    width:100%;
+    max-width:440px;
 
-    margin-bottom:12px;
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    align-items:center;
+}
+
+.bottom-nav a{
+    height:100%;
+
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    text-decoration:none;
+
+    color:#94a3b8;
+
+    font-size:9px;
+}
+
+.bottom-nav i{
+    font-size:18px;
+}
+
+.bottom-nav a.active{
+    color:#0b1c4d;
+    font-weight:800;
+}
+
+.bottom-nav a.active::after{
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:25%;
+    right:25%;
+
+    height:3px;
+
+    background:#0b1c4d;
+
+    border-radius:
+        4px 4px 0 0;
 }
 
 
@@ -340,238 +724,528 @@ body{
 
 @media(max-width:360px){
 
-    body{
-        padding:12px 10px;
+    .content{
+        padding:12px;
     }
 
     .plan-card{
-        padding:18px;
+        padding:15px;
     }
 
     .countdown{
-        font-size:27px;
+        font-size:26px;
+    }
+
+    .available-details{
+        gap:4px;
+    }
+
+    .available-detail{
+        padding:8px 4px;
+    }
+
+    .bottom-nav{
+        height:64px;
+    }
+
+    .bottom-nav i{
+        font-size:16px;
     }
 
 }
 
-</style></head><body><div class="container"><!-- HEADER -->
+</style>
 
-<div class="header">
+</head>
 
-    <div class="header-top">
 
-        <div>
+<body>
 
-            <h1>
-                My Income
-            </h1>
+<div class="phone">
 
-            <p>
-                Track your active plan
-            </p>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="header">
+
+        <div class="header-top">
+
+            <div>
+
+                <h1>
+                    My Income
+                </h1>
+
+                <p>
+                    Manage your active plan and products
+                </p>
+
+            </div>
+
+            {% if user_plan %}
+
+            <div class="status">
+                ACTIVE
+            </div>
+
+            {% endif %}
 
         </div>
 
-        <div class="status">
-            ACTIVE
-        </div>
-
-    </div>
-
-</div>
+    </header>
 
 
-{% if user_plan %}
-
-<!-- PLAN -->
-
-<div class="plan-card">
+    <main class="content">
 
 
-    <div class="plan-header">
+        <!-- =========================
+             CURRENT PLAN
+        ========================= -->
 
-        <div class="plan-icon">
-            💼
-        </div>
-
-        <div class="plan-title">
+        <div class="section-title">
 
             <h2>
-                {{ user_plan.plan_name }}
+                My Active Plan
             </h2>
 
+            {% if user_plan %}
+                <span>Currently running</span>
+            {% endif %}
+
+        </div>
+
+
+        {% if user_plan %}
+
+        <div class="plan-card">
+
+
+            <div class="plan-header">
+
+                <div class="plan-icon">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                </div>
+
+                <div class="plan-title">
+
+                    <h2>
+                        {{ user_plan.plan_name }}
+                    </h2>
+
+                    <p>
+                        Your active product
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="running">
+
+                <span class="dot"></span>
+
+                Plan Running
+
+            </div>
+
+
+            <div class="countdown-box">
+
+                <div class="countdown-label">
+                    NEXT INCOME IN
+                </div>
+
+                <div
+                    class="countdown"
+                    id="countdown"
+                >
+                    24:00:00
+                </div>
+
+                <div class="countdown-sub">
+                    Next scheduled settlement
+                </div>
+
+            </div>
+
+
+            <div class="details">
+
+                <div class="detail">
+
+                    <span>
+                        Investment
+                    </span>
+
+                    <strong>
+                        GHS {{ "%.2f"|format(user_plan.investment) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Daily Income
+                    </span>
+
+                    <strong>
+                        GHS {{ "%.2f"|format(user_plan.daily_income) }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Duration
+                    </span>
+
+                    <strong>
+                        {{ user_plan.duration }} Days
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong>
+                        Active
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="income-box">
+
+                <span>
+                    Expected Daily Income
+                </span>
+
+                <strong>
+                    GHS {{ "%.2f"|format(user_plan.daily_income) }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+        {% else %}
+
+        <div class="plan-card">
+
+            <div class="empty">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                </div>
+
+                <h2>
+                    No Active Plan
+                </h2>
+
+                <p>
+                    You currently don't have an active plan.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             AVAILABLE PLANS
+        ========================= -->
+
+        <div class="section-title">
+
+            <h2>
+                Available Plans
+            </h2>
+
+            <span>
+                Choose a product
+            </span>
+
+        </div>
+
+
+        <div class="plan-center">
+
+            {% if plans %}
+
+                {% for plan in plans %}
+
+                <div class="available-plan">
+
+
+                    <div class="available-top">
+
+                        <div class="available-name">
+
+                            <div class="available-icon">
+
+                                <i class="fa-solid fa-box"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    {{ plan.plan_name }}
+                                </h3>
+
+                                <p>
+                                    Zenith Capital Product
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {% if user_plan and user_plan.plan_name == plan.plan_name %}
+
+                            <span class="current-plan">
+                                CURRENT
+                            </span>
+
+                        {% else %}
+
+                            <span class="plan-badge">
+                                AVAILABLE
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="available-details">
+
+
+                        <div class="available-detail">
+
+                            <span>
+                                Investment
+                            </span>
+
+                            <strong>
+                                GHS {{ "%.2f"|format(plan.investment_amount) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="available-detail">
+
+                            <span>
+                                Daily Income
+                            </span>
+
+                            <strong>
+                                GHS {{ "%.2f"|format(plan.daily_income) }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="available-detail">
+
+                            <span>
+                                Duration
+                            </span>
+
+                            <strong>
+                                {{ plan.duration }} Days
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    {% if not user_plan or user_plan.plan_name != plan.plan_name %}
+
+                    <a
+                        href="{{ url_for('buy_plan', plan_id=plan.id) }}"
+                        class="select-plan"
+                    >
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                        View / Select Plan
+
+                    </a>
+
+                    {% endif %}
+
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="available-plan">
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+
+                            <i class="fa-solid fa-box-open"></i>
+
+                        </div>
+
+                        <h2>
+                            No Plans Available
+                        </h2>
+
+                        <p>
+                            There are currently no products available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <div class="info">
+
+            <div class="info-title">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Income Information
+                </span>
+
+            </div>
+
             <p>
-                Your active plan
+                Your countdown shows the time remaining until
+                the next scheduled settlement. Plan information
+                is displayed according to the products available
+                on your account.
             </p>
 
         </div>
 
-    </div>
+
+    </main>
 
 
-    <!-- RUNNING -->
-
-    <div class="running">
-
-        <span class="dot"></span>
-
-        Running
-
-    </div>
+</div>
 
 
-    <!-- COUNTDOWN -->
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
 
-    <div class="countdown-box">
+<nav class="bottom-nav">
 
-        <div class="countdown-label">
-            NEXT INCOME IN
-        </div>
+    <div class="bottom-nav-inner">
 
-        <div
-            class="countdown"
-            id="countdown"
+
+        <a href="{{ url_for('dashboard') }}">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="active"
         >
-            24:00:00
-        </div>
 
-        <div class="countdown-sub">
-            Settlement countdown
-        </div>
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('team') }}">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('team') }}">
+
+            <i class="fa-solid fa-share-nodes"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('profile') }}">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
+
 
     </div>
 
-
-    <!-- DETAILS -->
-
-    <div class="details">
-
-        <div class="detail">
-
-            <span>
-                Investment
-            </span>
-
-            <strong>
-                GHS {{ "%.2f"|format(user_plan.investment) }}
-            </strong>
-
-        </div>
+</nav>
 
 
-        <div class="detail">
+<script>
 
-            <span>
-                Daily Income
-            </span>
-
-            <strong>
-                GHS {{ "%.2f"|format(user_plan.daily_income) }}
-            </strong>
-
-        </div>
-
-
-        <div class="detail">
-
-            <span>
-                Duration
-            </span>
-
-            <strong>
-                {{ user_plan.duration }} Days
-            </strong>
-
-        </div>
-
-
-        <div class="detail">
-
-            <span>
-                Status
-            </span>
-
-            <strong>
-                Active
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="income-box">
-
-        <span>
-            Expected Daily Income
-        </span>
-
-        <strong>
-            GHS {{ "%.2f"|format(user_plan.daily_income) }}
-        </strong>
-
-    </div>
-
-
-</div>
-
-
-{% else %}
-
-
-<!-- NO PLAN -->
-
-<div class="plan-card">
-
-    <div class="empty">
-
-        <div class="empty-icon">
-            💼
-        </div>
-
-        <h2>
-            No Active Plan
-        </h2>
-
-        <p style="margin-top:8px;">
-            You currently don't have an active plan.
-        </p>
-
-    </div>
-
-</div>
-
-
-{% endif %}
-
-
-<!-- INFORMATION -->
-
-<div class="info">
-
-    <h3>
-        Income Information
-    </h3>
-
-    <p>
-        Your countdown shows the time remaining until
-        the next scheduled settlement. The timer continues
-        running when you refresh the page.
-    </p>
-
-</div>
-
-</div><script>
-
-/*
+/* =========================
    24-HOUR COUNTDOWN
+========================= */
 
-   The first time the page opens, an end time is created.
-   The end time is stored in the browser so refreshing
-   the page does not reset the countdown.
-*/
-
-const STORAGE_KEY = "zenith_capital_income_end";
+const STORAGE_KEY =
+    "zenith_capital_income_end";
 
 const countdown =
     document.getElementById("countdown");
@@ -580,7 +1254,9 @@ const countdown =
 function createEndTime(){
 
     const end =
-        Date.now() + (24 * 60 * 60 * 1000);
+        Date.now()
+        +
+        (24 * 60 * 60 * 1000);
 
     localStorage.setItem(
         STORAGE_KEY,
@@ -594,11 +1270,14 @@ function createEndTime(){
 function getEndTime(){
 
     let end =
-        localStorage.getItem(STORAGE_KEY);
+        localStorage.getItem(
+            STORAGE_KEY
+        );
 
     if(!end){
 
-        end = createEndTime();
+        end =
+            createEndTime();
 
     }
 
@@ -619,11 +1298,6 @@ function updateCountdown(){
     let remaining =
         end - Date.now();
 
-
-    /*
-       When the countdown reaches zero,
-       start another 24-hour cycle.
-    */
 
     if(remaining <= 0){
 
@@ -661,11 +1335,11 @@ function updateCountdown(){
     countdown.textContent =
 
         String(hours).padStart(2,"0")
-        + ":" +
-
+        + ":"
+        +
         String(minutes).padStart(2,"0")
-        + ":" +
-
+        + ":"
+        +
         String(seconds).padStart(2,"0");
 
 }
@@ -678,4 +1352,9 @@ setInterval(
     1000
 );
 
-</script></body></html>
+</script>
+
+
+</body>
+
+</html>
