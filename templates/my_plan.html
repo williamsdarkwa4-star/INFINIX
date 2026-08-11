@@ -1,1283 +1,908 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!DOCTYPE html><html lang="en">
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Income - Zenith Capital</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
 
-    <title>My Income - Zenith Capital</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, Arial, sans-serif;
+    }
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    body {
+        background: #f1f4fa;
+        color: #334155;
+        min-height: 100vh;
+        padding-bottom: 85px;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-    <style>
+    .phone {
+        width: 100%;
+        max-width: 440px;
+        min-height: 100vh;
+        margin: auto;
+        background: #f1f4fa;
+        padding-bottom: 85px;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, Arial, sans-serif;
-        }
+    .header {
+        background: #0b1c4d;
+        color: white;
+        padding: 20px 18px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.10);
+    }
 
-        body {
-            background: #f1f4fa;
-            color: #334155;
-            min-height: 100vh;
-            padding-bottom: 85px;
-            -webkit-tap-highlight-color: transparent;
+    .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
 
-            display: flex;
-            justify-content: center;
-        }
+    .header h1 {
+        font-size: 20px;
+        font-weight: 800;
+    }
 
-        .phone {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            background: #f1f4fa;
-            position: relative;
-            padding-bottom: 80px;
-        }
+    .header p {
+        margin-top: 4px;
+        color: #cbd5e1;
+        font-size: 11px;
+    }
 
-        /* HEADER */
+    .status {
+        background: #dcfce7;
+        color: #15803d;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 9px;
+        font-weight: 800;
+    }
 
-        .header {
-            background: #0b1c4d;
-            color: white;
-            padding: 20px 18px;
+    .content {
+        padding: 16px;
+    }
 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .10);
-        }
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 5px 2px 10px;
+    }
 
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
+    .section-title h2 {
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 800;
+    }
 
-        .header h1 {
-            font-size: 20px;
-            font-weight: 800;
-        }
+    .section-title span {
+        color: #94a3b8;
+        font-size: 10px;
+    }
 
-        .header p {
-            margin-top: 4px;
-            color: #cbd5e1;
-            font-size: 11px;
-        }
+    .flash {
+        padding: 11px 13px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        font-size: 11px;
+        font-weight: 700;
+    }
 
-        .status {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 800;
-            white-space: nowrap;
-        }
+    .flash.success {
+        background: #dcfce7;
+        color: #15803d;
+    }
 
-        /* CONTENT */
+    .flash.error {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
 
+    .flash.warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .flash.info {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .plan-card,
+    .available-plan,
+    .info {
+        background: white;
+        border: 1px solid #edf0f5;
+        box-shadow: 0 5px 18px rgba(15,23,42,.06);
+    }
+
+    .plan-card {
+        border-radius: 20px;
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+
+    .plan-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 15px;
+    }
+
+    .plan-icon {
+        width: 55px;
+        height: 55px;
+        flex-shrink: 0;
+        border-radius: 15px;
+        background: #eef2ff;
+        color: #0b1c4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .plan-title {
+        min-width: 0;
+    }
+
+    .plan-title h2 {
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 800;
+        word-break: break-word;
+    }
+
+    .plan-title p {
+        color: #64748b;
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+    .running {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #15803d;
+        padding: 9px 11px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .dot {
+        width: 7px;
+        height: 7px;
+        background: #22c55e;
+        border-radius: 50%;
+    }
+
+    .countdown-box {
+        background: #0b1c4d;
+        color: white;
+        border-radius: 15px;
+        padding: 16px;
+        text-align: center;
+        margin-bottom: 14px;
+    }
+
+    .countdown-label {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    .countdown {
+        margin-top: 5px;
+        font-size: 29px;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .countdown-sub {
+        margin-top: 5px;
+        color: #94a3b8;
+        font-size: 9px;
+    }
+
+    .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .detail {
+        background: #f8fafc;
+        border: 1px solid #edf0f5;
+        border-radius: 11px;
+        padding: 11px;
+    }
+
+    .detail span {
+        display: block;
+        color: #64748b;
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+
+    .detail strong {
+        color: #0f172a;
+        font-size: 13px;
+        word-break: break-word;
+    }
+
+    .income-box {
+        margin-top: 9px;
+        background: #eef2ff;
+        border: 1px solid #dbeafe;
+        border-radius: 11px;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .income-box span {
+        color: #475569;
+        font-size: 11px;
+    }
+
+    .income-box strong {
+        color: #0b1c4d;
+        font-size: 15px;
+        white-space: nowrap;
+    }
+
+    /*
+       IMPORTANT:
+       There is intentionally NO url_for('claim_income') here.
+       Your current app.py does not have that endpoint.
+    */
+
+    .claim-status {
+        margin-top: 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        padding: 11px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .available-plan {
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 9px;
+    }
+
+    .available-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .available-name {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+    }
+
+    .available-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 11px;
+        background: #eef2ff;
+        color: #0b1c4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .available-name h3 {
+        color: #0f172a;
+        font-size: 14px;
+        font-weight: 800;
+        word-break: break-word;
+    }
+
+    .available-name p {
+        color: #94a3b8;
+        font-size: 9px;
+        margin-top: 2px;
+    }
+
+    .plan-badge,
+    .current-plan {
+        padding: 5px 8px;
+        border-radius: 15px;
+        font-size: 8px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .plan-badge {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .current-plan {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .available-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+
+    .available-detail {
+        background: #f8fafc;
+        border-radius: 9px;
+        padding: 9px 6px;
+        text-align: center;
+    }
+
+    .available-detail span {
+        display: block;
+        color: #94a3b8;
+        font-size: 8px;
+        margin-bottom: 4px;
+    }
+
+    .available-detail strong {
+        color: #0b1c4d;
+        font-size: 11px;
+        word-break: break-word;
+    }
+
+    .select-plan {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 11px;
+        border-radius: 10px;
+        background: #0b1c4d;
+        color: white;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 25px 15px;
+        color: #64748b;
+    }
+
+    .empty-icon {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 10px;
+        border-radius: 15px;
+        background: #eef2ff;
+        color: #0b1c4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+    }
+
+    .empty h2 {
+        color: #0f172a;
+        font-size: 17px;
+    }
+
+    .empty p {
+        margin-top: 5px;
+        font-size: 11px;
+    }
+
+    .info {
+        border-radius: 16px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .info-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #0f172a;
+        font-size: 13px;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .info-title i {
+        color: #0b1c4d;
+    }
+
+    .info p {
+        color: #64748b;
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 67px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: center;
+        z-index: 9999;
+        box-shadow: 0 -4px 14px rgba(0,0,0,.05);
+    }
+
+    .bottom-nav-inner {
+        width: 100%;
+        max-width: 440px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        align-items: center;
+    }
+
+    .bottom-nav a {
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        text-decoration: none;
+        color: #94a3b8;
+        font-size: 9px;
+    }
+
+    .bottom-nav i {
+        font-size: 18px;
+    }
+
+    .bottom-nav a.active {
+        color: #0b1c4d;
+        font-weight: 800;
+    }
+
+    .bottom-nav a.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+        height: 3px;
+        background: #0b1c4d;
+        border-radius: 4px 4px 0 0;
+    }
+
+    @media (max-width: 360px) {
         .content {
-            padding: 16px;
+            padding: 12px;
         }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-
-            margin: 5px 2px 10px;
-        }
-
-        .section-title h2 {
-            color: #0f172a;
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .section-title span {
-            color: #94a3b8;
-            font-size: 10px;
-        }
-
-        /* FLASH */
-
-        .flash {
-            padding: 11px 13px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .flash.success {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .flash.error {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .flash.warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .flash.info {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        /* PLAN CARD */
 
         .plan-card {
-            background: white;
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 18px;
-
-            border: 1px solid #edf0f5;
-
-            box-shadow:
-                0 7px 22px rgba(15, 23, 42, .07);
-        }
-
-        .plan-header {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            margin-bottom: 15px;
-        }
-
-        .plan-icon {
-            width: 55px;
-            height: 55px;
-            flex-shrink: 0;
-
-            border-radius: 15px;
-
-            background: #eef2ff;
-            color: #0b1c4d;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 22px;
-        }
-
-        .plan-title {
-            min-width: 0;
-        }
-
-        .plan-title h2 {
-            color: #0f172a;
-            font-size: 18px;
-            font-weight: 800;
-            word-break: break-word;
-        }
-
-        .plan-title p {
-            color: #64748b;
-            font-size: 11px;
-            margin-top: 3px;
-        }
-
-        /* RUNNING */
-
-        .running {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-
-            color: #15803d;
-
-            padding: 9px 11px;
-            border-radius: 10px;
-
-            font-size: 11px;
-            font-weight: 700;
-
-            margin-bottom: 14px;
-        }
-
-        .dot {
-            width: 7px;
-            height: 7px;
-
-            background: #22c55e;
-            border-radius: 50%;
-
-            box-shadow:
-                0 0 0 4px rgba(34, 197, 94, .10);
-        }
-
-        /* COUNTDOWN */
-
-        .countdown-box {
-            background: #0b1c4d;
-            color: white;
-
-            border-radius: 15px;
-            padding: 16px;
-
-            text-align: center;
-            margin-bottom: 14px;
-        }
-
-        .countdown-label {
-            color: #94a3b8;
-            font-size: 10px;
-            font-weight: 600;
+            padding: 15px;
         }
 
         .countdown {
-            margin-top: 5px;
-
-            font-size: 29px;
-            font-weight: 800;
-
-            letter-spacing: 2px;
-        }
-
-        .countdown-sub {
-            margin-top: 5px;
-
-            color: #94a3b8;
-            font-size: 9px;
-        }
-
-        /* DETAILS */
-
-        .details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .detail {
-            background: #f8fafc;
-
-            border: 1px solid #edf0f5;
-            border-radius: 11px;
-
-            padding: 11px;
-        }
-
-        .detail span {
-            display: block;
-
-            color: #64748b;
-            font-size: 10px;
-
-            margin-bottom: 5px;
-        }
-
-        .detail strong {
-            color: #0f172a;
-            font-size: 13px;
-
-            word-break: break-word;
-        }
-
-        /* INCOME */
-
-        .income-box {
-            margin-top: 9px;
-
-            background: #eef2ff;
-            border: 1px solid #dbeafe;
-
-            border-radius: 11px;
-            padding: 12px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            gap: 10px;
-        }
-
-        .income-box span {
-            color: #475569;
-            font-size: 11px;
-        }
-
-        .income-box strong {
-            color: #0b1c4d;
-            font-size: 15px;
-            white-space: nowrap;
-        }
-
-        /* CLAIM */
-
-        .claim-form {
-            margin-top: 10px;
-        }
-
-        .claim-button {
-            width: 100%;
-
-            border: none;
-            background: #0b1c4d;
-            color: white;
-
-            padding: 12px;
-            border-radius: 10px;
-
-            font-size: 11px;
-            font-weight: 800;
-
-            cursor: pointer;
-        }
-
-        .claim-button:disabled {
-            background: #cbd5e1;
-            color: #64748b;
-            cursor: not-allowed;
-        }
-
-        /* AVAILABLE PLANS */
-
-        .available-plan {
-            background: white;
-
-            border: 1px solid #edf0f5;
-            border-radius: 16px;
-
-            padding: 15px;
-            margin-bottom: 9px;
-
-            box-shadow:
-                0 3px 10px rgba(15, 23, 42, .035);
-        }
-
-        .available-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .available-name {
-            display: flex;
-            align-items: center;
-
-            gap: 9px;
-            min-width: 0;
-        }
-
-        .available-icon {
-            width: 38px;
-            height: 38px;
-
-            flex-shrink: 0;
-
-            border-radius: 11px;
-
-            background: #eef2ff;
-            color: #0b1c4d;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 15px;
-        }
-
-        .available-name h3 {
-            color: #0f172a;
-            font-size: 14px;
-            font-weight: 800;
-
-            word-break: break-word;
-        }
-
-        .available-name p {
-            color: #94a3b8;
-            font-size: 9px;
-            margin-top: 2px;
-        }
-
-        .plan-badge,
-        .current-plan {
-            padding: 5px 8px;
-            border-radius: 15px;
-
-            font-size: 8px;
-            font-weight: 800;
-
-            white-space: nowrap;
-        }
-
-        .plan-badge {
-            background: #f1f5f9;
-            color: #64748b;
-        }
-
-        .current-plan {
-            background: #dcfce7;
-            color: #15803d;
+            font-size: 26px;
         }
 
         .available-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-
-            gap: 6px;
-            margin-bottom: 12px;
+            gap: 4px;
         }
 
         .available-detail {
-            background: #f8fafc;
-
-            border-radius: 9px;
-
-            padding: 9px 6px;
-            text-align: center;
+            padding: 8px 4px;
         }
-
-        .available-detail span {
-            display: block;
-
-            color: #94a3b8;
-            font-size: 8px;
-
-            margin-bottom: 4px;
-        }
-
-        .available-detail strong {
-            color: #0b1c4d;
-            font-size: 11px;
-
-            word-break: break-word;
-        }
-
-        .select-plan {
-            width: 100%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 7px;
-
-            padding: 11px;
-
-            border-radius: 10px;
-
-            background: #0b1c4d;
-            color: white;
-
-            text-decoration: none;
-
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .select-plan:active {
-            transform: scale(.99);
-        }
-
-        /* EMPTY */
-
-        .empty {
-            text-align: center;
-            padding: 25px 15px;
-            color: #64748b;
-        }
-
-        .empty-icon {
-            width: 55px;
-            height: 55px;
-
-            margin: 0 auto 10px;
-
-            border-radius: 15px;
-
-            background: #eef2ff;
-            color: #0b1c4d;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 23px;
-        }
-
-        .empty h2 {
-            color: #0f172a;
-            font-size: 17px;
-        }
-
-        .empty p {
-            margin-top: 5px;
-            font-size: 11px;
-        }
-
-        /* INFORMATION */
-
-        .info {
-            background: white;
-
-            border: 1px solid #edf0f5;
-            border-radius: 16px;
-
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .info-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            color: #0f172a;
-
-            font-size: 13px;
-            font-weight: 800;
-
-            margin-bottom: 7px;
-        }
-
-        .info-title i {
-            color: #0b1c4d;
-        }
-
-        .info p {
-            color: #64748b;
-
-            font-size: 11px;
-            line-height: 1.55;
-        }
-
-        /* BOTTOM NAVIGATION */
-
-        .bottom-nav {
-            position: fixed;
-
-            bottom: 0;
-            left: 0;
-            right: 0;
-
-            height: 67px;
-
-            background: white;
-
-            border-top: 1px solid #e2e8f0;
-
-            display: flex;
-            justify-content: center;
-
-            z-index: 9999;
-
-            box-shadow:
-                0 -4px 14px rgba(0, 0, 0, .05);
-        }
-
-        .bottom-nav-inner {
-            width: 100%;
-            max-width: 440px;
-
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-
-            align-items: center;
-        }
-
-        .bottom-nav a {
-            height: 100%;
-
-            position: relative;
-
-            display: flex;
-            flex-direction: column;
-
-            align-items: center;
-            justify-content: center;
-
-            gap: 4px;
-
-            text-decoration: none;
-
-            color: #94a3b8;
-
-            font-size: 9px;
-        }
-
-        .bottom-nav i {
-            font-size: 18px;
-        }
-
-        .bottom-nav a.active {
-            color: #0b1c4d;
-            font-weight: 800;
-        }
-
-        .bottom-nav a.active::after {
-            content: "";
-
-            position: absolute;
-
-            bottom: 0;
-
-            left: 25%;
-            right: 25%;
-
-            height: 3px;
-
-            background: #0b1c4d;
-
-            border-radius: 4px 4px 0 0;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 360px) {
-
-            .content {
-                padding: 12px;
-            }
-
-            .plan-card {
-                padding: 15px;
-            }
-
-            .countdown {
-                font-size: 26px;
-            }
-
-            .available-details {
-                gap: 4px;
-            }
-
-            .available-detail {
-                padding: 8px 4px;
-            }
-
-            .bottom-nav {
-                height: 64px;
-            }
-
-            .bottom-nav i {
-                font-size: 16px;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<div class="phone">
-
-
-    <!-- HEADER -->
-
-    <header class="header">
-
-        <div class="header-top">
-
-            <div>
-
-                <h1>My Income</h1>
-
-                <p>
-                    Manage your active plan and products
-                </p>
-
-            </div>
-
-            {% if user_plan %}
-
-                <div class="status">
-                    ACTIVE
-                </div>
-
-            {% endif %}
-
+    }
+</style>
+
+</head><body><div class="phone"><header class="header">
+    <div class="header-top">
+
+        <div>
+            <h1>My Income</h1>
+            <p>Manage your active plan and products</p>
         </div>
-
-    </header>
-
-
-    <main class="content">
-
-
-        <!-- FLASH MESSAGES -->
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-
-            {% if messages %}
-
-                {% for category, message in messages %}
-
-                    <div class="flash {{ category }}">
-                        {{ message }}
-                    </div>
-
-                {% endfor %}
-
-            {% endif %}
-
-        {% endwith %}
-
-
-        <!-- ACTIVE PLAN -->
-
-        <div class="section-title">
-
-            <h2>
-                My Active Plan
-            </h2>
-
-            {% if user_plan %}
-
-                <span>
-                    Currently running
-                </span>
-
-            {% endif %}
-
-        </div>
-
 
         {% if user_plan %}
+            <div class="status">ACTIVE</div>
+        {% endif %}
 
-        <div class="plan-card">
+    </div>
+</header>
 
+<main class="content">
 
-            <div class="plan-header">
-
-                <div class="plan-icon">
-
-                    <i class="fa-solid fa-chart-line"></i>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
                 </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-                <div class="plan-title">
+    <div class="section-title">
+        <h2>My Active Plan</h2>
 
-                    <h2>
-                        {{ user_plan.plan_name }}
-                    </h2>
+        {% if user_plan %}
+            <span>Currently running</span>
+        {% endif %}
+    </div>
 
-                    <p>
-                        Your active product
-                    </p>
+    {% if user_plan %}
 
-                </div>
+    <div class="plan-card">
+
+        <div class="plan-header">
+
+            <div class="plan-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div class="plan-title">
+
+                <h2>
+                    {{ user_plan.plan_name|default('Active Plan') }}
+                </h2>
+
+                <p>Your active product</p>
 
             </div>
 
+        </div>
 
-            <div class="running">
+        <div class="running">
+            <span class="dot"></span>
+            Plan Running
+        </div>
 
-                <span class="dot"></span>
+        <div class="countdown-box">
 
-                Plan Running
+            <div class="countdown-label">
+                NEXT INCOME IN
+            </div>
+
+            <div class="countdown" id="countdown">
+                --:--:--
+            </div>
+
+            <div class="countdown-sub" id="countdownSub">
+
+                {% if can_claim %}
+                    Income is ready
+                {% else %}
+                    Next scheduled settlement
+                {% endif %}
 
             </div>
 
+        </div>
 
-            <div class="countdown-box">
+        <div class="details">
 
-                <div class="countdown-label">
-                    NEXT INCOME IN
-                </div>
+            <div class="detail">
 
-                <div
-                    class="countdown"
-                    id="countdown"
-                >
-                    --:--:--
-                </div>
-
-                <div
-                    class="countdown-sub"
-                    id="countdownSub"
-                >
-
-                    {% if can_claim %}
-                        Income is ready to claim
-                    {% else %}
-                        Next scheduled settlement
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-
-            <!-- PLAN DETAILS -->
-
-            <div class="details">
-
-
-                <div class="detail">
-
-                    <span>
-                        Investment
-                    </span>
-
-                    <strong>
-                        GHS {{ "%.2f"|format(
-                            user_plan.investment_amount|default(0)
-                        ) }}
-                    </strong>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <span>
-                        Daily Income
-                    </span>
-
-                    <strong>
-                        GHS {{ "%.2f"|format(
-                            user_plan.daily_income|default(0)
-                        ) }}
-                    </strong>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <span>
-                        Duration
-                    </span>
-
-                    <strong>
-                        {{ user_plan.duration|default(0) }}
-                        Days
-                    </strong>
-
-                </div>
-
-
-                <div class="detail">
-
-                    <span>
-                        Status
-                    </span>
-
-                    <strong>
-                        Active
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-
-            <!-- DAILY INCOME -->
-
-            <div class="income-box">
-
-                <span>
-                    Expected Daily Income
-                </span>
+                <span>Investment</span>
 
                 <strong>
-                    GHS {{ "%.2f"|format(
-                        user_plan.daily_income|default(0)
-                    ) }}
+                    GHS {{
+                        "%.2f"|format(
+                            user_plan.investment_amount|default(0)|float
+                        )
+                    }}
                 </strong>
 
             </div>
 
+            <div class="detail">
 
-            <!-- CLAIM -->
+                <span>Daily Income</span>
 
-            <form
-                method="POST"
-                action="{{ url_for('claim_income') }}"
-                class="claim-form"
-            >
+                <strong>
+                    GHS {{
+                        "%.2f"|format(
+                            user_plan.daily_income|default(0)|float
+                        )
+                    }}
+                </strong>
 
-                <button
-                    type="submit"
-                    class="claim-button"
-                    id="claimButton"
+            </div>
 
-                    {% if not can_claim %}
-                        disabled
-                    {% endif %}
-                >
+            <div class="detail">
 
-                    {% if can_claim %}
+                <span>Duration</span>
 
-                        <i class="fa-solid fa-coins"></i>
-                        Claim Income
+                <strong>
+                    {{ user_plan.duration|default(0) }} Days
+                </strong>
 
-                    {% else %}
+            </div>
 
-                        <i class="fa-solid fa-clock"></i>
-                        Income Not Ready
+            <div class="detail">
 
-                    {% endif %}
+                <span>Status</span>
 
-                </button>
+                <strong>Active</strong>
 
-            </form>
-
+            </div>
 
         </div>
 
+        <div class="income-box">
 
-        {% else %}
+            <span>Expected Daily Income</span>
 
+            <strong>
+                GHS {{
+                    "%.2f"|format(
+                        user_plan.daily_income|default(0)|float
+                    )
+                }}
+            </strong>
 
-        <!-- NO ACTIVE PLAN -->
+        </div>
 
-        <div class="plan-card">
+        <div class="claim-status">
+
+            {% if can_claim %}
+                <i class="fa-solid fa-circle-check"></i>
+                Income is available according to your account status.
+            {% else %}
+                <i class="fa-solid fa-clock"></i>
+                Your next income is not yet available.
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="plan-card">
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+
+            <h2>No Active Plan</h2>
+
+            <p>
+                You currently don't have an active plan.
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <div class="section-title">
+
+        <h2>Available Plans</h2>
+
+        <span>Choose a product</span>
+
+    </div>
+
+    {% if plans %}
+
+        {% for plan in plans %}
+
+        <div class="available-plan">
+
+            <div class="available-top">
+
+                <div class="available-name">
+
+                    <div class="available-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ plan.plan_name|default('Plan') }}
+                        </h3>
+
+                        <p>Zenith Capital Product</p>
+
+                    </div>
+
+                </div>
+
+                {% if user_plan and
+                      user_plan.plan_name|default('') ==
+                      plan.plan_name|default('') %}
+
+                    <span class="current-plan">
+                        CURRENT
+                    </span>
+
+                {% else %}
+
+                    <span class="plan-badge">
+                        AVAILABLE
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <div class="available-details">
+
+                <div class="available-detail">
+
+                    <span>Investment</span>
+
+                    <strong>
+                        GHS {{
+                            "%.2f"|format(
+                                plan.investment_amount|default(0)|float
+                            )
+                        }}
+                    </strong>
+
+                </div>
+
+                <div class="available-detail">
+
+                    <span>Daily Income</span>
+
+                    <strong>
+                        GHS {{
+                            "%.2f"|format(
+                                plan.daily_income|default(0)|float
+                            )
+                        }}
+                    </strong>
+
+                </div>
+
+                <div class="available-detail">
+
+                    <span>Duration</span>
+
+                    <strong>
+                        {{ plan.duration|default(0) }} Days
+                    </strong>
+
+                </div>
+
+            </div>
+
+            {% if plan.id is defined %}
+
+                {% if not user_plan or
+                      user_plan.plan_name|default('') !=
+                      plan.plan_name|default('') %}
+
+                    <a
+                        href="{{ url_for('buy_plan', plan_id=plan.id) }}"
+                        class="select-plan"
+                    >
+                        <i class="fa-solid fa-arrow-right"></i>
+                        View / Select Plan
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="available-plan">
 
             <div class="empty">
 
                 <div class="empty-icon">
-
                     <i class="fa-solid fa-box-open"></i>
-
                 </div>
 
-                <h2>
-                    No Active Plan
-                </h2>
+                <h2>No Plans Available</h2>
 
                 <p>
-                    You currently don't have an active plan.
+                    There are currently no products available.
                 </p>
 
             </div>
 
         </div>
 
+    {% endif %}
 
-        {% endif %}
+    <div class="info">
 
+        <div class="info-title">
 
-        <!-- AVAILABLE PLANS -->
+            <i class="fa-solid fa-circle-info"></i>
 
-        <div class="section-title">
-
-            <h2>
-                Available Plans
-            </h2>
-
-            <span>
-                Choose a product
-            </span>
+            <span>Income Information</span>
 
         </div>
 
-
-        <div class="plan-center">
-
-
-            {% if plans %}
-
-
-                {% for plan in plans %}
-
-                <div class="available-plan">
-
-
-                    <div class="available-top">
-
-
-                        <div class="available-name">
-
-                            <div class="available-icon">
-
-                                <i class="fa-solid fa-box"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    {{ plan.plan_name }}
-                                </h3>
-
-                                <p>
-                                    Zenith Capital Product
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        {% if user_plan
-                              and user_plan.plan_name
-                              == plan.plan_name %}
-
-                            <span class="current-plan">
-                                CURRENT
-                            </span>
-
-                        {% else %}
-
-                            <span class="plan-badge">
-                                AVAILABLE
-                            </span>
-
-                        {% endif %}
-
-
-                    </div>
-
-
-                    <div class="available-details">
-
-
-                        <div class="available-detail">
-
-                            <span>
-                                Investment
-                            </span>
-
-                            <strong>
-                                GHS {{ "%.2f"|format(
-                                    plan.investment_amount|default(0)
-                                ) }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="available-detail">
-
-                            <span>
-                                Daily Income
-                            </span>
-
-                            <strong>
-                                GHS {{ "%.2f"|format(
-                                    plan.daily_income|default(0)
-                                ) }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="available-detail">
-
-                            <span>
-                                Duration
-                            </span>
-
-                            <strong>
-                                {{ plan.duration|default(0) }}
-                                Days
-                            </strong>
-
-                        </div>
-
-
-                    </div>
-
-
-                    {% if not user_plan
-                          or user_plan.plan_name
-                          != plan.plan_name %}
-
-                    <a
-                        href="{{ url_for(
-                            'buy_plan',
-                            plan_id=plan.id
-                        ) }}"
-                        class="select-plan"
-                    >
-
-                        <i class="fa-solid fa-arrow-right"></i>
-
-                        View / Select Plan
-
-                    </a>
-
-                    {% endif %}
-
-
-                </div>
-
-                {% endfor %}
-
-
-            {% else %}
-
-
-                <div class="available-plan">
-
-                    <div class="empty">
-
-                        <div class="empty-icon">
-
-                            <i class="fa-solid fa-box-open"></i>
-
-                        </div>
-
-                        <h2>
-                            No Plans Available
-                        </h2>
-
-                        <p>
-                            There are currently no products available.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-            {% endif %}
-
-
-        </div>
-
-
-        <!-- INFORMATION -->
-
-        <div class="info">
-
-            <div class="info-title">
-
-                <i class="fa-solid fa-circle-info"></i>
-
-                <span>
-                    Income Information
-                </span>
-
-            </div>
-
-            <p>
-                Your income countdown is controlled by the
-                server. Refreshing the page does not reset
-                the countdown. Income claims are validated
-                by the server.
-            </p>
-
-        </div>
-
-
-    </main>
-
-</div>
-
-
-<!-- BOTTOM NAVIGATION -->
-
-<nav class="bottom-nav">
-
-    <div class="bottom-nav-inner">
-
-
-        <a href="{{ url_for('dashboard') }}">
-
-            <i class="fa-solid fa-house"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('my_plan') }}"
-            class="active"
-        >
-
-            <i class="fa-solid fa-chart-line"></i>
-
-            <span>
-                Income
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i class="fa-solid fa-users"></i>
-
-            <span>
-                Team
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('team') }}">
-
-            <i class="fa-solid fa-share-nodes"></i>
-
-            <span>
-                Share
-            </span>
-
-        </a>
-
-
-        <a href="{{ url_for('profile') }}">
-
-            <i class="fa-solid fa-user"></i>
-
-            <span>
-                My
-            </span>
-
-        </a>
-
+        <p>
+            Your plan information is loaded from your account.
+            Income availability is controlled by the server.
+        </p>
 
     </div>
 
-</nav>
+</main>
 
+</div><nav class="bottom-nav"><div class="bottom-nav-inner">
 
-<!-- COUNTDOWN -->
+    <a href="{{ url_for('dashboard') }}">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
 
-<script>
+    <a href="{{ url_for('my_plan') }}" class="active">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Income</span>
+    </a>
 
-    const countdown =
-        document.getElementById("countdown");
+    <a href="{{ url_for('team') }}">
+        <i class="fa-solid fa-users"></i>
+        <span>Team</span>
+    </a>
 
-    const countdownSub =
-        document.getElementById("countdownSub");
+    <a href="{{ url_for('team') }}">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>Share</span>
+    </a>
 
-    const claimButton =
-        document.getElementById("claimButton");
+    <a href="{{ url_for('profile') }}">
+        <i class="fa-solid fa-user"></i>
+        <span>My</span>
+    </a>
 
+</div>
+
+</nav><script>
+    const countdown = document.getElementById("countdown");
+    const countdownSub = document.getElementById("countdownSub");
 
     {% if next_income_at %}
 
-        const nextIncomeAt =
-            new Date(
-                "{{ next_income_at.isoformat() }}"
-            ).getTime();
+        const nextIncomeAt = new Date(
+            "{{ next_income_at.isoformat() }}"
+        ).getTime();
 
     {% else %}
 
@@ -1285,76 +910,42 @@
 
     {% endif %}
 
-
     function updateCountdown() {
 
         if (!countdown) {
             return;
         }
 
-
         if (!nextIncomeAt) {
-
-            countdown.textContent =
-                "00:00:00";
-
+            countdown.textContent = "00:00:00";
             return;
         }
 
-
-        const remaining =
-            nextIncomeAt - Date.now();
-
+        const remaining = nextIncomeAt - Date.now();
 
         if (remaining <= 0) {
 
-            countdown.textContent =
-                "00:00:00";
-
+            countdown.textContent = "00:00:00";
 
             if (countdownSub) {
-
                 countdownSub.textContent =
-                    "Income is ready to claim";
-
-            }
-
-
-            if (claimButton) {
-
-                claimButton.disabled =
-                    false;
-
-                claimButton.innerHTML =
-                    '<i class="fa-solid fa-coins"></i> Claim Income';
-
+                    "Income is ready";
             }
 
             return;
         }
 
-
         const totalSeconds =
-            Math.floor(
-                remaining / 1000
-            );
-
+            Math.floor(remaining / 1000);
 
         const hours =
-            Math.floor(
-                totalSeconds / 3600
-            );
-
+            Math.floor(totalSeconds / 3600);
 
         const minutes =
-            Math.floor(
-                (totalSeconds % 3600) / 60
-            );
-
+            Math.floor((totalSeconds % 3600) / 60);
 
         const seconds =
             totalSeconds % 60;
-
 
         countdown.textContent =
             String(hours).padStart(2, "0")
@@ -1362,21 +953,10 @@
             + String(minutes).padStart(2, "0")
             + ":"
             + String(seconds).padStart(2, "0");
-
     }
-
 
     updateCountdown();
 
-
-    setInterval(
-        updateCountdown,
-        1000
-    );
-
-</script>
-
-
-</body>
-
+    setInterval(updateCountdown, 1000);
+</script></body>
 </html>
