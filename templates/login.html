@@ -9,158 +9,525 @@
 }
 
 body{
-    background:linear-gradient(135deg,#0F172A,#2563EB);
     min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#2563eb);
+    padding:25px 15px;
+
     display:flex;
-    justify-content:center;
     align-items:center;
-    padding:20px;
+    justify-content:center;
 }
 
-.card{
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.login-container{
     width:100%;
-    max-width:400px;
-    background:white;
-    padding:30px;
-    border-radius:25px;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    max-width:430px;
 }
+
+
+/* =========================
+   BRAND SECTION
+========================= */
 
 .logo{
     text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+.logo-icon{
+    width:65px;
+    height:65px;
+
+    margin:0 auto 12px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.15);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
     font-size:30px;
     font-weight:bold;
-    color:#2563EB;
-    margin-bottom:20px;
+
+    border:1px solid rgba(255,255,255,.2);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.15);
 }
 
-h2{
-    text-align:center;
-    margin-bottom:8px;
-    color:#0F172A;
+.logo h1{
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-.note{
-    text-align:center;
-    color:#64748b;
-    font-size:13px;
-    margin-bottom:20px;
-}
-
-.alert{
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:15px;
-    text-align:center;
+.logo p{
     font-size:14px;
-    background:#fee2e2;
-    color:#b91c1c;
+    color:#dbeafe;
+}
+
+
+/* =========================
+   LOGIN CARD
+========================= */
+
+.card{
+    background:white;
+
+    padding:28px;
+
+    border-radius:25px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.2);
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.card-header{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.card-header h2{
+    color:#0f172a;
+    font-size:24px;
+    margin-bottom:7px;
+}
+
+.card-header p{
+    color:#64748b;
+    font-size:14px;
+}
+
+
+/* =========================
+   FLASH MESSAGE
+========================= */
+
+.message{
+    padding:13px 15px;
+
+    border-radius:13px;
+
+    margin-bottom:16px;
+
+    font-size:14px;
+    line-height:1.4;
+
+    text-align:center;
 }
 
 .success{
     background:#dcfce7;
     color:#15803d;
+    border:1px solid #bbf7d0;
 }
 
-input{
+.error{
+    background:#fee2e2;
+    color:#b91c1c;
+    border:1px solid #fecaca;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+    margin-bottom:16px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#334155;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-wrapper{
+    position:relative;
+}
+
+.input-wrapper input{
     width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border:1px solid #ddd;
-    border-radius:12px;
+
+    padding:15px 45px 15px 15px;
+
+    border:1px solid #dbe1e8;
+
+    border-radius:14px;
+
     outline:none;
+
+    background:#f8fafc;
+
+    color:#0f172a;
+
     font-size:15px;
+
+    transition:.2s;
 }
 
-input:focus{
-    border-color:#2563EB;
+.input-wrapper input:focus{
+    border-color:#2563eb;
+
+    background:white;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.1);
 }
 
-button{
+.input-wrapper input::placeholder{
+    color:#94a3b8;
+}
+
+
+/* =========================
+   INPUT ICON
+========================= */
+
+.input-icon{
+    position:absolute;
+
+    right:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#94a3b8;
+
+    font-size:17px;
+
+    pointer-events:none;
+}
+
+
+/* =========================
+   LOGIN BUTTON
+========================= */
+
+.login-btn{
     width:100%;
-    padding:15px;
+
     border:none;
-    border-radius:12px;
-    background:#2563EB;
+
+    padding:15px;
+
+    margin-top:5px;
+
+    border-radius:14px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
     color:white;
+
     font-size:16px;
+
     font-weight:bold;
+
     cursor:pointer;
+
+    box-shadow:
+        0 7px 15px rgba(37,99,235,.25);
+
+    transition:.2s;
 }
 
-button:hover{
-    background:#1D4ED8;
+.login-btn:hover{
+    background:linear-gradient(
+        135deg,
+        #1d4ed8,
+        #1e40af
+    );
 }
 
-p{
+.login-btn:active{
+    transform:scale(.99);
+}
+
+
+/* =========================
+   REGISTER LINK
+========================= */
+
+.register-link{
     text-align:center;
+
     margin-top:20px;
-    color:#475569;
+
+    color:#64748b;
+
+    font-size:14px;
 }
 
-a{
-    color:#2563EB;
-    text-decoration:none;
+.register-link a{
+    color:#2563eb;
+
     font-weight:bold;
+
+    text-decoration:none;
 }
 
-</style></head><body><div class="card"><div class="logo">
-    ZC
+
+/* =========================
+   SECURITY
+========================= */
+
+.security{
+    margin-top:18px;
+
+    padding-top:15px;
+
+    border-top:1px solid #e2e8f0;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media(max-width:360px){
+
+    body{
+        padding:18px 12px;
+    }
+
+    .card{
+        padding:22px;
+
+        border-radius:22px;
+    }
+
+    .logo h1{
+        font-size:25px;
+    }
+
+}
+
+</style></head><body><div class="login-container"><!-- =========================
+     BRAND
+========================= -->
+
+<div class="logo">
+
+    <div class="logo-icon">
+        Z
+    </div>
+
+    <h1>
+        Zenith Capital
+    </h1>
+
+    <p>
+        Welcome back to Zenith Capital
+    </p>
+
 </div>
 
-<h2>
-    Welcome Back
-</h2>
 
-<div class="note">
-    Login to your Zenith Capital account
-</div>
+<!-- =========================
+     LOGIN CARD
+========================= -->
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+<div class="card">
 
-    {% if messages %}
+
+    <div class="card-header">
+
+        <h2>
+            Welcome Back
+        </h2>
+
+        <p>
+            Login to your account to continue
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% for category, message in messages %}
 
-            <div class="alert {% if category == 'success' %}success{% endif %}">
+            <div class="message {{ category }}">
+
                 {{ message }}
+
             </div>
 
         {% endfor %}
 
-    {% endif %}
+    {% endwith %}
 
-{% endwith %}
 
-<form method="POST">
+    <!-- =========================
+         LOGIN FORM
+    ========================= -->
 
-    <input
-        type="tel"
-        name="phone"
-        placeholder="Phone Number"
-        autocomplete="tel"
-        required
-    >
+    <form method="POST">
 
-    <input
-        type="password"
-        name="password"
-        placeholder="Login Password"
-        autocomplete="current-password"
-        required
-    >
 
-    <button type="submit">
-        Login
-    </button>
+        <!-- PHONE -->
 
-</form>
+        <div class="form-group">
 
-<p>
-    Don't have an account?
-    <a href="{{ url_for('register') }}">
-        Register
-    </a>
-</p>
+            <label for="phone">
+                Phone Number
+            </label>
 
-</div></body></html>
+            <div class="input-wrapper">
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                    required
+                >
+
+                <span class="input-icon">
+                    ☎
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+            <label for="password">
+                Login Password
+            </label>
+
+            <div class="input-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your login password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <span
+                    class="input-icon"
+                    onclick="togglePassword()"
+                    style="cursor:pointer;pointer-events:auto;"
+                    id="eye"
+                >
+                    👁
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <button
+            type="submit"
+            class="login-btn"
+        >
+            Login
+        </button>
+
+
+    </form>
+
+
+    <!-- =========================
+         REGISTER
+    ========================= -->
+
+    <div class="register-link">
+
+        Don't have an account?
+
+        <a href="{{ url_for('register') }}">
+            Create Account
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         SECURITY
+    ========================= -->
+
+    <div class="security">
+
+        🔒 Your account information is protected.
+
+    </div>
+
+
+</div>
+
+</div><script>
+
+function togglePassword(){
+
+    const password =
+        document.getElementById("password");
+
+    const eye =
+        document.getElementById("eye");
+
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        eye.textContent = "🙈";
+
+    }else{
+
+        password.type = "password";
+
+        eye.textContent = "👁";
+
+    }
+
+}
+
+</script></body></html>
