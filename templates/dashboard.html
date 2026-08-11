@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Home</title>
+    <title>Home - Zenith Capital</title>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -19,6 +23,7 @@
             display: flex;
             justify-content: center;
             color: #0f172a;
+            padding-bottom: 70px;
         }
 
         .phone {
@@ -30,6 +35,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.05);
             overflow: hidden;
         }
+
 
         /* =========================
            TOP FACTORY BANNER
@@ -103,6 +109,7 @@
             height: 8px;
         }
 
+
         /* =========================
            QUICK ACTIONS
         ========================= */
@@ -152,6 +159,7 @@
             background: #705ec8;
         }
 
+
         /* =========================
            ACCOUNT OVERVIEW
         ========================= */
@@ -196,6 +204,7 @@
             color: #0e2954;
         }
 
+
         /* =========================
            PLAN SECTION
         ========================= */
@@ -211,6 +220,7 @@
             color: #8c96a3;
             font-size: .72rem;
         }
+
 
         /* =========================
            PLAN CARD
@@ -249,6 +259,7 @@
             font-weight: bold;
             color: #0e2954;
         }
+
 
         /* =========================
            SMALL FACTORY PHOTO
@@ -306,6 +317,7 @@
             border-radius: 10px;
         }
 
+
         /* =========================
            INVEST BUTTON
         ========================= */
@@ -334,6 +346,7 @@
             background: #0e2954;
         }
 
+
         /* =========================
            LOCKED PLANS
         ========================= */
@@ -359,8 +372,9 @@
             cursor: not-allowed;
         }
 
+
         /* =========================
-           FIXED BOTTOM NAVIGATION
+           PROFILE-STYLE BOTTOM NAV
         ========================= */
 
         .nav {
@@ -370,44 +384,61 @@
             transform: translateX(-50%);
 
             width: 100%;
-            max-width: 450px;
-
-            height: 60px;
+            max-width: 440px;
+            height: 65px;
 
             background: white;
+            border-top: 1px solid #e2e8f0;
 
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-
-            border-top: 1px solid #eee;
-
-            font-size: .72rem;
-            color: #8fa0b5;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
 
             z-index: 1000;
 
-            box-shadow: 0 -3px 12px rgba(0,0,0,.06);
+            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
         }
 
         .nav a {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 3px;
+
             text-decoration: none;
-            color: #8fa0b5;
 
-            text-align: center;
-
-            min-width: 60px;
+            color: #94a3b8;
+            font-size: 9px;
         }
 
-        .nav .active {
-            color: #0e2954;
+        .nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav a.active {
+            color: #10144c;
             font-weight: bold;
         }
 
-        .nav-icon {
-            font-size: 1.05rem;
-            margin-bottom: 2px;
+        .nav a.active::after {
+            content: "";
+
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+
+            height: 3px;
+
+            background: #10144c;
+
+            border-radius: 4px 4px 0 0;
         }
+
 
         /* =========================
            MOBILE
@@ -435,12 +466,15 @@
                 font-size: .75rem;
             }
         }
+
     </style>
 </head>
+
 
 <body>
 
 <div class="phone">
+
 
     <!-- =========================
          TOP FACTORY BANNER
@@ -486,10 +520,13 @@
             href="{{ url_for('deposit') }}"
             class="action-item"
         >
+
             <div class="circle deposit-circle">
                 💰
             </div>
+
             Deposit
+
         </a>
 
 
@@ -497,10 +534,13 @@
             href="{{ url_for('withdraw') }}"
             class="action-item"
         >
+
             <div class="circle withdraw-circle">
                 💳
             </div>
+
             Withdraw
+
         </a>
 
 
@@ -508,10 +548,13 @@
             href="{{ url_for('support') }}"
             class="action-item"
         >
+
             <div class="circle service-circle">
                 🎧
             </div>
+
             Service
+
         </a>
 
 
@@ -519,10 +562,13 @@
             href="{{ url_for('profile') }}"
             class="action-item"
         >
+
             <div class="circle profile-circle">
                 👤
             </div>
+
             Profile
+
         </a>
 
     </div>
@@ -609,9 +655,7 @@
     </p>
 
 
-    <!-- =========================
-         PLAN 1
-    ========================= -->
+    <!-- PLAN 1 -->
 
     <div class="plan">
 
@@ -672,9 +716,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 2
-    ========================= -->
+    <!-- PLAN 2 -->
 
     <div class="plan">
 
@@ -735,9 +777,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 3
-    ========================= -->
+    <!-- PLAN 3 -->
 
     <div class="plan">
 
@@ -798,9 +838,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 4
-    ========================= -->
+    <!-- PLAN 4 -->
 
     <div class="plan">
 
@@ -861,9 +899,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 5
-    ========================= -->
+    <!-- PLAN 5 -->
 
     <div class="plan">
 
@@ -924,9 +960,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 6
-    ========================= -->
+    <!-- PLAN 6 -->
 
     <div class="plan">
 
@@ -987,9 +1021,7 @@
     </div>
 
 
-    <!-- =========================
-         PLAN 7
-    ========================= -->
+    <!-- PLAN 7 -->
 
     <div class="plan">
 
@@ -1050,9 +1082,7 @@
     </div>
 
 
-    <!-- =========================
-         LOCKED PLAN 8
-    ========================= -->
+    <!-- LOCKED PLAN 8 -->
 
     <div class="plan locked">
 
@@ -1113,9 +1143,7 @@
     </div>
 
 
-    <!-- =========================
-         LOCKED PLAN 9
-    ========================= -->
+    <!-- LOCKED PLAN 9 -->
 
     <div class="plan locked">
 
@@ -1177,7 +1205,7 @@
 
 
     <!-- =========================
-         FIXED BOTTOM NAVIGATION
+         PROFILE-STYLE BOTTOM NAV
     ========================= -->
 
     <div class="nav">
@@ -1186,32 +1214,32 @@
             href="{{ url_for('dashboard') }}"
             class="active"
         >
-            <div class="nav-icon">
-                🏠
-            </div>
-            Home
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+
+
+        <a href="{{ url_for('my_plan') }}">
+            <i data-lucide="trending-up"></i>
+            <span>Income</span>
         </a>
 
 
         <a href="{{ url_for('team') }}">
+            <i data-lucide="users"></i>
+            <span>Team</span>
+        </a>
 
-            <div class="nav-icon">
-                👥
-            </div>
 
-            Team
-
+        <a href="{{ url_for('team') }}">
+            <i data-lucide="share-2"></i>
+            <span>Share</span>
         </a>
 
 
         <a href="{{ url_for('profile') }}">
-
-            <div class="nav-icon">
-                👤
-            </div>
-
-            My
-
+            <i data-lucide="user"></i>
+            <span>My</span>
         </a>
 
     </div>
@@ -1292,6 +1320,13 @@
         changeBanner,
         5000
     );
+
+
+    /* =========================
+       LUCIDE ICONS
+    ========================= */
+
+    lucide.createIcons();
 
 </script>
 
