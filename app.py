@@ -1043,7 +1043,203 @@ def admin_dashboard():
     pending_withdrawals = query_one("SELECT COUNT(*) AS count FROM withdrawal_requests WHERE status='pending'")["count"]
     invites = query_all("SELECT i.*, u.username AS owner_username FROM invites i LEFT JOIN users u ON u.id=i.owner_id ORDER BY i.created_at DESC LIMIT 100")
     return render_template("admin_dashboard.html", total_users=total_users, pending_deposits=pending_deposits, pending_withdrawals=pending_withdrawals, invites=invites)
+# Admin user list
+@app.route("/admin_users")
+@app.route("/admin/users")
+def admin_users():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
 
+    users = query_all(
+        """
+        SELECT u.*,
+               a.deposit_account,
+               a.income_account,
+               a.referral_account,
+               a.withdraw_account
+        FROM users u
+        LEFT JOIN accounts a ON a.user_id=u.id
+        ORDER BY u.id DESC
+        """
+    )
+    return render_template("admin_users.html", users=users)
+
+
+# Admin manage single user (GET + POST actions)
+@app.route("/admin/user/<int:user_id>", methods=["GET", "POST"])
+def admin_manage_user(user_id):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    user = query_one("SELECT * FROM users WHERE id=%s", (user_id,))
+    if not user:
+        return "User not found", 404
+
+    if request.method == "POST":
+        action = request.form.get("action", "")
+
+        balance_actions = {
+            "add_deposit": "deposit_account",
+            "deduct_deposit": "deposit_account",
+            "add_withdraw": "withdraw_account",
+            "deduct_withdraw": "withdraw_account",
+            "add_income": "income_account",
+            "deduct_income": "income_account",
+            "add_referral": "referral_account",
+            "deduct_referral": "referral_account",
+        }
+
+        if action in balance_actions:
+            amount = parse_amount(request.form.get("amount", "0"))
+            if amount is None:
+                flash("Amount must be greater than zero.", "error")
+                return redirect(url_for("admin_manage_user", user_id=user_id))
+
+            column = balance_actions[action]
+            is_add = action.startswith("add_")
+
+            conn = get_conn()
+            cur = conn.cursor()
+            try:
+                ensure_account(cur, user_id, STARTING_DEPOSIT_BALANCE)
+
+                if is_add:
+                    cur.execute(
+                        f"""
+                        UPDATE accounts
+                        SET {column}=COALESCE({column},0)+%s
+                        WHERE user_id=%s
+                        """,
+                        (amount, user_id),
+                    )
+                else:
+                    cur.execute(
+                        f"""
+                        UPDATE accounts
+                        SET {column}=GREATEST(0,COALESCE({column},0)-%s)
+                        WHERE user_id=%s
+                        """,
+                        (amount, user_id),
+                    )
+
+                cur.execute(
+                    """
+                    INSERT INTO transactions (
+                        user_id,transaction_type,amount,status,
+                        reference,description
+                    )
+                    VALUES (%s,'admin_balance_adjustment',%s,'successful',%s,%s)
+                    """,
+                    (
+                        user_id,
+                        amount,
+                        generate_reference("ADM"),
+                        f"Admin adjustment: {action}",
+                    ),
+                )
+                conn.commit()
+            except Exception:
+                conn.rollback()
+                app.logger.exception("ADMIN MANAGE USER: balance action failed")
+                flash("Unable to update balance.", "error")
+            finally:
+                cur.close()
+                conn.close()
+
+            flash("User balance updated successfully.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "change_login_password":
+            new_password = request.form.get("new_password", "")
+            if len(new_password) < 6:
+                flash("Login password must contain at least 6 characters.", "error")
+            else:
+                execute(
+                    "UPDATE users SET password_hash=%s WHERE id=%s",
+                    (generate_password_hash(new_password), user_id),
+                )
+                flash("Login password updated successfully.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "change_withdraw_password":
+            new_password = request.form.get("new_password", "")
+            if len(new_password) < 4:
+                flash("Withdrawal password must contain at least 4 characters.", "error")
+            else:
+                execute(
+                    "UPDATE users SET withdraw_password_hash=%s WHERE id=%s",
+                    (generate_password_hash(new_password), user_id),
+                )
+                flash("Withdrawal password updated successfully.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "update_account":
+            account_id = request.form.get("account_id")
+            account_name = request.form.get("account_name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            network = request.form.get("network", "").strip()
+
+            if not account_id or not account_name or not phone or not network:
+                flash("Please complete all withdrawal account details.", "error")
+            else:
+                execute(
+                    """
+                    UPDATE withdrawal_accounts
+                    SET account_name=%s,phone=%s,network=%s
+                    WHERE id=%s AND user_id=%s
+                    """,
+                    (account_name, phone, network, account_id, user_id),
+                )
+                flash("Withdrawal account updated successfully.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "delete_account":
+            execute(
+                """
+                DELETE FROM withdrawal_accounts
+                WHERE id=%s AND user_id=%s
+                """,
+                (request.form.get("account_id"), user_id),
+            )
+            flash("Withdrawal account removed.", "success")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        flash("Unknown admin action.", "error")
+        return redirect(url_for("admin_manage_user", user_id=user_id))
+
+    account = current_account(user_id)
+    withdrawal_accounts = query_all(
+        """
+        SELECT * FROM withdrawal_accounts
+        WHERE user_id=%s ORDER BY id DESC
+        """,
+        (user_id,),
+    )
+
+    return render_template(
+        "admin_manage_user.html",
+        user=user,
+        account=account,
+        withdrawal_accounts=withdrawal_accounts,
+    )
+
+
+# Admin bind accounts listing
+@app.route("/admin_bind_accounts")
+@app.route("/admin/bind_accounts")
+def admin_bind_accounts():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    accounts = query_all(
+        """
+        SELECT wa.*,u.username,u.phone AS user_phone
+        FROM withdrawal_accounts wa
+        JOIN users u ON u.id=wa.user_id
+        ORDER BY wa.created_at DESC,wa.id DESC
+        """
+    )
+    return render_template("admin_bind_accounts.html", accounts=accounts)
 
 @app.route("/admin/invites/create", methods=["POST"])
 def admin_create_invite():
