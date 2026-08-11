@@ -16,6 +16,10 @@
 
 <style>
 
+/* =========================
+   GLOBAL
+========================= */
+
 *{
     margin:0;
     padding:0;
@@ -24,23 +28,66 @@
 }
 
 body{
-    background:#f4f7fb;
+    background:#f1f4fa;
+    color:#334155;
     min-height:100vh;
-    padding:20px;
-    padding-bottom:100px;
+
+    display:flex;
+    justify-content:center;
+
+    padding-bottom:85px;
+
+    -webkit-tap-highlight-color:transparent;
 }
 
 
 /* =========================
-   MAIN PHONE FRAME
+   PHONE CONTAINER
 ========================= */
 
 .phone{
     width:100%;
     max-width:440px;
     min-height:100vh;
-    margin:auto;
+    background:#f1f4fa;
     position:relative;
+    padding-bottom:80px;
+}
+
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.top-header{
+    width:100%;
+
+    background:#0b1c4d;
+    color:white;
+
+    padding:17px 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.10);
+}
+
+.top-header h1{
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:.3px;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.content{
+    width:100%;
+    padding:16px;
 }
 
 
@@ -49,31 +96,62 @@ body{
 ========================= */
 
 .card{
-    background:white;
     width:100%;
-    padding:28px;
-    border-radius:25px;
-    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    background:white;
+
+    border-radius:24px;
+
+    padding:22px;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.08);
+
+    border:1px solid #eef2f7;
 }
 
 
 /* =========================
-   LOGO
+   BRAND
 ========================= */
 
-.logo{
+.logo-area{
     text-align:center;
-    font-size:30px;
-    font-weight:bold;
-    color:#2563eb;
-    margin-bottom:8px;
+    margin-bottom:18px;
+}
+
+.logo{
+    width:62px;
+    height:62px;
+
+    margin:auto;
+    margin-bottom:10px;
+
+    border-radius:18px;
+
+    background:#0b1c4d;
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:23px;
+    font-weight:900;
+
+    box-shadow:0 7px 18px rgba(11,28,77,.20);
+}
+
+.brand-name{
+    color:#0b1c4d;
+    font-size:18px;
+    font-weight:800;
 }
 
 .subtitle{
-    text-align:center;
     color:#64748b;
-    font-size:14px;
-    margin-bottom:25px;
+    font-size:12px;
+    margin-top:4px;
 }
 
 
@@ -81,22 +159,59 @@ body{
    TITLE
 ========================= */
 
-h2{
-    text-align:center;
-    color:#0f172a;
+.title{
+    margin-top:20px;
     margin-bottom:18px;
+}
+
+.title h2{
+    color:#0f172a;
+    font-size:20px;
+    font-weight:800;
+}
+
+.title p{
+    color:#64748b;
+    font-size:12px;
+    margin-top:5px;
 }
 
 
 /* =========================
-   LABELS
+   FLASH MESSAGE
+========================= */
+
+.success-message{
+    background:#dcfce7;
+    border:1px solid #bbf7d0;
+
+    color:#166534;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    margin-bottom:16px;
+
+    font-size:13px;
+    line-height:1.4;
+
+    text-align:center;
+}
+
+
+/* =========================
+   FORM LABEL
 ========================= */
 
 label{
     display:block;
-    font-size:14px;
-    font-weight:bold;
+
+    font-size:13px;
+    font-weight:700;
+
     color:#334155;
+
     margin-bottom:7px;
 }
 
@@ -109,72 +224,119 @@ input[type="number"],
 input[type="tel"],
 input[type="text"],
 input[type="file"]{
+
     width:100%;
+
     padding:14px;
-    margin-bottom:16px;
-    border:1px solid #dbe1e8;
+
+    margin-bottom:15px;
+
+    border:1px solid #e2e8f0;
+
     border-radius:12px;
+
     background:#f8fafc;
+
+    color:#0f172a;
+
     outline:none;
+
+    font-size:14px;
 }
 
 input:focus{
-    border-color:#2563eb;
+
+    border-color:#4c64bc;
+
     background:white;
+
+    box-shadow:
+        0 0 0 3px rgba(76,100,188,.08);
 }
 
 
 /* =========================
-   QUICK AMOUNTS
+   QUICK AMOUNT AREA
 ========================= */
 
+.amount-title{
+    font-size:12px;
+    color:#64748b;
+    font-weight:600;
+
+    margin-bottom:8px;
+}
+
 .amount-buttons{
-    display:flex;
-    flex-wrap:wrap;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:8px;
+
     margin-bottom:18px;
 }
 
 .amount-buttons button{
-    flex:1;
-    min-width:65px;
-    padding:11px 8px;
+
+    padding:11px 6px;
+
     border:none;
-    border-radius:10px;
-    background:#e0e7ff;
-    color:#2563eb;
-    font-weight:bold;
+
+    border-radius:11px;
+
+    background:#eef2ff;
+
+    color:#334fa4;
+
+    font-size:12px;
+
+    font-weight:800;
+
     cursor:pointer;
+
+    transition:.15s;
+}
+
+.amount-buttons button:hover{
+    background:#e0e7ff;
 }
 
 .amount-buttons button:active{
-    transform:scale(.97);
+    transform:scale(.96);
 }
 
 
 /* =========================
-   BUTTONS
+   NEXT BUTTON
 ========================= */
 
-.next-button,
-.submit-button{
+.next-button{
+
     width:100%;
+
     padding:15px;
+
     border:none;
+
     border-radius:13px;
-    background:#2563eb;
+
+    background:#0b1c4d;
+
     color:white;
-    font-size:16px;
-    font-weight:bold;
+
+    font-size:15px;
+
+    font-weight:800;
+
     cursor:pointer;
+
+    box-shadow:
+        0 5px 14px rgba(11,28,77,.18);
 }
 
-.next-button:disabled{
-    background:#94a3b8;
-    cursor:not-allowed;
-}
-
-.submit-button:active,
 .next-button:active{
     transform:scale(.99);
 }
@@ -185,17 +347,67 @@ input:focus{
 ========================= */
 
 .payment-card{
+
     display:none;
-    margin-top:25px;
-    padding:20px;
+
+    margin-top:5px;
+
+    padding:17px;
+
     border-radius:18px;
+
     background:#eff6ff;
-    border:1px solid #bfdbfe;
+
+    border:1px solid #dbeafe;
 }
 
 .payment-card h3{
-    color:#1e40af;
-    margin-bottom:15px;
+
+    color:#0b1c4d;
+
+    font-size:16px;
+
+    margin-bottom:13px;
+}
+
+
+/* =========================
+   PAYMENT AMOUNT
+========================= */
+
+.amount-display{
+
+    background:white;
+
+    border:1px solid #dbeafe;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    font-size:18px;
+
+    font-weight:800;
+
+    color:#2563eb;
+
+    margin-bottom:12px;
+}
+
+
+/* =========================
+   PAYMENT DESCRIPTION
+========================= */
+
+.payment-description{
+
+    color:#475569;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    margin-bottom:10px;
 }
 
 
@@ -204,39 +416,47 @@ input:focus{
 ========================= */
 
 .payment-number{
+
     display:flex;
+
     align-items:center;
-    gap:8px;
-    margin:12px 0;
+
+    gap:7px;
+
+    margin:12px 0 15px;
 }
 
 .payment-number input{
+
+    flex:1;
+
     margin:0;
+
     background:white;
-    font-weight:bold;
+
+    font-weight:800;
+
     color:#0f172a;
 }
 
 .copy-button{
-    padding:13px;
+
+    padding:13px 12px;
+
     border:none;
+
     border-radius:10px;
-    background:#0f172a;
+
+    background:#0b1c4d;
+
     color:white;
-    font-weight:bold;
+
+    font-size:12px;
+
+    font-weight:800;
+
     cursor:pointer;
-}
 
-
-/* =========================
-   AMOUNT DISPLAY
-========================= */
-
-.amount-display{
-    font-size:20px;
-    font-weight:bold;
-    color:#2563eb;
-    margin-bottom:12px;
 }
 
 
@@ -245,30 +465,55 @@ input:focus{
 ========================= */
 
 .warning{
+
     background:#fff7ed;
+
     border:1px solid #fed7aa;
+
     color:#9a3412;
+
     padding:13px;
+
     border-radius:12px;
-    font-size:13px;
+
+    font-size:12px;
+
     line-height:1.5;
-    margin-bottom:18px;
+
+    margin-bottom:17px;
 }
 
 
 /* =========================
-   SUCCESS MESSAGE
+   SUBMIT BUTTON
 ========================= */
 
-.success-message{
-    display:none;
-    background:#dcfce7;
-    border:1px solid #bbf7d0;
-    color:#166534;
-    padding:13px;
-    border-radius:12px;
-    margin-bottom:15px;
-    text-align:center;
+.submit-button{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:#0b1c4d;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 14px rgba(11,28,77,.15);
+}
+
+.submit-button:active{
+    transform:scale(.99);
 }
 
 
@@ -277,81 +522,162 @@ input:focus{
 ========================= */
 
 .note{
+
     text-align:center;
+
     color:#64748b;
-    font-size:13px;
-    margin-top:18px;
-    line-height:1.5;
+
+    font-size:11px;
+
+    margin-top:17px;
+
+    line-height:1.6;
 }
 
 .file-label{
-    margin-top:15px;
+    margin-top:8px;
 }
 
 
 /* =========================
-   5-ITEM BOTTOM NAVIGATION
+   INFORMATION BOX
+========================= */
+
+.info-box{
+
+    margin-top:15px;
+
+    background:#f8fafc;
+
+    border:1px solid #eef2f7;
+
+    border-radius:13px;
+
+    padding:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.info-icon{
+
+    width:32px;
+    height:32px;
+
+    border-radius:9px;
+
+    background:#eef2ff;
+
+    color:#334fa4;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.info-text{
+
+    color:#64748b;
+
+    font-size:11px;
+
+    line-height:1.4;
+}
+
+
+/* =========================
+   FIXED BOTTOM NAVIGATION
 ========================= */
 
 .bottom-nav{
+
     position:fixed;
+
     bottom:0;
     left:0;
     right:0;
+
     height:67px;
 
     background:white;
-    border-top:1px solid #e5e7eb;
+
+    border-top:1px solid #e2e8f0;
 
     display:flex;
+
     justify-content:center;
 
     z-index:9999;
 
-    box-shadow:0 -3px 12px rgba(0,0,0,.04);
+    box-shadow:
+        0 -4px 14px rgba(0,0,0,.05);
 }
 
 .bottom-nav-inner{
+
     width:100%;
+
     max-width:440px;
 
     display:grid;
-    grid-template-columns:repeat(5,1fr);
+
+    grid-template-columns:
+        repeat(5,1fr);
+
     align-items:center;
 }
 
 .bottom-nav a{
+
     height:100%;
+
     position:relative;
 
     display:flex;
+
     flex-direction:column;
-    justify-content:center;
+
     align-items:center;
 
-    gap:3px;
+    justify-content:center;
+
+    gap:4px;
 
     text-decoration:none;
 
     color:#94a3b8;
-    font-size:10px;
+
+    font-size:9px;
+
     font-weight:500;
 }
 
 .bottom-nav i{
-    font-size:17px;
+
+    font-size:18px;
 }
 
 .bottom-nav a.active{
+
     color:#0b1c4d;
-    font-weight:700;
+
+    font-weight:800;
 }
 
 .bottom-nav a.active::after{
+
     content:"";
 
     position:absolute;
+
     bottom:0;
+
     left:25%;
     right:25%;
 
@@ -359,28 +685,37 @@ input:focus{
 
     background:#0b1c4d;
 
-    border-radius:4px 4px 0 0;
+    border-radius:
+        4px 4px 0 0;
 }
 
 
 /* =========================
-   SMALL SCREEN
+   MOBILE
 ========================= */
 
 @media(max-width:360px){
 
-    body{
+    .content{
         padding:12px;
-        padding-bottom:90px;
     }
 
     .card{
-        padding:20px;
+        padding:18px;
+
         border-radius:20px;
     }
 
     .logo{
-        font-size:27px;
+        width:55px;
+        height:55px;
+
+        font-size:20px;
+    }
+
+    .amount-buttons button{
+        font-size:11px;
+        padding:10px 5px;
     }
 
     .bottom-nav{
@@ -390,7 +725,6 @@ input:focus{
     .bottom-nav i{
         font-size:16px;
     }
-
 }
 
 </style>
@@ -400,372 +734,438 @@ input:focus{
 
 <body>
 
+
 <div class="phone">
 
 
     <!-- =========================
-         MAIN DEPOSIT CARD
+         HEADER
     ========================= -->
 
-    <div class="card">
+    <header class="top-header">
 
-        <div class="logo">
-            ZC
-        </div>
+        <h1>
+            Deposit
+        </h1>
 
-
-        <p class="subtitle">
-            Zenith Capital Deposit
-        </p>
+    </header>
 
 
-        <h2>
-            Deposit Funds
-        </h2>
+    <!-- =========================
+         CONTENT
+    ========================= -->
+
+    <main class="content">
 
 
-        <!-- FLASH MESSAGES -->
+        <div class="card">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
 
-            {% for category, message in messages %}
+            <!-- BRAND -->
 
-                <div
-                    class="success-message"
-                    style="display:block;"
-                >
-                    {{ message }}
+            <div class="logo-area">
+
+                <div class="logo">
+                    ZC
                 </div>
 
-            {% endfor %}
+                <div class="brand-name">
+                    Zenith Capital
+                </div>
 
-        {% endwith %}
-
-
-        <!-- =========================
-             STEP 1
-        ========================= -->
-
-        <div id="stepOne">
-
-
-            <label for="phone">
-                Phone Number
-            </label>
-
-
-            <input
-                type="tel"
-                id="phone"
-                placeholder="Enter your phone number"
-                required
-            >
-
-
-            <label for="amount">
-                Deposit Amount
-            </label>
-
-
-            <input
-                type="number"
-                id="amount"
-                placeholder="Minimum GHS 45"
-                min="45"
-                step="0.01"
-                required
-            >
-
-
-            <!-- QUICK AMOUNTS -->
-
-            <div class="amount-buttons">
-
-                <button
-                    type="button"
-                    onclick="setAmount(45)"
-                >
-                    GHS 45
-                </button>
-
-                <button
-                    type="button"
-                    onclick="setAmount(50)"
-                >
-                    GHS 50
-                </button>
-
-                <button
-                    type="button"
-                    onclick="setAmount(100)"
-                >
-                    GHS 100
-                </button>
-
-                <button
-                    type="button"
-                    onclick="setAmount(200)"
-                >
-                    GHS 200
-                </button>
-
-                <button
-                    type="button"
-                    onclick="setAmount(300)"
-                >
-                    GHS 300
-                </button>
-
-                <button
-                    type="button"
-                    onclick="setAmount(400)"
-                >
-                    GHS 400
-                </button>
+                <div class="subtitle">
+                    Secure Deposit Center
+                </div>
 
             </div>
 
 
-            <button
-                type="button"
-                class="next-button"
-                onclick="showPaymentCard()"
-            >
+            <!-- TITLE -->
 
-                Next
+            <div class="title">
 
-            </button>
+                <h2>
+                    Deposit Funds
+                </h2>
 
-        </div>
-
-
-        <!-- =========================
-             STEP 2
-        ========================= -->
-
-        <div
-            class="payment-card"
-            id="paymentCard"
-        >
-
-            <h3>
-                Payment Instructions
-            </h3>
-
-
-            <div class="amount-display">
-
-                Amount: GHS
-
-                <span id="displayAmount">
-                    0.00
-                </span>
+                <p>
+                    Enter your details to create a deposit request.
+                </p>
 
             </div>
 
 
-            <p>
-                Send the exact amount to the payment number below.
-            </p>
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% for category, message in messages %}
+
+                    <div class="success-message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endwith %}
 
 
-            <!-- PAYMENT NUMBER -->
+            <!-- =========================
+                 STEP 1
+            ========================= -->
 
-            <div class="payment-number">
-
-                <input
-                    type="text"
-                    id="paymentNumber"
-                    value="0257425844"
-                    readonly
-                >
+            <div id="stepOne">
 
 
-                <button
-                    type="button"
-                    class="copy-button"
-                    onclick="copyNumber()"
-                >
-
-                    Copy
-
-                </button>
-
-            </div>
-
-
-            <!-- WARNING -->
-
-            <div class="warning">
-
-                ⚠️ After making the payment, take a clear screenshot
-                showing the successful transaction. Upload the screenshot
-                below and submit your deposit request.
-
-            </div>
-
-
-            <!-- DEPOSIT FORM -->
-
-            <form
-                method="POST"
-                action="{{ url_for('deposit') }}"
-                enctype="multipart/form-data"
-                onsubmit="return validateDeposit()"
-            >
-
-
-                <input
-                    type="hidden"
-                    name="amount"
-                    id="finalAmount"
-                >
-
-
-                <input
-                    type="hidden"
-                    name="phone"
-                    id="finalPhone"
-                >
-
-
-                <label
-                    class="file-label"
-                    for="screenshot"
-                >
-
-                    Payment Screenshot
-
+                <label for="phone">
+                    Phone Number
                 </label>
 
-
                 <input
-                    type="file"
-                    id="screenshot"
-                    name="screenshot"
-                    accept="image/*"
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter your phone number"
                     required
                 >
 
 
-                <button
-                    type="submit"
-                    class="submit-button"
+                <label for="amount">
+                    Deposit Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Minimum GHS 45"
+                    min="45"
+                    step="0.01"
+                    required
                 >
 
-                    Submit Deposit Request
+
+                <div class="amount-title">
+                    Select Quick Amount
+                </div>
+
+
+                <div class="amount-buttons">
+
+                    <button
+                        type="button"
+                        onclick="setAmount(45)"
+                    >
+                        GHS 45
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="setAmount(50)"
+                    >
+                        GHS 50
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="setAmount(100)"
+                    >
+                        GHS 100
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="setAmount(200)"
+                    >
+                        GHS 200
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="setAmount(300)"
+                    >
+                        GHS 300
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="setAmount(400)"
+                    >
+                        GHS 400
+                    </button>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="showPaymentCard()"
+                >
+
+                    Continue to Payment
 
                 </button>
 
-            </form>
+
+            </div>
+
+
+            <!-- =========================
+                 STEP 2
+            ========================= -->
+
+            <div
+                class="payment-card"
+                id="paymentCard"
+            >
+
+
+                <h3>
+                    Payment Instructions
+                </h3>
+
+
+                <div class="amount-display">
+
+                    GHS
+                    <span id="displayAmount">
+                        0.00
+                    </span>
+
+                </div>
+
+
+                <p class="payment-description">
+
+                    Send the exact amount to the payment
+                    number below before submitting your request.
+
+                </p>
+
+
+                <!-- PAYMENT NUMBER -->
+
+                <div class="payment-number">
+
+                    <input
+                        type="text"
+                        id="paymentNumber"
+                        value="0257425844"
+                        readonly
+                    >
+
+                    <button
+                        type="button"
+                        class="copy-button"
+                        onclick="copyNumber()"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+
+                <!-- WARNING -->
+
+                <div class="warning">
+
+                    ⚠️ After making the payment, take a clear
+                    screenshot showing the successful transaction.
+                    Upload the screenshot below and submit your
+                    deposit request.
+
+                </div>
+
+
+                <!-- DEPOSIT FORM -->
+
+                <form
+                    method="POST"
+                    action="{{ url_for('deposit') }}"
+                    enctype="multipart/form-data"
+                    onsubmit="return validateDeposit()"
+                >
+
+
+                    <input
+                        type="hidden"
+                        name="amount"
+                        id="finalAmount"
+                    >
+
+
+                    <input
+                        type="hidden"
+                        name="phone"
+                        id="finalPhone"
+                    >
+
+
+                    <label
+                        class="file-label"
+                        for="screenshot"
+                    >
+
+                        Payment Screenshot
+
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="screenshot"
+                        name="screenshot"
+                        accept="image/*"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                    >
+
+                        Submit Deposit Request
+
+                    </button>
+
+
+                </form>
+
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+                    <div class="info-text">
+
+                        Your request will be sent to the
+                        server for review. Your balance should
+                        only be updated after the deposit has
+                        been verified and approved.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- NOTE -->
+
+            <div class="note">
+
+                Minimum deposit: GHS 45.<br>
+
+                Your balance will only be credited after the
+                deposit has been reviewed and approved.
+
+            </div>
+
 
         </div>
 
 
-        <!-- NOTE -->
+    </main>
 
-        <div class="note">
 
-            Minimum deposit: GHS 45.<br>
+</div>
 
-            Your balance will only be credited after the
-            deposit has been reviewed and approved.
 
-        </div>
+<!-- =========================
+     FIXED BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bottom-nav">
+
+    <div class="bottom-nav-inner">
+
+
+        <!-- HOME -->
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="active"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <!-- INCOME -->
+
+        <a
+            href="{{ url_for('my_plan') }}"
+        >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <!-- TEAM -->
+
+        <a
+            href="{{ url_for('team') }}"
+        >
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <!-- SHARE -->
+
+        <a
+            href="{{ url_for('team') }}"
+        >
+
+            <i class="fa-solid fa-share-nodes"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <!-- MY -->
+
+        <a
+            href="{{ url_for('profile') }}"
+        >
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
+
 
     </div>
 
-
-    <!-- =========================
-         5-ITEM BOTTOM NAVIGATION
-    ========================= -->
-
-    <nav class="bottom-nav">
-
-        <div class="bottom-nav-inner">
-
-
-            <!-- HOME -->
-
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="active"
-            >
-
-                <i class="fa-solid fa-house"></i>
-
-                <span>
-                    Home
-                </span>
-
-            </a>
-
-
-            <!-- INCOME -->
-
-            <a
-                href="{{ url_for('my_plan') }}"
-            >
-
-                <i class="fa-solid fa-chart-line"></i>
-
-                <span>
-                    Income
-                </span>
-
-            </a>
-
-
-            <!-- TEAM -->
-
-            <a
-                href="{{ url_for('team') }}"
-            >
-
-                <i class="fa-solid fa-users"></i>
-
-                <span>
-                    Team
-                </span>
-
-            </a>
-
-
-            <!-- SHARE -->
-
-            <a
-                href="{{ url_for('team') }}"
-            >
-
-                <i class="fa-solid fa-share-nodes"></i>
-
-                <span>
-                    Share
-                </span>
-
-            </a>
-
-
-            <!-- MY -->
-
-            <a
-                href="{{ url_for('profile') }}"
-            >
-
-                <i class="fa-solid fa-user"></i>
-
-                <span>
-                    My
-                </span>
-
-            </a>
-
-
-        </div>
-
-    </nav>
-
-</div>
+</nav>
 
 
 <!-- =========================
@@ -786,7 +1186,9 @@ function setAmount(value){
 function showPaymentCard(){
 
     const phone =
-        document.getElementById("phone").value.trim();
+        document.getElementById("phone")
+        .value
+        .trim();
 
 
     const amount =
@@ -877,24 +1279,37 @@ function copyNumber(){
     }
 
 
-    navigator.clipboard
-        .writeText(number)
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
 
-        .then(function(){
+        navigator.clipboard
+            .writeText(number)
 
-            alert(
-                "Payment number copied."
-            );
+            .then(function(){
 
-        })
+                alert(
+                    "Payment number copied."
+                );
 
-        .catch(function(){
+            })
 
-            alert(
-                "Please copy the number manually."
-            );
+            .catch(function(){
 
-        });
+                alert(
+                    "Please copy the number manually."
+                );
+
+            });
+
+    }else{
+
+        alert(
+            "Please copy the payment number manually."
+        );
+
+    }
 
 }
 
