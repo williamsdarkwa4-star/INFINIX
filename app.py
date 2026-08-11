@@ -1549,10 +1549,7 @@ def confirm_buy_plan(plan_id):
 # MY PLAN
 # ============================================================
 
-@app.route(
-    "/my_plan",
-    methods=["GET", "POST"]
-)
+@app.route("/my_plan", methods=["GET", "POST"])
 def my_plan():
 
     user = current_user()
@@ -2627,29 +2624,48 @@ def admin_deposits():
 # ============================================================
 # ADMIN DEPOSIT ACTION
 # ============================================================
-
 @app.route(
-    "/admin/deposit/<int:deposit_id>/<action>",
-    methods=["POST"]
+"/admin/deposit/"int:deposit_id" (int:deposit_id)/<action>",
+methods=["POST"]
 )
-def admin_deposit_action(
-    deposit_id,
-    action
-):
+def admin_deposit_action(deposit_id, action):
 
-    if not admin_required():
+if not admin_required():
+    return redirect(url_for("admin_login"))
 
-        return redirect(
-            url_for("admin_login")
-        )
+if action not in ("approve", "reject"):
+    flash("Invalid deposit action.", "error")
+    return redirect(url_for("admin_deposits"))
 
-    if action not in {
-        "approve",
-        "reject"
-    }:
+conn = get_conn()
+cur = conn.cursor(cursor_factory=RealDictCursor)
+
+try:
+
+    # ----------------------------------------------------
+    # LOCK THE DEPOSIT
+    # ----------------------------------------------------
+
+    cur.execute("""
+        SELECT
+            id,
+            user_id,
+            amount,
+            reference,
+            status
+        FROM deposit_requests
+        WHERE id=%s
+        FOR UPDATE
+    """, (deposit_id,))
+
+    deposit = cur.fetchone()
+
+    if not deposit:
+
+        conn.rollback()
 
         flash(
-            "Invalid deposit action.",
+            "Deposit request not found.",
             "error"
         )
 
@@ -2657,73 +2673,50 @@ def admin_deposit_action(
             url_for("admin_deposits")
         )
 
-    conn = get_conn()
-    cur = conn.cursor(
-        cursor_factory=RealDictCursor
-    )
+    # ----------------------------------------------------
+    # PREVENT DOUBLE APPROVAL / REJECTION
+    # ----------------------------------------------------
 
-    try:
+    if deposit["status"] != "pending":
 
-        # ----------------------------------------------------
-        # LOCK THE REQUEST
-        # ----------------------------------------------------
+        conn.rollback()
 
-        cur.execute("""
-            SELECT *
-            FROM deposit_requests
-            WHERE id=%s
-            FOR UPDATE
-        """, (
-            deposit_id,
-        ))
-
-        deposit = cur.fetchone()
-
-        if not deposit:
-
-            conn.rollback()
-
-            flash(
-                "Deposit request not found.",
-                "error"
-            )
-
-            return redirect(
-                url_for("admin_deposits")
-            )
-
-        # ----------------------------------------------------
-        # PREVENT DOUBLE PROCESSING
-        # ----------------------------------------------------
-
-        if deposit["status"] != "pending":
-
-            conn.rollback()
-
-            flash(
-                "This deposit has already been processed.",
-                "error"
-            )
-
-            return redirect(
-                url_for("admin_deposits")
-            )
-
-        user_id = deposit["user_id"]
-
-        amount = Decimal(
-            str(deposit["amount"])
+        flash(
+            "This deposit has already been reviewed.",
+            "error"
         )
 
-        reference = deposit["reference"]
+        return redirect(
+            url_for("admin_deposits")
+        )
 
-        # ----------------------------------------------------
-        # APPROVE
-        # ----------------------------------------------------
+    user_id = deposit["user_id"]
+    amount = Decimal(
+        str(deposit["amount"])
+    )
+    reference = deposit["reference"]
 
-        if action == "approve":
+    # ----------------------------------------------------
+    # APPROVE
+    # ----------------------------------------------------
 
-            # Make sure account exists.
+    if action == "approve":
+
+        # Lock the user's account row if it exists.
+        cur.execute("""
+            SELECT *
+            FROM accounts
+            WHERE user_id=%s
+            FOR UPDATE
+        """, (user_id,))
+
+        account = cur.fetchone()
+
+        # ------------------------------------------------
+        # ACCOUNT DOES NOT EXIST
+        # ------------------------------------------------
+
+        if not account:
 
             cur.execute("""
                 INSERT INTO accounts (
@@ -2733,115 +2726,173 @@ def admin_deposit_action(
                     referral_account,
                     withdraw_account
                 )
-
                 VALUES (
-                    %s,5.00,0,0,0
+                    %s,
+                    %s,
+                    0,
+                    0,
+                    0
                 )
-
-                ON CONFLICT (user_id)
-                DO NOTHING
             """, (
                 user_id,
+                amount
             ))
 
-            # Credit deposit balance.
+        # ------------------------------------------------
+        # ACCOUNT EXISTS
+        # ------------------------------------------------
+
+        else:
 
             cur.execute("""
                 UPDATE accounts
                 SET deposit_account =
-                    deposit_account + %s
+                    COALESCE(deposit_account, 0)
+                    + %s
                 WHERE user_id=%s
             """, (
                 amount,
                 user_id
             ))
 
-            # Mark request approved.
+        # ------------------------------------------------
+        # MARK DEPOSIT APPROVED
+        # ------------------------------------------------
 
-            cur.execute("""
-                UPDATE deposit_requests
-                SET status='approved'
-                WHERE id=%s
-            """, (
-                deposit_id,
-            ))
+        cur.execute("""
+            UPDATE deposit_requests
+            SET status='approved'
+            WHERE id=%s
+        """, (
+            deposit_id,
+        ))
 
-            # Update matching transaction.
+        # ------------------------------------------------
+        # UPDATE MATCHING TRANSACTION
+        # ------------------------------------------------
+
+        if reference:
 
             cur.execute("""
                 UPDATE transactions
-                SET status='successful',
-                    description=
-                        'Deposit approved by admin'
+                SET status='successful'
                 WHERE user_id=%s
-                AND transaction_type='deposit'
-                AND reference=%s
-                AND status='pending'
+                  AND transaction_type='deposit'
+                  AND reference=%s
+                  AND status='pending'
             """, (
                 user_id,
                 reference
             ))
-
-        # ----------------------------------------------------
-        # REJECT
-        # ----------------------------------------------------
 
         else:
 
             cur.execute("""
-                UPDATE deposit_requests
-                SET status='rejected'
-                WHERE id=%s
+                UPDATE transactions
+                SET status='successful'
+                WHERE id = (
+                    SELECT id
+                    FROM transactions
+                    WHERE user_id=%s
+                      AND transaction_type='deposit'
+                      AND status='pending'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                )
             """, (
-                deposit_id,
+                user_id,
             ))
+
+        flash(
+            f"Deposit of GHS {amount:.2f} approved successfully.",
+            "success"
+        )
+
+    # ----------------------------------------------------
+    # REJECT
+    # ----------------------------------------------------
+
+    else:
+
+        cur.execute("""
+            UPDATE deposit_requests
+            SET status='rejected'
+            WHERE id=%s
+        """, (
+            deposit_id,
+        ))
+
+        if reference:
 
             cur.execute("""
                 UPDATE transactions
-                SET status='failed',
-                    description=
-                        'Deposit rejected by admin'
+                SET status='failed'
                 WHERE user_id=%s
-                AND transaction_type='deposit'
-                AND reference=%s
-                AND status='pending'
+                  AND transaction_type='deposit'
+                  AND reference=%s
+                  AND status='pending'
             """, (
                 user_id,
                 reference
             ))
 
-        conn.commit()
+        else:
 
-    except Exception:
-
-        conn.rollback()
-        raise
-
-    finally:
-
-        cur.close()
-        conn.close()
-
-    if action == "approve":
+            cur.execute("""
+                UPDATE transactions
+                SET status='failed'
+                WHERE id = (
+                    SELECT id
+                    FROM transactions
+                    WHERE user_id=%s
+                      AND transaction_type='deposit'
+                      AND status='pending'
+                    ORDER BY created_at DESC
+                    LIMIT 1
+                )
+            """, (
+                user_id,
+            ))
 
         flash(
-            "Deposit approved successfully.",
+            f"Deposit of GHS {amount:.2f} rejected.",
             "success"
         )
 
-    else:
+    # ----------------------------------------------------
+    # COMMIT
+    # ----------------------------------------------------
 
-        flash(
-            "Deposit rejected successfully.",
-            "success"
-        )
+    conn.commit()
 
-    # IMPORTANT:
-    # Always return to the admin deposit page.
+except Exception as exc:
 
-    return redirect(
-        url_for("admin_deposits")
+    conn.rollback()
+
+    app.logger.exception(
+        "ADMIN DEPOSIT ACTION ERROR"
     )
+
+    flash(
+        "Unable to process the deposit. Please try again.",
+        "error"
+    )
+
+finally:
+
+    cur.close()
+    conn.close()
+
+# --------------------------------------------------------
+# IMPORTANT:
+# ALWAYS RETURN TO ADMIN DEPOSIT PAGE
+# --------------------------------------------------------
+
+return redirect(
+    url_for("admin_deposits")
+)
+
+                
 
 
 # ============================================================
