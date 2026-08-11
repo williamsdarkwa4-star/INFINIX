@@ -1,5 +1,18 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Deposit - Zenith Capital</title><style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Admin Deposits - Zenith Capital</title>
+
+<style>
 
 *{
     margin:0;
@@ -9,370 +22,363 @@
 }
 
 body{
-    background:#f4f7fb;
-    padding-bottom:90px;
-}
-
-.header{
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    color:white;
-    padding:30px 20px;
-    text-align:center;
-    border-radius:0 0 30px 30px;
-}
-
-.header h1{
-    margin-bottom:8px;
-}
-
-.header p{
-    opacity:.85;
-}
-
-.container{
-    max-width:600px;
-    margin:auto;
+    background:#f1f4fa;
+    color:#334155;
     padding:20px;
 }
 
-.search{
+.container{
     width:100%;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    background:white;
+    max-width:1000px;
+    margin:auto;
+}
+
+.header{
+    background:#0b1c4d;
+    color:white;
+    padding:18px;
+    border-radius:16px;
     margin-bottom:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    outline:none;
+}
+
+.header h1{
+    font-size:20px;
+}
+
+.message{
+    padding:12px 15px;
+    border-radius:10px;
+    margin-bottom:15px;
+    background:#dcfce7;
+    color:#166534;
 }
 
 .card{
     background:white;
-    padding:20px;
-    border-radius:20px;
-    margin-bottom:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
-
-.card h2{
-    color:#2563eb;
-    margin-bottom:15px;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 5px 20px rgba(15,23,42,.08);
 }
 
 .info{
-    line-height:30px;
-    color:#475569;
+    line-height:1.7;
+    font-size:14px;
 }
 
-.amount{
-    font-size:20px;
-    font-weight:bold;
+.info strong{
     color:#0f172a;
 }
 
 .status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
     font-weight:bold;
 }
 
-.status.pending{
-    color:#f59e0b;
+.pending{
+    background:#fef3c7;
+    color:#92400e;
 }
 
-.status.approved{
-    color:#16a34a;
+.approved{
+    background:#dcfce7;
+    color:#166534;
 }
 
-.status.rejected{
-    color:#dc2626;
+.rejected{
+    background:#fee2e2;
+    color:#991b1b;
 }
 
-.receipt{
-    margin-top:18px;
-}
-
-.receipt h3{
-    margin-bottom:10px;
-    color:#0f172a;
-}
-
-.receipt img{
+.screenshot{
     width:100%;
-    max-height:450px;
+    max-width:420px;
+    max-height:500px;
     object-fit:contain;
-    border-radius:15px;
-    border:1px solid #e2e8f0;
-    background:#f8fafc;
-}
-
-.no-receipt{
-    padding:15px;
-    background:#f8fafc;
     border-radius:12px;
-    color:#64748b;
+    border:1px solid #e2e8f0;
+    margin-top:12px;
+    background:#f8fafc;
 }
 
-.buttons{
+.actions{
     display:flex;
     gap:10px;
-    margin-top:18px;
+    margin-top:15px;
+    flex-wrap:wrap;
 }
 
-.buttons form{
-    flex:1;
+.actions form{
+    margin:0;
 }
 
 button{
-    width:100%;
-    padding:14px;
     border:none;
-    border-radius:15px;
+    border-radius:10px;
+    padding:12px 18px;
     color:white;
     font-weight:bold;
-    font-size:15px;
     cursor:pointer;
 }
 
 .approve{
-    background:#16a34a;
+    background:#15803d;
 }
 
 .reject{
     background:#dc2626;
 }
 
-button:active{
-    transform:scale(.98);
-}
-
-.created{
-    margin-top:10px;
-    font-size:13px;
-    color:#94a3b8;
-}
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    background:white;
-    display:flex;
-    justify-content:space-around;
-    padding:14px 5px;
-    box-shadow:0 -5px 15px rgba(0,0,0,.1);
-    z-index:100;
-}
-
-.bottom-nav a{
+.back{
+    display:inline-block;
     text-decoration:none;
-    color:#2563eb;
-    text-align:center;
-    font-weight:bold;
-    font-size:13px;
+    color:white;
+    background:#334155;
+    padding:11px 15px;
+    border-radius:10px;
+    margin-bottom:15px;
 }
 
-</style></head><body><div class="header"><h1>Deposit Management</h1>
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+}
 
-<p>Review wallet top-up requests</p>
+</style>
 
-</div><div class="container"><input
-    class="search"
-    id="searchInput"
-    type="search"
-    placeholder="Search username or phone number"
-    onkeyup="searchDeposits()"
->
+</head>
 
+<body>
 
-{% for deposit in deposits %}
+<div class="container">
 
-<div class="card deposit-card">
+    <div class="header">
 
-    <h2>
-        Deposit Request #{{ deposit.id }}
-    </h2>
-
-
-    <div class="info">
-
-        <strong>Username:</strong>
-        {{ deposit.username }}
-
-        <br>
-
-        <strong>Phone:</strong>
-        {{ deposit.phone }}
-
-        <br>
-
-        <strong>Amount:</strong>
-
-        <span class="amount">
-            GHS {{ "%.2f"|format(deposit.amount) }}
-        </span>
-
-        <br>
-
-        <strong>Payment Method:</strong>
-        {{ deposit.payment_method or "Demo Payment" }}
-
-        <br>
-
-        <strong>Reference:</strong>
-        {{ deposit.reference or "N/A" }}
-
-        <br>
-
-        <strong>Status:</strong>
-
-        <span class="status {{ deposit.status }}">
-            {{ deposit.status|capitalize }}
-        </span>
+        <h1>
+            Deposit Requests
+        </h1>
 
     </div>
 
 
-    {% if deposit.screenshot %}
+    <a
+        href="{{ url_for('admin_dashboard') }}"
+        class="back"
+    >
+        ← Admin Dashboard
+    </a>
 
-    <div class="receipt">
 
-        <h3>Payment Screenshot</h3>
+    {% with messages =
+        get_flashed_messages(
+            with_categories=true
+        )
+    %}
 
-        <a href="{{ deposit.screenshot }}" target="_blank">
+        {% for category, message in messages %}
 
-            <img
-                src="{{ deposit.screenshot }}"
-                alt="Payment screenshot"
-            >
+            <div class="message">
+                {{ message }}
+            </div>
 
-        </a>
+        {% endfor %}
 
-    </div>
+    {% endwith %}
+
+
+    {% if deposits %}
+
+        {% for deposit in deposits %}
+
+            <div class="card">
+
+                <div class="info">
+
+                    <strong>
+                        Request #{{ deposit.id }}
+                    </strong>
+
+                    <br>
+
+                    User:
+                    {{ deposit.fullname or deposit.username }}
+
+                    <br>
+
+                    Username:
+                    {{ deposit.username }}
+
+                    <br>
+
+                    Phone:
+                    {{ deposit.phone }}
+
+                    <br>
+
+                    Amount:
+                    <strong>
+                        GHS {{ "%.2f"|format(deposit.amount) }}
+                    </strong>
+
+                    <br>
+
+                    Payment Number:
+                    {{ deposit.payment_number }}
+
+                    <br>
+
+                    Reference:
+                    {{ deposit.reference }}
+
+                    <br>
+
+                    Date:
+                    {{ deposit.created_at }}
+
+                    <br><br>
+
+                    Status:
+
+                    <span
+                        class="status {{ deposit.status }}"
+                    >
+                        {{ deposit.status|upper }}
+                    </span>
+
+                </div>
+
+
+                {% if deposit.screenshot %}
+
+                    <div>
+
+                        <p
+                            style="
+                                margin-top:15px;
+                                font-weight:bold;
+                            "
+                        >
+                            Payment Screenshot
+                        </p>
+
+                        <a
+                            href="{{
+                                url_for(
+                                    'uploaded_deposit_image',
+                                    filename=deposit.screenshot
+                                )
+                            }}"
+                            target="_blank"
+                        >
+
+                            <img
+                                class="screenshot"
+                                src="{{
+                                    url_for(
+                                        'uploaded_deposit_image',
+                                        filename=deposit.screenshot
+                                    )
+                                }}"
+                                alt="Payment Screenshot"
+                            >
+
+                        </a>
+
+                    </div>
+
+                {% else %}
+
+                    <p
+                        style="
+                            margin-top:15px;
+                            color:#dc2626;
+                        "
+                    >
+                        No screenshot uploaded.
+                    </p>
+
+                {% endif %}
+
+
+                {% if deposit.status == "pending" %}
+
+                    <div class="actions">
+
+                        <form
+                            method="POST"
+                            action="{{
+                                url_for(
+                                    'admin_deposit_action',
+                                    deposit_id=deposit.id,
+                                    action='approve'
+                                )
+                            }}"
+                        >
+
+                            <button
+                                type="submit"
+                                class="approve"
+                                onclick="
+                                    return confirm(
+                                        'Approve this deposit request?'
+                                    );
+                                "
+                            >
+                                Approve
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            method="POST"
+                            action="{{
+                                url_for(
+                                    'admin_deposit_action',
+                                    deposit_id=deposit.id,
+                                    action='reject'
+                                )
+                            }}"
+                        >
+
+                            <button
+                                type="submit"
+                                class="reject"
+                                onclick="
+                                    return confirm(
+                                        'Reject this deposit request?'
+                                    );
+                                "
+                            >
+                                Reject
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
 
     {% else %}
 
-    <div class="receipt">
+        <div class="card empty">
 
-        <div class="no-receipt">
-            No payment screenshot was uploaded.
+            No deposit requests found.
+
         </div>
 
-    </div>
-
-    {% endif %}
-
-
-    <div class="created">
-
-        Submitted:
-        {{ deposit.created_at }}
-
-    </div>
-
-
-    {% if deposit.status == "pending" %}
-
-    <div class="buttons">
-
-        <form
-            method="POST"
-            action="{{ url_for(
-                'admin_deposit_action',
-                deposit_id=deposit.id,
-                action='approve'
-            ) }}"
-        >
-
-            <button
-                class="approve"
-                type="submit"
-                onclick="return confirm('Approve this top-up request?')"
-            >
-                ✓ Approve
-            </button>
-
-        </form>
-
-
-        <form
-            method="POST"
-            action="{{ url_for(
-                'admin_deposit_action',
-                deposit_id=deposit.id,
-                action='reject'
-            ) }}"
-        >
-
-            <button
-                class="reject"
-                type="submit"
-                onclick="return confirm('Reject this top-up request?')"
-            >
-                ✕ Reject
-            </button>
-
-        </form>
-
-    </div>
-
     {% endif %}
 
 </div>
 
-{% else %}
+</body>
 
-<div class="card">
-
-    <h2>No Deposits</h2>
-
-    <div class="info">
-        There are currently no top-up requests.
-    </div>
-
-</div>
-
-{% endfor %}
-
-</div><div class="bottom-nav"><a href="/admin_dashboard">
-    🏠<br>
-    Dashboard
-</a>
-
-<a href="/admin_users">
-    👥<br>
-    Users
-</a>
-
-<a href="/admin_deposit">
-    💳<br>
-    Deposits
-</a>
-
-</div><script>
-
-function searchDeposits(){
-
-    const input =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
-
-    const cards =
-        document.querySelectorAll(".deposit-card");
-
-    cards.forEach(function(card){
-
-        const text =
-            card.innerText.toLowerCase();
-
-        if(text.includes(input)){
-            card.style.display = "";
-        }else{
-            card.style.display = "none";
-        }
-
-    });
-
-}
-
-</script></body></html>
+</html>
