@@ -1,107 +1,597 @@
-<!DOCTYPE html><html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insufficient Balance</title><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Insufficient Balance - Zenith Capital</title><script src="https://unpkg.com/lucide@latest"></script><style>
+
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:system-ui,-apple-system,Arial,sans-serif;
 }
 
 body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     background:#f1f5f9;
-    padding:20px;
-}
-
-.card{
-    width:100%;
-    max-width:400px;
-    background:white;
-    padding:30px;
-    border-radius:24px;
-    text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.icon{
-    width:65px;
-    height:65px;
-    margin:auto;
-    border-radius:50%;
     display:flex;
-    align-items:center;
     justify-content:center;
+    min-height:100vh;
+    color:#334155;
+    padding-bottom:70px;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.phone{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    background:white;
+    position:relative;
+    padding-bottom:85px;
+    box-shadow:0 0 18px rgba(0,0,0,.06);
+}
+
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.page-header{
+    background:linear-gradient(
+        to bottom,
+        #eff6ff,
+        #ffffff
+    );
+
+    padding:28px 20px 25px;
+
+    text-align:center;
+}
+
+.header-icon{
+    width:68px;
+    height:68px;
+
+    margin:0 auto 12px;
+
+    border-radius:50%;
+
     background:#fee2e2;
     color:#dc2626;
-    font-size:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:0 4px 12px rgba(220,38,38,.08);
 }
 
-h2{
-    margin:18px 0 10px;
+.header-icon svg{
+    width:32px;
+    height:32px;
 }
 
-p{
+.page-header h1{
+    font-size:21px;
+    color:#334155;
+    margin-bottom:5px;
+}
+
+.page-header p{
+    font-size:12px;
     color:#64748b;
-    line-height:1.5;
 }
 
-.amount{
-    margin:18px 0;
-    padding:16px;
-    background:#f8fafc;
-    border-radius:15px;
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:0 16px;
+    margin-top:-5px;
 }
 
-strong{
+
+/* =========================
+   WARNING CARD
+========================= */
+
+.warning-card{
+    background:white;
+
+    border:1px solid #f1f5f9;
+
+    border-radius:13px;
+
+    padding:18px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.warning-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    color:#10144c;
+
+    font-size:15px;
+    font-weight:700;
+
+    margin-bottom:8px;
+}
+
+.warning-title svg{
+    width:19px;
+    height:19px;
+    color:#dc2626;
+}
+
+.warning-text{
+    color:#64748b;
+    font-size:12px;
+    line-height:1.6;
+}
+
+
+/* =========================
+   BALANCE SECTION
+========================= */
+
+.section-title{
+    margin:18px 0 8px;
+
+    font-size:14px;
+    font-weight:bold;
+
+    color:#0f172a;
+}
+
+.balance-card{
+    background:#fff;
+
+    border:1px solid #f1f5f9;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.balance-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 14px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    font-size:13px;
+}
+
+.balance-row:last-child{
+    border-bottom:none;
+}
+
+.balance-label{
+    color:#64748b;
+}
+
+.balance-value{
+    font-weight:700;
+    color:#10144c;
+    text-align:right;
+}
+
+.balance-value.plan{
     color:#2563eb;
 }
 
-a{
-    display:block;
-    background:#2563eb;
-    color:white;
-    text-decoration:none;
-    padding:14px;
+
+/* =========================
+   DIFFERENCE BOX
+========================= */
+
+.notice{
+    margin-top:12px;
+
+    background:#eff6ff;
+
+    border:1px solid #dbeafe;
+
     border-radius:12px;
-    font-weight:bold;
+
+    padding:14px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.notice svg{
+    width:18px;
+    height:18px;
+    color:#2563eb;
+    flex-shrink:0;
+    margin-top:1px;
+}
+
+.notice p{
+    color:#475569;
+    font-size:12px;
+    line-height:1.55;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.actions{
     margin-top:18px;
 }
-</style></head><body><div class="card"><div class="icon">!</div>
 
-<h2>Insufficient Balance</h2>
+.primary-btn{
+    width:100%;
 
-<p>
-    Your current demo balance is not enough for this plan.
-</p>
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
 
-<div class="amount">
+    padding:14px;
 
-    <div>
-        Current balance:
-        <strong>
-            GHS {{ "%.2f"|format(account.deposit_account or 0) }}
-        </strong>
+    background:#10144c;
+
+    color:white;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:700;
+
+    box-shadow:0 5px 14px rgba(16,20,76,.15);
+}
+
+.primary-btn svg{
+    width:18px;
+    height:18px;
+}
+
+.secondary-btn{
+    width:100%;
+
+    display:block;
+
+    margin-top:9px;
+
+    padding:13px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    color:#475569;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:600;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav{
+    position:fixed;
+
+    bottom:0;
+
+    width:100%;
+    max-width:440px;
+
+    height:65px;
+
+    background:white;
+
+    border-top:1px solid #e2e8f0;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+
+    z-index:1000;
+
+    box-shadow:0 -3px 12px rgba(0,0,0,.05);
+}
+
+.bottom-nav a{
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:3px;
+
+    text-decoration:none;
+
+    color:#94a3b8;
+
+    font-size:9px;
+}
+
+.bottom-nav svg{
+    width:20px;
+    height:20px;
+}
+
+.bottom-nav a.active{
+    color:#10144c;
+    font-weight:bold;
+}
+
+.bottom-nav a.active::after{
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:25%;
+    right:25%;
+
+    height:3px;
+
+    background:#10144c;
+
+    border-radius:4px 4px 0 0;
+}
+
+
+/* =========================
+   SMALL DEVICES
+========================= */
+
+@media(max-width:360px){
+
+    .page-header{
+        padding:23px 15px;
+    }
+
+    .content{
+        padding:0 13px;
+    }
+
+    .warning-card{
+        padding:16px;
+    }
+
+    .balance-row{
+        padding:13px 12px;
+    }
+
+}
+
+</style></head><body><div class="phone"><!-- =========================
+     HEADER
+========================= -->
+
+<div class="page-header">
+
+    <div class="header-icon">
+
+        <i data-lucide="wallet-cards"></i>
+
     </div>
 
-    <br>
+    <h1>
+        Insufficient Balance
+    </h1>
 
-    <div>
-        Plan amount:
-        <strong>
-            GHS {{ "%.2f"|format(plan.investment_amount) }}
-        </strong>
-    </div>
+    <p>
+        Your available balance is not enough
+    </p>
 
 </div>
 
-<a href="{{ url_for('dashboard') }}">
-    Back to Dashboard
-</a>
 
-</div></body>
-</html>
+<!-- =========================
+     CONTENT
+========================= -->
+
+<div class="content">
+
+
+    <!-- WARNING -->
+
+    <div class="warning-card">
+
+        <div class="warning-title">
+
+            <i data-lucide="triangle-alert"></i>
+
+            Balance Required
+
+        </div>
+
+        <div class="warning-text">
+
+            Your current deposit balance is not enough
+            to purchase this plan. Please add funds to
+            your deposit account and try again.
+
+        </div>
+
+    </div>
+
+
+    <!-- BALANCE -->
+
+    <div class="section-title">
+        Balance Information
+    </div>
+
+
+    <div class="balance-card">
+
+
+        <div class="balance-row">
+
+            <span class="balance-label">
+                Current Balance
+            </span>
+
+            <span class="balance-value">
+
+                GHS
+                {{ "%.2f"|format(account.deposit_account or 0) }}
+
+            </span>
+
+        </div>
+
+
+        <div class="balance-row">
+
+            <span class="balance-label">
+                Plan Amount
+            </span>
+
+            <span class="balance-value plan">
+
+                GHS
+                {{ "%.2f"|format(plan.investment_amount) }}
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- NOTICE -->
+
+    <div class="notice">
+
+        <i data-lucide="info"></i>
+
+        <p>
+            Please deposit enough funds to cover the
+            plan amount before trying to purchase it.
+        </p>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions">
+
+        <a
+            href="{{ url_for('deposit') }}"
+            class="primary-btn"
+        >
+
+            <i data-lucide="plus-circle"></i>
+
+            Deposit Funds
+
+        </a>
+
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="secondary-btn"
+        >
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<div class="bottom-nav">
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="active"
+    >
+
+        <i data-lucide="home"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <a href="{{ url_for('my_plan') }}">
+
+        <i data-lucide="trending-up"></i>
+
+        <span>
+            Income
+        </span>
+
+    </a>
+
+
+    <a href="{{ url_for('team') }}">
+
+        <i data-lucide="users"></i>
+
+        <span>
+            Team
+        </span>
+
+    </a>
+
+
+    <a href="{{ url_for('team') }}">
+
+        <i data-lucide="share-2"></i>
+
+        <span>
+            Share
+        </span>
+
+    </a>
+
+
+    <a href="{{ url_for('profile') }}">
+
+        <i data-lucide="user"></i>
+
+        <span>
+            My
+        </span>
+
+    </a>
+
+
+</div>
+
+</div><script>
+
+lucide.createIcons();
+
+</script></body></html>
