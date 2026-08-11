@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,7 +18,7 @@
         }
 
         body{
-            background:#f4f7fb;
+            background:#f1f4fa;
             color:#0f172a;
             padding-bottom:90px;
         }
@@ -26,11 +28,13 @@
         ========================= */
 
         .header{
-            background:linear-gradient(135deg,#0f172a,#2563eb);
+            width:100%;
+            background:linear-gradient(135deg,#0b1c4d,#2563eb);
             color:white;
             padding:28px 20px;
             text-align:center;
             border-radius:0 0 28px 28px;
+            box-shadow:0 5px 15px rgba(0,0,0,.12);
         }
 
         .header h1{
@@ -43,8 +47,9 @@
             font-size:14px;
         }
 
+
         /* =========================
-           CONTAINER
+           MAIN
         ========================= */
 
         .container{
@@ -54,32 +59,34 @@
             padding:18px 15px;
         }
 
+
         /* =========================
-           BALANCE CARD
+           BALANCE
         ========================= */
 
         .balance-card{
             background:white;
-            border-radius:20px;
             padding:20px;
+            border-radius:20px;
             margin-bottom:18px;
             box-shadow:0 6px 18px rgba(15,23,42,.08);
         }
 
         .balance-label{
             color:#64748b;
-            font-size:14px;
+            font-size:13px;
+            margin-bottom:7px;
         }
 
         .balance{
+            color:#2563eb;
             font-size:30px;
             font-weight:bold;
-            color:#2563eb;
-            margin-top:8px;
         }
 
+
         /* =========================
-           ACTIVE PLAN
+           ACTIVE PLAN CARD
         ========================= */
 
         .plan-card{
@@ -90,40 +97,80 @@
             box-shadow:0 6px 18px rgba(15,23,42,.08);
         }
 
+
+        /* PLAN IMAGE */
+
+        .plan-image-wrapper{
+            width:100%;
+            height:200px;
+            background:linear-gradient(135deg,#dbeafe,#eff6ff);
+            overflow:hidden;
+        }
+
         .plan-image{
             width:100%;
-            height:190px;
+            height:100%;
             object-fit:cover;
             display:block;
         }
+
+
+        /* IMAGE FALLBACK */
+
+        .image-fallback{
+            width:100%;
+            height:100%;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            color:#2563eb;
+        }
+
+        .image-fallback-icon{
+            font-size:50px;
+            margin-bottom:8px;
+        }
+
+        .image-fallback-text{
+            font-size:14px;
+            font-weight:bold;
+        }
+
+
+        /* PLAN CONTENT */
 
         .plan-content{
             padding:18px;
         }
 
-        .plan-badge{
+        .active-badge{
             display:inline-block;
             background:#dcfce7;
             color:#15803d;
             padding:6px 11px;
             border-radius:20px;
-            font-size:12px;
+            font-size:11px;
             font-weight:bold;
             margin-bottom:10px;
         }
 
-        .plan-content h2{
+        .plan-title{
             color:#2563eb;
-            font-size:20px;
-            margin-bottom:14px;
+            font-size:21px;
+            margin-bottom:15px;
         }
+
+
+        /* PLAN DETAILS */
 
         .detail-row{
             display:flex;
             justify-content:space-between;
+            align-items:center;
             gap:15px;
-            padding:11px 0;
-            border-bottom:1px solid #f1f5f9;
+            padding:12px 0;
+            border-bottom:1px solid #eef2f7;
         }
 
         .detail-row:last-child{
@@ -142,27 +189,119 @@
             text-align:right;
         }
 
+        .active-status{
+            color:#16a34a;
+        }
+
+
+        /* =========================
+           COUNTDOWN
+        ========================= */
+
+        .countdown-card{
+            background:white;
+            padding:18px;
+            border-radius:20px;
+            margin-bottom:18px;
+            box-shadow:0 6px 18px rgba(15,23,42,.08);
+        }
+
+        .countdown-title{
+            color:#2563eb;
+            font-size:18px;
+            font-weight:bold;
+            margin-bottom:14px;
+        }
+
+        .timer-box{
+            background:#eff6ff;
+            border:1px solid #bfdbfe;
+            border-radius:18px;
+            padding:20px 10px;
+            text-align:center;
+        }
+
+        .timer-label{
+            color:#64748b;
+            font-size:13px;
+            margin-bottom:8px;
+        }
+
+        #countdown{
+            color:#2563eb;
+            font-size:34px;
+            font-weight:bold;
+            letter-spacing:1px;
+            font-family:monospace;
+        }
+
+        #countdown.ready{
+            color:#16a34a;
+        }
+
+        .countdown-note{
+            color:#64748b;
+            text-align:center;
+            font-size:12px;
+            margin-top:10px;
+            line-height:18px;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            margin-bottom:18px;
+        }
+
+        .action{
+            background:white;
+            padding:17px 10px;
+            border-radius:18px;
+            text-decoration:none;
+            color:#0f172a;
+            text-align:center;
+            box-shadow:0 5px 15px rgba(15,23,42,.07);
+        }
+
+        .action-icon{
+            display:block;
+            font-size:25px;
+            margin-bottom:7px;
+        }
+
+        .action-text{
+            font-size:13px;
+            font-weight:bold;
+        }
+
+
         /* =========================
            NO PLAN
         ========================= */
 
         .empty-card{
             background:white;
-            padding:30px 20px;
+            padding:35px 20px;
             border-radius:20px;
             text-align:center;
-            box-shadow:0 6px 18px rgba(15,23,42,.08);
             margin-bottom:18px;
+            box-shadow:0 6px 18px rgba(15,23,42,.08);
         }
 
         .empty-icon{
-            font-size:40px;
-            margin-bottom:10px;
+            font-size:45px;
+            margin-bottom:12px;
         }
 
         .empty-card h2{
             color:#2563eb;
-            margin-bottom:8px;
+            margin-bottom:9px;
         }
 
         .empty-card p{
@@ -170,7 +309,7 @@
             line-height:22px;
         }
 
-        .plans-btn{
+        .plans-button{
             display:block;
             margin-top:18px;
             padding:14px;
@@ -181,40 +320,10 @@
             font-weight:bold;
         }
 
-        /* =========================
-           QUICK ACTIONS
-        ========================= */
-
-        .actions{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:12px;
-        }
-
-        .action{
-            background:white;
-            padding:18px 10px;
-            border-radius:18px;
-            text-align:center;
-            text-decoration:none;
-            color:#0f172a;
-            box-shadow:0 5px 15px rgba(15,23,42,.07);
-        }
-
-        .action span{
-            display:block;
-            font-size:25px;
-            margin-bottom:7px;
-        }
-
-        .action strong{
-            font-size:13px;
-        }
 
         /* =========================
            BOTTOM NAVIGATION
-           KEEPING YOUR ORIGINAL
-           PROFILE NAVIGATION STYLE
+           SAME SHAPE / COLOR / POSITION
         ========================= */
 
         .bottom-nav{
@@ -249,22 +358,42 @@
             margin-bottom:3px;
         }
 
+
+        /* =========================
+           MOBILE
+        ========================= */
+
         @media(max-width:380px){
 
-            .plan-image{
-                height:160px;
+            .header{
+                padding:25px 15px;
             }
 
             .balance{
                 font-size:27px;
             }
 
+            .plan-image-wrapper{
+                height:170px;
+            }
+
+            #countdown{
+                font-size:29px;
+            }
+
+            .detail-row{
+                gap:8px;
+            }
+
         }
 
     </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =========================
      HEADER
@@ -274,196 +403,355 @@
 
     <h1>Welcome Back</h1>
 
-    <p>Manage your Zenith Capital account</p>
+    <p>
+        Manage your Zenith Capital account
+    </p>
 
 </div>
 
 
 <div class="container">
 
-    <!-- =========================
-         BALANCE
-    ========================= -->
 
-    <div class="balance-card">
+<!-- =========================
+     BALANCE
+========================= -->
 
-        <div class="balance-label">
-            Available Balance
-        </div>
+<div class="balance-card">
 
-        <div class="balance">
-            GHS {{ "%.2f"|format((user.balance or 0)|float) }}
-        </div>
-
+    <div class="balance-label">
+        Available Balance
     </div>
 
+    <div class="balance">
 
-    <!-- =========================
-         ACTIVE PLAN
-    ========================= -->
-
-    {% if plan %}
-
-    <div class="plan-card">
-
-        {# 
-           Plan image is selected from the purchased plan.
-           Plan 1 will show plan1.jpg.
-        #}
-
-        {% set plan_image = 'plan1.jpg' %}
-
-        {% if '2' in (plan.plan_name|string) %}
-            {% set plan_image = 'plan2.jpg' %}
-
-        {% elif '3' in (plan.plan_name|string) %}
-            {% set plan_image = 'plan3.jpg' %}
-
-        {% elif '4' in (plan.plan_name|string) %}
-            {% set plan_image = 'plan4.jpg' %}
-
-        {% elif '5' in (plan.plan_name|string) %}
-            {% set plan_image = 'plan5.jpg' %}
-
-        {% elif '6' in (plan.plan_name|string) %}
-            {% set plan_image = 'plan6.jpg' %}
-
-        {% endif %}
-
-
-        <img
-            src="{{ url_for('static', filename='images/' + plan_image) }}"
-            alt="{{ plan.plan_name or 'Active Plan' }}"
-            class="plan-image"
-            onerror="this.style.display='none';"
-        >
-
-
-        <div class="plan-content">
-
-            <span class="plan-badge">
-                ACTIVE PLAN
-            </span>
-
-            <h2>
-                {{ plan.plan_name or "My Plan" }}
-            </h2>
-
-
-            <div class="detail-row">
-
-                <span class="detail-label">
-                    Investment
-                </span>
-
-                <span class="detail-value">
-                    GHS {{ "%.2f"|format((plan.investment or 0)|float) }}
-                </span>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span class="detail-label">
-                    Daily Income
-                </span>
-
-                <span class="detail-value">
-                    GHS {{ "%.2f"|format((plan.daily_income or 0)|float) }}
-                </span>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span class="detail-label">
-                    Duration
-                </span>
-
-                <span class="detail-value">
-                    {{ plan.duration or 0 }} Days
-                </span>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span class="detail-label">
-                    Status
-                </span>
-
-                <span class="detail-value" style="color:#15803d;">
-                    Active
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    {% else %}
-
-    <!-- =========================
-         NO PLAN
-    ========================= -->
-
-    <div class="empty-card">
-
-        <div class="empty-icon">
-            📋
-        </div>
-
-        <h2>
-            No Active Plan
-        </h2>
-
-        <p>
-            You currently do not have an active plan.
-        </p>
-
-        <a
-            href="{{ url_for('plan') }}"
-            class="plans-btn"
-        >
-            View Available Plans
-        </a>
-
-    </div>
-
-    {% endif %}
-
-
-    <!-- =========================
-         QUICK ACTIONS
-    ========================= -->
-
-    <div class="actions">
-
-        <a
-            href="{{ url_for('deposit') }}"
-            class="action"
-        >
-            <span>💰</span>
-            <strong>Deposit</strong>
-        </a>
-
-
-        <a
-            href="{{ url_for('withdraw') }}"
-            class="action"
-        >
-            <span>💸</span>
-            <strong>Withdraw</strong>
-        </a>
+        GHS
+        {{ "%.2f"|format((user.balance or 0)|float) }}
 
     </div>
 
 </div>
+
+
+
+{% if plan %}
+
+
+<!-- =========================
+     ACTIVE PLAN
+========================= -->
+
+<div class="plan-card">
+
+
+    <!-- PLAN IMAGE -->
+
+    <div class="plan-image-wrapper">
+
+        {% set plan_name = (plan.plan_name or '')|string|lower %}
+
+        {% if '1' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan1.jpg') }}"
+                class="plan-image"
+                alt="Plan 1"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% elif '2' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan2.jpg') }}"
+                class="plan-image"
+                alt="Plan 2"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% elif '3' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan3.jpg') }}"
+                class="plan-image"
+                alt="Plan 3"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% elif '4' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan4.jpg') }}"
+                class="plan-image"
+                alt="Plan 4"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% elif '5' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan5.jpg') }}"
+                class="plan-image"
+                alt="Plan 5"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% elif '6' in plan_name %}
+
+            <img
+                src="{{ url_for('static', filename='images/plan6.jpg') }}"
+                class="plan-image"
+                alt="Plan 6"
+                onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';"
+            >
+
+        {% else %}
+
+            <div
+                id="fallback"
+                class="image-fallback"
+            >
+                <div class="image-fallback-icon">
+                    💼
+                </div>
+
+                <div class="image-fallback-text">
+                    {{ plan.plan_name or "Active Plan" }}
+                </div>
+            </div>
+
+        {% endif %}
+
+
+        <div
+            id="fallback"
+            class="image-fallback"
+            style="display:none;"
+        >
+
+            <div class="image-fallback-icon">
+                💼
+            </div>
+
+            <div class="image-fallback-text">
+                {{ plan.plan_name or "Active Plan" }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PLAN INFORMATION -->
+
+    <div class="plan-content">
+
+        <span class="active-badge">
+            ACTIVE PLAN
+        </span>
+
+
+        <h2 class="plan-title">
+
+            {{ plan.plan_name or "My Plan" }}
+
+        </h2>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Investment
+            </span>
+
+            <span class="detail-value">
+
+                GHS
+                {{ "%.2f"|format((plan.investment or 0)|float) }}
+
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Daily Income
+            </span>
+
+            <span class="detail-value">
+
+                GHS
+                {{ "%.2f"|format((plan.daily_income or 0)|float) }}
+
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Duration
+            </span>
+
+            <span class="detail-value">
+
+                {{ plan.duration or 0 }}
+                Days
+
+            </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+            <span class="detail-label">
+                Status
+            </span>
+
+            <span class="detail-value active-status">
+                Active
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     COUNTDOWN
+========================= -->
+
+<div class="countdown-card">
+
+    <div class="countdown-title">
+        Daily Income
+    </div>
+
+
+    <div class="timer-box">
+
+        <div
+            class="timer-label"
+            id="timerLabel"
+        >
+            {% if can_claim %}
+                Your daily income is ready
+            {% else %}
+                Next income available in
+            {% endif %}
+        </div>
+
+
+        <div id="countdown">
+
+            {% if can_claim %}
+                READY
+            {% else %}
+                24:00:00
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="countdown-note">
+
+        The countdown is based on the server time.
+        Refreshing the page will not restart it.
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     ACTION BUTTONS
+========================= -->
+
+<div class="actions">
+
+    <a
+        href="{{ url_for('deposit') }}"
+        class="action"
+    >
+
+        <span class="action-icon">
+            💰
+        </span>
+
+        <span class="action-text">
+            Deposit
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('withdraw') }}"
+        class="action"
+    >
+
+        <span class="action-icon">
+            💸
+        </span>
+
+        <span class="action-text">
+            Withdraw
+        </span>
+
+    </a>
+
+</div>
+
+
+
+{% else %}
+
+
+<!-- =========================
+     NO ACTIVE PLAN
+========================= -->
+
+<div class="empty-card">
+
+    <div class="empty-icon">
+        📋
+    </div>
+
+
+    <h2>
+        No Active Plan
+    </h2>
+
+
+    <p>
+        You currently do not have an active plan.
+    </p>
+
+
+    <a
+        href="{{ url_for('plan') }}"
+        class="plans-button"
+    >
+        View Available Plans
+    </a>
+
+</div>
+
+
+{% endif %}
+
+</div>
+
 
 
 <!-- =========================
@@ -473,50 +761,229 @@
 
 <div class="bottom-nav">
 
+
     <a
         href="{{ url_for('dashboard') }}"
         class="active"
     >
-        <span>🏠</span>
+
+        <span>
+            🏠
+        </span>
+
         Dashboard
+
     </a>
 
 
-    <a href="{{ url_for('my_plan') }}">
-        <span>📈</span>
+    <a
+        href="{{ url_for('my_plan') }}"
+    >
+
+        <span>
+            📈
+        </span>
+
         My Plan
+
     </a>
 
 
-    <a href="{{ url_for('profile') }}">
-        <span>👤</span>
+    <a
+        href="{{ url_for('profile') }}"
+    >
+
+        <span>
+            👤
+        </span>
+
         Profile
+
     </a>
+
 
 </div>
 
+
+
+{% if plan %}
+
+<script>
+
+/* ==========================================
+   SERVER-SIDE COUNTDOWN
+========================================== */
+
+/*
+   Flask sends next_claim_at as an ISO date.
+
+   Example:
+   2026-08-11T01:30:00+00:00
+
+   The browser converts that into a JavaScript
+   Date and counts down to it.
+*/
+
+
+const nextClaimAtString =
+    "{{ next_claim_at.isoformat() if next_claim_at else '' }}";
+
+
+const canClaim =
+    {{ 'true' if can_claim else 'false' }};
+
+
+const countdown =
+    document.getElementById("countdown");
+
+
+const timerLabel =
+    document.getElementById("timerLabel");
+
+
+
+function showReady(){
+
+    countdown.textContent = "READY";
+
+    countdown.classList.add("ready");
+
+    timerLabel.textContent =
+        "Your daily income is ready";
+
+}
+
+
+
+function updateCountdown(){
+
+    /*
+       If Flask says the claim is already available,
+       immediately show READY.
+    */
+
+    if(canClaim){
+
+        showReady();
+
+        return;
+
+    }
+
+
+    /*
+       Make sure the server actually sent
+       a next claim time.
+    */
+
+    if(!nextClaimAtString){
+
+        countdown.textContent = "--:--:--";
+
+        timerLabel.textContent =
+            "Claim time unavailable";
+
+        return;
+
+    }
+
+
+    const target =
+        new Date(nextClaimAtString);
+
+
+    /*
+       Check whether JavaScript understood
+       the date correctly.
+    */
+
+    if(isNaN(target.getTime())){
+
+        countdown.textContent = "--:--:--";
+
+        timerLabel.textContent =
+            "Invalid claim time";
+
+        return;
+
+    }
+
+
+    const now =
+        new Date();
+
+
+    let difference =
+        target.getTime() - now.getTime();
+
+
+    /*
+       Countdown finished.
+    */
+
+    if(difference <= 0){
+
+        showReady();
+
+        return;
+
+    }
+
+
+    const totalSeconds =
+        Math.floor(difference / 1000);
+
+
+    const hours =
+        Math.floor(totalSeconds / 3600);
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    countdown.textContent =
+        String(hours).padStart(2,"0")
+        + ":"
+        + String(minutes).padStart(2,"0")
+        + ":"
+        + String(seconds).padStart(2,"0");
+
+
+    countdown.classList.remove("ready");
+
+    timerLabel.textContent =
+        "Next income available in";
+
+}
+
+
+/*
+   Start immediately.
+*/
+
+updateCountdown();
+
+
+/*
+   Update every second.
+*/
+
+setInterval(
+    updateCountdown,
+    1000
+);
+
+</script>
+
+{% endif %}
+
+
 </body>
 </html>
-
-Put the plan images here
-
-Inside your Flask project:
-
-static/
-└── images/
-    ├── plan1.jpg
-    ├── plan2.jpg
-    ├── plan3.jpg
-    ├── plan4.jpg
-    ├── plan5.jpg
-    └── plan6.jpg
-
-So when the user buys Plan 1, the dashboard will use:
-
-static/images/plan1.jpg
-
-and display it automatically.
-
-Important: If your actual plan names are something like "TESLA VIP 1", "TESLA VIP 2", etc., this code will still detect the number and show the corresponding image.
-
-I have not changed the Profile navigation's shape, color, position, or layout. It remains at the bottom with Dashboard, My Plan, and Profile.
