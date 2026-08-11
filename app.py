@@ -42,13 +42,13 @@ STARTING_DEPOSIT_BALANCE = Decimal("5.00")
 CLAIM_INTERVAL_HOURS = 24
 
 PLANS = {
-    1: {"name": "Zenith 1", "investment": Decimal("50.00"), "daily": Decimal("8.00"), "duration": 30},
-    2: {"name": "Zenith 2", "investment": Decimal("100.00"), "daily": Decimal("20.00"), "duration": 30},
-    3: {"name": "Zenith 3", "investment": Decimal("200.00"), "daily": Decimal("40.00"), "duration": 30},
-    4: {"name": "Zenith 4", "investment": Decimal("300.00"), "daily": Decimal("65.00"), "duration": 30},
-    5: {"name": "Zenith 5", "investment": Decimal("500.00"), "daily": Decimal("100.00"), "duration": 30},
-    6: {"name": "Zenith 6", "investment": Decimal("600.00"), "daily": Decimal("200.00"), "duration": 30},
-    7: {"name": "Zenith 7", "investment": Decimal("1000.00"), "daily": Decimal("360.00"), "duration": 30},
+    1: {"name": "Zenith 1", "investment": Decimal("50.00"), "daily": Decimal("5.00"), "duration": 180},
+    2: {"name": "Zenith 2", "investment": Decimal("100.00"), "daily": Decimal("20.00"), "duration": 180},
+    3: {"name": "Zenith 3", "investment": Decimal("200.00"), "daily": Decimal("40.00"), "duration": 180},
+    4: {"name": "Zenith 4", "investment": Decimal("300.00"), "daily": Decimal("65.00"), "duration": 180},
+    5: {"name": "Zenith 5", "investment": Decimal("500.00"), "daily": Decimal("100.00"), "duration": 180},
+    6: {"name": "Zenith 6", "investment": Decimal("600.00"), "daily": Decimal("200.00"), "duration": 180},
+    7: {"name": "Zenith 7", "investment": Decimal("1000.00"), "daily": Decimal("360.00"), "duration": 180},
 }
 
 
