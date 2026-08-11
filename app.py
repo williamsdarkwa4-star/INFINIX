@@ -11,20 +11,14 @@ from flask import (
     url_for,
     session,
     flash,
-    send_from_directory,
+    send_file,
+    abort,
 )
 
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash,
 )
-
-from werkzeug.utils import secure_filename
-
-
-# ============================================================
-# OPTIONAL POSTGRES IMPORT
-# ============================================================
 
 try:
     import psycopg2
@@ -35,61 +29,34 @@ except ImportError:
 
 
 # ============================================================
-# APP CONFIG
+# APP CONFIGURATION
 # ============================================================
 
 app = Flask(__name__)
 
 app.secret_key = os.environ.get(
     "SECRET_KEY",
-    "change-this-secret-key"
+    "change-this-secret-key",
 )
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 ADMIN_USERNAME = os.environ.get(
     "ADMIN_USERNAME",
-    "Williams"
+    "Williams",
 )
 
 ADMIN_PASSWORD = os.environ.get(
     "ADMIN_PASSWORD",
-    "Williams12"
+    "Williams12",
 )
 
+# Demo platform settings.
+MIN_DEPOSIT = Decimal("45")
+MIN_WITHDRAWAL = Decimal("30")
 
-# ============================================================
-# UPLOAD CONFIGURATION
-# ============================================================
-
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
-UPLOAD_FOLDER = os.path.join(
-    BASE_DIR,
-    "uploads",
-    "deposits"
-)
-
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
-
-ALLOWED_IMAGE_EXTENSIONS = {
-    "png",
-    "jpg",
-    "jpeg",
-    "webp",
-}
-
-
-def allowed_image(filename):
-    if not filename or "." not in filename:
-        return False
-
-    extension = filename.rsplit(".", 1)[1].lower()
-
-    return extension in ALLOWED_IMAGE_EXTENSIONS
+# Demo starting balance for newly registered users.
+STARTING_DEPOSIT_BALANCE = Decimal("5.00")
 
 
 # ============================================================
@@ -143,15 +110,68 @@ PLANS = {
 
 
 # ============================================================
+# HELPERS
+# ============================================================
+
+def utcnow():
+    """
+    Return a naive UTC datetime.
+
+    PostgreSQL TIMESTAMP columns in this application use UTC.
+    """
+    return datetime.utcnow()
+
+
+def money(value):
+    """
+    Safely convert a PostgreSQL numeric/string value to Decimal.
+    """
+    if value is None:
+        return Decimal("0")
+
+    try:
+        return Decimal(str(value))
+    except Exception:
+        return Decimal("0")
+
+
+def parse_amount(value):
+    """
+    Parse a positive monetary amount.
+    """
+    try:
+        amount = Decimal(str(value).strip())
+    except (InvalidOperation, ValueError, TypeError):
+        return None
+
+    if not amount.is_finite():
+        return None
+
+    return amount.quantize(Decimal("0.01"))
+
+
+def generate_referral_code():
+    return "ZEN" + uuid.uuid4().hex[:12].upper()
+
+
+def generate_reference(prefix):
+    return prefix + "-" + uuid.uuid4().hex[:12].upper()
+
+
+# ============================================================
 # DATABASE CONNECTION
 # ============================================================
 
 def get_conn():
     if not DATABASE_URL:
-        raise RuntimeError("DATABASE_URL is not configured.")
+        raise RuntimeError(
+            "DATABASE_URL is not configured."
+        )
 
     if psycopg2 is None:
-        raise RuntimeError("psycopg2 is not installed.")
+        raise RuntimeError(
+            "psycopg2 is not installed."
+        )
 
     return psycopg2.connect(
         DATABASE_URL,
@@ -161,11 +181,14 @@ def get_conn():
 
 def query_one(sql, params=()):
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
         cur.execute(sql, params)
         return cur.fetchone()
+
     finally:
         cur.close()
         conn.close()
@@ -173,11 +196,14 @@ def query_one(sql, params=()):
 
 def query_all(sql, params=()):
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
         cur.execute(sql, params)
         return cur.fetchall()
+
     finally:
         cur.close()
         conn.close()
@@ -185,12 +211,17 @@ def query_all(sql, params=()):
 
 def execute(sql, params=(), fetchone=False):
     conn = get_conn()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
 
     try:
         cur.execute(sql, params)
 
-        result = cur.fetchone() if fetchone else None
+        result = None
+
+        if fetchone:
+            result = cur.fetchone()
 
         conn.commit()
 
@@ -216,9 +247,9 @@ def init_db():
 
     try:
 
-        # ====================================================
+        # ----------------------------------------------------
         # USERS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS users (
@@ -236,7 +267,7 @@ def init_db():
 
         user_columns = {
             "username": "VARCHAR(120)",
-            "fullname": "VARCHAR(200)",
+            "fullname": "VARCHAR(200) DEFAULT ''",
             "phone": "VARCHAR(50)",
             "password_hash": "TEXT",
             "withdraw_password_hash": "TEXT",
@@ -253,14 +284,18 @@ def init_db():
                 """
             )
 
-        # Older database compatibility.
+        # ----------------------------------------------------
+        # LEGACY PASSWORD COMPATIBILITY
+        # ----------------------------------------------------
 
-        for old_column in [
+        legacy_columns = [
             "login_password",
             "password",
             "withdraw_password",
             "withdrawal_password",
-        ]:
+        ]
+
+        for old_column in legacy_columns:
 
             cur.execute("""
                 SELECT EXISTS (
@@ -272,17 +307,22 @@ def init_db():
                 )
             """, (old_column,))
 
-            if cur.fetchone()[0]:
+            exists = cur.fetchone()[0]
 
-                cur.execute(
-                    f"""
-                    ALTER TABLE users
-                    ALTER COLUMN {old_column}
-                    DROP NOT NULL
-                    """
-                )
+            if exists:
 
-        # Copy old password field if necessary.
+                try:
+                    cur.execute(
+                        f"""
+                        ALTER TABLE users
+                        ALTER COLUMN {old_column}
+                        DROP NOT NULL
+                        """
+                    )
+                except Exception:
+                    conn.rollback()
+
+        # Copy legacy password hash if necessary.
 
         cur.execute("""
             SELECT EXISTS (
@@ -294,23 +334,24 @@ def init_db():
             )
         """)
 
-        if cur.fetchone()[0]:
+        has_old_password = cur.fetchone()[0]
+
+        if has_old_password:
 
             cur.execute("""
                 UPDATE users
-                SET password_hash = password
-                WHERE password_hash IS NULL
+                SET password_hash=password
+                WHERE (password_hash IS NULL OR password_hash='')
                 AND password IS NOT NULL
             """)
 
-        # ====================================================
+        # ----------------------------------------------------
         # ACCOUNTS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS accounts (
-                user_id INTEGER
-                    PRIMARY KEY
+                user_id INTEGER PRIMARY KEY
                     REFERENCES users(id)
                     ON DELETE CASCADE,
 
@@ -336,7 +377,6 @@ def init_db():
         }
 
         for column, definition in account_columns.items():
-
             cur.execute(
                 f"""
                 ALTER TABLE accounts
@@ -344,31 +384,45 @@ def init_db():
                 """
             )
 
-        # IMPORTANT:
-        # Existing databases may have accounts.user_id without
-        # a unique constraint. Add one safely.
+        # Existing databases might have accounts.user_id without
+        # a primary/unique constraint. Ensure one exists.
+
         cur.execute("""
-            SELECT COUNT(*)
-            FROM accounts
-            WHERE user_id IS NOT NULL
-            GROUP BY user_id
-            HAVING COUNT(*) > 1
-            LIMIT 1
+            SELECT EXISTS (
+                SELECT 1
+                FROM pg_constraint
+                WHERE conrelid='accounts'::regclass
+                AND contype='p'
+            )
         """)
 
-        duplicate_account = cur.fetchone()
+        accounts_have_pk = cur.fetchone()[0]
 
-        if not duplicate_account:
+        if not accounts_have_pk:
 
             cur.execute("""
-                CREATE UNIQUE INDEX IF NOT EXISTS
-                idx_accounts_user_id_unique
-                ON accounts(user_id)
+                SELECT user_id, COUNT(*)
+                FROM accounts
+                GROUP BY user_id
+                HAVING COUNT(*) > 1
             """)
 
-        # ====================================================
+            duplicate_accounts = cur.fetchall()
+
+            if not duplicate_accounts:
+
+                try:
+                    cur.execute("""
+                        ALTER TABLE accounts
+                        ADD CONSTRAINT accounts_user_id_pk
+                        PRIMARY KEY (user_id)
+                    """)
+                except Exception:
+                    conn.rollback()
+
+        # ----------------------------------------------------
         # PLANS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS plans (
@@ -411,7 +465,6 @@ def init_db():
         }
 
         for column, definition in plan_columns.items():
-
             cur.execute(
                 f"""
                 ALTER TABLE plans
@@ -419,9 +472,9 @@ def init_db():
                 """
             )
 
-        # ====================================================
+        # ----------------------------------------------------
         # TRANSACTIONS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS transactions (
@@ -446,9 +499,9 @@ def init_db():
             )
         """)
 
-        # ====================================================
+        # ----------------------------------------------------
         # WITHDRAWAL ACCOUNTS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_accounts (
@@ -469,9 +522,13 @@ def init_db():
             )
         """)
 
-        # ====================================================
+        # ----------------------------------------------------
         # DEPOSIT REQUESTS
-        # ====================================================
+        #
+        # IMPORTANT:
+        # Screenshot is now stored in PostgreSQL BYTEA.
+        # This prevents Render filesystem persistence problems.
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS deposit_requests (
@@ -487,6 +544,10 @@ def init_db():
 
                 screenshot TEXT,
 
+                screenshot_data BYTEA,
+
+                screenshot_mime VARCHAR(100),
+
                 reference VARCHAR(200),
 
                 status VARCHAR(40)
@@ -497,13 +558,16 @@ def init_db():
             )
         """)
 
-        for column, definition in {
+        deposit_columns = {
             "payment_number": "VARCHAR(80)",
             "screenshot": "TEXT",
+            "screenshot_data": "BYTEA",
+            "screenshot_mime": "VARCHAR(100)",
             "reference": "VARCHAR(200)",
             "status": "VARCHAR(40) DEFAULT 'pending'",
-        }.items():
+        }
 
+        for column, definition in deposit_columns.items():
             cur.execute(
                 f"""
                 ALTER TABLE deposit_requests
@@ -511,9 +575,9 @@ def init_db():
                 """
             )
 
-        # ====================================================
+        # ----------------------------------------------------
         # WITHDRAWAL REQUESTS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS withdrawal_requests (
@@ -537,15 +601,9 @@ def init_db():
             )
         """)
 
-        # Add reference if older database doesn't have it.
-        cur.execute("""
-            ALTER TABLE withdrawal_requests
-            ADD COLUMN IF NOT EXISTS reference VARCHAR(200)
-        """)
-
-        # ====================================================
+        # ----------------------------------------------------
         # ADMINS
-        # ====================================================
+        # ----------------------------------------------------
 
         cur.execute("""
             CREATE TABLE IF NOT EXISTS admins (
@@ -558,9 +616,9 @@ def init_db():
             )
         """)
 
-        # ====================================================
-        # REFERRAL CODES
-        # ====================================================
+        # ----------------------------------------------------
+        # GENERATE MISSING REFERRAL CODES
+        # ----------------------------------------------------
 
         cur.execute("""
             SELECT id
@@ -569,12 +627,11 @@ def init_db():
                OR referral_code=''
         """)
 
-        for row in cur.fetchall():
+        missing_codes = cur.fetchall()
 
-            code = (
-                "ZEN"
-                + uuid.uuid4().hex[:10].upper()
-            )
+        for row in missing_codes:
+
+            code = generate_referral_code()
 
             cur.execute("""
                 UPDATE users
@@ -585,9 +642,12 @@ def init_db():
                 row[0],
             ))
 
-        # ====================================================
-        # MISSING ACCOUNT ROWS
-        # ====================================================
+        # ----------------------------------------------------
+        # ENSURE ACCOUNT FOR EVERY USER
+        #
+        # We do NOT use ON CONFLICT here because older databases
+        # may not have the expected unique constraint.
+        # ----------------------------------------------------
 
         cur.execute("""
             SELECT u.id
@@ -609,75 +669,95 @@ def init_db():
                     referral_account,
                     withdraw_account
                 )
-                VALUES (%s,5.00,0,0,0)
-            """, (row[0],))
+                VALUES (%s,%s,0,0,0)
+            """, (
+                row[0],
+                STARTING_DEPOSIT_BALANCE,
+            ))
 
-        # ====================================================
+        # ----------------------------------------------------
         # ADMIN ACCOUNT
-        # ====================================================
+        # ----------------------------------------------------
 
         admin_hash = generate_password_hash(
             ADMIN_PASSWORD
         )
 
         cur.execute("""
-            INSERT INTO admins (
-                username,
-                password_hash
-            )
-            VALUES (%s,%s)
-            ON CONFLICT (username)
-            DO UPDATE SET
-                password_hash=EXCLUDED.password_hash
+            SELECT id
+            FROM admins
+            WHERE username=%s
         """, (
             ADMIN_USERNAME,
-            admin_hash,
         ))
 
-        # ====================================================
+        existing_admin = cur.fetchone()
+
+        if existing_admin:
+
+            cur.execute("""
+                UPDATE admins
+                SET password_hash=%s
+                WHERE username=%s
+            """, (
+                admin_hash,
+                ADMIN_USERNAME,
+            ))
+
+        else:
+
+            cur.execute("""
+                INSERT INTO admins (
+                    username,
+                    password_hash
+                )
+                VALUES (%s,%s)
+            """, (
+                ADMIN_USERNAME,
+                admin_hash,
+            ))
+
+        # ----------------------------------------------------
         # INDEXES
-        # ====================================================
+        # ----------------------------------------------------
 
         indexes = [
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_users_phone
+            CREATE INDEX IF NOT EXISTS idx_users_phone
             ON users(phone)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_users_referral
+            CREATE INDEX IF NOT EXISTS idx_users_referral
             ON users(referral_code)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_plans_user
+            CREATE INDEX IF NOT EXISTS idx_plans_user
             ON plans(user_id)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_transactions_user
+            CREATE INDEX IF NOT EXISTS idx_transactions_user
             ON transactions(user_id)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_deposit_requests_user
+            CREATE INDEX IF NOT EXISTS idx_deposit_requests_user
             ON deposit_requests(user_id)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_deposit_requests_status
+            CREATE INDEX IF NOT EXISTS idx_deposit_requests_status
             ON deposit_requests(status)
             """,
             """
-            CREATE INDEX IF NOT EXISTS
-            idx_withdrawals_user
+            CREATE INDEX IF NOT EXISTS idx_withdrawals_user
             ON withdrawal_requests(user_id)
+            """,
+            """
+            CREATE INDEX IF NOT EXISTS idx_withdrawals_status
+            ON withdrawal_requests(status)
             """,
         ]
 
-        for index_sql in indexes:
-            cur.execute(index_sql)
+        for statement in indexes:
+            cur.execute(statement)
 
         conn.commit()
 
@@ -698,6 +778,7 @@ def init_db():
         raise
 
     finally:
+
         cur.close()
         conn.close()
 
@@ -717,7 +798,9 @@ def current_user():
         SELECT *
         FROM users
         WHERE id=%s
-    """, (user_id,))
+    """, (
+        user_id,
+    ))
 
 
 def current_account(user_id):
@@ -726,37 +809,65 @@ def current_account(user_id):
         SELECT *
         FROM accounts
         WHERE user_id=%s
-    """, (user_id,))
+    """, (
+        user_id,
+    ))
 
     if account:
         return account
 
-    # Do NOT rely on ON CONFLICT here.
-    # This also works with older Render databases.
-    execute("""
-        INSERT INTO accounts (
-            user_id,
-            deposit_account,
-            income_account,
-            referral_account,
-            withdraw_account
-        )
-        SELECT %s,5.00,0,0,0
-        WHERE NOT EXISTS (
-            SELECT 1
+    # Create without relying on ON CONFLICT.
+
+    conn = get_conn()
+    cur = conn.cursor(
+        cursor_factory=RealDictCursor
+    )
+
+    try:
+
+        cur.execute("""
+            SELECT *
             FROM accounts
             WHERE user_id=%s
-        )
-    """, (
-        user_id,
-        user_id,
-    ))
+            FOR UPDATE
+        """, (
+            user_id,
+        ))
 
-    return query_one("""
-        SELECT *
-        FROM accounts
-        WHERE user_id=%s
-    """, (user_id,))
+        existing = cur.fetchone()
+
+        if not existing:
+
+            cur.execute("""
+                INSERT INTO accounts (
+                    user_id,
+                    deposit_account,
+                    income_account,
+                    referral_account,
+                    withdraw_account
+                )
+                VALUES (%s,%s,0,0,0)
+                RETURNING *
+            """, (
+                user_id,
+                STARTING_DEPOSIT_BALANCE,
+            ))
+
+            existing = cur.fetchone()
+
+        conn.commit()
+
+        return existing
+
+    except Exception:
+
+        conn.rollback()
+        raise
+
+    finally:
+
+        cur.close()
+        conn.close()
 
 
 @app.context_processor
@@ -773,6 +884,9 @@ def inject_user():
 
 @app.route("/")
 def index():
+
+    if session.get("admin_logged_in") is True:
+        return redirect(url_for("admin_dashboard"))
 
     if session.get("user_id"):
         return redirect(url_for("dashboard"))
@@ -800,64 +914,71 @@ def register():
             SELECT id, username, referral_code
             FROM users
             WHERE referral_code=%s
-        """, (invite_code,))
+        """, (
+            invite_code,
+        ))
 
     if request.method == "POST":
 
         fullname = request.form.get(
-            "fullname", ""
+            "fullname",
+            "",
         ).strip()
 
         username = request.form.get(
-            "username", ""
+            "username",
+            "",
         ).strip()
 
         phone = request.form.get(
-            "phone", ""
+            "phone",
+            "",
         ).strip()
 
         password = request.form.get(
-            "password", ""
+            "password",
+            "",
         )
 
         withdraw_password = request.form.get(
-            "withdraw_password", ""
+            "withdraw_password",
+            "",
         )
 
         if not fullname or not username or not phone:
 
             flash(
                 "Please complete all required fields.",
-                "error"
+                "error",
             )
 
             return render_template(
                 "register.html",
-                invite_code=invite_code
+                invite_code=invite_code,
             )
 
         if not password:
 
             flash(
                 "Please enter a password.",
-                "error"
+                "error",
             )
 
             return render_template(
                 "register.html",
-                invite_code=invite_code
+                invite_code=invite_code,
             )
 
         if not withdraw_password:
 
             flash(
                 "Please enter your withdrawal password.",
-                "error"
+                "error",
             )
 
             return render_template(
                 "register.html",
-                invite_code=invite_code
+                invite_code=invite_code,
             )
 
         existing = query_one("""
@@ -874,76 +995,96 @@ def register():
 
             flash(
                 "Username or phone number already exists.",
-                "error"
+                "error",
             )
 
             return render_template(
                 "register.html",
-                invite_code=invite_code
+                invite_code=invite_code,
             )
 
         if invite_code and not referred_user:
 
             flash(
                 "Invalid referral code.",
-                "error"
+                "error",
             )
 
             return render_template(
                 "register.html",
-                invite_code=invite_code
+                invite_code=invite_code,
             )
 
-        referral_code = (
-            "ZEN"
-            + uuid.uuid4().hex[:12].upper()
+        referral_code = generate_referral_code()
+
+        conn = get_conn()
+        cur = conn.cursor(
+            cursor_factory=RealDictCursor
         )
 
-        user = execute("""
-            INSERT INTO users (
+        try:
+
+            cur.execute("""
+                INSERT INTO users (
+                    username,
+                    fullname,
+                    phone,
+                    password_hash,
+                    withdraw_password_hash,
+                    referral_code,
+                    referred_by
+                )
+                VALUES (%s,%s,%s,%s,%s,%s,%s)
+                RETURNING id
+            """, (
                 username,
                 fullname,
                 phone,
-                password_hash,
-                withdraw_password_hash,
+                generate_password_hash(password),
+                generate_password_hash(withdraw_password),
                 referral_code,
-                referred_by
-            )
-            VALUES (%s,%s,%s,%s,%s,%s,%s)
-            RETURNING id
-        """, (
-            username,
-            fullname,
-            phone,
-            generate_password_hash(password),
-            generate_password_hash(withdraw_password),
-            referral_code,
-            referred_user["referral_code"]
-            if referred_user else None,
-        ), fetchone=True)
+                referred_user["referral_code"]
+                if referred_user else None,
+            ))
 
-        # Safe account creation without ON CONFLICT.
-        execute("""
-            INSERT INTO accounts (
-                user_id,
-                deposit_account,
-                income_account,
-                referral_account,
-                withdraw_account
-            )
-            VALUES (%s,5.00,0,0,0)
-        """, (user["id"],))
+            user = cur.fetchone()
+
+            cur.execute("""
+                INSERT INTO accounts (
+                    user_id,
+                    deposit_account,
+                    income_account,
+                    referral_account,
+                    withdraw_account
+                )
+                VALUES (%s,%s,0,0,0)
+            """, (
+                user["id"],
+                STARTING_DEPOSIT_BALANCE,
+            ))
+
+            conn.commit()
+
+        except Exception:
+
+            conn.rollback()
+            raise
+
+        finally:
+
+            cur.close()
+            conn.close()
 
         flash(
             "Registration successful. Please log in.",
-            "success"
+            "success",
         )
 
         return redirect(url_for("login"))
 
     return render_template(
         "register.html",
-        invite_code=invite_code
+        invite_code=invite_code,
     )
 
 
@@ -957,38 +1098,31 @@ def login():
     if request.method == "POST":
 
         phone = request.form.get(
-            "phone", ""
+            "phone",
+            "",
         ).strip()
 
         password = request.form.get(
-            "password", ""
+            "password",
+            "",
         )
 
         user = query_one("""
             SELECT *
             FROM users
             WHERE phone=%s
-        """, (phone,))
-
-        if not user:
-
-            flash(
-                "Invalid phone number or password.",
-                "error"
-            )
-
-            return render_template("login.html")
-
-        stored_hash = user["password_hash"]
+        """, (
+            phone,
+        ))
 
         valid = False
 
-        if stored_hash:
+        if user and user["password_hash"]:
 
             try:
                 valid = check_password_hash(
-                    stored_hash,
-                    password
+                    user["password_hash"],
+                    password,
                 )
             except Exception:
                 valid = False
@@ -1005,7 +1139,7 @@ def login():
 
         flash(
             "Invalid phone number or password.",
-            "error"
+            "error",
         )
 
     return render_template("login.html")
@@ -1035,13 +1169,15 @@ def dashboard():
     if not user:
         return redirect(url_for("login"))
 
-    account = current_account(user["id"])
+    account = current_account(
+        user["id"]
+    )
 
     return render_template(
         "dashboard.html",
         user=user,
         account=account,
-        plans=PLANS
+        plans=PLANS,
     )
 
 
@@ -1059,109 +1195,142 @@ def deposit():
 
     if request.method == "POST":
 
-        try:
-            amount = Decimal(
-                request.form.get(
-                    "amount",
-                    "0"
-                ).strip()
+        amount = parse_amount(
+            request.form.get(
+                "amount",
+                "0",
             )
-        except (InvalidOperation, ValueError):
-            amount = Decimal("0")
+        )
 
         phone = request.form.get(
             "phone",
-            ""
+            "",
         ).strip()
 
         payment_number = request.form.get(
             "payment_number",
-            "0257425844"
+            "0257425844",
         ).strip()
 
-        screenshot = request.files.get("screenshot")
+        screenshot = request.files.get(
+            "screenshot"
+        )
 
-        if amount < Decimal("45"):
+        if amount is None:
 
             flash(
-                "Minimum demo deposit is GHS 45.",
-                "error"
+                "Please enter a valid deposit amount.",
+                "error",
             )
 
-            return render_template("deposit.html")
+            return render_template(
+                "deposit.html"
+            )
+
+        if amount < MIN_DEPOSIT:
+
+            flash(
+                f"Minimum demo deposit is GHS {MIN_DEPOSIT:.2f}.",
+                "error",
+            )
+
+            return render_template(
+                "deposit.html"
+            )
 
         if not phone:
 
             flash(
                 "Please enter your phone number.",
-                "error"
+                "error",
             )
 
-            return render_template("deposit.html")
+            return render_template(
+                "deposit.html"
+            )
 
         if not screenshot or not screenshot.filename:
 
             flash(
                 "Please upload your payment screenshot.",
-                "error"
+                "error",
             )
 
-            return render_template("deposit.html")
+            return render_template(
+                "deposit.html"
+            )
 
-        if not allowed_image(screenshot.filename):
+        filename = screenshot.filename.lower()
+
+        allowed_extensions = {
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".webp": "image/webp",
+        }
+
+        extension = None
+        mime_type = None
+
+        for ext, mime in allowed_extensions.items():
+
+            if filename.endswith(ext):
+                extension = ext
+                mime_type = mime
+                break
+
+        if not extension:
 
             flash(
                 "Only PNG, JPG, JPEG and WEBP images are allowed.",
-                "error"
+                "error",
             )
 
-            return render_template("deposit.html")
-
-        original_name = secure_filename(
-            screenshot.filename
-        )
-
-        if "." not in original_name:
-
-            flash(
-                "Invalid image filename.",
-                "error"
+            return render_template(
+                "deposit.html"
             )
 
-            return render_template("deposit.html")
-
-        extension = original_name.rsplit(
-            ".",
-            1
-        )[1].lower()
-
-        unique_name = (
-            "deposit_"
-            + uuid.uuid4().hex
-            + "."
-            + extension
-        )
-
-        file_path = os.path.join(
-            app.config["UPLOAD_FOLDER"],
-            unique_name
-        )
+        # Read screenshot directly into memory.
+        # It is NOT stored on the Render filesystem.
 
         try:
-            screenshot.save(file_path)
+
+            screenshot_data = screenshot.read()
+
         except Exception:
 
             flash(
-                "Unable to save the uploaded screenshot.",
-                "error"
+                "Unable to read the uploaded screenshot.",
+                "error",
             )
 
-            return render_template("deposit.html")
+            return render_template(
+                "deposit.html"
+            )
 
-        reference = (
-            "DEP-"
-            + uuid.uuid4().hex[:12].upper()
-        )
+        if not screenshot_data:
+
+            flash(
+                "The uploaded screenshot is empty.",
+                "error",
+            )
+
+            return render_template(
+                "deposit.html"
+            )
+
+        if len(screenshot_data) > 5 * 1024 * 1024:
+
+            flash(
+                "Screenshot is too large. Maximum size is 5 MB.",
+                "error",
+            )
+
+            return render_template(
+                "deposit.html"
+            )
+
+        reference = generate_reference("DEP")
 
         conn = get_conn()
         cur = conn.cursor()
@@ -1174,16 +1343,22 @@ def deposit():
                     amount,
                     payment_number,
                     screenshot,
+                    screenshot_data,
+                    screenshot_mime,
                     reference,
                     status
                 )
-                VALUES (%s,%s,%s,%s,%s,'pending')
+                VALUES (
+                    %s,%s,%s,%s,%s,%s,%s,'pending'
+                )
                 RETURNING id
             """, (
                 user["id"],
                 amount,
                 payment_number,
-                unique_name,
+                screenshot.filename,
+                psycopg2.Binary(screenshot_data),
+                mime_type,
                 reference,
             ))
 
@@ -1210,8 +1385,7 @@ def deposit():
                 user["id"],
                 amount,
                 reference,
-                "Manual demo deposit request #"
-                + str(deposit_id),
+                "Demo deposit request #" + str(deposit_id),
             ))
 
             conn.commit()
@@ -1219,45 +1393,110 @@ def deposit():
         except Exception:
 
             conn.rollback()
-
-            try:
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-            except Exception:
-                pass
-
             raise
 
         finally:
+
             cur.close()
             conn.close()
 
         flash(
             "Deposit request submitted successfully. "
             "Please wait for admin review.",
-            "success"
+            "success",
         )
 
         return redirect(
             url_for("transaction_history")
         )
 
-    return render_template("deposit.html")
+    return render_template(
+        "deposit.html"
+    )
 
 
 # ============================================================
-# SERVE DEPOSIT SCREENSHOTS
+# DEPOSIT SCREENSHOT
 # ============================================================
 
-@app.route("/uploads/deposits/<path:filename>")
+@app.route(
+    "/admin/deposit-image/<int:deposit_id>"
+)
+def admin_deposit_image(deposit_id):
+
+    if not admin_required():
+        return redirect(
+            url_for("admin_login")
+        )
+
+    deposit = query_one("""
+        SELECT
+            screenshot_data,
+            screenshot_mime
+        FROM deposit_requests
+        WHERE id=%s
+    """, (
+        deposit_id,
+    ))
+
+    if not deposit:
+        abort(404)
+
+    if not deposit["screenshot_data"]:
+        abort(404)
+
+    from io import BytesIO
+
+    return send_file(
+        BytesIO(bytes(deposit["screenshot_data"])),
+        mimetype=deposit["screenshot_mime"] or "image/jpeg",
+        as_attachment=False,
+        download_name=f"deposit_{deposit_id}.jpg",
+    )
+
+
+# ------------------------------------------------------------
+# OLD SCREENSHOT URL COMPATIBILITY
+#
+# Existing admin templates may still contain:
+# /uploads/deposits/<filename>
+#
+# We search PostgreSQL for that filename and serve the stored
+# BYTEA image.
+# ------------------------------------------------------------
+
+@app.route(
+    "/uploads/deposits/<path:filename>"
+)
 def uploaded_deposit_image(filename):
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+        return redirect(
+            url_for("admin_login")
+        )
 
-    return send_from_directory(
-        app.config["UPLOAD_FOLDER"],
-        filename
+    deposit = query_one("""
+        SELECT
+            screenshot_data,
+            screenshot_mime
+        FROM deposit_requests
+        WHERE screenshot=%s
+        ORDER BY id DESC
+        LIMIT 1
+    """, (
+        filename,
+    ))
+
+    if not deposit or not deposit["screenshot_data"]:
+        abort(404)
+
+    from io import BytesIO
+
+    return send_file(
+        BytesIO(bytes(deposit["screenshot_data"])),
+        mimetype=deposit["screenshot_mime"] or "image/jpeg",
+        as_attachment=False,
+        download_name=filename,
     )
 
 
@@ -1268,7 +1507,9 @@ def uploaded_deposit_image(filename):
 @app.route("/deposit_success")
 def deposit_success():
 
-    return redirect(url_for("deposit"))
+    return redirect(
+        url_for("deposit")
+    )
 
 
 # ============================================================
@@ -1287,17 +1528,21 @@ def buy_plan(plan_id):
 
         flash(
             "Plan not found.",
-            "error"
+            "error",
         )
 
-        return redirect(url_for("dashboard"))
+        return redirect(
+            url_for("dashboard")
+        )
 
     plan = PLANS[plan_id]
 
-    account = current_account(user["id"])
+    account = current_account(
+        user["id"]
+    )
 
-    balance = Decimal(
-        str(account["deposit_account"] or 0)
+    balance = money(
+        account["deposit_account"]
     )
 
     if balance < plan["investment"]:
@@ -1307,8 +1552,8 @@ def buy_plan(plan_id):
             account=account,
             plan={
                 "investment_amount":
-                    plan["investment"]
-            }
+                    plan["investment"],
+            },
         )
 
     return render_template(
@@ -1318,13 +1563,10 @@ def buy_plan(plan_id):
         plan={
             "id": plan_id,
             "plan_name": plan["name"],
-            "investment_amount":
-                plan["investment"],
-            "daily_income":
-                plan["daily"],
-            "duration":
-                plan["duration"],
-        }
+            "investment_amount": plan["investment"],
+            "daily_income": plan["daily"],
+            "duration": plan["duration"],
+        },
     )
 
 
@@ -1334,7 +1576,7 @@ def buy_plan(plan_id):
 
 @app.route(
     "/confirm_buy_plan/<int:plan_id>",
-    methods=["POST"]
+    methods=["POST"],
 )
 def confirm_buy_plan(plan_id):
 
@@ -1347,10 +1589,12 @@ def confirm_buy_plan(plan_id):
 
         flash(
             "Plan not found.",
-            "error"
+            "error",
         )
 
-        return redirect(url_for("dashboard"))
+        return redirect(
+            url_for("dashboard")
+        )
 
     plan = PLANS[plan_id]
 
@@ -1359,30 +1603,67 @@ def confirm_buy_plan(plan_id):
 
     try:
 
+        # Lock account row to prevent simultaneous purchases.
+
         cur.execute("""
-            UPDATE accounts
-            SET deposit_account =
-                COALESCE(deposit_account,0) - %s
+            SELECT deposit_account
+            FROM accounts
             WHERE user_id=%s
-            AND COALESCE(deposit_account,0) >= %s
+            FOR UPDATE
         """, (
-            plan["investment"],
             user["id"],
-            plan["investment"],
         ))
 
-        if cur.rowcount != 1:
+        account = cur.fetchone()
+
+        if not account:
+
+            cur.execute("""
+                INSERT INTO accounts (
+                    user_id,
+                    deposit_account,
+                    income_account,
+                    referral_account,
+                    withdraw_account
+                )
+                VALUES (%s,%s,0,0,0)
+            """, (
+                user["id"],
+                STARTING_DEPOSIT_BALANCE,
+            ))
+
+            deposit_balance = STARTING_DEPOSIT_BALANCE
+
+        else:
+
+            deposit_balance = money(
+                account[0]
+            )
+
+        if deposit_balance < plan["investment"]:
 
             conn.rollback()
 
             flash(
                 "Insufficient balance.",
-                "error"
+                "error",
             )
 
-            return redirect(url_for("dashboard"))
+            return redirect(
+                url_for("dashboard")
+            )
 
-        started_at = datetime.utcnow()
+        cur.execute("""
+            UPDATE accounts
+            SET deposit_account =
+                deposit_account - %s
+            WHERE user_id=%s
+        """, (
+            plan["investment"],
+            user["id"],
+        ))
+
+        started_at = utcnow()
 
         cur.execute("""
             INSERT INTO plans (
@@ -1409,11 +1690,6 @@ def confirm_buy_plan(plan_id):
             started_at,
         ))
 
-        reference = (
-            "PLAN-"
-            + uuid.uuid4().hex[:12].upper()
-        )
-
         cur.execute("""
             INSERT INTO transactions (
                 user_id,
@@ -1429,12 +1705,13 @@ def confirm_buy_plan(plan_id):
                 %s,
                 'successful',
                 %s,
-                'Demo plan purchase'
+                %s
             )
         """, (
             user["id"],
             plan["investment"],
-            reference,
+            generate_reference("PLAN"),
+            "Demo plan purchase",
         ))
 
         conn.commit()
@@ -1450,24 +1727,247 @@ def confirm_buy_plan(plan_id):
         conn.close()
 
     flash(
-        "Plan activated successfully.",
-        "success"
+        "Demo plan activated successfully.",
+        "success",
     )
 
-    return redirect(url_for("my_plan"))
+    return redirect(
+        url_for("my_plan")
+    )
 
 
 # ============================================================
 # MY PLAN
 # ============================================================
 
-@app.route("/my_plan", methods=["GET", "POST"])
+@app.route(
+    "/my_plan",
+    methods=["GET", "POST"],
+)
 def my_plan():
 
     user = current_user()
 
     if not user:
         return redirect(url_for("login"))
+
+    # --------------------------------------------------------
+    # POST CLAIM
+    # --------------------------------------------------------
+
+    if request.method == "POST":
+
+        conn = get_conn()
+        cur = conn.cursor(
+            cursor_factory=RealDictCursor
+        )
+
+        try:
+
+            cur.execute("""
+                SELECT *
+                FROM plans
+                WHERE user_id=%s
+                AND active=TRUE
+                ORDER BY id DESC
+                LIMIT 1
+                FOR UPDATE
+            """, (
+                user["id"],
+            ))
+
+            plan = cur.fetchone()
+
+            if not plan:
+
+                conn.rollback()
+
+                flash(
+                    "No active demo plan found.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for("my_plan")
+                )
+
+            now = utcnow()
+
+            started_at = plan["started_at"]
+
+            end_time = (
+                started_at
+                + timedelta(
+                    days=int(plan["duration"])
+                )
+            )
+
+            if now >= end_time:
+
+                cur.execute("""
+                    UPDATE plans
+                    SET active=FALSE
+                    WHERE id=%s
+                """, (
+                    plan["id"],
+                ))
+
+                conn.commit()
+
+                flash(
+                    "Your demo plan has ended.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for("my_plan")
+                )
+
+            last_claim_at = plan["last_claim_at"]
+
+            if last_claim_at is None:
+
+                allowed_time = (
+                    started_at
+                    + timedelta(hours=24)
+                )
+
+            else:
+
+                allowed_time = (
+                    last_claim_at
+                    + timedelta(hours=24)
+                )
+
+            if now < allowed_time:
+
+                conn.rollback()
+
+                remaining = int(
+                    (
+                        allowed_time - now
+                    ).total_seconds()
+                )
+
+                hours = remaining // 3600
+                minutes = (
+                    remaining % 3600
+                ) // 60
+
+                flash(
+                    f"Next claim is available in "
+                    f"{hours}h {minutes}m.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for("my_plan")
+                )
+
+            daily_income = money(
+                plan["daily_income"]
+            )
+
+            # Lock account.
+
+            cur.execute("""
+                SELECT user_id
+                FROM accounts
+                WHERE user_id=%s
+                FOR UPDATE
+            """, (
+                user["id"],
+            ))
+
+            account = cur.fetchone()
+
+            if not account:
+
+                cur.execute("""
+                    INSERT INTO accounts (
+                        user_id,
+                        deposit_account,
+                        income_account,
+                        referral_account,
+                        withdraw_account
+                    )
+                    VALUES (%s,%s,0,0,0)
+                """, (
+                    user["id"],
+                    STARTING_DEPOSIT_BALANCE,
+                ))
+
+            cur.execute("""
+                UPDATE accounts
+                SET income_account =
+                        COALESCE(income_account,0)
+                        + %s,
+                    withdraw_account =
+                        COALESCE(withdraw_account,0)
+                        + %s
+                WHERE user_id=%s
+            """, (
+                daily_income,
+                daily_income,
+                user["id"],
+            ))
+
+            cur.execute("""
+                UPDATE plans
+                SET last_claim_at=%s
+                WHERE id=%s
+            """, (
+                now,
+                plan["id"],
+            ))
+
+            cur.execute("""
+                INSERT INTO transactions (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    status,
+                    reference,
+                    description
+                )
+                VALUES (
+                    %s,
+                    'income_claim',
+                    %s,
+                    'successful',
+                    %s,
+                    'Demo daily income claim'
+                )
+            """, (
+                user["id"],
+                daily_income,
+                generate_reference("INC"),
+            ))
+
+            conn.commit()
+
+            flash(
+                "Demo daily income claimed successfully.",
+                "success",
+            )
+
+            return redirect(
+                url_for("my_plan")
+            )
+
+        except Exception:
+
+            conn.rollback()
+            raise
+
+        finally:
+
+            cur.close()
+            conn.close()
+
+    # --------------------------------------------------------
+    # GET
+    # --------------------------------------------------------
 
     plan = query_one("""
         SELECT *
@@ -1476,7 +1976,9 @@ def my_plan():
         AND active=TRUE
         ORDER BY id DESC
         LIMIT 1
-    """, (user["id"],))
+    """, (
+        user["id"],
+    ))
 
     can_claim = False
     seconds_remaining = 0
@@ -1484,13 +1986,15 @@ def my_plan():
 
     if plan:
 
-        now = datetime.utcnow()
+        now = utcnow()
 
         started_at = plan["started_at"]
 
         end_time = (
             started_at
-            + timedelta(days=int(plan["duration"]))
+            + timedelta(
+                days=int(plan["duration"])
+            )
         )
 
         if now >= end_time:
@@ -1499,7 +2003,9 @@ def my_plan():
                 UPDATE plans
                 SET active=FALSE
                 WHERE id=%s
-            """, (plan["id"],))
+            """, (
+                plan["id"],
+            ))
 
             plan = None
             cycle_ended = True
@@ -1509,238 +2015,33 @@ def my_plan():
             last_claim_at = plan["last_claim_at"]
 
             if last_claim_at is None:
+
                 next_claim_time = (
                     started_at
                     + timedelta(hours=24)
                 )
+
             else:
+
                 next_claim_time = (
                     last_claim_at
                     + timedelta(hours=24)
                 )
 
             if now >= next_claim_time:
+
                 can_claim = True
+
             else:
+
                 seconds_remaining = max(
                     0,
                     int(
                         (
                             next_claim_time - now
                         ).total_seconds()
-                    )
+                    ),
                 )
-
-            if request.method == "POST":
-
-                conn = get_conn()
-                cur = conn.cursor(
-                    cursor_factory=RealDictCursor
-                )
-
-                try:
-
-                    # Lock the plan to prevent double claims.
-                    cur.execute("""
-                        SELECT *
-                        FROM plans
-                        WHERE id=%s
-                        AND user_id=%s
-                        AND active=TRUE
-                        FOR UPDATE
-                    """, (
-                        plan["id"],
-                        user["id"],
-                    ))
-
-                    locked_plan = cur.fetchone()
-
-                    if not locked_plan:
-
-                        conn.rollback()
-
-                        flash(
-                            "Active plan not found.",
-                            "error"
-                        )
-
-                        return redirect(url_for("my_plan"))
-
-                    claim_time = datetime.utcnow()
-
-                    locked_started = (
-                        locked_plan["started_at"]
-                    )
-
-                    locked_end = (
-                        locked_started
-                        + timedelta(
-                            days=int(
-                                locked_plan["duration"]
-                            )
-                        )
-                    )
-
-                    if claim_time >= locked_end:
-
-                        cur.execute("""
-                            UPDATE plans
-                            SET active=FALSE
-                            WHERE id=%s
-                        """, (
-                            locked_plan["id"],
-                        ))
-
-                        conn.commit()
-
-                        flash(
-                            "Your demo plan has ended.",
-                            "error"
-                        )
-
-                        return redirect(url_for("my_plan"))
-
-                    locked_last = (
-                        locked_plan["last_claim_at"]
-                    )
-
-                    if locked_last is None:
-                        allowed_time = (
-                            locked_started
-                            + timedelta(hours=24)
-                        )
-                    else:
-                        allowed_time = (
-                            locked_last
-                            + timedelta(hours=24)
-                        )
-
-                    if claim_time < allowed_time:
-
-                        conn.rollback()
-
-                        flash(
-                            "Your next claim is not ready yet.",
-                            "error"
-                        )
-
-                        return redirect(url_for("my_plan"))
-
-                    daily_income = Decimal(
-                        str(
-                            locked_plan["daily_income"]
-                        )
-                    )
-
-                    cur.execute("""
-                        UPDATE accounts
-                        SET income_account =
-                                COALESCE(income_account,0)
-                                + %s,
-                            withdraw_account =
-                                COALESCE(withdraw_account,0)
-                                + %s
-                        WHERE user_id=%s
-                    """, (
-                        daily_income,
-                        daily_income,
-                        user["id"],
-                    ))
-
-                    claim_reference = (
-                        "INC-"
-                        + uuid.uuid4().hex[:12].upper()
-                    )
-
-                    cur.execute("""
-                        UPDATE plans
-                        SET last_claim_at=%s
-                        WHERE id=%s
-                    """, (
-                        claim_time,
-                        locked_plan["id"],
-                    ))
-
-                    cur.execute("""
-                        INSERT INTO transactions (
-                            user_id,
-                            transaction_type,
-                            amount,
-                            status,
-                            reference,
-                            description
-                        )
-                        VALUES (
-                            %s,
-                            'income_claim',
-                            %s,
-                            'successful',
-                            %s,
-                            'Demo daily income claim'
-                        )
-                    """, (
-                        user["id"],
-                        daily_income,
-                        claim_reference,
-                    ))
-
-                    conn.commit()
-
-                    flash(
-                        "Demo daily income claimed successfully.",
-                        "success"
-                    )
-
-                    return redirect(url_for("my_plan"))
-
-                except Exception:
-
-                    conn.rollback()
-                    raise
-
-                finally:
-
-                    cur.close()
-                    conn.close()
-
-    # --------------------------------------------------------
-    # TEMPLATE COMPATIBILITY
-    # --------------------------------------------------------
-    #
-    # Your existing my_plan.html uses:
-    #
-    # user_plan.investment
-    #
-    # while the PostgreSQL table uses:
-    #
-    # investment_amount
-    #
-    # Add compatibility values to the RealDictRow so both
-    # naming styles work.
-    # --------------------------------------------------------
-
-    if plan:
-
-        plan_dict = dict(plan)
-
-        plan_dict["investment"] = (
-            plan_dict.get("investment_amount")
-            or Decimal("0")
-        )
-
-        plan_dict["daily"] = (
-            plan_dict.get("daily_income")
-            or Decimal("0")
-        )
-
-        plan_dict["name"] = (
-            plan_dict.get("plan_name")
-            or ""
-        )
-
-        plan_dict["plan"] = plan_dict["plan_name"]
-
-        plan = plan_dict
 
     return render_template(
         "my_plan.html",
@@ -1755,7 +2056,10 @@ def my_plan():
 # WITHDRAW
 # ============================================================
 
-@app.route("/withdraw")
+@app.route(
+    "/withdraw",
+    methods=["GET"],
+)
 def withdraw():
 
     user = current_user()
@@ -1763,14 +2067,18 @@ def withdraw():
     if not user:
         return redirect(url_for("login"))
 
-    account = current_account(user["id"])
+    account = current_account(
+        user["id"]
+    )
 
     accounts = query_all("""
         SELECT *
         FROM withdrawal_accounts
         WHERE user_id=%s
         ORDER BY id DESC
-    """, (user["id"],))
+    """, (
+        user["id"],
+    ))
 
     return render_template(
         "withdraw.html",
@@ -1785,7 +2093,7 @@ def withdraw():
 
 @app.route(
     "/bind_account",
-    methods=["GET", "POST"]
+    methods=["GET", "POST"],
 )
 def bind_account():
 
@@ -1798,24 +2106,28 @@ def bind_account():
 
         account_name = request.form.get(
             "account_name",
-            ""
+            "",
         ).strip()
 
         phone = request.form.get(
             "phone",
-            ""
+            "",
         ).strip()
 
         network = request.form.get(
             "network",
-            ""
+            "",
         ).strip()
 
-        if not account_name or not phone or not network:
+        if (
+            not account_name
+            or not phone
+            or not network
+        ):
 
             flash(
                 "Please complete all account details.",
-                "error"
+                "error",
             )
 
         else:
@@ -1837,7 +2149,7 @@ def bind_account():
 
             flash(
                 "Withdrawal account saved.",
-                "success"
+                "success",
             )
 
     accounts = query_all("""
@@ -1845,7 +2157,9 @@ def bind_account():
         FROM withdrawal_accounts
         WHERE user_id=%s
         ORDER BY id DESC
-    """, (user["id"],))
+    """, (
+        user["id"],
+    ))
 
     return render_template(
         "bind_account.html",
@@ -1859,7 +2173,7 @@ def bind_account():
 
 @app.route(
     "/request_withdrawal",
-    methods=["POST"]
+    methods=["POST"],
 )
 def request_withdrawal():
 
@@ -1868,49 +2182,50 @@ def request_withdrawal():
     if not user:
         return redirect(url_for("login"))
 
-    try:
-
-        amount = Decimal(
-            request.form.get(
-                "amount",
-                "0"
-            ).strip()
+    amount = parse_amount(
+        request.form.get(
+            "amount",
+            "0",
         )
-
-    except (InvalidOperation, ValueError):
-
-        amount = Decimal("0")
+    )
 
     password = request.form.get(
         "password",
-        ""
+        "",
     )
 
-    account_id = request.form.get("account_id")
+    account_id = request.form.get(
+        "account_id"
+    )
 
-    if amount < Decimal("30"):
+    if amount is None or amount < MIN_WITHDRAWAL:
 
         flash(
-            "Minimum demo withdrawal is GHS 30.",
-            "error"
+            f"Minimum demo withdrawal is "
+            f"GHS {MIN_WITHDRAWAL:.2f}.",
+            "error",
         )
 
-        return redirect(url_for("withdraw"))
+        return redirect(
+            url_for("withdraw")
+        )
 
     if not user["withdraw_password_hash"]:
 
         flash(
             "Withdrawal password is not configured.",
-            "error"
+            "error",
         )
 
-        return redirect(url_for("withdraw"))
+        return redirect(
+            url_for("withdraw")
+        )
 
     try:
 
         valid = check_password_hash(
             user["withdraw_password_hash"],
-            password
+            password,
         )
 
     except Exception:
@@ -1921,27 +2236,14 @@ def request_withdrawal():
 
         flash(
             "Invalid withdrawal password.",
-            "error"
+            "error",
         )
 
-        return redirect(url_for("withdraw"))
-
-    account = current_account(user["id"])
-
-    balance = Decimal(
-        str(account["withdraw_account"] or 0)
-    )
-
-    if balance < amount:
-
-        flash(
-            "Insufficient withdrawal balance.",
-            "error"
+        return redirect(
+            url_for("withdraw")
         )
 
-        return redirect(url_for("withdraw"))
-
-    selected_account = None
+    selected_account_id = None
 
     if account_id:
 
@@ -1959,27 +2261,69 @@ def request_withdrawal():
 
             flash(
                 "Invalid withdrawal account.",
-                "error"
+                "error",
             )
 
-            return redirect(url_for("withdraw"))
+            return redirect(
+                url_for("withdraw")
+            )
 
-    reference = (
-        "WDR-"
-        + uuid.uuid4().hex[:12].upper()
-    )
+        selected_account_id = selected_account["id"]
 
     conn = get_conn()
     cur = conn.cursor()
 
     try:
 
+        # Lock account before checking balance.
+
+        cur.execute("""
+            SELECT withdraw_account
+            FROM accounts
+            WHERE user_id=%s
+            FOR UPDATE
+        """, (
+            user["id"],
+        ))
+
+        account = cur.fetchone()
+
+        if not account:
+
+            conn.rollback()
+
+            flash(
+                "Account balance not found.",
+                "error",
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+        balance = money(account[0])
+
+        if balance < amount:
+
+            conn.rollback()
+
+            flash(
+                "Insufficient withdrawal balance.",
+                "error",
+            )
+
+            return redirect(
+                url_for("withdraw")
+            )
+
+        # Reserve the withdrawal amount.
+
         cur.execute("""
             UPDATE accounts
             SET withdraw_account =
-                COALESCE(withdraw_account,0) - %s
+                withdraw_account - %s
             WHERE user_id=%s
-            AND COALESCE(withdraw_account,0) >= %s
+            AND withdraw_account >= %s
         """, (
             amount,
             user["id"],
@@ -1992,26 +2336,32 @@ def request_withdrawal():
 
             flash(
                 "Insufficient withdrawal balance.",
-                "error"
+                "error",
             )
 
-            return redirect(url_for("withdraw"))
+            return redirect(
+                url_for("withdraw")
+            )
+
+        withdrawal_reference = generate_reference(
+            "WDR"
+        )
 
         cur.execute("""
             INSERT INTO withdrawal_requests (
                 user_id,
                 amount,
                 account_id,
-                reference,
                 status
             )
-            VALUES (%s,%s,%s,%s,'pending')
+            VALUES (
+                %s,%s,%s,'pending'
+            )
             RETURNING id
         """, (
             user["id"],
             amount,
-            account_id or None,
-            reference,
+            selected_account_id,
         ))
 
         withdrawal_id = cur.fetchone()[0]
@@ -2036,7 +2386,7 @@ def request_withdrawal():
         """, (
             user["id"],
             amount,
-            reference,
+            withdrawal_reference,
             "Demo withdrawal request #"
             + str(withdrawal_id),
         ))
@@ -2055,7 +2405,7 @@ def request_withdrawal():
 
     flash(
         "Withdrawal request submitted for review.",
-        "success"
+        "success",
     )
 
     return redirect(
@@ -2079,8 +2429,10 @@ def transaction_history():
         SELECT *
         FROM transactions
         WHERE user_id=%s
-        ORDER BY created_at DESC
-    """, (user["id"],))
+        ORDER BY created_at DESC, id DESC
+    """, (
+        user["id"],
+    ))
 
     return render_template(
         "transaction_history.html",
@@ -2114,10 +2466,12 @@ def team():
         user["referral_code"],
     ))
 
-    account = current_account(user["id"])
+    account = current_account(
+        user["id"]
+    )
 
     referral_income = (
-        account["referral_account"]
+        money(account["referral_account"])
         if account
         else Decimal("0")
     )
@@ -2136,9 +2490,12 @@ def team():
 # ============================================================
 
 @app.route("/support")
+@app.route("/service")
 def support():
 
-    return render_template("support.html")
+    return render_template(
+        "support.html"
+    )
 
 
 # ============================================================
@@ -2153,7 +2510,9 @@ def profile():
     if not user:
         return redirect(url_for("login"))
 
-    account = current_account(user["id"])
+    account = current_account(
+        user["id"]
+    )
 
     return render_template(
         "profile.html",
@@ -2166,12 +2525,215 @@ def profile():
 
 
 # ============================================================
+# CHANGE LOGIN PASSWORD
+# ============================================================
+
+@app.route(
+    "/change_login_password",
+    methods=["GET", "POST"],
+)
+def change_login_password():
+
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        current_password = request.form.get(
+            "current_password",
+            "",
+        )
+
+        new_password = request.form.get(
+            "new_password",
+            "",
+        )
+
+        confirm_password = request.form.get(
+            "confirm_password",
+            "",
+        )
+
+        valid = False
+
+        try:
+
+            valid = check_password_hash(
+                user["password_hash"],
+                current_password,
+            )
+
+        except Exception:
+
+            valid = False
+
+        if not valid:
+
+            flash(
+                "Current password is incorrect.",
+                "error",
+            )
+
+            return render_template(
+                "change_login_password.html"
+            )
+
+        if len(new_password) < 6:
+
+            flash(
+                "New password must contain at least 6 characters.",
+                "error",
+            )
+
+            return render_template(
+                "change_login_password.html"
+            )
+
+        if new_password != confirm_password:
+
+            flash(
+                "New passwords do not match.",
+                "error",
+            )
+
+            return render_template(
+                "change_login_password.html"
+            )
+
+        execute("""
+            UPDATE users
+            SET password_hash=%s
+            WHERE id=%s
+        """, (
+            generate_password_hash(new_password),
+            user["id"],
+        ))
+
+        flash(
+            "Login password changed successfully.",
+            "success",
+        )
+
+        return redirect(
+            url_for("profile")
+        )
+
+    return render_template(
+        "change_login_password.html"
+    )
+
+
+# ============================================================
+# CHANGE WITHDRAWAL PASSWORD
+# ============================================================
+
+@app.route(
+    "/change_withdraw_password",
+    methods=["GET", "POST"],
+)
+def change_withdraw_password():
+
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        current_password = request.form.get(
+            "current_password",
+            "",
+        )
+
+        new_password = request.form.get(
+            "new_password",
+            "",
+        )
+
+        confirm_password = request.form.get(
+            "confirm_password",
+            "",
+        )
+
+        valid = False
+
+        try:
+
+            valid = check_password_hash(
+                user["withdraw_password_hash"],
+                current_password,
+            )
+
+        except Exception:
+
+            valid = False
+
+        if not valid:
+
+            flash(
+                "Current withdrawal password is incorrect.",
+                "error",
+            )
+
+            return render_template(
+                "change_withdraw_password.html"
+            )
+
+        if len(new_password) < 4:
+
+            flash(
+                "New withdrawal password must contain at least 4 characters.",
+                "error",
+            )
+
+            return render_template(
+                "change_withdraw_password.html"
+            )
+
+        if new_password != confirm_password:
+
+            flash(
+                "New passwords do not match.",
+                "error",
+            )
+
+            return render_template(
+                "change_withdraw_password.html"
+            )
+
+        execute("""
+            UPDATE users
+            SET withdraw_password_hash=%s
+            WHERE id=%s
+        """, (
+            generate_password_hash(new_password),
+            user["id"],
+        ))
+
+        flash(
+            "Withdrawal password changed successfully.",
+            "success",
+        )
+
+        return redirect(
+            url_for("profile")
+        )
+
+    return render_template(
+        "change_withdraw_password.html"
+    )
+
+
+# ============================================================
 # ADMIN AUTHORIZATION
 # ============================================================
 
 def admin_required():
-
-    return session.get("admin_logged_in") is True
+    return session.get(
+        "admin_logged_in"
+    ) is True
 
 
 # ============================================================
@@ -2180,7 +2742,7 @@ def admin_required():
 
 @app.route(
     "/admin/login",
-    methods=["GET", "POST"]
+    methods=["GET", "POST"],
 )
 def admin_login():
 
@@ -2188,30 +2750,35 @@ def admin_login():
 
         username = request.form.get(
             "username",
-            ""
+            "",
         ).strip()
 
         password = request.form.get(
             "password",
-            ""
+            "",
         )
 
         admin = query_one("""
             SELECT *
             FROM admins
             WHERE username=%s
-        """, (username,))
+        """, (
+            username,
+        ))
 
         valid = False
 
         if admin:
 
             try:
+
                 valid = check_password_hash(
                     admin["password_hash"],
-                    password
+                    password,
                 )
+
             except Exception:
+
                 valid = False
 
         if valid:
@@ -2222,7 +2789,7 @@ def admin_login():
 
             flash(
                 "Administrator login successful.",
-                "success"
+                "success",
             )
 
             return redirect(
@@ -2231,10 +2798,12 @@ def admin_login():
 
         flash(
             "Invalid administrator credentials.",
-            "error"
+            "error",
         )
 
-    return render_template("admin_login.html")
+    return render_template(
+        "admin_login.html"
+    )
 
 
 # ============================================================
@@ -2246,10 +2815,12 @@ def admin_logout():
 
     session.pop(
         "admin_logged_in",
-        None
+        None,
     )
 
-    return redirect(url_for("admin_login"))
+    return redirect(
+        url_for("admin_login")
+    )
 
 
 # ============================================================
@@ -2261,7 +2832,10 @@ def admin_logout():
 def admin_dashboard():
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     total_users = query_one("""
         SELECT COUNT(*) AS count
@@ -2297,7 +2871,10 @@ def admin_dashboard():
 def admin_users():
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     users = query_all("""
         SELECT
@@ -2324,18 +2901,23 @@ def admin_users():
 
 @app.route(
     "/admin/user/<int:user_id>",
-    methods=["GET", "POST"]
+    methods=["GET", "POST"],
 )
 def admin_manage_user(user_id):
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     user = query_one("""
         SELECT *
         FROM users
         WHERE id=%s
-    """, (user_id,))
+    """, (
+        user_id,
+    ))
 
     if not user:
         return "User not found", 404
@@ -2344,115 +2926,304 @@ def admin_manage_user(user_id):
 
         action = request.form.get(
             "action",
-            ""
+            "",
         )
 
-        try:
+        # ----------------------------------------------------
+        # BALANCE ACTIONS
+        # ----------------------------------------------------
 
-            amount = Decimal(
-                request.form.get(
-                    "amount",
-                    "0"
-                ).strip()
-            )
-
-        except (InvalidOperation, ValueError):
-
-            flash(
-                "Invalid amount.",
-                "error"
-            )
-
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
-                )
-            )
-
-        actions = {
-            "add_deposit": ("deposit_account", 1),
-            "deduct_deposit": ("deposit_account", -1),
-            "add_withdraw": ("withdraw_account", 1),
-            "deduct_withdraw": ("withdraw_account", -1),
+        balance_actions = {
+            "add_deposit": (
+                "deposit_account",
+                1,
+            ),
+            "deduct_deposit": (
+                "deposit_account",
+                -1,
+            ),
+            "add_withdraw": (
+                "withdraw_account",
+                1,
+            ),
+            "deduct_withdraw": (
+                "withdraw_account",
+                -1,
+            ),
+            "add_income": (
+                "income_account",
+                1,
+            ),
+            "deduct_income": (
+                "income_account",
+                -1,
+            ),
+            "add_referral": (
+                "referral_account",
+                1,
+            ),
+            "deduct_referral": (
+                "referral_account",
+                -1,
+            ),
         }
 
-        if action not in actions:
+        if action in balance_actions:
 
-            flash(
-                "Unknown admin action.",
-                "error"
-            )
-
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
+            amount = parse_amount(
+                request.form.get(
+                    "amount",
+                    "0",
                 )
             )
 
-        if amount <= 0:
+            if amount is None or amount <= 0:
 
-            flash(
-                "Amount must be greater than zero.",
-                "error"
-            )
-
-            return redirect(
-                url_for(
-                    "admin_manage_user",
-                    user_id=user_id
+                flash(
+                    "Amount must be greater than zero.",
+                    "error",
                 )
-            )
 
-        column, multiplier = actions[action]
-
-        if multiplier == 1:
-
-            execute(
-                f"""
-                UPDATE accounts
-                SET {column} =
-                    COALESCE({column},0) + %s
-                WHERE user_id=%s
-                """,
-                (
-                    amount,
-                    user_id,
-                )
-            )
-
-        else:
-
-            execute(
-                f"""
-                UPDATE accounts
-                SET {column} =
-                    GREATEST(
-                        0,
-                        COALESCE({column},0) - %s
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id,
                     )
-                WHERE user_id=%s
-                """,
-                (
-                    amount,
+                )
+
+            column, multiplier = balance_actions[
+                action
+            ]
+
+            conn = get_conn()
+            cur = conn.cursor()
+
+            try:
+
+                # Lock account.
+
+                cur.execute("""
+                    SELECT user_id
+                    FROM accounts
+                    WHERE user_id=%s
+                    FOR UPDATE
+                """, (
                     user_id,
+                ))
+
+                account_exists = cur.fetchone()
+
+                if not account_exists:
+
+                    cur.execute("""
+                        INSERT INTO accounts (
+                            user_id,
+                            deposit_account,
+                            income_account,
+                            referral_account,
+                            withdraw_account
+                        )
+                        VALUES (%s,%s,0,0,0)
+                    """, (
+                        user_id,
+                        STARTING_DEPOSIT_BALANCE,
+                    ))
+
+                if multiplier == 1:
+
+                    cur.execute(
+                        f"""
+                        UPDATE accounts
+                        SET {column} =
+                            COALESCE({column},0) + %s
+                        WHERE user_id=%s
+                        """,
+                        (
+                            amount,
+                            user_id,
+                        ),
+                    )
+
+                else:
+
+                    cur.execute(
+                        f"""
+                        UPDATE accounts
+                        SET {column} =
+                            GREATEST(
+                                0,
+                                COALESCE({column},0) - %s
+                            )
+                        WHERE user_id=%s
+                        """,
+                        (
+                            amount,
+                            user_id,
+                        ),
+                    )
+
+                # Audit transaction.
+
+                transaction_type = (
+                    "admin_balance_adjustment"
+                )
+
+                description = (
+                    "Admin adjustment: "
+                    + action
+                )
+
+                cur.execute("""
+                    INSERT INTO transactions (
+                        user_id,
+                        transaction_type,
+                        amount,
+                        status,
+                        reference,
+                        description
+                    )
+                    VALUES (
+                        %s,%s,%s,'successful',%s,%s
+                    )
+                """, (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    generate_reference("ADM"),
+                    description,
+                ))
+
+                conn.commit()
+
+            except Exception:
+
+                conn.rollback()
+                raise
+
+            finally:
+
+                cur.close()
+                conn.close()
+
+            flash(
+                "User balance updated successfully.",
+                "success",
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id,
+                )
+            )
+
+        # ----------------------------------------------------
+        # CHANGE LOGIN PASSWORD
+        # ----------------------------------------------------
+
+        if action == "change_login_password":
+
+            new_password = request.form.get(
+                "new_password",
+                "",
+            )
+
+            if len(new_password) < 6:
+
+                flash(
+                    "Login password must contain at least 6 characters.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id,
+                    )
+                )
+
+            execute("""
+                UPDATE users
+                SET password_hash=%s
+                WHERE id=%s
+            """, (
+                generate_password_hash(new_password),
+                user_id,
+            ))
+
+            flash(
+                "Login password updated successfully.",
+                "success",
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id,
+                )
+            )
+
+        # ----------------------------------------------------
+        # CHANGE WITHDRAWAL PASSWORD
+        # ----------------------------------------------------
+
+        if action == "change_withdraw_password":
+
+            new_password = request.form.get(
+                "new_password",
+                "",
+            )
+
+            if len(new_password) < 4:
+
+                flash(
+                    "Withdrawal password must contain at least 4 characters.",
+                    "error",
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_manage_user",
+                        user_id=user_id,
+                    )
+                )
+
+            execute("""
+                UPDATE users
+                SET withdraw_password_hash=%s
+                WHERE id=%s
+            """, (
+                generate_password_hash(new_password),
+                user_id,
+            ))
+
+            flash(
+                "Withdrawal password updated successfully.",
+                "success",
+            )
+
+            return redirect(
+                url_for(
+                    "admin_manage_user",
+                    user_id=user_id,
                 )
             )
 
         flash(
-            "User balance updated.",
-            "success"
+            "Unknown admin action.",
+            "error",
         )
 
         return redirect(
             url_for(
                 "admin_manage_user",
-                user_id=user_id
+                user_id=user_id,
             )
         )
 
-    account = current_account(user_id)
+    account = current_account(
+        user_id
+    )
 
     return render_template(
         "admin_manage_user.html",
@@ -2470,18 +3241,29 @@ def admin_manage_user(user_id):
 def admin_deposits():
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     deposits = query_all("""
         SELECT
-            d.*,
+            d.id,
+            d.user_id,
+            d.amount,
+            d.payment_number,
+            d.screenshot,
+            d.screenshot_mime,
+            d.reference,
+            d.status,
+            d.created_at,
             u.username,
             u.fullname,
             u.phone
         FROM deposit_requests d
         JOIN users u
             ON u.id=d.user_id
-        ORDER BY d.created_at DESC
+        ORDER BY d.created_at DESC, d.id DESC
     """)
 
     return render_template(
@@ -2496,21 +3278,32 @@ def admin_deposits():
 
 @app.route(
     "/admin/deposit/<int:deposit_id>/<action>",
-    methods=["POST"]
+    methods=["POST"],
 )
-def admin_deposit_action(deposit_id, action):
+def admin_deposit_action(
+    deposit_id,
+    action,
+):
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
 
-    if action not in ("approve", "reject"):
+        return redirect(
+            url_for("admin_login")
+        )
+
+    if action not in (
+        "approve",
+        "reject",
+    ):
 
         flash(
             "Invalid deposit action.",
-            "error"
+            "error",
         )
 
-        return redirect(url_for("admin_deposits"))
+        return redirect(
+            url_for("admin_deposits")
+        )
 
     conn = get_conn()
     cur = conn.cursor(
@@ -2519,9 +3312,7 @@ def admin_deposit_action(deposit_id, action):
 
     try:
 
-        # ----------------------------------------------------
-        # LOCK DEPOSIT
-        # ----------------------------------------------------
+        # Lock deposit request.
 
         cur.execute("""
             SELECT
@@ -2533,7 +3324,9 @@ def admin_deposit_action(deposit_id, action):
             FROM deposit_requests
             WHERE id=%s
             FOR UPDATE
-        """, (deposit_id,))
+        """, (
+            deposit_id,
+        ))
 
         deposit = cur.fetchone()
 
@@ -2543,10 +3336,12 @@ def admin_deposit_action(deposit_id, action):
 
             flash(
                 "Deposit request not found.",
-                "error"
+                "error",
             )
 
-            return redirect(url_for("admin_deposits"))
+            return redirect(
+                url_for("admin_deposits")
+            )
 
         if deposit["status"] != "pending":
 
@@ -2554,32 +3349,33 @@ def admin_deposit_action(deposit_id, action):
 
             flash(
                 "This deposit has already been reviewed.",
-                "error"
+                "error",
             )
 
-            return redirect(url_for("admin_deposits"))
+            return redirect(
+                url_for("admin_deposits")
+            )
 
         user_id = deposit["user_id"]
-
-        amount = Decimal(
-            str(deposit["amount"])
-        )
-
+        amount = money(deposit["amount"])
         reference = deposit["reference"]
 
-        # ====================================================
+        # ----------------------------------------------------
         # APPROVE
-        # ====================================================
+        # ----------------------------------------------------
 
         if action == "approve":
 
-            # Lock account if it exists.
+            # Find and lock account.
+
             cur.execute("""
-                SELECT user_id
+                SELECT *
                 FROM accounts
                 WHERE user_id=%s
                 FOR UPDATE
-            """, (user_id,))
+            """, (
+                user_id,
+            ))
 
             account = cur.fetchone()
 
@@ -2598,9 +3394,9 @@ def admin_deposit_action(deposit_id, action):
 
             else:
 
-                # IMPORTANT:
-                # No ON CONFLICT is used here.
-                # This fixes the exact error shown in your log.
+                # Account does not exist.
+                # Insert directly because user_id is primary key.
+
                 cur.execute("""
                     INSERT INTO accounts (
                         user_id,
@@ -2609,13 +3405,7 @@ def admin_deposit_action(deposit_id, action):
                         referral_account,
                         withdraw_account
                     )
-                    VALUES (
-                        %s,
-                        %s,
-                        0,
-                        0,
-                        0
-                    )
+                    VALUES (%s,%s,0,0,0)
                 """, (
                     user_id,
                     amount,
@@ -2625,7 +3415,9 @@ def admin_deposit_action(deposit_id, action):
                 UPDATE deposit_requests
                 SET status='approved'
                 WHERE id=%s
-            """, (deposit_id,))
+            """, (
+                deposit_id,
+            ))
 
             if reference:
 
@@ -2641,14 +3433,33 @@ def admin_deposit_action(deposit_id, action):
                     reference,
                 ))
 
+            else:
+
+                cur.execute("""
+                    UPDATE transactions
+                    SET status='successful'
+                    WHERE id = (
+                        SELECT id
+                        FROM transactions
+                        WHERE user_id=%s
+                        AND transaction_type='deposit'
+                        AND status='pending'
+                        ORDER BY created_at DESC, id DESC
+                        LIMIT 1
+                    )
+                """, (
+                    user_id,
+                ))
+
             flash(
-                f"Deposit of GHS {amount:.2f} approved successfully.",
-                "success"
+                f"Demo deposit of GHS {amount:.2f} "
+                "approved successfully.",
+                "success",
             )
 
-        # ====================================================
+        # ----------------------------------------------------
         # REJECT
-        # ====================================================
+        # ----------------------------------------------------
 
         else:
 
@@ -2656,7 +3467,9 @@ def admin_deposit_action(deposit_id, action):
                 UPDATE deposit_requests
                 SET status='rejected'
                 WHERE id=%s
-            """, (deposit_id,))
+            """, (
+                deposit_id,
+            ))
 
             if reference:
 
@@ -2672,9 +3485,28 @@ def admin_deposit_action(deposit_id, action):
                     reference,
                 ))
 
+            else:
+
+                cur.execute("""
+                    UPDATE transactions
+                    SET status='failed'
+                    WHERE id = (
+                        SELECT id
+                        FROM transactions
+                        WHERE user_id=%s
+                        AND transaction_type='deposit'
+                        AND status='pending'
+                        ORDER BY created_at DESC, id DESC
+                        LIMIT 1
+                    )
+                """, (
+                    user_id,
+                ))
+
             flash(
-                f"Deposit of GHS {amount:.2f} rejected.",
-                "success"
+                f"Demo deposit of GHS {amount:.2f} "
+                "rejected.",
+                "success",
             )
 
         conn.commit()
@@ -2689,7 +3521,7 @@ def admin_deposit_action(deposit_id, action):
 
         flash(
             "Unable to process the deposit. Please try again.",
-            "error"
+            "error",
         )
 
     finally:
@@ -2711,7 +3543,10 @@ def admin_deposit_action(deposit_id, action):
 def admin_withdrawals():
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     withdrawals = query_all("""
         SELECT
@@ -2727,7 +3562,7 @@ def admin_withdrawals():
             ON u.id=w.user_id
         LEFT JOIN withdrawal_accounts wa
             ON wa.id=w.account_id
-        ORDER BY w.created_at DESC
+        ORDER BY w.created_at DESC, w.id DESC
     """)
 
     return render_template(
@@ -2742,21 +3577,27 @@ def admin_withdrawals():
 
 @app.route(
     "/admin/withdraw/<int:withdrawal_id>/<action>",
-    methods=["POST"]
+    methods=["POST"],
 )
 def admin_withdraw_action(
     withdrawal_id,
-    action
+    action,
 ):
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
 
-    if action not in {"approve", "reject"}:
+        return redirect(
+            url_for("admin_login")
+        )
+
+    if action not in {
+        "approve",
+        "reject",
+    }:
 
         flash(
             "Invalid withdrawal action.",
-            "error"
+            "error",
         )
 
         return redirect(
@@ -2787,7 +3628,7 @@ def admin_withdraw_action(
 
             flash(
                 "Withdrawal request not found.",
-                "error"
+                "error",
             )
 
             return redirect(
@@ -2800,7 +3641,7 @@ def admin_withdraw_action(
 
             flash(
                 "Withdrawal request is no longer pending.",
-                "error"
+                "error",
             )
 
             return redirect(
@@ -2808,12 +3649,7 @@ def admin_withdraw_action(
             )
 
         user_id = withdrawal["user_id"]
-
-        amount = Decimal(
-            str(withdrawal["amount"])
-        )
-
-        reference = withdrawal.get("reference")
+        amount = money(withdrawal["amount"])
 
         if action == "approve":
 
@@ -2825,33 +3661,75 @@ def admin_withdraw_action(
                 withdrawal_id,
             ))
 
-            if reference:
+            # Find the transaction associated with this request
+            # using the closest pending withdrawal transaction.
 
-                cur.execute("""
-                    UPDATE transactions
-                    SET status='successful'
+            cur.execute("""
+                UPDATE transactions
+                SET status='successful'
+                WHERE id = (
+                    SELECT id
+                    FROM transactions
                     WHERE user_id=%s
                     AND transaction_type='withdrawal'
-                    AND reference=%s
+                    AND amount=%s
                     AND status='pending'
-                """, (
-                    user_id,
-                    reference,
-                ))
+                    ORDER BY created_at DESC, id DESC
+                    LIMIT 1
+                )
+            """, (
+                user_id,
+                amount,
+            ))
+
+            flash(
+                "Withdrawal approved successfully.",
+                "success",
+            )
 
         else:
 
-            # Refund the held withdrawal balance.
+            # Return the reserved amount to the user.
+
             cur.execute("""
-                UPDATE accounts
-                SET withdraw_account =
-                    COALESCE(withdraw_account,0)
-                    + %s
+                SELECT user_id
+                FROM accounts
                 WHERE user_id=%s
+                FOR UPDATE
             """, (
-                amount,
                 user_id,
             ))
+
+            account = cur.fetchone()
+
+            if account:
+
+                cur.execute("""
+                    UPDATE accounts
+                    SET withdraw_account =
+                        COALESCE(withdraw_account,0)
+                        + %s
+                    WHERE user_id=%s
+                """, (
+                    amount,
+                    user_id,
+                ))
+
+            else:
+
+                cur.execute("""
+                    INSERT INTO accounts (
+                        user_id,
+                        deposit_account,
+                        income_account,
+                        referral_account,
+                        withdraw_account
+                    )
+                    VALUES (%s,0,0,0,%s)
+                """, (
+                    user_id,
+                    amount,
+                ))
 
             cur.execute("""
                 UPDATE withdrawal_requests
@@ -2861,19 +3739,28 @@ def admin_withdraw_action(
                 withdrawal_id,
             ))
 
-            if reference:
-
-                cur.execute("""
-                    UPDATE transactions
-                    SET status='failed'
+            cur.execute("""
+                UPDATE transactions
+                SET status='failed'
+                WHERE id = (
+                    SELECT id
+                    FROM transactions
                     WHERE user_id=%s
                     AND transaction_type='withdrawal'
-                    AND reference=%s
+                    AND amount=%s
                     AND status='pending'
-                """, (
-                    user_id,
-                    reference,
-                ))
+                    ORDER BY created_at DESC, id DESC
+                    LIMIT 1
+                )
+            """, (
+                user_id,
+                amount,
+            ))
+
+            flash(
+                "Withdrawal rejected and balance restored.",
+                "success",
+            )
 
         conn.commit()
 
@@ -2887,24 +3774,13 @@ def admin_withdraw_action(
 
         flash(
             "Unable to process the withdrawal.",
-            "error"
-        )
-
-        return redirect(
-            url_for("admin_withdrawals")
+            "error",
         )
 
     finally:
 
         cur.close()
         conn.close()
-
-    flash(
-        "Withdrawal "
-        + action
-        + "d successfully.",
-        "success"
-    )
 
     return redirect(
         url_for("admin_withdrawals")
@@ -2920,7 +3796,10 @@ def admin_withdraw_action(
 def admin_bind_accounts():
 
     if not admin_required():
-        return redirect(url_for("admin_login"))
+
+        return redirect(
+            url_for("admin_login")
+        )
 
     accounts = query_all("""
         SELECT
@@ -2930,7 +3809,7 @@ def admin_bind_accounts():
         FROM withdrawal_accounts wa
         JOIN users u
             ON u.id=wa.user_id
-        ORDER BY wa.created_at DESC
+        ORDER BY wa.created_at DESC, wa.id DESC
     """)
 
     return render_template(
@@ -2940,7 +3819,7 @@ def admin_bind_accounts():
 
 
 # ============================================================
-# FILE TOO LARGE
+# ERROR HANDLERS
 # ============================================================
 
 @app.errorhandler(413)
@@ -2948,25 +3827,19 @@ def file_too_large(error):
 
     flash(
         "Screenshot is too large. Maximum size is 5 MB.",
-        "error"
+        "error",
     )
 
-    return redirect(url_for("deposit"))
+    return redirect(
+        url_for("deposit")
+    )
 
-
-# ============================================================
-# 404
-# ============================================================
 
 @app.errorhandler(404)
 def not_found(error):
 
     return "Page not found", 404
 
-
-# ============================================================
-# 500
-# ============================================================
 
 @app.errorhandler(500)
 def server_error(error):
@@ -2977,20 +3850,30 @@ def server_error(error):
 
     return (
         "An internal server error occurred.",
-        500
+        500,
     )
+
+
+# ============================================================
+# MAX UPLOAD SIZE
+# ============================================================
+
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 
 # ============================================================
 # DATABASE INITIALIZATION
 # ============================================================
 
+# Render/Gunicorn imports app.py, so this initializes the
+# PostgreSQL schema before serving requests.
+
 with app.app_context():
     init_db()
 
 
 # ============================================================
-# LOCAL / RENDER START
+# LOCAL DEVELOPMENT
 # ============================================================
 
 if __name__ == "__main__":
@@ -2998,12 +3881,12 @@ if __name__ == "__main__":
     port = int(
         os.environ.get(
             "PORT",
-            "5000"
+            "5000",
         )
     )
 
     app.run(
         host="0.0.0.0",
         port=port,
-        debug=False
+        debug=False,
     )
