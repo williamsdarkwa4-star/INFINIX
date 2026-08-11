@@ -1,7 +1,7 @@
 import os
 import uuid
 from io import BytesIO
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 
 from flask import (
@@ -49,13 +49,13 @@ CLAIM_INTERVAL_HOURS = 24
 # ============================================================
 
 PLANS = {
-    1: {"name": "Zenith 1", "investment": Decimal("50.00"), "daily": Decimal("8.00"), "duration": 30},
-    2: {"name": "Zenith 2", "investment": Decimal("100.00"), "daily": Decimal("20.00"), "duration": 30},
-    3: {"name": "Zenith 3", "investment": Decimal("200.00"), "daily": Decimal("40.00"), "duration": 30},
-    4: {"name": "Zenith 4", "investment": Decimal("300.00"), "daily": Decimal("65.00"), "duration": 30},
-    5: {"name": "Zenith 5", "investment": Decimal("500.00"), "daily": Decimal("100.00"), "duration": 30},
-    6: {"name": "Zenith 6", "investment": Decimal("600.00"), "daily": Decimal("200.00"), "duration": 30},
-    7: {"name": "Zenith 7", "investment": Decimal("1000.00"), "daily": Decimal("360.00"), "duration": 30},
+    1: {"name": "Zenith 1", "investment": Decimal("50.00"), "daily": Decimal("5.00"), "duration": 180},
+    2: {"name": "Zenith 2", "investment": Decimal("100.00"), "daily": Decimal("20.00"), "duration": 180},
+    3: {"name": "Zenith 3", "investment": Decimal("200.00"), "daily": Decimal("40.00"), "duration": 180},
+    4: {"name": "Zenith 4", "investment": Decimal("300.00"), "daily": Decimal("65.00"), "duration": 180},
+    5: {"name": "Zenith 5", "investment": Decimal("500.00"), "daily": Decimal("100.00"), "duration": 180},
+    6: {"name": "Zenith 6", "investment": Decimal("600.00"), "daily": Decimal("200.00"), "duration": 180},
+    7: {"name": "Zenith 7", "investment": Decimal("1000.00"), "daily": Decimal("360.00"), "duration": 180},
 }
 
 
@@ -64,7 +64,8 @@ PLANS = {
 # ============================================================
 
 def utcnow():
-    return datetime.utcnow()
+    # Return timezone-aware UTC datetime
+    return datetime.now(timezone.utc)
 
 
 def money(value):
@@ -209,7 +210,7 @@ def init_db():
                 f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column} {definition}"
             )
 
-        # Legacy columns, if an older database contains them.
+        # Legacy columns handling
         for column in ["login_password", "password", "withdraw_password", "withdrawal_password"]:
             cur.execute(
                 """
@@ -222,7 +223,7 @@ def init_db():
                 """,
                 (column,),
             )
-            if cur.fetchone()[0]:
+            if cur.fetchone() and cur.fetchone()[0]:
                 try:
                     cur.execute(f"ALTER TABLE users ALTER COLUMN {column} DROP NOT NULL")
                 except Exception:
@@ -237,7 +238,7 @@ def init_db():
                 AND column_name='password'
             )
         """)
-        if cur.fetchone()[0]:
+        if cur.fetchone() and cur.fetchone()[0]:
             cur.execute("""
                 UPDATE users
                 SET password_hash=password
@@ -350,6 +351,18 @@ def init_db():
             )
         """)
 
+        # Create invites table (new)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS invites (
+                id SERIAL PRIMARY KEY,
+                token VARCHAR(120) UNIQUE NOT NULL,
+                owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                amount NUMERIC(14,2) NOT NULL DEFAULT 0,
+                approved BOOLEAN NOT NULL DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         # Fill missing referral codes.
         cur.execute("""
             SELECT id FROM users
@@ -404,6 +417,7 @@ def init_db():
             "CREATE INDEX IF NOT EXISTS idx_deposit_requests_status ON deposit_requests(status)",
             "CREATE INDEX IF NOT EXISTS idx_withdrawals_user ON withdrawal_requests(user_id)",
             "CREATE INDEX IF NOT EXISTS idx_withdrawals_status ON withdrawal_requests(status)",
+            "CREATE INDEX IF NOT EXISTS idx_invites_token ON invites(token)"
         ]
         for statement in indexes:
             cur.execute(statement)
@@ -919,14 +933,29 @@ def confirm_buy_plan(plan_id):
 # ============================================================
 
 def plan_times(plan, now=None):
+    """
+    plan is a dict returned from DB with keys 'started_at', 'last_claim_at', 'duration'
+    This function returns (end_time, next_claim) as timezone-aware UTC datetimes.
+    """
     now = now or utcnow()
-    started = plan["started_at"]
-    end_time = started + timedelta(days=int(plan["duration"]))
 
-    if plan["last_claim_at"] is None:
+    started = plan.get("started_at")
+    if started is None:
+        started = now
+    else:
+        # If DB returned naive timestamp, assume UTC
+        if getattr(started, "tzinfo", None) is None:
+            started = started.replace(tzinfo=timezone.utc)
+
+    end_time = started + timedelta(days=int(plan.get("duration", 0)))
+
+    last_claim_at = plan.get("last_claim_at")
+    if last_claim_at is None:
         next_claim = started + timedelta(hours=CLAIM_INTERVAL_HOURS)
     else:
-        next_claim = plan["last_claim_at"] + timedelta(hours=CLAIM_INTERVAL_HOURS)
+        if getattr(last_claim_at, "tzinfo", None) is None:
+            last_claim_at = last_claim_at.replace(tzinfo=timezone.utc)
+        next_claim = last_claim_at + timedelta(hours=CLAIM_INTERVAL_HOURS)
 
     return end_time, next_claim
 
@@ -1080,6 +1109,7 @@ def my_plan():
     cycle_seconds_remaining = 0
     next_claim_timestamp = 0
     cycle_ended = False
+    next_claim = None
 
     if plan:
         now = utcnow()
@@ -1103,7 +1133,11 @@ def my_plan():
                 can_claim = True
                 seconds_remaining = 0
             else:
-                next_claim_timestamp = int(next_claim.timestamp())
+                # Provide timestamp (seconds -> ms later in template JS)
+                try:
+                    next_claim_timestamp = int(next_claim.timestamp())
+                except Exception:
+                    next_claim_timestamp = 0
 
     available_plans = [
         {
@@ -1127,15 +1161,19 @@ def my_plan():
         (user["id"],),
     )
 
+    # Pass next_income_at and server_now (timezone-aware) for the improved template
     return render_template(
         "my_plan.html",
         user_plan=plan,
         active_plans=active_plans,
         available_plans=available_plans,
+        plans=available_plans,  # legacy key the new template expects
         can_claim=can_claim,
         seconds_remaining=seconds_remaining,
         cycle_seconds_remaining=cycle_seconds_remaining,
         next_claim_timestamp=next_claim_timestamp,
+        next_income_at=next_claim,  # datetime or None
+        server_now=utcnow(),
         cycle_ended=cycle_ended,
     )
 
@@ -1537,11 +1575,23 @@ def admin_dashboard():
         "SELECT COUNT(*) AS count FROM withdrawal_requests WHERE status='pending'"
     )["count"]
 
+    # list some recent invites for admin convenience
+    invites = query_all(
+        """
+        SELECT i.*, u.username AS owner_username
+        FROM invites i
+        LEFT JOIN users u ON u.id=i.owner_id
+        ORDER BY i.created_at DESC
+        LIMIT 50
+        """
+    )
+
     return render_template(
         "admin_dashboard.html",
         total_users=total_users,
         pending_deposits=pending_deposits,
         pending_withdrawals=pending_withdrawals,
+        invites=invites,
     )
 
 
@@ -1721,6 +1771,80 @@ def admin_manage_user(user_id):
         account=account,
         withdrawal_accounts=withdrawal_accounts,
     )
+
+
+# ============================================================
+# ADMIN: Approve Invite (credits invite owner)
+# ============================================================
+
+@app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
+def admin_approve_invite(token):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    conn = get_conn()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    try:
+        cur.execute(
+            """
+            SELECT * FROM invites WHERE token=%s FOR UPDATE
+            """,
+            (token,),
+        )
+        invite = cur.fetchone()
+        if not invite:
+            flash("Invite not found.", "error")
+            return redirect(url_for("admin_dashboard"))
+
+        if invite.get("approved"):
+            flash("Invite already approved.", "info")
+            return redirect(url_for("admin_dashboard"))
+
+        owner_id = invite["owner_id"]
+        amount = money(invite["amount"] or 0)
+
+        ensure_account(cur, owner_id, STARTING_DEPOSIT_BALANCE)
+
+        # credit referral_account
+        cur.execute(
+            """
+            UPDATE accounts
+            SET referral_account=COALESCE(referral_account,0)+%s
+            WHERE user_id=%s
+            """,
+            (amount, owner_id),
+        )
+
+        # mark invite approved
+        cur.execute("UPDATE invites SET approved=TRUE WHERE id=%s", (invite["id"],))
+
+        # record transaction
+        cur.execute(
+            """
+            INSERT INTO transactions (
+                user_id, transaction_type, amount, status, reference, description
+            )
+            VALUES (%s,'invite_credit',%s,'successful',%s,%s)
+            """,
+            (
+                owner_id,
+                amount,
+                generate_reference("INV"),
+                f"Admin approved invite {token}",
+            ),
+        )
+
+        conn.commit()
+        flash(f"Invite approved and GHS {amount:.2f} credited to user id {owner_id}.", "success")
+    except Exception:
+        conn.rollback()
+        app.logger.exception("APPROVE INVITE ERROR")
+        flash("Unable to approve invite.", "error")
+    finally:
+        cur.close()
+        conn.close()
+
+    return redirect(url_for("admin_dashboard"))
 
 
 # ============================================================
