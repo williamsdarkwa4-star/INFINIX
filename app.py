@@ -1127,13 +1127,11 @@ def register():
                     phone,
                     password_hash,
                     withdraw_password_hash,
-                    password,
-                    withdraw_password,
                     referral_code,
                     referred_by
                 )
                 VALUES (
-                    %s,%s,%s,%s,%s,%s,%s,%s,%s
+                    %s,%s,%s,%s,%s,%s,%s,%s
                 )
                 RETURNING id
                 """,
