@@ -1,130 +1,764 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Confirm Plan</title><style>
+
+<title>Confirm Plan - Zenith Capital</title>
+
+<!-- Font Awesome -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
+
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:system-ui,-apple-system,Arial,sans-serif;
 }
 
 body{
-    margin:0;
+    background:#f1f4fa;
+    color:#334155;
     min-height:100vh;
+    padding-bottom:85px;
+    -webkit-tap-highlight-color:transparent;
+
+    display:flex;
+    justify-content:center;
+}
+
+
+/* =========================
+   PHONE CONTAINER
+========================= */
+
+.phone{
+    width:100%;
+    max-width:440px;
+    min-height:100vh;
+    background:#f1f4fa;
+    position:relative;
+    padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    width:100%;
+    background:#0b1c4d;
+    color:white;
+
+    padding:17px 20px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    background:linear-gradient(135deg,#0f172a,#2563eb);
-    padding:20px;
+
+    position:relative;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.10);
 }
+
+.header h1{
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+
+.back-btn{
+    position:absolute;
+    left:18px;
+    top:50%;
+    transform:translateY(-50%);
+
+    color:white;
+    text-decoration:none;
+
+    font-size:18px;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    padding:16px;
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
 
 .card{
-    width:100%;
-    max-width:400px;
     background:white;
-    padding:28px;
-    border-radius:24px;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    border-radius:22px;
+    padding:20px;
+
+    border:1px solid #edf0f5;
+
+    box-shadow:
+        0 7px 22px rgba(15,23,42,.07);
 }
 
-h2{
+
+/* =========================
+   PLAN ICON
+========================= */
+
+.plan-icon{
+    width:62px;
+    height:62px;
+
+    margin:2px auto 12px;
+
+    border-radius:18px;
+
+    background:#eef2ff;
+    color:#0b1c4d;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:25px;
+
+    box-shadow:
+        0 5px 14px rgba(11,28,77,.08);
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.title{
     text-align:center;
-    color:#0f172a;
     margin-bottom:20px;
 }
 
+.title h2{
+    color:#0f172a;
+    font-size:21px;
+    font-weight:800;
+}
+
+.title p{
+    color:#64748b;
+    font-size:12px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+
+/* =========================
+   PLAN INFO
+========================= */
+
 .info{
     background:#f8fafc;
-    padding:18px;
-    border-radius:16px;
+    border:1px solid #edf0f5;
+
+    border-radius:15px;
+
+    padding:14px;
 }
+
+
+/* =========================
+   ROW
+========================= */
 
 .row{
     display:flex;
     justify-content:space-between;
-    margin:12px 0;
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #e8edf3;
+
+    font-size:13px;
 }
+
+.row:first-child{
+    padding-top:2px;
+}
+
+.row:last-child{
+    border-bottom:none;
+    padding-bottom:2px;
+}
+
+.row span{
+    color:#64748b;
+}
+
+.row strong{
+    color:#334155;
+    text-align:right;
+    word-break:break-word;
+}
+
+
+/* =========================
+   PRICE
+========================= */
 
 .price{
-    color:#2563eb;
-    font-weight:bold;
+    color:#0b1c4d !important;
+    font-size:15px;
 }
+
+
+/* =========================
+   BALANCE
+========================= */
+
+.balance-value{
+    color:#0b1c4d !important;
+}
+
+
+/* =========================
+   WARNING
+========================= */
 
 .warning{
-    margin-top:18px;
-    padding:14px;
+    margin-top:15px;
+
     background:#fff7ed;
+
+    border:1px solid #fed7aa;
+    border-left:4px solid #f97316;
+
     color:#9a3412;
+
+    padding:13px;
+
     border-radius:12px;
-    font-size:14px;
+
+    font-size:12px;
+    line-height:1.55;
 }
 
-button{
-    width:100%;
-    border:0;
-    padding:15px;
-    margin-top:20px;
-    border-radius:12px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
+.warning-title{
+    font-weight:800;
+    margin-bottom:4px;
+
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
+
+
+/* =========================
+   CONFIRM BUTTON
+========================= */
+
+.confirm-btn{
+    width:100%;
+
+    border:none;
+
+    padding:15px;
+
+    margin-top:18px;
+
+    border-radius:13px;
+
+    background:#0b1c4d;
+
+    color:white;
+
+    font-size:14px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 14px rgba(11,28,77,.18);
+
+    transition:.15s;
+}
+
+.confirm-btn:active{
+    transform:scale(.99);
+}
+
+
+/* =========================
+   CANCEL
+========================= */
 
 .cancel{
-    display:block;
-    text-align:center;
-    margin-top:15px;
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:7px;
+
+    margin-top:12px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    background:#f8fafc;
+
+    border:1px solid #e5e7eb;
+
     color:#64748b;
+
     text-decoration:none;
+
+    font-size:12px;
+    font-weight:700;
 }
-</style></head><body><div class="card"><h2>Confirm Selection</h2>
 
-<div class="info">
+.cancel:active{
+    background:#f1f5f9;
+}
 
-    <div class="row">
-        <span>Plan</span>
-        <strong>{{ plan.plan_name }}</strong>
-    </div>
 
-    <div class="row">
-        <span>Amount</span>
-        <strong class="price">
-            GHS {{ "%.2f"|format(plan.investment_amount) }}
-        </strong>
-    </div>
+/* =========================
+   FIXED BOTTOM NAVIGATION
+========================= */
 
-    <div class="row">
-        <span>Available balance</span>
-        <strong>
-            GHS {{ "%.2f"|format(account.deposit_account) }}
-        </strong>
-    </div>
+.bottom-nav{
 
-    <div class="row">
-        <span>Duration</span>
-        <strong>{{ plan.duration }} days</strong>
-    </div>
+    position:fixed;
+
+    bottom:0;
+    left:0;
+    right:0;
+
+    height:67px;
+
+    background:white;
+
+    border-top:1px solid #e2e8f0;
+
+    display:flex;
+    justify-content:center;
+
+    z-index:9999;
+
+    box-shadow:
+        0 -4px 14px rgba(0,0,0,.05);
+}
+
+.bottom-nav-inner{
+
+    width:100%;
+    max-width:440px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    align-items:center;
+}
+
+.bottom-nav a{
+
+    height:100%;
+
+    position:relative;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:4px;
+
+    text-decoration:none;
+
+    color:#94a3b8;
+
+    font-size:9px;
+    font-weight:500;
+}
+
+.bottom-nav i{
+    font-size:18px;
+}
+
+.bottom-nav a.active{
+
+    color:#0b1c4d;
+
+    font-weight:800;
+}
+
+.bottom-nav a.active::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:25%;
+    right:25%;
+
+    height:3px;
+
+    background:#0b1c4d;
+
+    border-radius:
+        4px 4px 0 0;
+}
+
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+    .content{
+        padding:12px;
+    }
+
+    .card{
+        padding:17px;
+        border-radius:19px;
+    }
+
+    .title h2{
+        font-size:19px;
+    }
+
+    .row{
+        font-size:12px;
+    }
+
+    .bottom-nav{
+        height:64px;
+    }
+
+    .bottom-nav i{
+        font-size:16px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="phone">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="header">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+
+        <h1>
+            Confirm Plan
+        </h1>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENT
+    ========================= -->
+
+    <main class="content">
+
+
+        <div class="card">
+
+
+            <!-- PLAN ICON -->
+
+            <div class="plan-icon">
+
+                <i class="fa-solid fa-box"></i>
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <div class="title">
+
+                <h2>
+                    Confirm Selection
+                </h2>
+
+                <p>
+                    Review your plan details before confirming.
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 PLAN INFORMATION
+            ========================= -->
+
+            <div class="info">
+
+
+                <div class="row">
+
+                    <span>
+                        Plan
+                    </span>
+
+                    <strong>
+                        {{ plan.plan_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Plan Amount
+                    </span>
+
+                    <strong class="price">
+
+                        GHS
+                        {{ "%.2f"|format(plan.investment_amount) }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Available Balance
+                    </span>
+
+                    <strong class="balance-value">
+
+                        GHS
+                        {{ "%.2f"|format(account.deposit_account) }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Duration
+                    </span>
+
+                    <strong>
+                        {{ plan.duration }} days
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 WARNING
+            ========================= -->
+
+            <div class="warning">
+
+                <div class="warning-title">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <span>
+                        Please Review
+                    </span>
+
+                </div>
+
+                Please review the plan name, amount,
+                available balance and duration before
+                confirming this demo plan selection.
+
+            </div>
+
+
+            <!-- =========================
+                 CONFIRM FORM
+            ========================= -->
+
+            <form
+                method="POST"
+                action="{{ url_for('confirm_buy_plan', plan_id=plan.id) }}"
+            >
+
+                <button
+                    type="submit"
+                    class="confirm-btn"
+                >
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Confirm Selection
+
+                </button>
+
+            </form>
+
+
+            <!-- =========================
+                 CANCEL
+            ========================= -->
+
+            <a
+                class="cancel"
+                href="{{ url_for('dashboard') }}"
+            >
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Cancel
+
+            </a>
+
+
+        </div>
+
+
+    </main>
+
 
 </div>
 
-<div class="warning">
-    Please review the details before confirming this demo plan selection.
-</div>
 
-<form method="POST"
-      action="{{ url_for('confirm_buy_plan', plan_id=plan.id) }}">
+<!-- =========================
+     FIXED BOTTOM NAVIGATION
+========================= -->
 
-    <button type="submit">
-        Confirm Selection
-    </button>
+<nav class="bottom-nav">
 
-</form>
+    <div class="bottom-nav-inner">
 
-<a class="cancel"
-   href="{{ url_for('dashboard') }}">
-    Cancel
-</a>
 
-</div></body>
+        <!-- HOME -->
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="active"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <!-- INCOME -->
+
+        <a
+            href="{{ url_for('my_plan') }}"
+        >
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <!-- TEAM -->
+
+        <a
+            href="{{ url_for('team') }}"
+        >
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <!-- SHARE -->
+
+        <a
+            href="{{ url_for('team') }}"
+        >
+
+            <i class="fa-solid fa-share-nodes"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <!-- MY -->
+
+        <a
+            href="{{ url_for('profile') }}"
+        >
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
+
+
+    </div>
+
+</nav>
+
+
+</body>
+
 </html>
