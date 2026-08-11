@@ -8,18 +8,12 @@
 >
 
 <style>
-
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family:
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            Arial,
-            sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", Arial, sans-serif;
     }
 
     body {
@@ -27,18 +21,14 @@
         color: #334155;
         min-height: 100vh;
         padding-bottom: 85px;
-        -webkit-tap-highlight-color: transparent;
-
-        display: flex;
-        justify-content: center;
     }
 
     .phone {
         width: 100%;
         max-width: 440px;
         min-height: 100vh;
+        margin: auto;
         background: #f1f4fa;
-        position: relative;
     }
 
     /* HEADER */
@@ -47,16 +37,14 @@
         background: #0b1c4d;
         color: white;
         padding: 20px 18px;
-
-        box-shadow:
-            0 4px 12px rgba(0, 0, 0, .10);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .10);
     }
 
     .header-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 10px;
     }
 
     .header h1 {
@@ -73,10 +61,8 @@
     .status {
         background: #dcfce7;
         color: #15803d;
-
         padding: 6px 10px;
         border-radius: 20px;
-
         font-size: 9px;
         font-weight: 800;
     }
@@ -93,7 +79,6 @@
         padding: 11px 13px;
         border-radius: 10px;
         margin-bottom: 12px;
-
         font-size: 11px;
         font-weight: 700;
     }
@@ -119,7 +104,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         margin: 5px 2px 10px;
     }
 
@@ -141,14 +125,9 @@
         border-radius: 20px;
         padding: 18px;
         margin-bottom: 18px;
-
         border: 1px solid #edf0f5;
-
-        box-shadow:
-            0 7px 22px rgba(15, 23, 42, .07);
+        box-shadow: 0 7px 22px rgba(15, 23, 42, .07);
     }
-
-    /* PLAN HEADER */
 
     .plan-header {
         display: flex;
@@ -160,18 +139,13 @@
     .plan-icon {
         width: 55px;
         height: 55px;
-
         flex-shrink: 0;
-
         border-radius: 15px;
-
         background: #eef2ff;
         color: #0b1c4d;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 22px;
     }
 
@@ -183,7 +157,6 @@
         color: #0f172a;
         font-size: 18px;
         font-weight: 800;
-
         word-break: break-word;
     }
 
@@ -199,52 +172,22 @@
         display: flex;
         align-items: center;
         gap: 7px;
-
         background: #f0fdf4;
         border: 1px solid #bbf7d0;
-
         color: #15803d;
-
         padding: 9px 11px;
         border-radius: 10px;
-
         font-size: 11px;
         font-weight: 700;
-
         margin-bottom: 14px;
     }
 
     .dot {
         width: 7px;
         height: 7px;
-
         background: #22c55e;
-
         border-radius: 50%;
-
-        box-shadow:
-            0 0 0 4px rgba(34, 197, 94, .10);
-    }
-
-    /* ENDED */
-
-    .ended {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-
-        background: #fff7ed;
-        border: 1px solid #fed7aa;
-
-        color: #c2410c;
-
-        padding: 9px 11px;
-        border-radius: 10px;
-
-        font-size: 11px;
-        font-weight: 700;
-
-        margin-bottom: 14px;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, .10);
     }
 
     /* COUNTDOWN */
@@ -252,33 +195,24 @@
     .countdown-box {
         background: #0b1c4d;
         color: white;
-
         border-radius: 15px;
-
-        padding: 17px 12px;
-
+        padding: 18px 12px;
         text-align: center;
-
         margin-bottom: 14px;
     }
 
     .countdown-label {
         color: #cbd5e1;
-
         font-size: 10px;
         font-weight: 700;
-
-        letter-spacing: .5px;
+        letter-spacing: .6px;
     }
 
     .countdown {
-        margin-top: 5px;
-
+        margin-top: 7px;
         font-size: 32px;
         font-weight: 900;
-
         letter-spacing: 2px;
-
         font-variant-numeric: tabular-nums;
     }
 
@@ -288,45 +222,52 @@
 
     .countdown-sub {
         margin-top: 6px;
-
         color: #94a3b8;
-
         font-size: 9px;
+    }
+
+    /* CLAIM BUTTON */
+
+    .claim-button {
+        width: 100%;
+        border: none;
+        background: #0b1c4d;
+        color: white;
+        padding: 13px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .claim-button.disabled {
+        background: #cbd5e1;
+        color: #64748b;
     }
 
     /* DETAILS */
 
     .details {
         display: grid;
-
         grid-template-columns: 1fr 1fr;
-
         gap: 8px;
     }
 
     .detail {
         background: #f8fafc;
-
         border: 1px solid #edf0f5;
-
         border-radius: 11px;
-
         padding: 11px;
     }
 
     .detail span {
         display: block;
-
         color: #64748b;
-
         font-size: 10px;
-
         margin-bottom: 5px;
     }
 
     .detail strong {
         color: #0f172a;
-
         font-size: 13px;
     }
 
@@ -334,21 +275,13 @@
 
     .income-box {
         margin-top: 9px;
-
         background: #eef2ff;
-
         border: 1px solid #dbeafe;
-
         border-radius: 11px;
-
         padding: 12px;
-
         display: flex;
-
         justify-content: space-between;
-
         align-items: center;
-
         gap: 10px;
     }
 
@@ -362,116 +295,64 @@
         font-size: 15px;
     }
 
-    /* CLAIM */
-
-    .claim-form {
-        margin-top: 10px;
-    }
-
-    .claim-button {
-        width: 100%;
-
-        border: none;
-
-        background: #0b1c4d;
-        color: white;
-
-        padding: 13px;
-
-        border-radius: 10px;
-
-        font-size: 11px;
-        font-weight: 800;
-
-        cursor: pointer;
-    }
-
-    .claim-button:disabled {
-        background: #cbd5e1;
-        color: #64748b;
-        cursor: not-allowed;
-    }
-
     /* AVAILABLE PLANS */
 
     .available-plan {
         background: white;
-
         border: 1px solid #edf0f5;
-
         border-radius: 16px;
-
         padding: 15px;
-
         margin-bottom: 9px;
-
-        box-shadow:
-            0 3px 10px rgba(15, 23, 42, .035);
+        box-shadow: 0 3px 10px rgba(15, 23, 42, .035);
     }
 
     .available-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-
         gap: 10px;
-
         margin-bottom: 12px;
     }
 
     .available-name {
         display: flex;
         align-items: center;
-
         gap: 9px;
-
         min-width: 0;
     }
 
     .available-icon {
         width: 38px;
         height: 38px;
-
         flex-shrink: 0;
-
         border-radius: 11px;
-
         background: #eef2ff;
         color: #0b1c4d;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 15px;
     }
 
     .available-name h3 {
         color: #0f172a;
-
         font-size: 14px;
         font-weight: 800;
-
         word-break: break-word;
     }
 
     .available-name p {
         color: #94a3b8;
-
         font-size: 9px;
-
         margin-top: 2px;
     }
 
     .plan-badge,
     .current-plan {
         padding: 5px 8px;
-
         border-radius: 15px;
-
         font-size: 8px;
         font-weight: 800;
-
         white-space: nowrap;
     }
 
@@ -487,64 +368,42 @@
 
     .available-details {
         display: grid;
-
         grid-template-columns: repeat(3, 1fr);
-
         gap: 6px;
-
         margin-bottom: 12px;
     }
 
     .available-detail {
         background: #f8fafc;
-
         border-radius: 9px;
-
         padding: 9px 6px;
-
         text-align: center;
     }
 
     .available-detail span {
         display: block;
-
         color: #94a3b8;
-
         font-size: 8px;
-
         margin-bottom: 4px;
     }
 
     .available-detail strong {
         color: #0b1c4d;
-
         font-size: 11px;
-
-        word-break: break-word;
     }
 
     .select-plan {
         width: 100%;
-
         display: flex;
-
         align-items: center;
         justify-content: center;
-
         gap: 7px;
-
         padding: 11px;
-
         border-radius: 10px;
-
         background: #0b1c4d;
-
         color: white;
-
         text-decoration: none;
-
         font-size: 11px;
-
         font-weight: 800;
     }
 
@@ -552,39 +411,30 @@
 
     .empty {
         text-align: center;
-
         padding: 25px 15px;
-
         color: #64748b;
     }
 
     .empty-icon {
         width: 55px;
         height: 55px;
-
         margin: 0 auto 10px;
-
         border-radius: 15px;
-
         background: #eef2ff;
         color: #0b1c4d;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 23px;
     }
 
     .empty h2 {
         color: #0f172a;
-
         font-size: 17px;
     }
 
     .empty p {
         margin-top: 5px;
-
         font-size: 11px;
     }
 
@@ -592,28 +442,19 @@
 
     .info {
         background: white;
-
         border: 1px solid #edf0f5;
-
         border-radius: 16px;
-
         padding: 15px;
-
         margin-top: 15px;
     }
 
     .info-title {
         display: flex;
-
         align-items: center;
-
         gap: 8px;
-
         color: #0f172a;
-
         font-size: 13px;
         font-weight: 800;
-
         margin-bottom: 7px;
     }
 
@@ -623,9 +464,7 @@
 
     .info p {
         color: #64748b;
-
         font-size: 11px;
-
         line-height: 1.55;
     }
 
@@ -633,56 +472,36 @@
 
     .bottom-nav {
         position: fixed;
-
         bottom: 0;
         left: 0;
         right: 0;
-
         height: 67px;
-
         background: white;
-
         border-top: 1px solid #e2e8f0;
-
         display: flex;
-
         justify-content: center;
-
         z-index: 9999;
-
-        box-shadow:
-            0 -4px 14px rgba(0, 0, 0, .05);
+        box-shadow: 0 -4px 14px rgba(0, 0, 0, .05);
     }
 
     .bottom-nav-inner {
         width: 100%;
         max-width: 440px;
-
         display: grid;
-
         grid-template-columns: repeat(5, 1fr);
-
         align-items: center;
     }
 
     .bottom-nav a {
         height: 100%;
-
         position: relative;
-
         display: flex;
-
         flex-direction: column;
-
         align-items: center;
         justify-content: center;
-
         gap: 4px;
-
         text-decoration: none;
-
         color: #94a3b8;
-
         font-size: 9px;
     }
 
@@ -697,25 +516,16 @@
 
     .bottom-nav a.active::after {
         content: "";
-
         position: absolute;
-
         bottom: 0;
-
         left: 25%;
         right: 25%;
-
         height: 3px;
-
         background: #0b1c4d;
-
         border-radius: 4px 4px 0 0;
     }
 
-    /* MOBILE */
-
     @media (max-width: 360px) {
-
         .content {
             padding: 12px;
         }
@@ -735,41 +545,25 @@
         .available-detail {
             padding: 8px 4px;
         }
-
-        .bottom-nav {
-            height: 64px;
-        }
-
-        .bottom-nav i {
-            font-size: 16px;
-        }
-
     }
-
 </style>
 
-</head><body><div class="phone"><!-- HEADER -->
-
-<header class="header">
+</head><body><div class="phone"><header class="header">
 
     <div class="header-top">
 
         <div>
-
             <h1>My Income</h1>
 
             <p>
                 Manage your active plan and income
             </p>
-
         </div>
 
         {% if user_plan %}
-
             <div class="status">
                 ACTIVE
             </div>
-
         {% endif %}
 
     </div>
@@ -777,10 +571,7 @@
 </header>
 
 
-<!-- MAIN -->
-
 <main class="content">
-
 
     <!-- FLASH MESSAGES -->
 
@@ -805,16 +596,10 @@
 
     <div class="section-title">
 
-        <h2>
-            My Active Plan
-        </h2>
+        <h2>My Active Plan</h2>
 
         {% if user_plan %}
-
-            <span>
-                Currently running
-            </span>
-
+            <span>Currently running</span>
         {% endif %}
 
     </div>
@@ -823,7 +608,6 @@
     {% if user_plan %}
 
     <div class="plan-card">
-
 
         <div class="plan-header">
 
@@ -846,78 +630,51 @@
         </div>
 
 
-        {% if cycle_ended %}
+        <div class="running">
 
-            <div class="ended">
+            <span class="dot"></span>
 
-                <i class="fa-solid fa-circle-check"></i>
+            Plan Running
 
-                Plan Cycle Completed
-
-            </div>
-
-        {% else %}
-
-            <div class="running">
-
-                <span class="dot"></span>
-
-                Plan Running
-
-            </div>
-
-        {% endif %}
+        </div>
 
 
         <!-- COUNTDOWN -->
 
-        {% if not cycle_ended %}
+        <div class="countdown-box">
 
-            <div class="countdown-box">
-
-                <div class="countdown-label">
-                    NEXT INCOME IN
-                </div>
-
-                <div
-                    class="countdown"
-                    id="countdown"
-                >
-
-                    {% if can_claim %}
-                        00:00:00
-                    {% else %}
-                        24:00:00
-                    {% endif %}
-
-                </div>
-
-                <div
-                    class="countdown-sub"
-                    id="countdownSub"
-                >
-
-                    {% if can_claim %}
-
-                        Your income is ready to claim
-
-                    {% else %}
-
-                        Time remaining until your next claim
-
-                    {% endif %}
-
-                </div>
-
+            <div class="countdown-label">
+                NEXT INCOME IN
             </div>
 
-        {% endif %}
+            <div
+                id="countdown"
+                class="countdown"
+            >
+                {% if can_claim %}
+                    00:00:00
+                {% else %}
+                    --:--:--
+                {% endif %}
+            </div>
+
+            <div
+                id="countdownSub"
+                class="countdown-sub"
+            >
+                {% if can_claim %}
+                    Income is ready
+                {% else %}
+                    Calculating next income...
+                {% endif %}
+            </div>
+
+        </div>
 
 
         <!-- PLAN DETAILS -->
 
         <div class="details">
-
 
             <div class="detail">
 
@@ -926,9 +683,8 @@
                 </span>
 
                 <strong>
-                    GHS
-                    {{ "%.2f"|format(
-                        user_plan.investment_amount
+                    GHS {{ "%.2f"|format(
+                        user_plan.investment_amount|float
                     ) }}
                 </strong>
 
@@ -942,9 +698,8 @@
                 </span>
 
                 <strong>
-                    GHS
-                    {{ "%.2f"|format(
-                        user_plan.daily_income
+                    GHS {{ "%.2f"|format(
+                        user_plan.daily_income|float
                     ) }}
                 </strong>
 
@@ -971,22 +726,15 @@
                 </span>
 
                 <strong>
-
-                    {% if cycle_ended %}
-                        Completed
-                    {% else %}
-                        Active
-                    {% endif %}
-
+                    Active
                 </strong>
 
             </div>
 
-
         </div>
 
 
-        <!-- EXPECTED INCOME -->
+        <!-- DAILY INCOME -->
 
         <div class="income-box">
 
@@ -995,70 +743,47 @@
             </span>
 
             <strong>
-                GHS
-                {{ "%.2f"|format(
-                    user_plan.daily_income
+                GHS {{ "%.2f"|format(
+                    user_plan.daily_income|float
                 ) }}
             </strong>
 
         </div>
 
 
-        <!-- CLAIM BUTTON -->
+        <!-- CLAIM STATUS -->
 
-        {% if not cycle_ended %}
+        <div
+            id="claimButton"
+            class="claim-button {% if not can_claim %}disabled{% endif %}"
+            style="margin-top:10px;"
+        >
 
-            <form
-                method="POST"
-                action="{{ url_for('my_plan') }}"
-                class="claim-form"
-            >
+            {% if can_claim %}
 
-                <button
-                    type="submit"
-                    class="claim-button"
-                    id="claimButton"
+                <i class="fa-solid fa-coins"></i>
+                Income Ready
 
-                    {% if not can_claim %}
-                        disabled
-                    {% endif %}
-                >
+            {% else %}
 
-                    {% if can_claim %}
+                <i class="fa-solid fa-clock"></i>
+                Income Not Ready
 
-                        <i class="fa-solid fa-coins"></i>
-                        Claim Income
+            {% endif %}
 
-                    {% else %}
-
-                        <i class="fa-solid fa-clock"></i>
-                        Income Not Ready
-
-                    {% endif %}
-
-                </button>
-
-            </form>
-
-        {% endif %}
-
+        </div>
 
     </div>
 
 
     {% else %}
 
-
-    <!-- NO ACTIVE PLAN -->
-
     <div class="plan-card">
 
         <div class="empty">
 
             <div class="empty-icon">
-
                 <i class="fa-solid fa-box-open"></i>
-
             </div>
 
             <h2>
@@ -1097,16 +822,12 @@
 
             <div class="available-plan">
 
-
                 <div class="available-top">
-
 
                     <div class="available-name">
 
                         <div class="available-icon">
-
                             <i class="fa-solid fa-box"></i>
-
                         </div>
 
                         <div>
@@ -1125,8 +846,7 @@
 
 
                     {% if user_plan and
-                          user_plan.plan_name ==
-                          plan.plan_name %}
+                          user_plan.plan_name == plan.plan_name %}
 
                         <span class="current-plan">
                             CURRENT
@@ -1140,12 +860,10 @@
 
                     {% endif %}
 
-
                 </div>
 
 
                 <div class="available-details">
-
 
                     <div class="available-detail">
 
@@ -1154,12 +872,9 @@
                         </span>
 
                         <strong>
-
-                            GHS
-                            {{ "%.2f"|format(
-                                plan.investment_amount
+                            GHS {{ "%.2f"|format(
+                                plan.investment_amount|float
                             ) }}
-
                         </strong>
 
                     </div>
@@ -1172,12 +887,9 @@
                         </span>
 
                         <strong>
-
-                            GHS
-                            {{ "%.2f"|format(
-                                plan.daily_income
+                            GHS {{ "%.2f"|format(
+                                plan.daily_income|float
                             ) }}
-
                         </strong>
 
                     </div>
@@ -1190,21 +902,16 @@
                         </span>
 
                         <strong>
-
-                            {{ plan.duration }}
-                            Days
-
+                            {{ plan.duration }} Days
                         </strong>
 
                     </div>
-
 
                 </div>
 
 
                 {% if not user_plan or
-                      user_plan.plan_name !=
-                      plan.plan_name %}
+                      user_plan.plan_name != plan.plan_name %}
 
                     <a
                         href="{{ url_for(
@@ -1222,23 +929,18 @@
 
                 {% endif %}
 
-
             </div>
 
         {% endfor %}
 
-
     {% else %}
-
 
         <div class="available-plan">
 
             <div class="empty">
 
                 <div class="empty-icon">
-
                     <i class="fa-solid fa-box-open"></i>
-
                 </div>
 
                 <h2>
@@ -1252,7 +954,6 @@
             </div>
 
         </div>
-
 
     {% endif %}
 
@@ -1272,21 +973,16 @@
         </div>
 
         <p>
-
-            Income availability is controlled by
-            the server. After a successful claim,
-            the next income becomes available after
-            the required 24-hour interval.
-
+            The countdown is based on the next income
+            time supplied by the server. Refreshing
+            the page does not reset the countdown.
         </p>
 
     </div>
 
-
 </main>
 
-</div><!-- BOTTOM NAV --><nav class="bottom-nav"><div class="bottom-nav-inner">
-
+</div><!-- BOTTOM NAVIGATION --><nav class="bottom-nav"><div class="bottom-nav-inner">
 
     <a href="{{ url_for('dashboard') }}">
 
@@ -1345,12 +1041,11 @@
 
     </a>
 
-
 </div>
 
-</nav><!-- COUNTDOWN --><script>
+</nav><!-- COUNTDOWN SCRIPT --><script>
 
-    const countdownElement =
+    const countdown =
         document.getElementById("countdown");
 
     const countdownSub =
@@ -1360,33 +1055,41 @@
         document.getElementById("claimButton");
 
 
+    /*
+     * Flask must provide next_income_at.
+     *
+     * Example:
+     *
+     * 2026-08-12T09:30:00+00:00
+     */
+
     {% if next_income_at %}
 
-        const nextIncomeTimestamp =
+        const nextIncome =
             new Date(
                 "{{ next_income_at.isoformat() }}"
             ).getTime();
 
     {% else %}
 
-        const nextIncomeTimestamp = null;
+        const nextIncome = null;
 
     {% endif %}
 
 
-    function formatTime(milliseconds) {
+    function formatCountdown(ms) {
 
-        let totalSeconds =
-            Math.max(
-                0,
-                Math.floor(milliseconds / 1000)
-            );
+        if (ms <= 0) {
+            return "00:00:00";
+        }
+
+
+        const totalSeconds =
+            Math.floor(ms / 1000);
 
 
         const hours =
-            Math.floor(
-                totalSeconds / 3600
-            );
+            Math.floor(totalSeconds / 3600);
 
 
         const minutes =
@@ -1402,45 +1105,45 @@
         return (
             String(hours).padStart(2, "0")
             + ":"
-            +
-            String(minutes).padStart(2, "0")
+            + String(minutes).padStart(2, "0")
             + ":"
-            +
-            String(seconds).padStart(2, "0")
+            + String(seconds).padStart(2, "0")
         );
     }
 
 
     function updateCountdown() {
 
-        if (!countdownElement) {
+        if (!countdown) {
             return;
         }
 
 
+        /*
+         * If the server says income is already
+         * available, show READY.
+         */
+
         {% if can_claim %}
 
-            countdownElement.textContent =
+            countdown.textContent =
                 "00:00:00";
 
-            countdownElement.classList.add(
-                "ready"
-            );
+            countdown.classList.add("ready");
 
             if (countdownSub) {
-
                 countdownSub.textContent =
-                    "Your income is ready to claim";
-
+                    "Your income is ready";
             }
 
             if (claimButton) {
 
-                claimButton.disabled = false;
+                claimButton.classList.remove(
+                    "disabled"
+                );
 
                 claimButton.innerHTML =
-                    '<i class="fa-solid fa-coins"></i> Claim Income';
-
+                    '<i class="fa-solid fa-coins"></i> Income Ready';
             }
 
             return;
@@ -1448,47 +1151,54 @@
         {% endif %}
 
 
-        if (!nextIncomeTimestamp) {
+        /*
+         * No timestamp was supplied.
+         */
 
-            countdownElement.textContent =
-                "24:00:00";
+        if (!nextIncome) {
+
+            countdown.textContent =
+                "--:--:--";
+
+            if (countdownSub) {
+                countdownSub.textContent =
+                    "Next income time unavailable";
+            }
 
             return;
         }
 
 
-        const now =
-            Date.now();
-
-
         const remaining =
-            nextIncomeTimestamp - now;
+            nextIncome - Date.now();
 
+
+        /*
+         * COUNTDOWN FINISHED
+         */
 
         if (remaining <= 0) {
 
-            countdownElement.textContent =
+            countdown.textContent =
                 "00:00:00";
 
-            countdownElement.classList.add(
-                "ready"
-            );
-
+            countdown.classList.add("ready");
 
             if (countdownSub) {
 
                 countdownSub.textContent =
-                    "Income is ready. Refresh the page to claim.";
+                    "Your income is ready";
 
             }
 
-
             if (claimButton) {
 
-                claimButton.disabled = false;
+                claimButton.classList.remove(
+                    "disabled"
+                );
 
                 claimButton.innerHTML =
-                    '<i class="fa-solid fa-coins"></i> Claim Income';
+                    '<i class="fa-solid fa-coins"></i> Income Ready';
 
             }
 
@@ -1496,26 +1206,32 @@
         }
 
 
-        countdownElement.classList.remove(
+        /*
+         * COUNTING DOWN
+         */
+
+        countdown.classList.remove(
             "ready"
         );
 
 
-        countdownElement.textContent =
-            formatTime(remaining);
+        countdown.textContent =
+            formatCountdown(remaining);
 
 
         if (countdownSub) {
 
             countdownSub.textContent =
-                "Time remaining until your next claim";
+                "Time remaining until your next income";
 
         }
 
 
         if (claimButton) {
 
-            claimButton.disabled = true;
+            claimButton.classList.add(
+                "disabled"
+            );
 
             claimButton.innerHTML =
                 '<i class="fa-solid fa-clock"></i> Income Not Ready';
@@ -1533,4 +1249,5 @@
         1000
     );
 
-</script></body></html>
+</script></body>
+</html>
