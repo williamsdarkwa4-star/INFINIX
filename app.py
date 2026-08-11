@@ -3585,10 +3585,10 @@ def profile():
 # ============================================================
 
 @app.route(
-    "/change_login_password",
+    "/admin_change_password",
     methods=["GET", "POST"]
 )
-def change_login_password():
+def admin_change_password():
 
     user = current_user()
 
@@ -3601,10 +3601,7 @@ def change_login_password():
 
     if request.method == "POST":
 
-        current_password = request.form.get(
-            "current_password",
-            ""
-        )
+        
 
         new_password = request.form.get(
             "new_password",
@@ -3656,7 +3653,7 @@ def change_login_password():
             )
 
             return render_template(
-                "change_login_password.html"
+                "admin_change_password.html"
             )
 
 
@@ -3729,10 +3726,10 @@ def change_login_password():
 # ============================================================
 
 @app.route(
-    "/change_withdraw_password",
+    "/admin_withdraw_password",
     methods=["GET", "POST"]
 )
-def change_withdraw_password():
+def admin_change_withdraw_password():
 
     user = current_user()
 
@@ -3745,8 +3742,7 @@ def change_withdraw_password():
 
     if request.method == "POST":
 
-        current_password = request.form.get(
-            "current_password",
+        
             ""
         )
 
@@ -3804,7 +3800,7 @@ def change_withdraw_password():
             )
 
 
-        if len(new_password) < 4:
+        if len(new_password) < 6:
 
             flash(
                 "New withdrawal password must contain at least 4 characters.",
