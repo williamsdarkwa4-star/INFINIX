@@ -596,7 +596,31 @@ def admin_deposit_image(deposit_id):
     if not deposit or not deposit.get("screenshot_data"):
         abort(404)
     return send_file(BytesIO(bytes(deposit["screenshot_data"])), mimetype=deposit.get("screenshot_mime") or "image/jpeg", as_attachment=False, download_name=f"deposit_{deposit_id}.jpg")
+@app.route("/uploads/deposits/<path:filename>")
+def uploaded_deposit_image(filename):
+    # Only admins can view uploaded deposit images via this path
+    if not admin_required():
+        return redirect(url_for("admin_login"))
 
+    deposit = query_one(
+        """
+        SELECT screenshot_data, screenshot_mime
+        FROM deposit_requests
+        WHERE screenshot = %s
+        ORDER BY id DESC
+        LIMIT 1
+        """,
+        (filename,),
+    )
+    if not deposit or not deposit.get("screenshot_data"):
+        abort(404)
+
+    return send_file(
+        BytesIO(bytes(deposit["screenshot_data"])),
+        mimetype=deposit.get("screenshot_mime") or "image/jpeg",
+        as_attachment=False,
+        download_name=filename,
+    )
 
 # ---------- Buy plan ----------
 @app.route("/buy_plan/<int:plan_id>")
