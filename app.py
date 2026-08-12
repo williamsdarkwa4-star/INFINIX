@@ -2,11 +2,12 @@
 """
 app.py - Rewritten for clarity and reliability
 
-- Preserves your original routes and template names.
-- Adds typed settings (pydantic), structured logging, and context-managed DB access.
-- my_plan route claims a single purchased plan when `user_plan_id` is posted (template sends this),
-  and falls back to claiming all ready plans if no id provided.
-- Keep dependencies: Flask, pydantic, psycopg2-binary (or psycopg2), python-dotenv.
+Changes made:
+- Robust handling of DB fetchone() results (dict-like or sequence) for INSERT ... RETURNING id.
+- Fixed register flow so users can register and then login.
+- Admin form action names aligned with templates (update_password, update_withdraw_password).
+- Removed success flash messages for admin actions and admin login; errors still flash.
+- Small defensive fixes around withdrawals and deposit id extraction.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal, InvalidOperation
 from io import BytesIO
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from flask import (
     Flask,
@@ -141,6 +142,33 @@ def generate_referral_code() -> str:
 
 def generate_reference(prefix: str) -> str:
     return f"{prefix}-{uuid.uuid4().hex[:12].upper()}"
+
+
+def fetch_id(row: Optional[Any], key: str = "id"):
+    """
+    Safely extract an 'id' (or other single value) from a DB cursor.fetchone() row.
+
+    - If row is None -> None
+    - If row is mapping/dict -> return row.get(key) or (if single-column mapping) the single value
+    - If row is sequence/tuple -> return row[0]
+    """
+    if row is None:
+        return None
+    try:
+        if isinstance(row, dict):
+            if key in row:
+                return row.get(key)
+            # fallback: if only one column present return it
+            if len(row) == 1:
+                return next(iter(row.values()))
+            return None
+        # sequence/tuple-like
+        if isinstance(row, (list, tuple, Sequence)):
+            return row[0]
+        # last-resort: try attribute access
+        return getattr(row, key, None)
+    except Exception:
+        return None
 
 
 # ============================================================
@@ -478,7 +506,11 @@ def index():
 # ---------------------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    invite_code = (request.args.get("ref", "").strip() or request.form.get("referred_by", "").strip() or request.form.get("referral_code", "").strip())
+    invite_code = (
+        request.args.get("ref", "").strip()
+        or request.form.get("referred_by", "").strip()
+        or request.form.get("referral_code", "").strip()
+    )
     referred_user = None
     if invite_code:
         referred_user = query_one("SELECT id, username, referral_code FROM users WHERE referral_code=%s", (invite_code,))
@@ -534,7 +566,15 @@ def register():
                         referred_user["referral_code"] if referred_user else None,
                     ),
                 )
-                new_user_id = cur.fetchone()[0]
+                row = cur.fetchone()
+                new_user_id = fetch_id(row, "id")
+                if not new_user_id:
+                    # Defensive: if DB didn't return id, try to find inserted user by phone/username
+                    logger.warning("INSERT returned no id when registering user; attempting lookup by phone/username.")
+                    maybe = query_one("SELECT id FROM users WHERE phone=%s OR username=%s ORDER BY id DESC LIMIT 1", (phone, username))
+                    new_user_id = fetch_id(maybe, "id")
+                    if not new_user_id:
+                        raise RuntimeError("Could not determine new user id after insert.")
                 cur.execute(
                     """
                     INSERT INTO accounts (
@@ -548,6 +588,7 @@ def register():
             flash("Unable to register at this time.", "error")
             return render_template("register.html", invite_code=invite_code)
 
+        # Keep user experience: after registering, redirect to login page
         flash("Registration successful. Please log in.", "success")
         return redirect(url_for("login"))
 
@@ -679,13 +720,14 @@ def confirm_buy_plan(plan_id: int):
             )
             new_plan = cur.fetchone()
             purchase_ref = generate_reference("PLAN")
+            new_plan_id = fetch_id(new_plan, "id")
             cur.execute(
                 """
                 INSERT INTO transactions (
                     user_id, transaction_type, amount, status, reference, description
                 ) VALUES (%s,'plan_purchase',%s,'successful',%s,%s)
                 """,
-                (user["id"], plan["investment"], purchase_ref, f"Plan purchase: {plan['name']} (plan record #{new_plan['id']})"),
+                (user["id"], plan["investment"], purchase_ref, f"Plan purchase: {plan['name']} (plan record #{new_plan_id})"),
             )
 
             # Referral bonuses (levels)
@@ -982,7 +1024,10 @@ def deposit():
                     """,
                     (user["id"], amount, payment_number, screenshot.filename, psycopg2.Binary(data) if psycopg2 else None, mime_type, reference),
                 )
-                dep_id = cur.fetchone()[0]
+                dep_row = cur.fetchone()
+                dep_id = fetch_id(dep_row, "id")
+                if not dep_id:
+                    logger.warning("Deposit insert returned no id; continuing but admin will need to inspect.")
                 cur.execute(
                     """
                     INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
@@ -1101,9 +1146,13 @@ def request_withdrawal():
                 raise ValueError("Insufficient withdrawal/referral balance.")
             from_withdraw = min(withdraw_balance, amount)
             from_referral = amount - from_withdraw
-            cur.execute("UPDATE accounts SET withdraw_account=COALESCE(withdraw_account,0)-%s, referral_account=COALESCE(referral_account,0)-%s WHERE user_id=%s", (from_withdraw, from_referral, user["id"]))
+            cur.execute(
+                "UPDATE accounts SET withdraw_account=COALESCE(withdraw_account,0)-%s, referral_account=COALESCE(referral_account,0)-%s WHERE user_id=%s",
+                (from_withdraw, from_referral, user["id"]),
+            )
             cur.execute("INSERT INTO withdrawal_requests (user_id, amount, account_id, status) VALUES (%s,%s,%s,'pending') RETURNING id", (user["id"], amount, selected["id"]))
-            withdrawal_id = cur.fetchone()["id"]
+            withdrawal_row = cur.fetchone()
+            withdrawal_id = fetch_id(withdrawal_row, "id")
             reference = generate_reference("WDR")
             cur.execute("INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description) VALUES (%s,'withdrawal',%s,'pending',%s,%s)", (user["id"], amount, reference, f"Demo withdrawal request #{withdrawal_id}"))
         flash("Withdrawal request submitted successfully.", "success")
@@ -1142,6 +1191,7 @@ def team():
 
     level2_users = []
     if level1_codes:
+        # psycopg2 RealDictCursor + ANY requires list to be passed as a python list/sequence
         level2_users = query_all("SELECT id, username, fullname, phone, referral_code, referred_by, created_at FROM users WHERE referred_by = ANY(%s) ORDER BY created_at DESC, id DESC", (level1_codes,))
 
     level2_codes = [m["referral_code"] for m in level2_users if m.get("referral_code")]
@@ -1296,7 +1346,9 @@ def admin_login():
             session.clear()
             session["admin_logged_in"] = True
             session["admin_id"] = admin["id"]
+            # Removed success flash for admin login per request.
             return redirect(url_for("admin_dashboard"))
+        # keep error feedback for bad credentials
         flash("Invalid administrator credentials.", "error")
     return render_template("admin_login.html")
 
@@ -1354,6 +1406,13 @@ def admin_manage_user(user_id: int):
 
     if request.method == "POST":
         action = request.form.get("action", "")
+        # Map template action names to existing operations
+        # Template uses 'update_password' and 'update_withdraw_password'
+        if action == "update_password":
+            action = "change_login_password"
+        if action == "update_withdraw_password":
+            action = "change_withdraw_password"
+
         balance_actions = {
             "add_deposit": "deposit_account",
             "deduct_deposit": "deposit_account",
@@ -1367,6 +1426,7 @@ def admin_manage_user(user_id: int):
         if action in balance_actions:
             amount = parse_amount(request.form.get("amount", "0"))
             if amount is None:
+                # keep error feedback
                 flash("Amount must be greater than zero.", "error")
                 return redirect(url_for("admin_manage_user", user_id=user_id))
             column = balance_actions[action]
@@ -1385,7 +1445,8 @@ def admin_manage_user(user_id: int):
                         """,
                         (user_id, amount, generate_reference("ADM"), "Admin adjustment: " + action),
                     )
-                flash("User balance updated successfully.", "success")
+                # Remove success flash for admin action per request; log instead
+                logger.info("Admin %s adjusted %s for user %s by %s", session.get("admin_id"), column, user_id, amount)
             except Exception:
                 logger.exception("ADMIN BALANCE ACTION FAILED")
                 flash("Unable to update balance.", "error")
@@ -1399,7 +1460,7 @@ def admin_manage_user(user_id: int):
                 new_hash = generate_password_hash(new_password)
                 execute("UPDATE users SET password_hash=%s, password=NULL WHERE id=%s", (new_hash, user_id))
                 logger.info("Admin %s set login password for user %s", session.get("admin_id"), user_id)
-                flash("Login password updated successfully.", "success")
+                # Removed flash success
             return redirect(url_for("admin_manage_user", user_id=user_id))
 
         if action == "change_withdraw_password":
@@ -1410,7 +1471,7 @@ def admin_manage_user(user_id: int):
                 new_hash = generate_password_hash(new_password)
                 execute("UPDATE users SET withdraw_password_hash=%s, withdraw_password=NULL WHERE id=%s", (new_hash, user_id))
                 logger.info("Admin %s set withdrawal password for user %s", session.get("admin_id"), user_id)
-                flash("Withdrawal password updated successfully.", "success")
+                # Removed flash success
             return redirect(url_for("admin_manage_user", user_id=user_id))
 
         if action == "update_account":
@@ -1422,12 +1483,14 @@ def admin_manage_user(user_id: int):
                 flash("Please complete all withdrawal account details.", "error")
             else:
                 execute("UPDATE withdrawal_accounts SET account_name=%s, phone=%s, network=%s WHERE id=%s AND user_id=%s", (account_name, phone, network, account_id, user_id))
-                flash("Withdrawal account updated successfully.", "success")
+                logger.info("Admin %s updated withdrawal account %s for user %s", session.get("admin_id"), account_id, user_id)
+                # Removed flash success
             return redirect(url_for("admin_manage_user", user_id=user_id))
 
         if action == "delete_account":
             execute("DELETE FROM withdrawal_accounts WHERE id=%s AND user_id=%s", (request.form.get("account_id"), user_id))
-            flash("Withdrawal account removed.", "success")
+            logger.info("Admin %s deleted withdrawal account %s for user %s", session.get("admin_id"), request.form.get("account_id"), user_id)
+            # Removed flash success
             return redirect(url_for("admin_manage_user", user_id=user_id))
 
         flash("Unknown admin action.", "error")
@@ -1498,7 +1561,8 @@ def admin_deposit_action(deposit_id: int, action: str):
                 cur.execute("UPDATE deposit_requests SET status='rejected' WHERE id=%s", (deposit_id,))
                 cur.execute("UPDATE transactions SET status='failed' WHERE user_id=%s AND transaction_type='deposit' AND reference=%s AND status='pending'", (user_id, reference))
                 message = f"Demo deposit of GHS {amount:.2f} rejected."
-        flash(message, "success")
+        # Do not flash success to admin UI; just log action
+        logger.info("Admin %s processed deposit %s: %s", session.get("admin_id"), deposit_id, message)
     except Exception:
         logger.exception("ADMIN DEPOSIT ACTION ERROR")
         flash("Unable to process the deposit.", "error")
@@ -1570,7 +1634,8 @@ def admin_withdraw_action(withdrawal_id: int, action: str):
                     (user_id, amount),
                 )
                 message = "Withdrawal rejected and balance restored."
-        flash(message, "success")
+        # Do not flash success to admin UI; log instead
+        logger.info("Admin %s processed withdrawal %s: %s", session.get("admin_id"), withdrawal_id, message)
     except Exception:
         logger.exception("ADMIN WITHDRAWAL ACTION ERROR")
         flash("Unable to process the withdrawal.", "error")
@@ -1589,7 +1654,7 @@ def admin_approve_invite(token: str):
                 flash("Invite not found.", "error")
                 return redirect(url_for("admin_dashboard"))
             if invite.get("approved"):
-                flash("Invite already approved.", "info")
+                # keep info feedback for admin if needed
                 return redirect(url_for("admin_dashboard"))
             owner_id = invite["owner_id"]
             amount = money(invite.get("amount") or 0)
@@ -1603,7 +1668,7 @@ def admin_approve_invite(token: str):
                 """,
                 (owner_id, amount, generate_reference("INV"), "Admin approved invite " + token),
             )
-        flash(f"Invite approved and GHS {amount:.2f} credited to user id {owner_id}.", "success")
+        logger.info("Admin %s approved invite %s for owner %s (amount %s)", session.get("admin_id"), token, owner_id, amount)
     except Exception:
         logger.exception("APPROVE INVITE ERROR")
         flash("Unable to approve invite.", "error")
