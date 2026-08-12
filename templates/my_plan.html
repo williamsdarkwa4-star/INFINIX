@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Income - Zenith Capital</title>
 
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    />
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
@@ -97,7 +97,10 @@
                 <p>Manage your active plan and income</p>
             </div>
 
-            {% if user_plan %}
+            {# Show ACTIVE if user has any purchased plans #}
+            {% if user_plans is defined and user_plans|length > 0 %}
+                <div class="status" aria-hidden="true">ACTIVE</div>
+            {% elif user_plan is defined and user_plan %}
                 <div class="status" aria-hidden="true">ACTIVE</div>
             {% endif %}
 
@@ -117,142 +120,120 @@
         {% endwith %}
 
         <div class="section-title">
-            <h2>My Active Plan</h2>
-            {% if user_plan %}
+            <h2>My Active Plans</h2>
+            {% if (user_plans is defined and user_plans|length > 0) or (user_plan is defined and user_plan) %}
                 <span>Currently running</span>
             {% endif %}
         </div>
 
-        {% if user_plan %}
-
-        <div class="plan-card">
-
-            <div class="plan-header">
-
-                <div class="plan-icon" aria-hidden="true">
-                    <i class="fa-solid fa-chart-line"></i>
-                </div>
-
-                <div class="plan-title">
-
-                    <h2>
-                        {{ user_plan.plan_name }}
-                    </h2>
-
-                    <p>
-                        Your active plan
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="running" aria-hidden="true">
-                <span class="dot" aria-hidden="true"></span>
-                Plan Running
-            </div>
-
-            <div class="countdown-box">
-
-                <div class="countdown-label">
-                    NEXT INCOME IN
-                </div>
-
-                <div id="countdown" class="countdown" aria-live="polite" aria-atomic="true" title="Time until next income">
-                    {% if can_claim %}
-                        00:00:00
-                    {% else %}
-                        --:--:--
-                    {% endif %}
-                </div>
-
-                <div id="countdownSub" class="countdown-sub" aria-live="polite" aria-atomic="true">
-                    {% if can_claim %}
-                        Income is ready
-                    {% else %}
-                        Calculating next income...
-                    {% endif %}
-                </div>
-
-            </div>
-
-            <div class="details">
-
-                <div class="detail">
-                    <span>Investment</span>
-                    <strong>
-                        GHS {{ "%.2f"|format(user_plan.investment_amount|float) }}
-                    </strong>
-                </div>
-
-                <div class="detail">
-                    <span>Daily Income</span>
-                    <strong>
-                        GHS {{ "%.2f"|format(user_plan.daily_income|float) }}
-                    </strong>
-                </div>
-
-                <div class="detail">
-                    <span>Duration</span>
-                    <strong>
-                        {{ user_plan.duration }} Days
-                    </strong>
-                </div>
-
-                <div class="detail">
-                    <span>Status</span>
-                    <strong>Active</strong>
-                </div>
-
-            </div>
-
-            <div class="income-box">
-                <span>Expected Daily Income</span>
-                <strong>
-                    GHS {{ "%.2f"|format(user_plan.daily_income|float) }}
-                </strong>
-            </div>
-
-            <!-- CLAIM FORM -->
-            <form method="POST" action="{{ url_for('my_plan') }}" class="claim-form" novalidate>
-                <button
-                    type="submit"
-                    id="claimButton"
-                    class="claim-button {% if not can_claim %}disabled{% endif %}"
-                    {% if not can_claim %}disabled aria-disabled="true"{% else %}aria-disabled="false"{% endif %}
-                >
-                    {% if can_claim %}
-                        <i class="fa-solid fa-coins" aria-hidden="true"></i>
-                        <span>Claim Income</span>
-                    {% else %}
-                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
-                        <span>Income Not Ready</span>
-                    {% endif %}
-                </button>
-            </form>
-
-        </div>
-
+        {# Prepare active_plans list (supports both user_plans list and single user_plan) #}
+        {% if user_plans is defined %}
+            {% set active_plans = user_plans %}
+        {% elif user_plan is defined and user_plan %}
+            {% set active_plans = [user_plan] %}
         {% else %}
+            {% set active_plans = [] %}
+        {% endif %}
 
-        <div class="plan-card">
+        {# Build a list of owned plan names to hide them from Available Plans #}
+        {% set owned_names = active_plans|map(attribute='plan_name')|list %}
 
-            <div class="empty">
+        {# Render one card per purchased plan #}
+        {% if active_plans %}
+            {% for p in active_plans %}
+                <div class="plan-card" data-plan-id="{{ p.id }}"
+                     data-next-income-ms="{% if p.next_income_at %}{{ (p.next_income_at.timestamp() * 1000)|int }}{% else %}null{% endif %}"
+                     data-can-claim="{{ 'true' if p.can_claim else 'false' }}">
+                    <div class="plan-header">
+                        <div class="plan-icon" aria-hidden="true">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
 
-                <div class="empty-icon" aria-hidden="true">
-                    <i class="fa-solid fa-box-open"></i>
+                        <div class="plan-title">
+                            <h2>{{ p.plan_name }}</h2>
+                            <p>Your active plan</p>
+                        </div>
+                    </div>
+
+                    <div class="running" aria-hidden="true">
+                        <span class="dot" aria-hidden="true"></span>
+                        Plan Running
+                    </div>
+
+                    <div class="countdown-box">
+                        <div class="countdown-label">NEXT INCOME IN</div>
+                        <div id="countdown-{{ p.id }}" class="countdown" aria-live="polite" aria-atomic="true" title="Time until next income">
+                            {% if p.can_claim %}
+                                00:00:00
+                            {% else %}
+                                --:--:--
+                            {% endif %}
+                        </div>
+                        <div id="countdownSub-{{ p.id }}" class="countdown-sub" aria-live="polite" aria-atomic="true">
+                            {% if p.can_claim %}
+                                Income is ready
+                            {% else %}
+                                Calculating next income...
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="details">
+                        <div class="detail">
+                            <span>Investment</span>
+                            <strong>GHS {{ "%.2f"|format(p.investment_amount|float) }}</strong>
+                        </div>
+
+                        <div class="detail">
+                            <span>Daily Income</span>
+                            <strong>GHS {{ "%.2f"|format(p.daily_income|float) }}</strong>
+                        </div>
+
+                        <div class="detail">
+                            <span>Duration</span>
+                            <strong>{{ p.duration }} Days</strong>
+                        </div>
+
+                        <div class="detail">
+                            <span>Status</span>
+                            <strong>Active</strong>
+                        </div>
+                    </div>
+
+                    <div class="income-box">
+                        <span>Expected Daily Income</span>
+                        <strong>GHS {{ "%.2f"|format(p.daily_income|float) }}</strong>
+                    </div>
+
+                    <!-- Claim specific plan (backend must accept plan_id param) -->
+                    <form method="POST" action="{{ url_for('claim_income', plan_id=p.id) }}" class="claim-form">
+                        <button
+                            type="submit"
+                            id="claimButton-{{ p.id }}"
+                            class="claim-button {% if not p.can_claim %}disabled{% endif %}"
+                            {% if not p.can_claim %}disabled aria-disabled="true"{% else %}aria-disabled="false"{% endif %}
+                        >
+                            {% if p.can_claim %}
+                                <i class="fa-solid fa-coins" aria-hidden="true"></i>
+                                <span>Claim Income</span>
+                            {% else %}
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                <span>Income Not Ready</span>
+                            {% endif %}
+                        </button>
+                    </form>
                 </div>
-
-                <h2>No Active Plan</h2>
-
-                <p>
-                    You currently don't have an active plan.
-                </p>
-
+            {% endfor %}
+        {% else %}
+            <div class="plan-card">
+                <div class="empty">
+                    <div class="empty-icon" aria-hidden="true">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h2>No Active Plans</h2>
+                    <p>You currently don't have an active plan. Choose from available plans below.</p>
+                </div>
             </div>
-
-        </div>
-
         {% endif %}
 
         <div class="section-title">
@@ -260,74 +241,68 @@
             <span>Choose a product</span>
         </div>
 
+        {# Show only plans that are NOT already owned #}
         {% if plans %}
-
+            {% set available_plans = [] %}
             {% for plan in plans %}
-
-            <div class="available-plan">
-
-                <div class="available-top">
-
-                    <div class="available-name">
-
-                        <div class="available-icon" aria-hidden="true">
-                            <i class="fa-solid fa-box"></i>
-                        </div>
-
-                        <div>
-
-                            <h3>
-                                {{ plan.plan_name }}
-                            </h3>
-
-                            <p>
-                                Zenith Capital Plan
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    {% if user_plan and user_plan.plan_name == plan.plan_name %}
-                        <span class="current-plan" aria-hidden="true">CURRENT</span>
-                    {% else %}
-                        <span class="plan-badge" aria-hidden="true">AVAILABLE</span>
-                    {% endif %}
-
-                </div>
-
-                <div class="available-details">
-
-                    <div class="available-detail">
-                        <span>Investment</span>
-                        <strong>GHS {{ "%.2f"|format(plan.investment_amount|float) }}</strong>
-                    </div>
-
-                    <div class="available-detail">
-                        <span>Daily Income</span>
-                        <strong>GHS {{ "%.2f"|format(plan.daily_income|float) }}</strong>
-                    </div>
-
-                    <div class="available-detail">
-                        <span>Duration</span>
-                        <strong>{{ plan.duration }} Days</strong>
-                    </div>
-
-                </div>
-
-                {% if not user_plan or user_plan.plan_name != plan.plan_name %}
-                    <a href="{{ url_for('buy_plan', plan_id=plan.id) }}" class="select-plan">
-                        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                        <span>View / Select Plan</span>
-                    </a>
+                {% if plan.plan_name not in owned_names %}
+                    {% do available_plans.append(plan) %}
                 {% endif %}
-
-            </div>
-
             {% endfor %}
 
-        {% else %}
+            {% if available_plans %}
+                {% for plan in available_plans %}
+                    <div class="available-plan">
+                        <div class="available-top">
+                            <div class="available-name">
+                                <div class="available-icon" aria-hidden="true">
+                                    <i class="fa-solid fa-box"></i>
+                                </div>
 
+                                <div>
+                                    <h3>{{ plan.plan_name }}</h3>
+                                    <p>Zenith Capital Plan</p>
+                                </div>
+                            </div>
+
+                            <span class="plan-badge" aria-hidden="true">AVAILABLE</span>
+                        </div>
+
+                        <div class="available-details">
+                            <div class="available-detail">
+                                <span>Investment</span>
+                                <strong>GHS {{ "%.2f"|format(plan.investment_amount|float) }}</strong>
+                            </div>
+
+                            <div class="available-detail">
+                                <span>Daily Income</span>
+                                <strong>GHS {{ "%.2f"|format(plan.daily_income|float) }}</strong>
+                            </div>
+
+                            <div class="available-detail">
+                                <span>Duration</span>
+                                <strong>{{ plan.duration }} Days</strong>
+                            </div>
+                        </div>
+
+                        <a href="{{ url_for('buy_plan', plan_id=plan.id) }}" class="select-plan">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            <span>View / Select Plan</span>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="available-plan">
+                    <div class="empty">
+                        <div class="empty-icon" aria-hidden="true">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h2>No Plans Available</h2>
+                        <p>You've already bought all available plans.</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
             <div class="available-plan">
                 <div class="empty">
                     <div class="empty-icon" aria-hidden="true">
@@ -337,7 +312,6 @@
                     <p>There are currently no plans available.</p>
                 </div>
             </div>
-
         {% endif %}
 
         <div class="info">
@@ -381,52 +355,34 @@
 </nav>
 
 <script>
-    (function () {
-        const countdownEl = document.getElementById("countdown");
-        const countdownSub = document.getElementById("countdownSub");
-        const claimButton = document.getElementById("claimButton");
-        const claimForm = document.querySelector(".claim-form");
+(function () {
+    // Optional server time to correct client clock
+    const SERVER_NOW_MS = {% if server_now is defined and server_now %}{{ (server_now.timestamp() * 1000)|int }}{% else %}null{% endif %};
 
-        // Timestamps are expected in milliseconds since epoch from server when available.
-        // Preferred: backend should pass `next_income_at_ts` and `server_now_ts` (ms ints).
-        // Fallback: parse ISO next_income_at string if numeric timestamps are not provided.
-        {% if next_income_at is defined and server_now is defined and next_income_at and server_now %}
-            const NEXT_INCOME_MS = {{ (next_income_at.timestamp() * 1000)|int }};
-            const SERVER_NOW_MS = {{ (server_now.timestamp() * 1000)|int }};
-        {% elif next_income_at is defined and next_income_at %}
-            // no server_now provided; fall back to ISO parse
-            try {
-                const parsed = new Date("{{ next_income_at.isoformat() }}");
-                const NEXT_INCOME_MS = isNaN(parsed.getTime()) ? null : parsed.getTime();
-                window.__NEXT_INCOME_MS__ = NEXT_INCOME_MS;
-            } catch (e) {
-                window.__NEXT_INCOME_MS__ = null;
-            }
-            const NEXT_INCOME_MS = window.__NEXT_INCOME_MS__ || null;
-            const SERVER_NOW_MS = null;
-        {% else %}
-            const NEXT_INCOME_MS = null;
-            const SERVER_NOW_MS = null;
-        {% endif %}
+    function pad2(n) { return String(n).padStart(2, "0"); }
+    function formatCountdown(ms) {
+        if (ms <= 0 || !isFinite(ms)) return "00:00:00";
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return pad2(hours) + ":" + pad2(minutes) + ":" + pad2(seconds);
+    }
 
-        // Server-provided boolean for immediate claim
-        const SERVER_CAN_CLAIM = {{ 'true' if can_claim else 'false' }};
+    function setupPlanCard(card) {
+        const planId = card.dataset.planId;
+        const nextIncomeRaw = card.dataset.nextIncomeMs;
+        const canClaimRaw = card.dataset.canClaim === 'true';
+        const nextIncomeMs = (nextIncomeRaw === 'null' || nextIncomeRaw === '' || typeof nextIncomeRaw === 'undefined') ? null : Number(nextIncomeRaw);
+        const serverNowMs = (SERVER_NOW_MS !== null) ? Number(SERVER_NOW_MS) : null;
 
-        // compute a client/server offset (serverNow - clientNow)
+        const countdownEl = document.getElementById('countdown-' + planId);
+        const countdownSub = document.getElementById('countdownSub-' + planId);
+        const claimButton = document.getElementById('claimButton-' + planId);
+        const claimForm = card.querySelector('.claim-form');
+
         const clientNowAtScript = Date.now();
-        const hasServerNow = typeof SERVER_NOW_MS !== 'undefined' && SERVER_NOW_MS !== null;
-        const clientServerOffset = hasServerNow ? (SERVER_NOW_MS - clientNowAtScript) : 0;
-
-        function pad2(n) { return String(n).padStart(2, "0"); }
-
-        function formatCountdown(ms) {
-            if (ms <= 0 || !isFinite(ms)) return "00:00:00";
-            const totalSeconds = Math.floor(ms / 1000);
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            return pad2(hours) + ":" + pad2(minutes) + ":" + pad2(seconds);
-        }
+        const clientServerOffset = (serverNowMs !== null && !isNaN(serverNowMs)) ? (serverNowMs - clientNowAtScript) : 0;
 
         function setReadyState() {
             if (!countdownEl) return;
@@ -455,34 +411,16 @@
         }
 
         function update() {
-            // If server explicitly says can_claim, show ready immediately
-            if (SERVER_CAN_CLAIM) {
-                setReadyState();
-                return;
-            }
-
-            if (typeof NEXT_INCOME_MS === 'undefined' || NEXT_INCOME_MS === null || !isFinite(NEXT_INCOME_MS)) {
-                setNotReadyState("Next income time unavailable");
-                return;
-            }
-
-            // Calculate remaining using offset
+            if (canClaimRaw) { setReadyState(); return; }
+            if (nextIncomeMs === null || isNaN(nextIncomeMs)) { setNotReadyState("Next income time unavailable"); return; }
             const nowCorrected = Date.now() + clientServerOffset;
-            const remaining = NEXT_INCOME_MS - nowCorrected;
-
-            if (remaining <= 0) {
-                setReadyState();
-                return;
-            }
-
-            // Normal running countdown
+            const remaining = nextIncomeMs - nowCorrected;
+            if (remaining <= 0) { setReadyState(); return; }
             if (countdownEl) {
                 countdownEl.textContent = formatCountdown(remaining);
                 countdownEl.classList.remove("ready");
             }
-            if (countdownSub) {
-                countdownSub.textContent = "Time remaining until your next income";
-            }
+            if (countdownSub) countdownSub.textContent = "Time remaining until your next income";
             if (claimButton) {
                 claimButton.disabled = true;
                 claimButton.classList.add("disabled");
@@ -491,22 +429,12 @@
             }
         }
 
-        // Initial update right away
         update();
-
-        // Update every second
         const intervalId = setInterval(update, 1000);
 
-        // Prevent double submit; show loading state on submit
         if (claimForm && claimButton) {
-            claimForm.addEventListener("submit", function (e) {
-                // If button is disabled, block the submit
-                if (claimButton.disabled) {
-                    e.preventDefault();
-                    return;
-                }
-
-                // Give immediate feedback while POSTing
+            claimForm.addEventListener('submit', function (e) {
+                if (claimButton.disabled) { e.preventDefault(); return; }
                 claimButton.disabled = true;
                 claimButton.classList.add("disabled");
                 claimButton.setAttribute("aria-disabled", "true");
@@ -514,13 +442,17 @@
             });
         }
 
-        // Clean up on unload (not strictly necessary, but tidy)
-        window.addEventListener("beforeunload", function () {
-            clearInterval(intervalId);
-        });
+        card._cleanup = function () { clearInterval(intervalId); };
+    }
 
-    })();
+    const planCards = document.querySelectorAll('.plan-card[data-plan-id]');
+    planCards.forEach(setupPlanCard);
+
+    window.addEventListener("beforeunload", function () {
+        planCards.forEach(c => c._cleanup && c._cleanup());
+    });
+})();
 </script>
 
 </body>
-    </html>
+</html>
