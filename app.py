@@ -1508,11 +1508,69 @@ def my_plan():
         logger.exception("PLAN EXPIRY CHECK ERROR")
 
     if request.method == "POST":
+        now = utcnow()
+        user_plan_id = request.form.get("user_plan_id")
+        # If a single plan id is provided, claim only that plan
+        if user_plan_id:
+            try:
+                pid = int(user_plan_id)
+            except (TypeError, ValueError):
+                flash("Invalid plan identifier.", "error")
+                return redirect(url_for("my_plan"))
+
+            try:
+                with db_cursor(commit=True, dict_cursor=True) as cur:
+                    # lock the specific plan row
+                    cur.execute("SELECT * FROM plans WHERE id=%s AND user_id=%s FOR UPDATE", (pid, user["id"]))
+                    plan = cur.fetchone()
+                    if not plan:
+                        flash("Plan not found.", "error")
+                        return redirect(url_for("my_plan"))
+
+                    # check expiry
+                    end_time, next_claim = plan_times(plan, now)
+                    if now >= end_time:
+                        # deactivate expired plan
+                        cur.execute("UPDATE plans SET active=FALSE WHERE id=%s", (plan["id"],))
+                        flash("This plan has already ended and was deactivated.", "error")
+                        return redirect(url_for("my_plan"))
+
+                    # check claim readiness
+                    if now < next_claim:
+                        flash("This plan is not yet ready for claiming.", "error")
+                        return redirect(url_for("my_plan"))
+
+                    daily_income = money(plan.get("daily_income"))
+                    if daily_income <= 0:
+                        flash("This plan has no daily income to claim.", "error")
+                        return redirect(url_for("my_plan"))
+
+                    # ensure account row exists and credit income atomically
+                    ensure_account(cur, user["id"], STARTING_DEPOSIT_BALANCE)
+                    cur.execute(
+                        "UPDATE accounts SET income_account = COALESCE(income_account,0) + %s, withdraw_account = COALESCE(withdraw_account,0) + %s WHERE user_id=%s",
+                        (daily_income, daily_income, user["id"]),
+                    )
+                    claim_time = now
+                    cur.execute("UPDATE plans SET last_claim_at=%s WHERE id=%s", (claim_time, plan["id"]))
+                    cur.execute(
+                        """
+                        INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
+                        VALUES (%s,'income_claim',%s,'successful',%s,%s)
+                        """,
+                        (user["id"], daily_income, generate_reference("INC"), f"Daily income claim: {plan['plan_name']} (plan #{plan['id']})"),
+                    )
+                flash(f"GHS {daily_income:.2f} income claimed for plan {plan.get('plan_name')}.", "success")
+            except Exception:
+                logger.exception("MY PLAN SINGLE CLAIM ERROR")
+                flash("Unable to claim income for this plan.", "error")
+            return redirect(url_for("my_plan"))
+
+        # Otherwise: fallback to claiming all ready active plans (original behaviour)
         try:
             with db_cursor(commit=True, dict_cursor=True) as cur:
                 cur.execute("SELECT * FROM plans WHERE user_id=%s AND active=TRUE ORDER BY id ASC FOR UPDATE", (user["id"],))
                 plans_to_claim = cur.fetchall() or []
-                now = utcnow()
                 ensure_account(cur, user["id"], STARTING_DEPOSIT_BALANCE)
                 claimed_total = Decimal("0.00")
                 claimed_count = 0
@@ -1523,15 +1581,14 @@ def my_plan():
                         continue
                     if now < next_claim:
                         continue
-                    daily_income = money(plan["daily_income"])
+                    daily_income = money(plan.get("daily_income"))
                     if daily_income <= 0:
                         continue
                     cur.execute(
                         "UPDATE accounts SET income_account=COALESCE(income_account,0)+%s, withdraw_account=COALESCE(withdraw_account,0)+%s WHERE user_id=%s",
                         (daily_income, daily_income, user["id"]),
                     )
-                    claim_time = now
-                    cur.execute("UPDATE plans SET last_claim_at=%s WHERE id=%s", (claim_time, plan["id"]))
+                    cur.execute("UPDATE plans SET last_claim_at=%s WHERE id=%s", (now, plan["id"]))
                     cur.execute(
                         """
                         INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
@@ -1550,17 +1607,14 @@ def my_plan():
             flash("Unable to process your income claim.", "error")
         return redirect(url_for("my_plan"))
 
-    # GET: prepare plans for display
+    # GET -> render page: query plans and annotate for template
     all_plans = query_all("SELECT * FROM plans WHERE user_id=%s ORDER BY id DESC", (user["id"],))
-    # Only those with active==True (DB rows are dict-like)
     active_plans = [p for p in all_plans if p.get("active")]
     now = utcnow()
 
-    # Annotate each active plan with can_claim and next_income_at (datetime or None)
     user_plans = []
     for p in active_plans:
         end_time, next_claim = plan_times(p, now)
-        # If plan already ended, mark as inactive candidate (but keep in history)
         if now >= end_time:
             p["can_claim"] = False
             p["next_income_at"] = None
@@ -1569,14 +1623,12 @@ def my_plan():
             p["can_claim"] = now >= next_claim
         user_plans.append(p)
 
-    # For overall page indicators, compute whether any plan is claimable and next overall next_claim
     can_claim = any(p.get("can_claim") for p in user_plans)
     next_claims = [p.get("next_income_at") for p in user_plans if p.get("next_income_at")]
     next_claim_dt = min(next_claims) if next_claims else None
     seconds_remaining = max(0, int((next_claim_dt - now).total_seconds())) if next_claim_dt else 0
     next_claim_timestamp = int(next_claim_dt.timestamp()) if next_claim_dt else 0
 
-    # Use the most recent active plan for cycle calculations (same as original behaviour)
     plan = user_plans[0] if user_plans else (all_plans[0] if all_plans else None)
     cycle_seconds_remaining = 0
     cycle_ended = False
@@ -1595,7 +1647,7 @@ def my_plan():
         "my_plan.html",
         user_plan=plan,
         user_plans=user_plans,
-        active_plans=all_plans,  # keep original variable for compatibility
+        active_plans=all_plans,
         all_plans=all_plans,
         plans=available_plans,
         available_plans=available_plans,
@@ -1607,8 +1659,6 @@ def my_plan():
         server_now=now,
         cycle_ended=cycle_ended,
     )
-
-                
  
 
 
