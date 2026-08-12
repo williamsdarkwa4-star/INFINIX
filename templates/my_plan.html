@@ -11,6 +11,7 @@
     />
 
     <style>
+        /* (same styles as before) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
         body { background: #f1f4fa; color: #334155; min-height: 100vh; padding-bottom: 85px; }
         .phone { width: 100%; max-width: 440px; min-height: 100vh; margin: auto; background: #f1f4fa; }
@@ -162,6 +163,7 @@
 
                     <div class="countdown-box">
                         <div class="countdown-label">NEXT INCOME IN</div>
+
                         <div id="countdown-{{ p.id }}" class="countdown" aria-live="polite" aria-atomic="true" title="Time until next income">
                             {% if p.can_claim %}
                                 00:00:00
@@ -169,6 +171,7 @@
                                 --:--:--
                             {% endif %}
                         </div>
+
                         <div id="countdownSub-{{ p.id }}" class="countdown-sub" aria-live="polite" aria-atomic="true">
                             {% if p.can_claim %}
                                 Income is ready
@@ -241,17 +244,12 @@
             <span>Choose a product</span>
         </div>
 
-        {# Show only plans that are NOT already owned #}
+        {# Show only plans that are NOT already owned (no use of 'do' tag) #}
         {% if plans %}
-            {% set available_plans = [] %}
+            {% set ns = namespace(found=False) %}
             {% for plan in plans %}
                 {% if plan.plan_name not in owned_names %}
-                    {% do available_plans.append(plan) %}
-                {% endif %}
-            {% endfor %}
-
-            {% if available_plans %}
-                {% for plan in available_plans %}
+                    {% set ns.found = True %}
                     <div class="available-plan">
                         <div class="available-top">
                             <div class="available-name">
@@ -290,8 +288,10 @@
                             <span>View / Select Plan</span>
                         </a>
                     </div>
-                {% endfor %}
-            {% else %}
+                {% endif %}
+            {% endfor %}
+
+            {% if not ns.found %}
                 <div class="available-plan">
                     <div class="empty">
                         <div class="empty-icon" aria-hidden="true">
