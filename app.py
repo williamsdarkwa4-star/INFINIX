@@ -1641,7 +1641,7 @@ def my_plan():
         user_plans=plans,
         active_plans=all_plans,  # Keep old template variable but include every historical purchase.
         all_plans=all_plans,
-        plans=available_plans,
+        plans=plans,
         available_plans=available_plans,
         can_claim=can_claim,
         seconds_remaining=seconds_remaining,
