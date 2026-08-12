@@ -1638,7 +1638,7 @@ def my_plan():
 
     return render_template(
         "my_plan.html",
-        user_plans=plan,
+        user_plan=plan,
         active_plans=all_plans,  # Keep old template variable but include every historical purchase.
         all_plans=all_plans,
         plans=available_plans,
