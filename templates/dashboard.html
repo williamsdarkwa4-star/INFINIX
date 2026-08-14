@@ -6,499 +6,624 @@
 
     <title>Home - Zenith Capital</title>
 
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: Inter, Arial, sans-serif;
         }
 
         body {
-            background: #f4f6fa;
-            display: flex;
-            justify-content: center;
-            color: #0f172a;
-            padding-bottom: 70px;
+            background: #eef1f5;
+            color: #111827;
+            padding-bottom: 80px;
         }
 
         .phone {
             width: 100%;
             max-width: 450px;
             min-height: 100vh;
-            background: #fbfcff;
-            padding-bottom: 85px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            margin: auto;
+            background: #f7f8fa;
             overflow: hidden;
+            padding-bottom: 80px;
         }
-
 
         /* =========================
-           TOP FACTORY BANNER
+           HEADER
         ========================= */
 
-        .banner {
-            height: 175px;
-            position: relative;
-            overflow: hidden;
-            background: #0e2954;
+        .top-header {
+            height: 62px;
+            padding: 0 18px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #edf0f3;
         }
 
-        .banner img {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: #111111;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .brand-name {
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -.3px;
+        }
+
+        .notification {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: #f4f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #20252c;
+        }
+
+        .notification svg {
+            width: 19px;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            margin: 12px;
+            height: 205px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            background: #111111;
+        }
+
+        .hero img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
             display: block;
-            transition: opacity .5s ease;
+            transition: opacity .35s ease;
         }
 
-        .banner-overlay {
+        .hero::after {
+            content: "";
             position: absolute;
             inset: 0;
-
-            background: linear-gradient(
-                rgba(14,41,84,.55),
-                rgba(14,41,84,.75)
-            );
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            text-align: center;
-            color: white;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,0,0,.82),
+                    rgba(0,0,0,.25),
+                    rgba(0,0,0,.08)
+                );
         }
 
-        .banner-overlay h1 {
-            font-size: 1.45rem;
-            margin-bottom: 7px;
-            letter-spacing: .5px;
-        }
-
-        .banner-overlay p {
-            font-size: .78rem;
-            opacity: .92;
-        }
-
-        .banner-dots {
+        .hero-content {
             position: absolute;
-            bottom: 9px;
-            left: 0;
-            right: 0;
-            text-align: center;
+            z-index: 3;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            max-width: 65%;
+        }
+
+        .hero-small {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: .8;
+            margin-bottom: 7px;
+        }
+
+        .hero-title {
+            font-size: 25px;
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 8px;
+        }
+
+        .hero-text {
+            font-size: 12px;
+            line-height: 1.5;
+            opacity: .9;
+        }
+
+        .hero-dots {
+            position: absolute;
+            z-index: 5;
+            bottom: 12px;
+            right: 17px;
+            display: flex;
+            gap: 5px;
         }
 
         .dot {
-            display: inline-block;
             width: 6px;
             height: 6px;
+            background: rgba(255,255,255,.45);
             border-radius: 50%;
-            background: rgba(255,255,255,.5);
-            margin: 0 3px;
         }
 
         .dot.active {
-            background: white;
-            width: 8px;
-            height: 8px;
+            width: 18px;
+            border-radius: 8px;
+            background: #ffffff;
         }
 
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome {
+            padding: 2px 17px 12px;
+        }
+
+        .welcome p {
+            font-size: 12px;
+            color: #8a929d;
+            margin-bottom: 3px;
+        }
+
+        .welcome h2 {
+            font-size: 20px;
+            font-weight: 850;
+            color: #111827;
+        }
 
         /* =========================
            QUICK ACTIONS
         ========================= */
 
-        .actions {
+        .quick-actions {
+            background: #ffffff;
+            margin: 0 12px 12px;
+            padding: 14px 5px;
+            border-radius: 16px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            padding: 15px 8px;
-            background: white;
-            margin-bottom: 10px;
-            text-align: center;
-            font-size: .75rem;
+            border: 1px solid #edf0f3;
         }
 
-        .action-item {
+        .quick-item {
             text-decoration: none;
-            color: #374151;
+            color: #343a40;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
         }
 
-        .circle {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            color: white;
-
+        .quick-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            margin: 0 auto 7px;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            margin: 0 auto 8px;
-            font-size: 1.15rem;
         }
 
-        .deposit-circle {
-            background: #10cf74;
+        .quick-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .withdraw-circle {
-            background: #ff9f43;
+        .deposit {
+            background: #e8f8ef;
+            color: #0c9b54;
         }
 
-        .service-circle {
-            background: #3884ff;
+        .withdraw {
+            background: #fff1df;
+            color: #e88918;
         }
 
-        .profile-circle {
-            background: #705ec8;
+        .service {
+            background: #eaf2ff;
+            color: #3478e5;
         }
 
+        .profile {
+            background: #f0ebff;
+            color: #7655ce;
+        }
 
         /* =========================
-           ACCOUNT OVERVIEW
+           BALANCE CARD
         ========================= */
 
-        .account-card {
-            background: white;
+        .balance-card {
             margin: 12px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #edf1f7;
-        }
-
-        .account-title {
-            color: #0e2954;
-            font-size: .95rem;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-        .account-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .account-box {
-            background: #f8fafd;
-            padding: 10px 7px;
-            border-radius: 7px;
-            text-align: center;
-        }
-
-        .lbl {
-            font-size: .68rem;
-            color: #8c96a3;
-            margin-bottom: 4px;
-        }
-
-        .val {
-            font-size: .82rem;
-            font-weight: bold;
-            color: #0e2954;
-        }
-
-
-        /* =========================
-           PLAN SECTION
-        ========================= */
-
-        .section-title {
-            padding: 5px 12px;
-            color: #0e2954;
-            font-size: 1.1rem;
-        }
-
-        .section-subtitle {
-            padding: 0 12px 5px;
-            color: #8c96a3;
-            font-size: .72rem;
-        }
-
-
-        /* =========================
-           PLAN CARD
-        ========================= */
-
-        .plan {
-            background: white;
-            margin: 12px;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #edf1f7;
-        }
-
-        .plan-main {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .plan-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            width: 65%;
-        }
-
-        .plan-box {
-            background: #f8fafd;
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .plan-value {
-            font-size: .82rem;
-            font-weight: bold;
-            color: #0e2954;
-        }
-
-
-        /* =========================
-           SMALL FACTORY PHOTO
-        ========================= */
-
-        .preview {
-            width: 32%;
-            height: 110px;
-            background: #f3f4f7;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
-        }
-
-        .tag {
-            position: absolute;
-            top: 0;
-            right: 0;
-            z-index: 2;
-
-            background: #444;
+            border-radius: 19px;
+            padding: 19px;
+            background: #111111;
             color: white;
-
-            font-size: .58rem;
-            padding: 3px 6px;
-
-            border-top-right-radius: 8px;
-            border-bottom-left-radius: 6px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .badge {
+        .balance-card::before {
+            content: "";
             position: absolute;
-            bottom: 7px;
-            left: 50%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            right: -60px;
+            top: -70px;
+            border: 1px solid rgba(255,255,255,.13);
+        }
 
-            transform: translateX(-50%);
+        .balance-card::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            right: 20px;
+            bottom: -70px;
+            border: 1px solid rgba(255,255,255,.09);
+        }
 
-            white-space: nowrap;
+        .balance-heading {
+            position: relative;
+            z-index: 2;
+            font-size: 11px;
+            color: #aeb4bc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
 
-            background: #0e2954;
-            color: #ffd700;
+        .total-balance {
+            position: relative;
+            z-index: 2;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
 
-            font-size: .65rem;
-            font-weight: bold;
+        .balance-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
 
-            padding: 3px 9px;
+        .balance-item {
+            background: rgba(255,255,255,.07);
+            padding: 10px;
             border-radius: 10px;
         }
 
+        .balance-label {
+            color: #969da6;
+            font-size: 9px;
+            margin-bottom: 4px;
+        }
+
+        .balance-value {
+            font-size: 12px;
+            font-weight: 800;
+        }
 
         /* =========================
-           INVEST BUTTON
+           SECTION HEADER
         ========================= */
 
-        .invest-btn {
-            display: block;
-            width: 100%;
-
-            border: none;
-            padding: 11px;
-
-            border-radius: 20px;
-
-            font-weight: bold;
-            margin-top: 12px;
-
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-
-            background: #0c1c33;
-            color: white;
+        .section-header {
+            padding: 10px 14px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .invest-btn:hover {
-            background: #0e2954;
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 850;
         }
 
+        .section-header span {
+            font-size: 10px;
+            color: #8b939d;
+        }
 
         /* =========================
-           LOCKED PLANS
+           PRODUCT / PLAN CARD
+        ========================= */
+
+        .plan {
+            background: #ffffff;
+            margin: 10px 12px;
+            padding: 12px;
+            border-radius: 17px;
+            border: 1px solid #edf0f3;
+            box-shadow: 0 3px 12px rgba(0,0,0,.035);
+        }
+
+        .plan-top {
+            display: flex;
+            gap: 12px;
+        }
+
+        .phone-image {
+            width: 112px;
+            height: 125px;
+            flex-shrink: 0;
+            border-radius: 13px;
+            overflow: hidden;
+            background: #f1f2f4;
+            position: relative;
+        }
+
+        .phone-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .plan-number {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            background: rgba(0,0,0,.75);
+            color: white;
+            padding: 4px 7px;
+            border-radius: 6px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .plan-info {
+            flex: 1;
+        }
+
+        .plan-name {
+            font-size: 15px;
+            font-weight: 850;
+            margin-bottom: 10px;
+        }
+
+        .plan-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+        }
+
+        .data-box {
+            background: #f6f7f9;
+            padding: 7px;
+            border-radius: 8px;
+        }
+
+        .data-label {
+            color: #9299a2;
+            font-size: 8px;
+            margin-bottom: 3px;
+        }
+
+        .data-value {
+            font-size: 11px;
+            font-weight: 800;
+            color: #171b21;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #079650;
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            background: #0baa59;
+            border-radius: 50%;
+        }
+
+        .plan-button {
+            width: 100%;
+            margin-top: 11px;
+            border: none;
+            border-radius: 11px;
+            padding: 11px;
+            background: #111111;
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: .2s;
+        }
+
+        .plan-button:active {
+            transform: scale(.98);
+        }
+
+        /* =========================
+           LOCKED
         ========================= */
 
         .locked {
             opacity: .55;
         }
 
-        .locked-btn {
-            width: 100%;
-
-            border: none;
-            padding: 11px;
-
-            border-radius: 20px;
-
-            font-weight: bold;
-            margin-top: 12px;
-
-            background: #9da4b0;
-            color: white;
-
-            cursor: not-allowed;
+        .locked .phone-image {
+            filter: grayscale(1);
         }
 
+        .locked-button {
+            width: 100%;
+            margin-top: 11px;
+            padding: 11px;
+            border: none;
+            border-radius: 11px;
+            background: #d6d9de;
+            color: #717781;
+            font-size: 12px;
+            font-weight: 800;
+        }
 
         /* =========================
-           PROFILE-STYLE BOTTOM NAV
+           BOTTOM NAV
         ========================= */
 
         .nav {
             position: fixed;
+            z-index: 1000;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-
             width: 100%;
-            max-width: 440px;
-            height: 65px;
-
-            background: white;
-            border-top: 1px solid #e2e8f0;
-
+            max-width: 450px;
+            height: 68px;
+            background: rgba(255,255,255,.97);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid #e6e8eb;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-
-            z-index: 1000;
-
-            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
         }
 
         .nav a {
             position: relative;
-
+            text-decoration: none;
+            color: #9aa1aa;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
-            gap: 3px;
-
-            text-decoration: none;
-
-            color: #94a3b8;
+            gap: 4px;
             font-size: 9px;
+            font-weight: 600;
         }
 
         .nav svg {
             width: 20px;
             height: 20px;
+            stroke-width: 2;
         }
 
         .nav a.active {
-            color: #10144c;
-            font-weight: bold;
+            color: #111111;
+            font-weight: 800;
         }
 
-        .nav a.active::after {
+        .nav a.active::before {
             content: "";
-
             position: absolute;
-            bottom: 0;
-            left: 25%;
-            right: 25%;
-
+            top: 0;
+            width: 28px;
             height: 3px;
-
-            background: #10144c;
-
-            border-radius: 4px 4px 0 0;
+            border-radius: 0 0 5px 5px;
+            background: #111111;
         }
-
 
         /* =========================
-           MOBILE
+           SMALL SCREEN
         ========================= */
 
-        @media (max-width: 380px) {
+        @media(max-width:360px) {
 
-            .banner {
-                height: 160px;
+            .hero {
+                height: 190px;
             }
 
-            .banner-overlay h1 {
-                font-size: 1.3rem;
+            .hero-title {
+                font-size: 22px;
             }
 
-            .plan-grid {
-                width: 63%;
+            .phone-image {
+                width: 96px;
+                height: 115px;
             }
 
-            .preview {
-                width: 34%;
+            .plan-name {
+                font-size: 13px;
             }
 
-            .plan-value {
-                font-size: .75rem;
+            .data-value {
+                font-size: 10px;
             }
         }
-
     </style>
 </head>
-
 
 <body>
 
 <div class="phone">
 
+    <!-- HEADER -->
 
-    <!-- =========================
-         TOP FACTORY BANNER
-    ========================= -->
+    <header class="top-header">
 
-    <div class="banner">
+        <div class="brand">
+            <div class="brand-logo">Z</div>
+
+            <div class="brand-name">
+                Zenith Capital
+            </div>
+        </div>
+
+        <div class="notification">
+            <i data-lucide="bell"></i>
+        </div>
+
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
 
         <img
-            id="bannerImage"
-            src="https://images.unsplash.com/photo-1581092160607-ee22621dd758"
-            alt="Factory equipment"
+            id="heroImage"
+            src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=80"
+            alt="Smartphone"
         >
 
-        <div class="banner-overlay">
+        <div class="hero-content">
 
-            <h1>ZENITH CAPITAL</h1>
+            <div class="hero-small">
+                Welcome
+            </div>
 
-            <p>
-                Welcome, {{ user.fullname }}
-            </p>
+            <div class="hero-title">
+                Smart choices.<br>
+                Better opportunities.
+            </div>
+
+            <div class="hero-text">
+                Welcome back, {{ user.fullname }}
+            </div>
 
         </div>
 
-        <div class="banner-dots">
+        <div class="hero-dots">
 
             <span class="dot active"></span>
             <span class="dot"></span>
@@ -507,22 +632,35 @@
 
         </div>
 
+    </section>
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <p>
+            Your account
+        </p>
+
+        <h2>
+            Welcome back 👋
+        </h2>
+
     </div>
 
 
-    <!-- =========================
-         QUICK MENU
-    ========================= -->
+    <!-- QUICK ACTIONS -->
 
-    <div class="actions">
+    <div class="quick-actions">
 
         <a
             href="{{ url_for('deposit') }}"
-            class="action-item"
+            class="quick-item"
         >
 
-            <div class="circle deposit-circle">
-                💰
+            <div class="quick-icon deposit">
+                <i data-lucide="wallet"></i>
             </div>
 
             Deposit
@@ -532,11 +670,11 @@
 
         <a
             href="{{ url_for('withdraw') }}"
-            class="action-item"
+            class="quick-item"
         >
 
-            <div class="circle withdraw-circle">
-                💳
+            <div class="quick-icon withdraw">
+                <i data-lucide="credit-card"></i>
             </div>
 
             Withdraw
@@ -546,11 +684,11 @@
 
         <a
             href="{{ url_for('support') }}"
-            class="action-item"
+            class="quick-item"
         >
 
-            <div class="circle service-circle">
-                🎧
+            <div class="quick-icon service">
+                <i data-lucide="headphones"></i>
             </div>
 
             Service
@@ -560,11 +698,11 @@
 
         <a
             href="{{ url_for('profile') }}"
-            class="action-item"
+            class="quick-item"
         >
 
-            <div class="circle profile-circle">
-                👤
+            <div class="quick-icon profile">
+                <i data-lucide="user"></i>
             </div>
 
             Profile
@@ -574,64 +712,77 @@
     </div>
 
 
-    <!-- =========================
-         ACCOUNT OVERVIEW
-    ========================= -->
+    <!-- BALANCE -->
 
-    <div class="account-card">
+    <div class="balance-card">
 
-        <div class="account-title">
-            Account Overview
+        <div class="balance-heading">
+            Total Account Balance
         </div>
 
-        <div class="account-grid">
+        <div class="total-balance">
 
-            <div class="account-box">
+            GHS {{
+                "%.2f"|format(
+                    (
+                        account.deposit_account|float
+                        + account.withdraw_account|float
+                        + account.income_account|float
+                        + account.referral_account|float
+                    )
+                )
+            }}
 
-                <div class="lbl">
-                    Deposit Balance
+        </div>
+
+        <div class="balance-grid">
+
+            <div class="balance-item">
+
+                <div class="balance-label">
+                    Deposit
                 </div>
 
-                <div class="val">
+                <div class="balance-value">
                     GHS {{ "%.2f"|format(account.deposit_account|float) }}
                 </div>
 
             </div>
 
 
-            <div class="account-box">
+            <div class="balance-item">
 
-                <div class="lbl">
-                    Withdraw Balance
+                <div class="balance-label">
+                    Withdraw
                 </div>
 
-                <div class="val">
+                <div class="balance-value">
                     GHS {{ "%.2f"|format(account.withdraw_account|float) }}
                 </div>
 
             </div>
 
 
-            <div class="account-box">
+            <div class="balance-item">
 
-                <div class="lbl">
-                    Income Balance
+                <div class="balance-label">
+                    Income
                 </div>
 
-                <div class="val">
+                <div class="balance-value">
                     GHS {{ "%.2f"|format(account.income_account|float) }}
                 </div>
 
             </div>
 
 
-            <div class="account-box">
+            <div class="balance-item">
 
-                <div class="lbl">
-                    Referral Balance
+                <div class="balance-label">
+                    Referral
                 </div>
 
-                <div class="val">
+                <div class="balance-value">
                     GHS {{ "%.2f"|format(account.referral_account|float) }}
                 </div>
 
@@ -642,75 +793,83 @@
     </div>
 
 
-    <!-- =========================
-         INVESTMENT PLANS
-    ========================= -->
+    <!-- PLANS -->
 
-    <h2 class="section-title">
-        Investment Plans
-    </h2>
+    <div class="section-header">
 
-    <p class="section-subtitle">
-        Choose an available plan
-    </p>
+        <h2>
+            Available Plans
+        </h2>
+
+        <span>
+            View all
+        </span>
+
+    </div>
 
 
     <!-- PLAN 1 -->
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 50</div>
+                <div class="plan-number">
+                    PLAN 01
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 5</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 01
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                    alt="Factory machinery"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 1
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 50</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 5</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=1) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -720,58 +879,64 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 100</div>
+                <div class="plan-number">
+                    PLAN 02
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 20</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 02
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1565793298595-6a879b1d9492"
-                    alt="Industrial equipment"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 2
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 100</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 20</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=2) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -781,58 +946,64 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 200</div>
+                <div class="plan-number">
+                    PLAN 03
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 40</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 03
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122"
-                    alt="Factory machinery"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 3
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 200</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 40</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=3) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -842,58 +1013,64 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 300</div>
+                <div class="plan-number">
+                    PLAN 04
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 65</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 04
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
-                    alt="Factory equipment"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 4
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 300</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 65</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=4) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -903,58 +1080,64 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 500</div>
+                <div class="plan-number">
+                    PLAN 05
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 100</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 05
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1567789884554-0b844b597180"
-                    alt="Industrial machine"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 5
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 500</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 100</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=5) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -964,58 +1147,64 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 600</div>
+                <div class="plan-number">
+                    PLAN 06
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 200</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 06
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1581092335397-9583eb92d232"
-                    alt="Industrial machinery"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 6
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 600</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 200</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=6) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
@@ -1025,116 +1214,127 @@
 
     <div class="plan">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 1000</div>
+                <div class="plan-number">
+                    PLAN 07
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 360</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Active</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    1/1
+                <div class="plan-name">
+                    Smartphone Plan 07
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1531058020387-3be344556be6"
-                    alt="Factory equipment"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 7
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 1000</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 360</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value status">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <a
             href="{{ url_for('buy_plan', plan_id=7) }}"
-            class="invest-btn"
+            class="plan-button"
         >
-            Invest
+            Continue
         </a>
 
     </div>
 
 
-    <!-- LOCKED PLAN 8 -->
+    <!-- PLAN 8 -->
 
     <div class="plan locked">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 2000</div>
+                <div class="plan-number">
+                    PLAN 08
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 500</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Locked</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1592286927505-2fd9a10b6b7a?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    0/1
+                <div class="plan-name">
+                    Smartphone Plan 08
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1581092160562-40aa08e78837"
-                    alt="Factory equipment"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 8
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 2000</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 500</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value">
+                            Locked
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <button
-            class="locked-btn"
+            class="locked-button"
             disabled
         >
             Locked
@@ -1143,59 +1343,64 @@
     </div>
 
 
-    <!-- LOCKED PLAN 9 -->
+    <!-- PLAN 9 -->
 
     <div class="plan locked">
 
-        <div class="plan-main">
+        <div class="plan-top">
 
-            <div class="plan-grid">
+            <div class="phone-image">
 
-                <div class="plan-box">
-                    <div class="lbl">Price</div>
-                    <div class="plan-value">GHS 4000</div>
+                <div class="plan-number">
+                    PLAN 09
                 </div>
 
-                <div class="plan-box">
-                    <div class="lbl">Daily Income</div>
-                    <div class="plan-value">GHS 800</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Duration</div>
-                    <div class="plan-value">180 Days</div>
-                </div>
-
-                <div class="plan-box">
-                    <div class="lbl">Status</div>
-                    <div class="plan-value">Locked</div>
-                </div>
+                <img
+                    src="https://images.unsplash.com/photo-1551355738-187c3b8e7f3d?auto=format&fit=crop&w=600&q=80"
+                    alt="Smartphone"
+                >
 
             </div>
 
 
-            <div class="preview">
+            <div class="plan-info">
 
-                <div class="tag">
-                    0/1
+                <div class="plan-name">
+                    Smartphone Plan 09
                 </div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6"
-                    alt="Industrial machinery"
-                >
+                <div class="plan-data">
 
-                <div class="badge">
-                    PLAN 9
+                    <div class="data-box">
+                        <div class="data-label">PRICE</div>
+                        <div class="data-value">GHS 4000</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DAILY</div>
+                        <div class="data-value">GHS 800</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">DURATION</div>
+                        <div class="data-value">180 Days</div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">STATUS</div>
+                        <div class="data-value">
+                            Locked
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-
         <button
-            class="locked-btn"
+            class="locked-button"
             disabled
         >
             Locked
@@ -1204,11 +1409,9 @@
     </div>
 
 
-    <!-- =========================
-         PROFILE-STYLE BOTTOM NAV
-    ========================= -->
+    <!-- BOTTOM NAV -->
 
-    <div class="nav">
+    <nav class="nav">
 
         <a
             href="{{ url_for('dashboard') }}"
@@ -1220,7 +1423,7 @@
 
 
         <a href="{{ url_for('my_plan') }}">
-            <i data-lucide="trending-up"></i>
+            <i data-lucide="chart-no-axes-combined"></i>
             <span>Income</span>
         </a>
 
@@ -1238,11 +1441,11 @@
 
 
         <a href="{{ url_for('profile') }}">
-            <i data-lucide="user"></i>
+            <i data-lucide="user-round"></i>
             <span>My</span>
         </a>
 
-    </div>
+    </nav>
 
 </div>
 
@@ -1250,65 +1453,55 @@
 <script>
 
     /* =========================
-       ROTATING FACTORY BANNER
+       HERO SLIDER
     ========================= */
 
-    const bannerImages = [
+    const heroImages = [
 
-        "https://images.unsplash.com/photo-1581092160607-ee22621dd758",
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=80",
 
-        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+        "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=1000&q=80",
 
-        "https://images.unsplash.com/photo-1565793298595-6a879b1d9492",
+        "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=1000&q=80",
 
-        "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122"
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=80"
 
     ];
 
+    let heroIndex = 0;
 
-    let currentBanner = 0;
-
-
-    const bannerImage =
-        document.getElementById("bannerImage");
-
+    const heroImage =
+        document.getElementById("heroImage");
 
     const dots =
         document.querySelectorAll(".dot");
 
 
-    function changeBanner() {
+    function changeHero() {
 
-        currentBanner++;
+        heroIndex++;
 
-        if (
-            currentBanner >=
-            bannerImages.length
-        ) {
-
-            currentBanner = 0;
-
+        if (heroIndex >= heroImages.length) {
+            heroIndex = 0;
         }
 
-
-        bannerImage.style.opacity = "0";
-
+        heroImage.style.opacity = "0";
 
         setTimeout(() => {
 
-            bannerImage.src =
-                bannerImages[currentBanner];
+            heroImage.src =
+                heroImages[heroIndex];
 
-            bannerImage.style.opacity = "1";
+            heroImage.style.opacity = "1";
 
-        }, 300);
+        }, 250);
 
 
         dots.forEach((dot, index) => {
 
             dot.classList.toggle(
                 "active",
-                index === currentBanner
+                index === heroIndex
             );
 
         });
@@ -1316,14 +1509,11 @@
     }
 
 
-    setInterval(
-        changeBanner,
-        5000
-    );
+    setInterval(changeHero, 5000);
 
 
     /* =========================
-       LUCIDE ICONS
+       ICONS
     ========================= */
 
     lucide.createIcons();
