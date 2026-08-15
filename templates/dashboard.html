@@ -1,1143 +1,1217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>INFINIX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter",Arial,sans-serif;
+}
+
+:root{
+    --bg:#050505;
+    --surface:#0c0c0c;
+    --surface2:#111;
+    --surface3:#181818;
+    --text:#fff;
+    --muted:#858585;
+    --green:#00ff55;
+    --green2:#00d948;
+    --border:rgba(255,255,255,.08);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#000;
+    color:#fff;
+    min-height:100vh;
+    padding-bottom:78px;
+}
+
+.phone-container{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(0,255,85,.08),
+            transparent 30%
+        ),
+        #050505;
+}
+
+
+/* ===============================
+   PAGE LOADER
+================================ */
+
+.page-loader{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background:rgba(0,0,0,.90);
+    backdrop-filter:blur(12px);
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:.25s ease;
+}
+
+.page-loader.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.loader-card{
+    width:165px;
+    padding:22px 15px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:13px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #181818,
+            #090909
+        );
+
+    border:1px solid rgba(0,255,85,.18);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.75);
+}
+
+.loader-logo{
+    width:45px;
+    height:45px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    <title>Zenith Capital</title>
+    border-radius:12px;
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    background:
+        linear-gradient(
+            135deg,
+            #00ff55,
+            #8affae
+        );
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    color:#001b09;
+
+    font-size:19px;
+    font-weight:900;
 
-    <script src="https://unpkg.com/lucide@latest"></script>
+    box-shadow:
+        0 0 30px rgba(0,255,85,.20);
+}
 
-    <style>
+.loader-ring{
+    width:29px;
+    height:29px;
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", Arial, sans-serif;
-        }
+    border-radius:50%;
+
+    border:
+        2px solid
+        rgba(255,255,255,.10);
 
-        :root {
-            --bg: #050505;
-            --surface: #0b0b0b;
-            --surface2: #111111;
-            --surface3: #171717;
+    border-top-color:#00ff55;
+    border-right-color:rgba(0,255,85,.35);
 
-            --text: #ffffff;
-            --muted: #858585;
+    animation:spin .65s linear infinite;
+}
 
-            --green: #00ff55;
-            --green-dark: #00b83d;
+.loader-text{
+    color:#aaa;
+    font-size:8px;
+    font-weight:600;
+    letter-spacing:.5px;
+    text-align:center;
+}
 
-            --border: rgba(255,255,255,.08);
-        }
+.loader-bar{
+    width:100%;
+    height:3px;
+    overflow:hidden;
+    border-radius:20px;
+    background:#252525;
+}
+
+.loader-bar span{
+    display:block;
+    width:40%;
+    height:100%;
+    background:#00ff55;
+    border-radius:20px;
+
+    animation:loadingBar 1.1s ease-in-out infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+@keyframes loadingBar{
+    0%{
+        transform:translateX(-120%);
+    }
 
-        body {
-            margin: 0;
-            background: #000;
-            color: var(--text);
-            min-height: 100vh;
-            padding-bottom: 78px;
-        }
+    100%{
+        transform:translateX(280%);
+    }
+}
 
-        /* ======================================
-           PHONE CONTAINER
-        ====================================== */
 
-        .phone-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            margin: auto;
+/* ===============================
+   HEADER
+================================ */
 
-            background:
-                radial-gradient(
-                    circle at 50% -10%,
-                    rgba(0,255,85,.07),
-                    transparent 30%
-                ),
-                #050505;
+.top-header{
+    height:64px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-            position: relative;
-            overflow: hidden;
-        }
+    padding:0 15px;
 
+    position:sticky;
+    top:0;
+    z-index:100;
 
-        /* ======================================
-           HEADER
-        ====================================== */
+    background:rgba(5,5,5,.96);
 
-        .top-header {
-            height: 64px;
+    border-bottom:1px solid var(--border);
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    backdrop-filter:blur(20px);
+}
 
-            padding: 0 15px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-            background:
-                rgba(5,5,5,.94);
+.brand-logo{
+    width:38px;
+    height:38px;
 
-            border-bottom:
-                1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
 
-            backdrop-filter: blur(20px);
+    background:
+        linear-gradient(
+            135deg,
+            #00ff55,
+            #8affae
+        );
+
+    color:#001b09;
 
-            position: sticky;
-            top: 0;
+    font-size:17px;
+    font-weight:900;
+
+    box-shadow:
+        0 0 22px rgba(0,255,85,.18);
+}
 
-            z-index: 100;
-        }
+.brand-text strong{
+    display:block;
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.brand-text span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:8px;
+}
 
-        .brand-logo {
-            width: 38px;
-            height: 38px;
+.header-button{
+    width:38px;
+    height:38px;
 
-            border-radius: 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #00ff55,
-                    #8affae
-                );
+    border-radius:10px;
 
-            color: #001b09;
+    color:white;
+    background:#101010;
+    border:1px solid var(--border);
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    text-decoration:none;
+}
 
-            font-weight: 900;
-            font-size: 17px;
+.header-button svg{
+    width:18px;
+}
 
-            box-shadow:
-                0 0 22px
-                rgba(0,255,85,.16);
-        }
 
-        .brand-text strong {
-            display: block;
+/* ===============================
+   HERO
+================================ */
 
-            font-size: 13px;
-            font-weight: 800;
+.hero{
+    height:210px;
+    position:relative;
+    overflow:hidden;
+    background:#111;
+}
 
-            letter-spacing: .5px;
-        }
+.hero-image{
+    position:absolute;
+    inset:0;
 
-        .brand-text span {
-            display: block;
+    width:100%;
+    height:100%;
 
-            color: var(--muted);
+    object-fit:cover;
 
-            font-size: 8px;
+    opacity:.72;
 
-            margin-top: 2px;
-        }
+    transform:scale(1.03);
 
-        .header-button {
-            width: 38px;
-            height: 38px;
+    transition:
+        opacity .4s ease,
+        transform 5s ease;
+}
 
-            border-radius: 10px;
+.hero-image.loading-image{
+    opacity:.15;
+}
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
 
-            color: white;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.42),
+            rgba(5,5,5,1)
+        );
+}
 
-            background:
-                #101010;
+.hero-content{
+    position:absolute;
+    z-index:5;
 
-            border:
-                1px solid var(--border);
+    left:16px;
+    right:16px;
+    bottom:20px;
+}
 
-            text-decoration: none;
-        }
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
 
-        .header-button svg {
-            width: 18px;
-        }
+    padding:5px 8px;
 
+    border-radius:20px;
 
-        /* ======================================
-           HERO
-        ====================================== */
+    background:rgba(0,255,85,.09);
 
-        .hero {
-            height: 190px;
+    border:1px solid rgba(0,255,85,.22);
 
-            position: relative;
+    color:var(--green);
 
-            overflow: hidden;
+    font-size:8px;
+    font-weight:800;
 
-            background: #101010;
-        }
+    margin-bottom:8px;
+}
 
-        .hero-image {
-            position: absolute;
+.eyebrow span{
+    width:5px;
+    height:5px;
 
-            inset: 0;
+    border-radius:50%;
 
-            width: 100%;
-            height: 100%;
+    background:var(--green);
 
-            object-fit: cover;
+    box-shadow:
+        0 0 8px var(--green);
+}
 
-            opacity: .62;
+.hero h1{
+    font-size:23px;
+    line-height:1.1;
+    font-weight:900;
+    margin-bottom:5px;
+}
 
-            transition:
-                opacity .45s ease,
-                transform 5s ease;
+.hero h1 span{
+    color:var(--green);
+}
 
-            transform: scale(1.03);
-        }
+.hero p{
+    max-width:300px;
 
-        .hero::after {
-            content: "";
+    color:#b5b5b5;
 
-            position: absolute;
+    font-size:9px;
+    line-height:1.5;
+}
 
-            inset: 0;
+.hero-dots{
+    position:absolute;
 
-            background:
-                linear-gradient(
-                    180deg,
-                    rgba(0,0,0,.08),
-                    rgba(0,0,0,.40),
-                    rgba(5,5,5,1)
-                );
-        }
+    right:16px;
+    bottom:22px;
+    z-index:10;
 
-        .hero-content {
-            position: absolute;
+    display:flex;
+    gap:4px;
+}
 
-            z-index: 5;
+.hero-dot{
+    width:5px;
+    height:5px;
 
-            left: 16px;
-            right: 16px;
-            bottom: 20px;
-        }
+    border-radius:10px;
 
-        .eyebrow {
-            display: inline-flex;
+    background:rgba(255,255,255,.35);
 
-            align-items: center;
+    transition:.3s;
+}
 
-            gap: 6px;
+.hero-dot.active{
+    width:17px;
+    background:var(--green);
 
-            padding: 5px 8px;
+    box-shadow:
+        0 0 8px rgba(0,255,85,.5);
+}
 
-            border-radius: 20px;
 
-            background:
-                rgba(0,255,85,.09);
+/* ===============================
+   QUICK ACTIONS
+================================ */
 
-            border:
-                1px solid rgba(0,255,85,.2);
+.top-actions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
 
-            color: var(--green);
+    padding:10px;
 
-            font-size: 8px;
-            font-weight: 700;
+    background:#090909;
 
-            margin-bottom: 8px;
-        }
+    border-bottom:1px solid var(--border);
+}
 
-        .eyebrow span {
-            width: 5px;
-            height: 5px;
+.action-btn{
+    position:relative;
+    overflow:hidden;
 
-            border-radius: 50%;
+    padding:10px 4px;
 
-            background: var(--green);
+    text-align:center;
 
-            box-shadow:
-                0 0 8px
-                var(--green);
-        }
+    color:white;
 
-        .hero h1 {
-            font-size: 23px;
+    text-decoration:none;
 
-            line-height: 1.1;
+    background:
+        linear-gradient(
+            180deg,
+            #181818,
+            #0e0e0e
+        );
 
-            font-weight: 800;
+    border:1px solid var(--border);
+    border-radius:9px;
 
-            margin-bottom: 5px;
-        }
+    transition:.2s;
+}
 
-        .hero h1 span {
-            color: var(--green);
-        }
+.action-btn:active{
+    transform:scale(.96);
+}
 
-        .hero p {
-            font-size: 9px;
+.action-icon{
+    width:28px;
+    height:28px;
 
-            color: #b5b5b5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-            line-height: 1.5;
+    margin:auto auto 4px;
 
-            max-width: 280px;
-        }
+    border-radius:8px;
 
-        .hero-dots {
-            position: absolute;
+    background:rgba(255,255,255,.04);
+}
 
-            right: 16px;
-            bottom: 22px;
+.action-icon svg{
+    width:15px;
+    height:15px;
+}
 
-            z-index: 10;
+.action-label{
+    font-size:8px;
+    color:#aaa;
+}
 
-            display: flex;
 
-            gap: 4px;
-        }
+/* ===============================
+   ACCOUNT
+================================ */
 
-        .hero-dot {
-            width: 5px;
-            height: 5px;
+.account{
+    margin:14px 10px;
+    padding:14px;
 
-            border-radius: 10px;
+    border-radius:14px;
 
-            background:
-                rgba(255,255,255,.35);
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0c0c0c
+        );
 
-            transition: .3s;
-        }
+    border:1px solid var(--border);
 
-        .hero-dot.active {
-            width: 17px;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.20);
+}
 
-            background:
-                var(--green);
-        }
+.account-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
+    margin-bottom:10px;
+}
 
-        /* ======================================
-           QUICK ACTIONS
-        ====================================== */
+.account-header h3{
+    font-size:12px;
+}
 
-        .top-actions {
-            display: grid;
+.account-header span{
+    color:var(--muted);
+    font-size:8px;
+}
 
-            grid-template-columns:
-                repeat(4, 1fr);
+.balance-main{
+    font-size:22px;
+    font-weight:900;
+    margin-bottom:12px;
+}
 
-            gap: 6px;
+.balance-main small{
+    color:var(--muted);
+    font-size:8px;
+    font-weight:500;
+}
 
-            padding: 10px;
+.balance-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
 
-            background:
-                #090909;
+    border-top:1px solid var(--border);
 
-            border-bottom:
-                1px solid var(--border);
-        }
+    padding-top:11px;
+}
 
-        .action-btn {
-            text-decoration: none;
+.balance-box{
+    padding:0 7px;
+    border-right:1px solid var(--border);
+}
 
-            background:
-                linear-gradient(
-                    180deg,
-                    #181818,
-                    #0e0e0e
-                );
+.balance-box:last-child{
+    border-right:none;
+}
 
-            border:
-                1px solid var(--border);
+.balance-box label{
+    display:block;
 
-            border-radius: 9px;
+    color:var(--muted);
 
-            padding: 10px 4px;
+    font-size:7px;
 
-            text-align: center;
+    margin-bottom:4px;
+}
 
-            color: white;
+.balance-box strong{
+    font-size:9px;
+}
 
-            transition: .2s;
-        }
 
-        .action-btn:active {
-            transform: scale(.96);
-        }
+/* ===============================
+   SECTION
+================================ */
 
-        .action-icon {
-            width: 28px;
-            height: 28px;
+.section{
+    padding:0 10px;
+}
 
-            margin: auto auto 4px;
+.section-head{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
 
-            display: flex;
+    margin:18px 2px 10px;
+}
 
-            align-items: center;
-            justify-content: center;
+.section-head h2{
+    font-size:18px;
+    letter-spacing:-.4px;
+}
 
-            border-radius: 8px;
+.section-head p{
+    color:var(--muted);
+    font-size:8px;
+    margin-top:3px;
+}
 
-            background:
-                rgba(255,255,255,.04);
-        }
+.section-head a{
+    color:var(--green);
+    text-decoration:none;
+    font-size:8px;
+}
 
-        .action-icon svg {
-            width: 15px;
-            height: 15px;
-        }
 
-        .action-label {
-            font-size: 8px;
+/* ===============================
+   PRODUCT GRID
+================================ */
 
-            color: #a0a0a0;
-        }
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:2px;
 
+    background:#262626;
 
-        /* ======================================
-           ACCOUNT SUMMARY
-        ====================================== */
+    border:1px solid #242424;
+}
 
-        .account {
-            margin: 14px 10px;
 
-            padding: 14px;
+/* ===============================
+   PRODUCT CARD
+================================ */
 
-            border-radius: 14px;
+.product-card{
+    min-width:0;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #151515,
-                    #0c0c0c
-                );
+    padding:11px;
 
-            border:
-                1px solid var(--border);
-        }
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
-        .account-header {
-            display: flex;
+    position:relative;
 
-            align-items: center;
-            justify-content: space-between;
+    background:#090909;
+}
 
-            margin-bottom: 10px;
-        }
+.product-card::before{
+    content:"";
 
-        .account-header h3 {
-            font-size: 12px;
-        }
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
 
-        .account-header span {
-            font-size: 8px;
+    height:1px;
 
-            color: var(--muted);
-        }
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,255,85,.25),
+            transparent
+        );
+}
 
-        .balance-main {
-            font-size: 22px;
+.vip-tag{
+    width:100%;
 
-            font-weight: 800;
+    margin-bottom:8px;
 
-            color: white;
+    color:var(--green);
 
-            margin-bottom: 12px;
-        }
+    text-align:left;
 
-        .balance-main small {
-            font-size: 8px;
+    font-size:12px;
+    font-weight:900;
+}
 
-            color: var(--muted);
+.vip-tag span{
+    float:right;
 
-            font-weight: 500;
-        }
+    color:#666;
 
-        .balance-grid {
-            display: grid;
+    font-size:7px;
+    font-weight:600;
+}
 
-            grid-template-columns:
-                repeat(3,1fr);
 
-            border-top:
-                1px solid var(--border);
+/* ===============================
+   PRODUCT IMAGE
+================================ */
 
-            padding-top: 11px;
-        }
+.product-img-box{
+    width:100%;
+    height:145px;
 
-        .balance-box {
-            padding: 0 7px;
+    position:relative;
 
-            border-right:
-                1px solid var(--border);
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .balance-box:last-child {
-            border-right: none;
-        }
+    overflow:hidden;
 
-        .balance-box label {
-            display: block;
+    margin-bottom:10px;
 
-            color: var(--muted);
+    border-radius:9px;
 
-            font-size: 7px;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            #292929,
+            #090909 75%
+        );
 
-            margin-bottom: 4px;
-        }
+    border:1px solid rgba(255,255,255,.06);
+}
 
-        .balance-box strong {
-            font-size: 9px;
-        }
+.product-img-box img{
+    width:100%;
+    height:100%;
 
+    object-fit:contain;
 
-        /* ======================================
-           SECTION
-        ====================================== */
+    padding:5px;
 
-        .section {
-            padding: 0 10px;
-        }
+    opacity:0;
 
-        .section-head {
-            display: flex;
+    transition:
+        opacity .35s ease,
+        transform .5s ease;
+}
 
-            align-items: end;
+.product-img-box img.image-loaded{
+    opacity:1;
+}
 
-            justify-content: space-between;
+.product-card:hover
+.product-img-box img{
+    transform:scale(1.06);
+}
 
-            margin:
-                18px 2px 10px;
-        }
 
-        .section-head h2 {
-            font-size: 18px;
+/* ===============================
+   IMAGE LOADER
+================================ */
 
-            letter-spacing: -.4px;
-        }
+.image-loader{
+    position:absolute;
+    inset:0;
 
-        .section-head p {
-            font-size: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
 
-            color: var(--muted);
+    gap:8px;
 
-            margin-top: 3px;
-        }
+    background:
+        radial-gradient(
+            circle at center,
+            #202020,
+            #090909
+        );
 
-        .section-head a {
-            color: var(--green);
+    z-index:3;
 
-            text-decoration: none;
+    transition:
+        opacity .3s ease,
+        visibility .3s ease;
+}
 
-            font-size: 8px;
-        }
+.image-loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
 
+.image-spinner{
+    width:24px;
+    height:24px;
 
-        /* ======================================
-           PLAN GRID
-        ====================================== */
+    border-radius:50%;
 
-        .product-grid {
-            display: grid;
+    border:
+        2px solid
+        rgba(255,255,255,.10);
 
-            grid-template-columns:
-                repeat(2, minmax(0,1fr));
+    border-top-color:
+        var(--green);
 
-            gap: 2px;
+    animation:
+        spin .7s linear infinite;
+}
 
-            background:
-                #262626;
+.image-loader span{
+    color:#777;
+    font-size:7px;
+}
 
-            border:
-                1px solid #242424;
-        }
 
+/* ===============================
+   FALLBACK PHONE
+================================ */
 
-        /* ======================================
-           PLAN CARD
-        ====================================== */
+.image-fallback{
+    display:none;
 
-        .product-card {
-            background:
-                #090909;
+    position:absolute;
+    inset:0;
 
-            padding: 11px;
+    align-items:center;
+    justify-content:center;
+}
 
-            min-width: 0;
+.fake-phone{
+    width:62px;
+    height:112px;
 
-            display: flex;
+    position:relative;
 
-            flex-direction: column;
+    border-radius:13px;
 
-            align-items: center;
-        }
+    background:
+        linear-gradient(
+            145deg,
+            #303030,
+            #080808
+        );
 
-        .vip-tag {
-            width: 100%;
+    border:2px solid #4a4a4a;
 
-            color:
-                var(--green);
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.6);
+}
 
-            font-weight: 800;
+.fake-phone::before{
+    content:"";
 
-            font-size: 12px;
+    position:absolute;
 
-            margin-bottom: 8px;
+    width:30px;
+    height:4px;
 
-            text-align: left;
-        }
+    top:5px;
+    left:50%;
 
-        .vip-tag span {
-            float: right;
+    transform:translateX(-50%);
 
-            color: #666;
+    border-radius:10px;
 
-            font-size: 7px;
+    background:#050505;
+}
 
-            font-weight: 500;
-        }
+.fake-phone::after{
+    content:"INFINIX";
 
+    position:absolute;
 
-        /* ======================================
-           PRODUCT IMAGE
-        ====================================== */
+    bottom:20px;
+    left:50%;
 
-        .product-img-box {
-            width: 100%;
+    transform:
+        translateX(-50%)
+        rotate(90deg);
 
-            height: 125px;
+    color:rgba(255,255,255,.45);
 
-            display: flex;
+    font-size:6px;
+    font-weight:800;
+}
 
-            align-items: center;
 
-            justify-content: center;
+/* ===============================
+   INFO
+================================ */
 
-            margin-bottom: 10px;
+.info-row{
+    width:100%;
 
-            overflow: hidden;
+    margin-bottom:5px;
 
-            border-radius: 9px;
+    color:#777;
 
-            background:
-                radial-gradient(
-                    circle,
-                    #1d1d1d,
-                    #090909
-                );
-        }
+    font-size:8px;
 
-        .product-img-box img {
-            width: 100%;
+    text-align:left;
+}
 
-            height: 100%;
+.info-row span{
+    float:right;
 
-            object-fit: cover;
+    color:#d0d0d0;
 
-            opacity: .82;
+    font-weight:600;
+}
 
-            transition:
-                transform .5s ease,
-                opacity .3s ease;
-        }
+.info-row .income{
+    color:var(--green);
+}
 
-        .product-card:hover
-        .product-img-box img {
-            transform: scale(1.07);
+.price-tag{
+    width:100%;
 
-            opacity: 1;
-        }
+    margin:7px 0 9px;
 
+    color:var(--green);
 
-        /* ======================================
-           PLAN INFO
-        ====================================== */
+    font-size:14px;
+    font-weight:900;
 
-        .info-row {
-            width: 100%;
+    text-align:left;
+}
 
-            font-size: 8px;
+.price-tag small{
+    color:#666;
+    font-size:7px;
+    font-weight:500;
+}
 
-            margin-bottom: 5px;
 
-            color:
-                #777;
+/* ===============================
+   DETAILS BUTTON
+================================ */
 
-            text-align: left;
-        }
+.buy-btn{
+    width:100%;
+    min-height:32px;
 
-        .info-row span {
-            color:
-                #d0d0d0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
 
-            font-weight: 600;
+    padding:7px 0;
 
-            float: right;
-        }
+    border:none;
+    border-radius:6px;
 
-        .info-row.income span {
-            color:
-                var(--green);
-        }
+    background:
+        linear-gradient(
+            135deg,
+            #00d948,
+            #00a83a
+        );
 
+    color:#001407;
 
-        /* ======================================
-           PRICE
-        ====================================== */
+    font-size:10px;
+    font-weight:900;
 
-        .price-tag {
-            width: 100%;
+    text-decoration:none;
 
-            color:
-                var(--green);
+    cursor:pointer;
 
-            font-weight: 800;
+    transition:.2s;
+}
 
-            font-size: 14px;
+.buy-btn:active{
+    transform:scale(.95);
+}
 
-            margin:
-                7px 0 9px;
+.buy-btn svg{
+    width:13px;
+    height:13px;
+}
 
-            text-align: left;
-        }
 
-        .price-tag small {
-            font-size: 7px;
+/* ===============================
+   PLAN 7 + PLAN 9
+================================ */
 
-            color: #666;
+.plan-seven{
+    border:1px solid rgba(0,255,85,.20);
+}
 
-            font-weight: 500;
-        }
+.plan-nine{
+    border:1px solid rgba(0,255,85,.12);
+}
 
 
-        /* ======================================
-           BUY BUTTON
-        ====================================== */
+/* ===============================
+   LOCKED
+================================ */
 
-        .buy-btn {
-            width: 100%;
+.locked{
+    opacity:.72;
+}
 
-            min-height: 32px;
+.locked-button{
+    width:100%;
+    min-height:32px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #00d948,
-                    #00a83a
-                );
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
 
-            color: #001407;
+    border:1px solid #272727;
+    border-radius:6px;
 
-            border: none;
+    background:#151515;
 
-            border-radius: 6px;
+    color:#707070;
 
-            padding: 7px 0;
+    font-size:9px;
+    font-weight:700;
+}
 
-            font-weight: 800;
+.locked-button svg{
+    width:13px;
+}
 
-            font-size: 10px;
 
-            cursor: pointer;
+/* ===============================
+   INFORMATION
+================================ */
 
-            text-align: center;
+.info{
+    margin:15px 10px;
+    padding:13px;
 
-            text-decoration: none;
+    display:flex;
+    gap:9px;
 
-            display: flex;
+    border-radius:12px;
 
-            align-items: center;
+    background:#0e1110;
 
-            justify-content: center;
+    border:1px solid rgba(0,255,85,.10);
+}
 
-            gap: 5px;
+.info-icon{
+    min-width:30px;
+    height:30px;
 
-            transition: .2s;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .buy-btn:active {
-            transform: scale(.96);
-        }
+    border-radius:8px;
 
-        .buy-btn svg {
-            width: 13px;
-            height: 13px;
-        }
+    color:var(--green);
 
+    background:
+        rgba(0,255,85,.08);
+}
 
-        /* ======================================
-           LOCKED PLANS
-        ====================================== */
+.info-icon svg{
+    width:15px;
+}
 
-        .locked {
-            opacity: .55;
-        }
+.info h4{
+    font-size:9px;
+    margin-bottom:3px;
+}
 
-        .locked
-        .product-img-box img {
-            filter:
-                grayscale(1);
+.info p{
+    color:var(--muted);
+    font-size:7px;
+    line-height:1.5;
+}
 
-        }
 
-        .locked .vip-tag {
-            color: #777;
-        }
+/* ===============================
+   BOTTOM NAV
+================================ */
 
-        .locked-button {
-            width: 100%;
+.bottom-nav{
+    position:fixed;
 
-            min-height: 32px;
+    left:50%;
+    bottom:0;
 
-            border:
-                1px solid #272727;
+    transform:translateX(-50%);
 
-            border-radius: 6px;
+    width:100%;
+    max-width:480px;
+    height:68px;
 
-            background:
-                #151515;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
 
-            color:
-                #707070;
+    z-index:500;
 
-            font-size: 9px;
+    background:
+        rgba(14,14,14,.97);
 
-            font-weight: 700;
+    border-top:1px solid #252525;
 
-            display: flex;
+    backdrop-filter:blur(18px);
+}
 
-            align-items: center;
-            justify-content: center;
+.nav-item{
+    position:relative;
 
-            gap: 5px;
-        }
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 
-        .locked-button svg {
-            width: 13px;
-        }
+    gap:4px;
 
+    color:#686868;
 
-        /* ======================================
-           INFORMATION
-        ====================================== */
+    font-size:7px;
 
-        .info {
-            margin: 15px 10px;
+    text-decoration:none;
 
-            padding: 13px;
+    transition:.2s;
+}
 
-            border-radius: 12px;
+.nav-item svg{
+    width:18px;
+    height:18px;
+}
 
-            background:
-                #0e1110;
+.nav-item:active{
+    transform:scale(.91);
+}
 
-            border:
-                1px solid
-                rgba(0,255,85,.10);
+.nav-item.active{
+    color:var(--green);
+}
 
-            display: flex;
+.nav-item.active::before{
+    content:"";
 
-            gap: 9px;
-        }
+    position:absolute;
 
-        .info-icon {
-            min-width: 30px;
-            height: 30px;
+    top:0;
 
-            border-radius: 8px;
+    width:28px;
+    height:2px;
 
-            display: flex;
+    border-radius:
+        0 0 5px 5px;
 
-            align-items: center;
-            justify-content: center;
+    background:var(--green);
 
-            color:
-                var(--green);
+    box-shadow:
+        0 0 10px
+        rgba(0,255,85,.5);
+}
 
-            background:
-                rgba(0,255,85,.08);
-        }
 
-        .info-icon svg {
-            width: 15px;
-        }
+/* ===============================
+   RESPONSIVE
+================================ */
 
-        .info h4 {
-            font-size: 9px;
+@media(max-width:360px){
 
-            margin-bottom: 3px;
-        }
+    .product-img-box{
+        height:120px;
+    }
 
-        .info p {
-            font-size: 7px;
+    .product-card{
+        padding:9px;
+    }
 
-            line-height: 1.5;
+    .hero{
+        height:180px;
+    }
 
-            color:
-                var(--muted);
-        }
+    .hero h1{
+        font-size:21px;
+    }
+}
 
-
-        /* ======================================
-           BOTTOM NAVIGATION
-        ====================================== */
-
-        .bottom-nav {
-            position: fixed;
-
-            bottom: 0;
-
-            left: 50%;
-
-            transform:
-                translateX(-50%);
-
-            width: 100%;
-
-            max-width: 480px;
-
-            height: 68px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(5,1fr);
-
-            background:
-                rgba(14,14,14,.96);
-
-            border-top:
-                1px solid #252525;
-
-            backdrop-filter:
-                blur(18px);
-
-            z-index: 500;
-        }
-
-        .nav-item {
-            position: relative;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 4px;
-
-            text-decoration: none;
-
-            color:
-                #686868;
-
-            font-size: 7px;
-
-            transition: .2s;
-        }
-
-        .nav-item svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .nav-item.active {
-            color:
-                var(--green);
-        }
-
-        .nav-item.active::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-
-            width: 28px;
-            height: 2px;
-
-            border-radius:
-                0 0 5px 5px;
-
-            background:
-                var(--green);
-
-            box-shadow:
-                0 0 10px
-                rgba(0,255,85,.5);
-        }
-
-
-        /* ======================================
-           LOADING SCREEN
-        ====================================== */
-
-        .page-loader {
-            position: fixed;
-
-            inset: 0;
-
-            background:
-                rgba(0,0,0,.96);
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            flex-direction: column;
-
-            gap: 12px;
-
-            z-index: 9999;
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            transition:
-                opacity .2s ease,
-                visibility .2s ease;
-        }
-
-        .page-loader.show {
-            opacity: 1;
-
-            visibility: visible;
-        }
-
-        .loader-logo {
-            width: 46px;
-            height: 46px;
-
-            border-radius: 12px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--green),
-                    #8affae
-                );
-
-            color:
-                #001b09;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-weight: 900;
-
-            font-size: 18px;
-
-            box-shadow:
-                0 0 30px
-                rgba(0,255,85,.18);
-        }
-
-        .loader-ring {
-            width: 25px;
-            height: 25px;
-
-            border-radius: 50%;
-
-            border:
-                2px solid
-                rgba(255,255,255,.12);
-
-            border-top-color:
-                var(--green);
-
-            animation:
-                spin .7s linear infinite;
-        }
-
-        .loader-text {
-            color: #858585;
-
-            font-size: 8px;
-
-            letter-spacing: .4px;
-        }
-
-        @keyframes spin {
-
-            to {
-                transform:
-                    rotate(360deg);
-            }
-
-        }
-
-
-        /* ======================================
-           RESPONSIVE
-        ====================================== */
-
-        @media(max-width:360px) {
-
-            .product-img-box {
-                height: 105px;
-            }
-
-            .product-card {
-                padding: 9px;
-            }
-
-            .hero {
-                height: 175px;
-            }
-
-            .hero h1 {
-                font-size: 21px;
-            }
-
-        }
-
-    </style>
+</style>
 </head>
 
 <body>
 
-<!-- =========================================
-     GLOBAL PAGE LOADER
-========================================= -->
 
-<div
-    class="page-loader"
-    id="pageLoader">
+<!-- ===============================
+     PAGE LOADER
+================================ -->
 
-    <div class="loader-logo">
-        Z
-    </div>
+<div class="page-loader" id="pageLoader">
 
-    <div class="loader-ring"></div>
+    <div class="loader-card">
 
-    <div class="loader-text">
-        Loading Zenith Capital...
+        <div class="loader-logo">
+            I
+        </div>
+
+        <div class="loader-ring"></div>
+
+        <div
+            class="loader-text"
+            id="loaderText">
+            Loading Infinix...
+        </div>
+
+        <div class="loader-bar">
+            <span></span>
+        </div>
+
     </div>
 
 </div>
@@ -1146,1231 +1220,1518 @@
 <div class="phone-container">
 
 
-    <!-- =========================================
-         HEADER
-    ========================================== -->
+<!-- ===============================
+     HEADER
+================================ -->
 
-    <header class="top-header">
+<header class="top-header">
 
-        <div class="brand">
+    <div class="brand">
 
-            <div class="brand-logo">
-                Z
-            </div>
+        <div class="brand-logo">
+            I
+        </div>
 
-            <div class="brand-text">
+        <div class="brand-text">
 
-                <strong>
-                    ZENITH CAPITAL
-                </strong>
+            <strong>INFINIX</strong>
 
-                <span>
-                    SMART FINANCIAL PLATFORM
-                </span>
+            <span>
+                SMARTPHONE SHOWCASE
+            </span>
 
-            </div>
+        </div>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('support') }}"
+        class="header-button loading-link"
+        data-loading="Opening Support...">
+
+        <i data-lucide="bell"></i>
+
+    </a>
+
+</header>
+
+
+<!-- ===============================
+     HERO
+================================ -->
+
+<section class="hero">
+
+    <img
+        id="heroImage"
+        class="hero-image loading-image"
+        src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
+        alt="Infinix smartphone"
+    >
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+
+            <span></span>
+
+            FEATURED DEVICE
+
+        </div>
+
+        <h1>
+
+            Welcome,
+            <span>
+                {{ user.fullname }}
+            </span>
+
+        </h1>
+
+        <p>
+            Explore the latest Infinix smartphone
+            designs and device information.
+        </p>
+
+    </div>
+
+
+    <div class="hero-dots">
+
+        <span class="hero-dot active"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
+
+    </div>
+
+</section>
+
+
+<!-- ===============================
+     QUICK ACTIONS
+================================ -->
+
+<div class="top-actions">
+
+    <a
+        href="{{ url_for('deposit') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Deposit...">
+
+        <div
+            class="action-icon"
+            style="color:#00ff55">
+
+            <i data-lucide="wallet"></i>
+
+        </div>
+
+        <div class="action-label">
+            Deposit
+        </div>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('withdraw') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Withdraw...">
+
+        <div
+            class="action-icon"
+            style="color:#ffb45b">
+
+            <i data-lucide="arrow-up-right"></i>
+
+        </div>
+
+        <div class="action-label">
+            Withdraw
+        </div>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('support') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Support...">
+
+        <div
+            class="action-icon"
+            style="color:#67b5ff">
+
+            <i data-lucide="headphones"></i>
+
+        </div>
+
+        <div class="action-label">
+            Support
+        </div>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('profile') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Profile...">
+
+        <div
+            class="action-icon"
+            style="color:#d78cff">
+
+            <i data-lucide="user-round"></i>
+
+        </div>
+
+        <div class="action-label">
+            Profile
+        </div>
+
+    </a>
+
+</div>
+
+
+<!-- ===============================
+     ACCOUNT
+================================ -->
+
+<section class="account">
+
+    <div class="account-header">
+
+        <h3>
+            Account Overview
+        </h3>
+
+        <span>
+            Available balances
+        </span>
+
+    </div>
+
+
+    <div class="balance-main">
+
+        GHS
+        {{ "%.2f"|format(account.deposit_account|float) }}
+
+        <small>
+            Deposit
+        </small>
+
+    </div>
+
+
+    <div class="balance-grid">
+
+        <div class="balance-box">
+
+            <label>
+                Withdraw
+            </label>
+
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.withdraw_account|float) }}
+            </strong>
 
         </div>
 
 
-        <a
-            href="{{ url_for('support') }}"
-            class="header-button loading-link">
+        <div class="balance-box">
 
-            <i data-lucide="bell"></i>
+            <label>
+                Income
+            </label>
 
-        </a>
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.income_account|float) }}
+            </strong>
 
-    </header>
+        </div>
 
 
-    <!-- =========================================
-         HERO
-    ========================================== -->
+        <div class="balance-box">
 
-    <section class="hero">
+            <label>
+                Referral
+            </label>
 
-        <img
-            id="heroImage"
-            class="hero-image"
-            src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=85"
-            alt="Premium smartphone">
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.referral_account|float) }}
+            </strong>
 
-        <div class="hero-content">
+        </div>
 
-            <div class="eyebrow">
+    </div>
 
-                <span></span>
+</section>
 
-                PREMIUM EXPERIENCE
 
-            </div>
+<!-- ===============================
+     DEVICES
+================================ -->
 
-            <h1>
+<section class="section">
 
-                Welcome back,
-                <span>
-                    {{ user.fullname }}
-                </span>
+    <div class="section-head">
 
-            </h1>
+        <div>
+
+            <h2>
+                Available Devices
+            </h2>
 
             <p>
-                Explore available packages
-                and manage your account.
+                Explore Infinix smartphone models
             </p>
 
         </div>
 
-
-        <div class="hero-dots">
-
-            <span class="hero-dot active"></span>
-            <span class="hero-dot"></span>
-            <span class="hero-dot"></span>
-            <span class="hero-dot"></span>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================================
-         QUICK ACTIONS
-    ========================================== -->
-
-    <div class="top-actions">
-
-
-        <a
-            href="{{ url_for('deposit') }}"
-            class="action-btn loading-link">
-
-            <div class="action-icon"
-                 style="color:#00ff55">
-
-                <i data-lucide="wallet"></i>
-
-            </div>
-
-            <div class="action-label">
-                Deposit
-            </div>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('withdraw') }}"
-            class="action-btn loading-link">
-
-            <div class="action-icon"
-                 style="color:#ffb45b">
-
-                <i data-lucide="arrow-up-right"></i>
-
-            </div>
-
-            <div class="action-label">
-                Withdraw
-            </div>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('support') }}"
-            class="action-btn loading-link">
-
-            <div class="action-icon"
-                 style="color:#67b5ff">
-
-                <i data-lucide="headphones"></i>
-
-            </div>
-
-            <div class="action-label">
-                Support
-            </div>
-
-        </a>
-
-
-        <a
-            href="{{ url_for('profile') }}"
-            class="action-btn loading-link">
-
-            <div class="action-icon"
-                 style="color:#d78cff">
-
-                <i data-lucide="user-round"></i>
-
-            </div>
-
-            <div class="action-label">
-                Profile
-            </div>
-
-        </a>
-
-    </div>
-
-
-    <!-- =========================================
-         ACCOUNT
-    ========================================== -->
-
-    <section class="account">
-
-        <div class="account-header">
-
-            <h3>
-                Account Overview
-            </h3>
-
-            <span>
-                Available balances
-            </span>
-
-        </div>
-
-
-        <div class="balance-main">
-
-            GHS
-            {{ "%.2f"|format(account.deposit_account|float) }}
-
-            <small>
-                Deposit
-            </small>
-
-        </div>
-
-
-        <div class="balance-grid">
-
-
-            <div class="balance-box">
-
-                <label>
-                    Withdraw
-                </label>
-
-                <strong>
-                    GHS
-                    {{ "%.2f"|format(account.withdraw_account|float) }}
-                </strong>
-
-            </div>
-
-
-            <div class="balance-box">
-
-                <label>
-                    Income
-                </label>
-
-                <strong>
-                    GHS
-                    {{ "%.2f"|format(account.income_account|float) }}
-                </strong>
-
-            </div>
-
-
-            <div class="balance-box">
-
-                <label>
-                    Referral
-                </label>
-
-                <strong>
-                    GHS
-                    {{ "%.2f"|format(account.referral_account|float) }}
-                </strong>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================================
-         PLANS
-    ========================================== -->
-
-    <section class="section">
-
-
-        <div class="section-head">
-
-            <div>
-
-                <h2>
-                    Available Products
-                </h2>
-
-                <p>
-                    Select a package to Buy
-                </p>
-
-            </div>
-
-
-            <a
-                href="{{ url_for('my_plan') }}"
-                class="loading-link">
-
-                My Product
-
-            </a>
-
-        </div>
-
-
-        <div class="product-grid">
-
-
-            <!-- ================= PLAN 1 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 1
-
-                    <span>
-                        STARTER
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 1 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 22
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 4,400
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 100
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=1) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 2 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 2
-
-                    <span>
-                        BASIC
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 2 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 45
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 9000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 200
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=2) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 3 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 3
-
-                    <span>
-                        GROWTH
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 3 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 80
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 16,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 400
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=3) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 4 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 4
-
-                    <span>
-                        ADVANCED
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 4 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 110
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 22,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 600
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=4) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 5 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 5
-
-                    <span>
-                        PREMIUM
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1592286927505-2fd0b4f5c0e5?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 5 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 200
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 40,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 800
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=5) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 6 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 6
-
-                    <span>
-                        ELITE
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 6 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 300
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 60,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 900
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=6) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 7 ================= -->
-
-            <article class="product-card">
-
-                <div class="vip-tag">
-
-                    VIP 7
-
-                    <span>
-                        MASTER
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 7 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 460
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 92,00
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        300 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 1000
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=7) }}"
-                    class="buy-btn plan-link">
-
-                    Buy now
-
-                    <i data-lucide="arrow-right"></i>
-
-                </a>
-
-            </article>
-
-
-            <!-- ================= PLAN 8 ================= -->
-
-            <article class="product-card locked">
-
-                <div class="vip-tag">
-
-                    VIP 8
-
-                    <span>
-                        Coming soon
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 8 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span>
-                        GHS 500
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 100,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 1500
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <button
-                    class="locked-button"
-                    disabled>
-
-                    <i data-lucide="lock"></i>
-
-                    Coming soon
-
-                </button>
-
-            </article>
-
-
-            <!-- ================= PLAN 9 ================= -->
-
-            <article class="product-card locked">
-
-                <div class="vip-tag">
-
-                    VIP 9
-
-                    <span>
-                        coming soon
-                    </span>
-
-                </div>
-
-
-                <div class="product-img-box">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=700&q=85"
-                        alt="Plan 9 smartphone">
-
-                </div>
-
-
-                <div class="info-row">
-                    Daily income:
-                    <span>
-                        GHS 800
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 144,000
-                    </span>
-                </div>
-
-                <div class="info-row">
-                    Validity:
-                    <span>
-                        180 Days
-                    </span>
-                </div>
-
-
-                <div class="price-tag">
-
-                    GHS 4000
-
-                    <small>
-                        / PLAN
-                    </small>
-
-                </div>
-
-
-                <button
-                    class="locked-button"
-                    disabled>
-
-                    <i data-lucide="lock"></i>
-
-                    Coming soon
-
-                </button>
-
-            </article>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================================
-         INFORMATION
-    ========================================== -->
-
-    <div class="info">
-
-        <div class="info-icon">
-
-            <i data-lucide="shield-check"></i>
-
-        </div>
-
-        <div>
-
-            <h4>
-                Platform information
-            </h4>
-
-            <p>
-                Please review the package information
-                carefully before buying. The figures
-                displayed here are affordable to be purchase 
-            </>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================================
-         BOTTOM NAVIGATION
-    ========================================== -->
-
-    <nav class="bottom-nav">
-
-
-        <a
-            href="{{ url_for('dashboard') }}"
-            class="nav-item active loading-link">
-
-            <i data-lucide="house"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
         <a
             href="{{ url_for('my_plan') }}"
-            class="nav-item loading-link">
+            class="loading-link"
+            data-loading="Opening My Devices...">
 
-            <i data-lucide="chart-no-axes-combined"></i>
-
-            <span>
-                Income
-            </span>
+            My Devices
 
         </a>
 
-
-        <a
-            href="{{ url_for('team') }}"
-            class="nav-item loading-link">
-
-            <i data-lucide="users"></i>
-
-            <span>
-                Team
-            </span>
-
-        </a>
+    </div>
 
 
-        <a
-            href="{{ url_for('team') }}"
-            class="nav-item loading-link">
-
-            <i data-lucide="share-2"></i>
-
-            <span>
-                Share
-            </span>
-
-        </a>
+    <div class="product-grid">
 
 
-        <a
-            href="{{ url_for('profile') }}"
-            class="nav-item loading-link">
+<!-- ===============================
+     PLAN 1
+================================ -->
 
-            <i data-lucide="user-round"></i>
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 1
+
+        <span>
+            STARTER
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
 
             <span>
-                My
+                Loading image...
             </span>
 
-        </a>
+        </div>
 
-    </nav>
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
+            alt="Infinix Note 10"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+
+            <div class="fake-phone"></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            Note Series
+        </span>
+    </div>
+
+    <div class="info-row">
+        Display:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 1
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 1...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 2
+================================ -->
+
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 2
+
+        <span>
+            BASIC
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
+            alt="Infinix Hot series"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            HOT Series
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 2
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 2...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 3
+================================ -->
+
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 3
+
+        <span>
+            GROWTH
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2022/04/Infinix-Hot-12i.png"
+            alt="Infinix Hot 12i"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            Hot 12i
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 3
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 3...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 4
+================================ -->
+
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 4
+
+        <span>
+            ADVANCED
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+            alt="Infinix S5 Pro"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            S5 Pro
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 4
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 4...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 5
+================================ -->
+
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 5
+
+        <span>
+            PREMIUM
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-s2-pro.png"
+            alt="Infinix S2 Pro"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            S2 Pro
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 5
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 5...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 6
+================================ -->
+
+<article class="product-card">
+
+    <div class="vip-tag">
+
+        INFINIX 6
+
+        <span>
+            ELITE
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
+            alt="Infinix Note"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            NOTE Series
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 6
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 6...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 7
+================================ -->
+
+<article class="product-card plan-seven">
+
+    <div class="vip-tag">
+
+        INFINIX 7
+
+        <span>
+            MASTER
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
+            alt="Infinix Note 12 Pro"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            Note 12 Pro
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 7
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 7...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 8
+================================ -->
+
+<article class="product-card locked">
+
+    <div class="vip-tag">
+
+        INFINIX 8
+
+        <span>
+            COMING SOON
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
+            alt="Infinix device"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            HOT Series
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span>
+            Coming soon
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 8
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <button
+        class="locked-button"
+        disabled>
+
+        <i data-lucide="lock"></i>
+
+        Coming soon
+
+    </button>
+
+</article>
+
+
+<!-- ===============================
+     PLAN 9
+================================ -->
+
+<article class="product-card plan-nine">
+
+    <div class="vip-tag">
+
+        INFINIX 9
+
+        <span>
+            MASTER
+        </span>
+
+    </div>
+
+
+    <div class="product-img-box">
+
+        <div class="image-loader">
+
+            <div class="image-spinner"></div>
+
+            <span>
+                Loading image...
+            </span>
+
+        </div>
+
+        <img
+            src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+            alt="Infinix S5 Pro"
+            loading="lazy"
+        >
+
+        <div class="image-fallback">
+            <div class="fake-phone"></div>
+        </div>
+
+    </div>
+
+
+    <div class="info-row">
+        Model:
+        <span>
+            S5 Pro
+        </span>
+    </div>
+
+    <div class="info-row">
+        Category:
+        <span>
+            Smartphone
+        </span>
+    </div>
+
+    <div class="info-row">
+        Status:
+        <span class="income">
+            Available
+        </span>
+    </div>
+
+
+    <div class="price-tag">
+
+        INFINIX 9
+
+        <small>
+            / MODEL
+        </small>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="buy-btn loading-link"
+        data-loading="Opening Infinix 9...">
+
+        View device
+
+        <i data-lucide="arrow-right"></i>
+
+    </a>
+
+</article>
+
+
+    </div>
+
+</section>
+
+
+<!-- ===============================
+     INFORMATION
+================================ -->
+
+<div class="info">
+
+    <div class="info-icon">
+
+        <i data-lucide="shield-check"></i>
+
+    </div>
+
+    <div>
+
+        <h4>
+            Device information
+        </h4>
+
+        <p>
+            Explore the available Infinix models
+            and view their device information.
+            Images may take a moment to load depending
+            on your internet connection.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ===============================
+     BOTTOM NAVIGATION
+================================ -->
+
+<nav class="bottom-nav">
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="nav-item active loading-link"
+        data-loading="Loading Home...">
+
+        <i data-lucide="house"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="nav-item loading-link"
+        data-loading="Loading Income...">
+
+        <i data-lucide="chart-no-axes-combined"></i>
+
+        <span>
+            Income
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('team') }}"
+        class="nav-item loading-link"
+        data-loading="Loading Team...">
+
+        <i data-lucide="users"></i>
+
+        <span>
+            Team
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('team') }}"
+        class="nav-item loading-link"
+        data-loading="Opening Share...">
+
+        <i data-lucide="share-2"></i>
+
+        <span>
+            Share
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('profile') }}"
+        class="nav-item loading-link"
+        data-loading="Loading Profile...">
+
+        <i data-lucide="user-round"></i>
+
+        <span>
+            My
+        </span>
+
+    </a>
+
+</nav>
 
 </div>
 
 
 <script>
 
-    /* =========================================
-       HERO SLIDER
-    ========================================== */
+/* =========================================
+   PAGE LOADER
+========================================= */
 
-    const heroImages = [
+const pageLoader =
+    document.getElementById("pageLoader");
 
-        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=85",
+const loaderText =
+    document.getElementById("loaderText");
 
-        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1000&q=85",
-
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=85",
-
-        "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=1000&q=85"
-
-    ];
+let navigationStarted = false;
 
 
-    let heroIndex = 0;
+function showLoader(message){
 
-    const heroImage =
-        document.getElementById("heroImage");
+    if(loaderText){
+        loaderText.textContent =
+            message || "Loading Infinix...";
+    }
 
-    const heroDots =
-        document.querySelectorAll(".hero-dot");
+    pageLoader.classList.add("show");
+}
 
 
-    function changeHero() {
+function hideLoader(){
 
-        heroIndex++;
+    pageLoader.classList.remove("show");
+}
 
-        if (
-            heroIndex >=
-            heroImages.length
-        ) {
 
-            heroIndex = 0;
+/* =========================================
+   NAVIGATION LOADING
+========================================= */
 
+document
+.querySelectorAll(".loading-link")
+.forEach(link => {
+
+    link.addEventListener("click",function(event){
+
+        if(navigationStarted){
+            event.preventDefault();
+            return;
         }
 
+        const href =
+            this.getAttribute("href");
 
-        heroImage.style.opacity = "0";
+        if(
+            !href ||
+            href === "#" ||
+            href.startsWith("javascript:")
+        ){
+            return;
+        }
 
+        event.preventDefault();
+
+        navigationStarted = true;
+
+        const message =
+            this.dataset.loading ||
+            "Loading Infinix...";
+
+        showLoader(message);
+
+        this.style.opacity = ".65";
 
         setTimeout(() => {
 
-            heroImage.src =
-                heroImages[heroIndex];
+            window.location.href = href;
 
-            heroImage.style.opacity =
-                ".62";
+        },420);
 
-        }, 300);
+    });
+
+});
 
 
-        heroDots.forEach(
-            (dot,index) => {
+/* =========================================
+   PAGE SHOW
+========================================= */
 
-                dot.classList.toggle(
-                    "active",
-                    index === heroIndex
-                );
+window.addEventListener(
+    "pageshow",
+    function(){
 
-            }
-        );
+        navigationStarted = false;
+
+        hideLoader();
+
+    }
+);
+
+
+/* =========================================
+   PRODUCT IMAGE LOADING
+========================================= */
+
+document
+.querySelectorAll(".product-img-box")
+.forEach(box => {
+
+    const img =
+        box.querySelector("img");
+
+    const loader =
+        box.querySelector(".image-loader");
+
+    const fallback =
+        box.querySelector(".image-fallback");
+
+
+    if(!img){
+        return;
+    }
+
+
+    function imageLoaded(){
+
+        img.classList.add("image-loaded");
+
+        if(loader){
+            loader.classList.add("hide");
+        }
 
     }
 
 
-    setInterval(
-        changeHero,
-        4500
+    function imageFailed(){
+
+        img.style.display = "none";
+
+        if(loader){
+            loader.classList.add("hide");
+        }
+
+        if(fallback){
+            fallback.style.display = "flex";
+        }
+
+    }
+
+
+    img.addEventListener(
+        "load",
+        imageLoaded
     );
 
 
-    /* =========================================
-       GLOBAL LOADING SYSTEM
-    ========================================== */
-
-    const pageLoader =
-        document.getElementById(
-            "pageLoader"
-        );
+    img.addEventListener(
+        "error",
+        imageFailed
+    );
 
 
-    function showLoader() {
+    /*
+       Handles images that are already
+       cached by the browser.
+    */
 
-        pageLoader.classList.add(
-            "show"
-        );
+    if(img.complete){
+
+        if(img.naturalWidth > 0){
+            imageLoaded();
+        }else{
+            imageFailed();
+        }
 
     }
 
-
-    function hideLoader() {
-
-        pageLoader.classList.remove(
-            "show"
-        );
-
-    }
+});
 
 
-    /*
-       Show loader when the user
-       navigates to another page.
-    */
+/* =========================================
+   HERO IMAGE LOADING
+========================================= */
 
-    document.querySelectorAll(
-        ".loading-link"
-    ).forEach(link => {
+const heroImage =
+    document.getElementById("heroImage");
 
-        link.addEventListener(
-            "click",
-            function(event) {
+if(heroImage){
 
-                const href =
-                    this.getAttribute("href");
+    heroImage.addEventListener(
+        "load",
+        function(){
 
-                if (
-                    !href ||
-                    href === "#" ||
-                    this.target === "_blank"
-                ) {
-
-                    return;
-
-                }
-
-                event.preventDefault();
-
-                showLoader();
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        href;
-
-                }, 250);
-
-            }
-        );
-
-    });
-
-
-    /*
-       Plan buttons get the same
-       loading experience.
-    */
-
-    document.querySelectorAll(
-        ".plan-link"
-    ).forEach(link => {
-
-        link.addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-                const destination =
-                    this.href;
-
-                showLoader();
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        destination;
-
-                }, 300);
-
-            }
-        );
-
-    });
-
-
-    /*
-       If the user comes back using
-       browser history, remove loader.
-    */
-
-    window.addEventListener(
-        "pageshow",
-        function() {
-
-            hideLoader();
+            this.classList.remove(
+                "loading-image"
+            );
 
         }
     );
 
+}
 
-    /* =========================================
-       LUCIDE ICONS
-    ========================================== */
+
+/* =========================================
+   HERO SLIDER
+========================================= */
+
+const heroImages = [
+
+    "https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png",
+
+    "https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png",
+
+    "https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png",
+
+    "https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+
+];
+
+let heroIndex = 0;
+
+const heroDots =
+    document.querySelectorAll(".hero-dot");
+
+
+function changeHero(){
+
+    if(!heroImage){
+        return;
+    }
+
+    heroIndex++;
+
+    if(heroIndex >= heroImages.length){
+        heroIndex = 0;
+    }
+
+    heroImage.classList.add(
+        "loading-image"
+    );
+
+    heroImage.style.opacity = "0";
+
+
+    const newImage =
+        new Image();
+
+
+    newImage.onload = function(){
+
+        heroImage.src =
+            heroImages[heroIndex];
+
+        heroImage.style.opacity =
+            ".72";
+
+        heroImage.classList.remove(
+            "loading-image"
+        );
+
+    };
+
+
+    newImage.onerror = function(){
+
+        heroImage.style.opacity =
+            ".72";
+
+        heroImage.classList.remove(
+            "loading-image"
+        );
+
+    };
+
+
+    newImage.src =
+        heroImages[heroIndex];
+
+
+    heroDots.forEach(
+        (dot,index) => {
+
+            dot.classList.toggle(
+                "active",
+                index === heroIndex
+            );
+
+        }
+    );
+
+}
+
+
+setInterval(
+    changeHero,
+    4500
+);
+
+
+/* =========================================
+   LUCIDE ICONS
+========================================= */
+
+if(typeof lucide !== "undefined"){
 
     lucide.createIcons();
+
+}
 
 </script>
 
