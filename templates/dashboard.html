@@ -2,1447 +2,2168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Home - Zenith Capital</title>
+    <title>Zenith Capital</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Inter, Arial, sans-serif;
+            font-family: "Inter", Arial, sans-serif;
+        }
+
+        :root {
+            --bg: #050505;
+            --surface: #0b0b0b;
+            --surface2: #111111;
+            --surface3: #171717;
+
+            --text: #ffffff;
+            --muted: #858585;
+
+            --green: #00ff55;
+            --green-dark: #00b83d;
+
+            --border: rgba(255,255,255,.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: #eef1f5;
-            color: #111827;
-            padding-bottom: 80px;
+            margin: 0;
+            background: #000;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 78px;
         }
 
-        .phone {
+        /* ======================================
+           PHONE CONTAINER
+        ====================================== */
+
+        .phone-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             min-height: 100vh;
             margin: auto;
-            background: #f7f8fa;
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(0,255,85,.07),
+                    transparent 30%
+                ),
+                #050505;
+
+            position: relative;
             overflow: hidden;
-            padding-bottom: 80px;
         }
 
-        /* =========================
+
+        /* ======================================
            HEADER
-        ========================= */
+        ====================================== */
 
         .top-header {
-            height: 62px;
-            padding: 0 18px;
-            background: #ffffff;
+            height: 64px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #edf0f3;
+
+            padding: 0 15px;
+
+            background:
+                rgba(5,5,5,.94);
+
+            border-bottom:
+                1px solid var(--border);
+
+            backdrop-filter: blur(20px);
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 10px;
         }
 
         .brand-logo {
             width: 38px;
             height: 38px;
-            border-radius: 11px;
-            background: #111111;
-            color: #ffffff;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00ff55,
+                    #8affae
+                );
+
+            color: #001b09;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 17px;
+
             font-weight: 900;
-        }
-
-        .brand-name {
             font-size: 17px;
-            font-weight: 800;
-            letter-spacing: -.3px;
+
+            box-shadow:
+                0 0 22px
+                rgba(0,255,85,.16);
         }
 
-        .notification {
-            width: 39px;
-            height: 39px;
-            border-radius: 50%;
-            background: #f4f5f7;
+        .brand-text strong {
+            display: block;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            letter-spacing: .5px;
+        }
+
+        .brand-text span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 8px;
+
+            margin-top: 2px;
+        }
+
+        .header-button {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #20252c;
+
+            color: white;
+
+            background:
+                #101010;
+
+            border:
+                1px solid var(--border);
+
+            text-decoration: none;
         }
 
-        .notification svg {
-            width: 19px;
+        .header-button svg {
+            width: 18px;
         }
 
-        /* =========================
+
+        /* ======================================
            HERO
-        ========================= */
+        ====================================== */
 
         .hero {
-            margin: 12px;
-            height: 205px;
+            height: 190px;
+
             position: relative;
+
             overflow: hidden;
-            border-radius: 18px;
-            background: #111111;
+
+            background: #101010;
         }
 
-        .hero img {
+        .hero-image {
+            position: absolute;
+
+            inset: 0;
+
             width: 100%;
             height: 100%;
+
             object-fit: cover;
-            display: block;
-            transition: opacity .35s ease;
+
+            opacity: .62;
+
+            transition:
+                opacity .45s ease,
+                transform 5s ease;
+
+            transform: scale(1.03);
         }
 
         .hero::after {
             content: "";
+
             position: absolute;
+
             inset: 0;
+
             background:
                 linear-gradient(
-                    90deg,
-                    rgba(0,0,0,.82),
-                    rgba(0,0,0,.25),
-                    rgba(0,0,0,.08)
+                    180deg,
+                    rgba(0,0,0,.08),
+                    rgba(0,0,0,.40),
+                    rgba(5,5,5,1)
                 );
         }
 
         .hero-content {
             position: absolute;
-            z-index: 3;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            max-width: 65%;
+
+            z-index: 5;
+
+            left: 16px;
+            right: 16px;
+            bottom: 20px;
         }
 
-        .hero-small {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            opacity: .8;
-            margin-bottom: 7px;
-        }
+        .eyebrow {
+            display: inline-flex;
 
-        .hero-title {
-            font-size: 25px;
-            font-weight: 900;
-            line-height: 1.05;
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(0,255,85,.09);
+
+            border:
+                1px solid rgba(0,255,85,.2);
+
+            color: var(--green);
+
+            font-size: 8px;
+            font-weight: 700;
+
             margin-bottom: 8px;
         }
 
-        .hero-text {
-            font-size: 12px;
+        .eyebrow span {
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 8px
+                var(--green);
+        }
+
+        .hero h1 {
+            font-size: 23px;
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            margin-bottom: 5px;
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero p {
+            font-size: 9px;
+
+            color: #b5b5b5;
+
             line-height: 1.5;
-            opacity: .9;
+
+            max-width: 280px;
         }
 
         .hero-dots {
             position: absolute;
-            z-index: 5;
-            bottom: 12px;
-            right: 17px;
+
+            right: 16px;
+            bottom: 22px;
+
+            z-index: 10;
+
             display: flex;
-            gap: 5px;
-        }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            background: rgba(255,255,255,.45);
-            border-radius: 50%;
-        }
-
-        .dot.active {
-            width: 18px;
-            border-radius: 8px;
-            background: #ffffff;
-        }
-
-        /* =========================
-           WELCOME
-        ========================= */
-
-        .welcome {
-            padding: 2px 17px 12px;
-        }
-
-        .welcome p {
-            font-size: 12px;
-            color: #8a929d;
-            margin-bottom: 3px;
-        }
-
-        .welcome h2 {
-            font-size: 20px;
-            font-weight: 850;
-            color: #111827;
-        }
-
-        /* =========================
-           QUICK ACTIONS
-        ========================= */
-
-        .quick-actions {
-            background: #ffffff;
-            margin: 0 12px 12px;
-            padding: 14px 5px;
-            border-radius: 16px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border: 1px solid #edf0f3;
-        }
-
-        .quick-item {
-            text-decoration: none;
-            color: #343a40;
-            text-align: center;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .quick-icon {
-            width: 43px;
-            height: 43px;
-            border-radius: 13px;
-            margin: 0 auto 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quick-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .deposit {
-            background: #e8f8ef;
-            color: #0c9b54;
-        }
-
-        .withdraw {
-            background: #fff1df;
-            color: #e88918;
-        }
-
-        .service {
-            background: #eaf2ff;
-            color: #3478e5;
-        }
-
-        .profile {
-            background: #f0ebff;
-            color: #7655ce;
-        }
-
-        /* =========================
-           BALANCE CARD
-        ========================= */
-
-        .balance-card {
-            margin: 12px;
-            border-radius: 19px;
-            padding: 19px;
-            background: #111111;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .balance-card::before {
-            content: "";
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            right: -60px;
-            top: -70px;
-            border: 1px solid rgba(255,255,255,.13);
-        }
-
-        .balance-card::after {
-            content: "";
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            right: 20px;
-            bottom: -70px;
-            border: 1px solid rgba(255,255,255,.09);
-        }
-
-        .balance-heading {
-            position: relative;
-            z-index: 2;
-            font-size: 11px;
-            color: #aeb4bc;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .total-balance {
-            position: relative;
-            z-index: 2;
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 18px;
-        }
-
-        .balance-grid {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .balance-item {
-            background: rgba(255,255,255,.07);
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .balance-label {
-            color: #969da6;
-            font-size: 9px;
-            margin-bottom: 4px;
-        }
-
-        .balance-value {
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        /* =========================
-           SECTION HEADER
-        ========================= */
-
-        .section-header {
-            padding: 10px 14px 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .section-header h2 {
-            font-size: 18px;
-            font-weight: 850;
-        }
-
-        .section-header span {
-            font-size: 10px;
-            color: #8b939d;
-        }
-
-        /* =========================
-           PRODUCT / PLAN CARD
-        ========================= */
-
-        .plan {
-            background: #ffffff;
-            margin: 10px 12px;
-            padding: 12px;
-            border-radius: 17px;
-            border: 1px solid #edf0f3;
-            box-shadow: 0 3px 12px rgba(0,0,0,.035);
-        }
-
-        .plan-top {
-            display: flex;
-            gap: 12px;
-        }
-
-        .phone-image {
-            width: 112px;
-            height: 125px;
-            flex-shrink: 0;
-            border-radius: 13px;
-            overflow: hidden;
-            background: #f1f2f4;
-            position: relative;
-        }
-
-        .phone-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .plan-number {
-            position: absolute;
-            top: 7px;
-            left: 7px;
-            background: rgba(0,0,0,.75);
-            color: white;
-            padding: 4px 7px;
-            border-radius: 6px;
-            font-size: 8px;
-            font-weight: 700;
-        }
-
-        .plan-info {
-            flex: 1;
-        }
-
-        .plan-name {
-            font-size: 15px;
-            font-weight: 850;
-            margin-bottom: 10px;
-        }
-
-        .plan-data {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 7px;
-        }
-
-        .data-box {
-            background: #f6f7f9;
-            padding: 7px;
-            border-radius: 8px;
-        }
-
-        .data-label {
-            color: #9299a2;
-            font-size: 8px;
-            margin-bottom: 3px;
-        }
-
-        .data-value {
-            font-size: 11px;
-            font-weight: 800;
-            color: #171b21;
-        }
-
-        .status {
-            display: inline-flex;
-            align-items: center;
             gap: 4px;
-            color: #079650;
         }
 
-        .status-dot {
+        .hero-dot {
             width: 5px;
             height: 5px;
-            background: #0baa59;
-            border-radius: 50%;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.35);
+
+            transition: .3s;
         }
 
-        .plan-button {
-            width: 100%;
-            margin-top: 11px;
-            border: none;
-            border-radius: 11px;
-            padding: 11px;
-            background: #111111;
-            color: white;
-            font-size: 12px;
-            font-weight: 800;
+        .hero-dot.active {
+            width: 17px;
+
+            background:
+                var(--green);
+        }
+
+
+        /* ======================================
+           QUICK ACTIONS
+        ====================================== */
+
+        .top-actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 6px;
+
+            padding: 10px;
+
+            background:
+                #090909;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .action-btn {
             text-decoration: none;
-            display: block;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #181818,
+                    #0e0e0e
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 9px;
+
+            padding: 10px 4px;
+
             text-align: center;
+
+            color: white;
+
             transition: .2s;
         }
 
-        .plan-button:active {
-            transform: scale(.98);
+        .action-btn:active {
+            transform: scale(.96);
         }
 
-        /* =========================
-           LOCKED
-        ========================= */
+        .action-icon {
+            width: 28px;
+            height: 28px;
+
+            margin: auto auto 4px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background:
+                rgba(255,255,255,.04);
+        }
+
+        .action-icon svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .action-label {
+            font-size: 8px;
+
+            color: #a0a0a0;
+        }
+
+
+        /* ======================================
+           ACCOUNT SUMMARY
+        ====================================== */
+
+        .account {
+            margin: 14px 10px;
+
+            padding: 14px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #151515,
+                    #0c0c0c
+                );
+
+            border:
+                1px solid var(--border);
+        }
+
+        .account-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .account-header h3 {
+            font-size: 12px;
+        }
+
+        .account-header span {
+            font-size: 8px;
+
+            color: var(--muted);
+        }
+
+        .balance-main {
+            font-size: 22px;
+
+            font-weight: 800;
+
+            color: white;
+
+            margin-bottom: 12px;
+        }
+
+        .balance-main small {
+            font-size: 8px;
+
+            color: var(--muted);
+
+            font-weight: 500;
+        }
+
+        .balance-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            border-top:
+                1px solid var(--border);
+
+            padding-top: 11px;
+        }
+
+        .balance-box {
+            padding: 0 7px;
+
+            border-right:
+                1px solid var(--border);
+        }
+
+        .balance-box:last-child {
+            border-right: none;
+        }
+
+        .balance-box label {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 7px;
+
+            margin-bottom: 4px;
+        }
+
+        .balance-box strong {
+            font-size: 9px;
+        }
+
+
+        /* ======================================
+           SECTION
+        ====================================== */
+
+        .section {
+            padding: 0 10px;
+        }
+
+        .section-head {
+            display: flex;
+
+            align-items: end;
+
+            justify-content: space-between;
+
+            margin:
+                18px 2px 10px;
+        }
+
+        .section-head h2 {
+            font-size: 18px;
+
+            letter-spacing: -.4px;
+        }
+
+        .section-head p {
+            font-size: 8px;
+
+            color: var(--muted);
+
+            margin-top: 3px;
+        }
+
+        .section-head a {
+            color: var(--green);
+
+            text-decoration: none;
+
+            font-size: 8px;
+        }
+
+
+        /* ======================================
+           PLAN GRID
+        ====================================== */
+
+        .product-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+
+            gap: 2px;
+
+            background:
+                #262626;
+
+            border:
+                1px solid #242424;
+        }
+
+
+        /* ======================================
+           PLAN CARD
+        ====================================== */
+
+        .product-card {
+            background:
+                #090909;
+
+            padding: 11px;
+
+            min-width: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+        }
+
+        .vip-tag {
+            width: 100%;
+
+            color:
+                var(--green);
+
+            font-weight: 800;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+
+            text-align: left;
+        }
+
+        .vip-tag span {
+            float: right;
+
+            color: #666;
+
+            font-size: 7px;
+
+            font-weight: 500;
+        }
+
+
+        /* ======================================
+           PRODUCT IMAGE
+        ====================================== */
+
+        .product-img-box {
+            width: 100%;
+
+            height: 125px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 10px;
+
+            overflow: hidden;
+
+            border-radius: 9px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #1d1d1d,
+                    #090909
+                );
+        }
+
+        .product-img-box img {
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            opacity: .82;
+
+            transition:
+                transform .5s ease,
+                opacity .3s ease;
+        }
+
+        .product-card:hover
+        .product-img-box img {
+            transform: scale(1.07);
+
+            opacity: 1;
+        }
+
+
+        /* ======================================
+           PLAN INFO
+        ====================================== */
+
+        .info-row {
+            width: 100%;
+
+            font-size: 8px;
+
+            margin-bottom: 5px;
+
+            color:
+                #777;
+
+            text-align: left;
+        }
+
+        .info-row span {
+            color:
+                #d0d0d0;
+
+            font-weight: 600;
+
+            float: right;
+        }
+
+        .info-row.income span {
+            color:
+                var(--green);
+        }
+
+
+        /* ======================================
+           PRICE
+        ====================================== */
+
+        .price-tag {
+            width: 100%;
+
+            color:
+                var(--green);
+
+            font-weight: 800;
+
+            font-size: 14px;
+
+            margin:
+                7px 0 9px;
+
+            text-align: left;
+        }
+
+        .price-tag small {
+            font-size: 7px;
+
+            color: #666;
+
+            font-weight: 500;
+        }
+
+
+        /* ======================================
+           BUY BUTTON
+        ====================================== */
+
+        .buy-btn {
+            width: 100%;
+
+            min-height: 32px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00d948,
+                    #00a83a
+                );
+
+            color: #001407;
+
+            border: none;
+
+            border-radius: 6px;
+
+            padding: 7px 0;
+
+            font-weight: 800;
+
+            font-size: 10px;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 5px;
+
+            transition: .2s;
+        }
+
+        .buy-btn:active {
+            transform: scale(.96);
+        }
+
+        .buy-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+
+        /* ======================================
+           LOCKED PLANS
+        ====================================== */
 
         .locked {
             opacity: .55;
         }
 
-        .locked .phone-image {
-            filter: grayscale(1);
+        .locked
+        .product-img-box img {
+            filter:
+                grayscale(1);
+
+        }
+
+        .locked .vip-tag {
+            color: #777;
         }
 
         .locked-button {
             width: 100%;
-            margin-top: 11px;
-            padding: 11px;
-            border: none;
-            border-radius: 11px;
-            background: #d6d9de;
-            color: #717781;
-            font-size: 12px;
-            font-weight: 800;
-        }
 
-        /* =========================
-           BOTTOM NAV
-        ========================= */
+            min-height: 32px;
 
-        .nav {
-            position: fixed;
-            z-index: 1000;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 450px;
-            height: 68px;
-            background: rgba(255,255,255,.97);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid #e6e8eb;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-        }
+            border:
+                1px solid #272727;
 
-        .nav a {
-            position: relative;
-            text-decoration: none;
-            color: #9aa1aa;
+            border-radius: 6px;
+
+            background:
+                #151515;
+
+            color:
+                #707070;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
             display: flex;
-            flex-direction: column;
+
             align-items: center;
             justify-content: center;
-            gap: 4px;
+
+            gap: 5px;
+        }
+
+        .locked-button svg {
+            width: 13px;
+        }
+
+
+        /* ======================================
+           INFORMATION
+        ====================================== */
+
+        .info {
+            margin: 15px 10px;
+
+            padding: 13px;
+
+            border-radius: 12px;
+
+            background:
+                #0e1110;
+
+            border:
+                1px solid
+                rgba(0,255,85,.10);
+
+            display: flex;
+
+            gap: 9px;
+        }
+
+        .info-icon {
+            min-width: 30px;
+            height: 30px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color:
+                var(--green);
+
+            background:
+                rgba(0,255,85,.08);
+        }
+
+        .info-icon svg {
+            width: 15px;
+        }
+
+        .info h4 {
             font-size: 9px;
-            font-weight: 600;
+
+            margin-bottom: 3px;
         }
 
-        .nav svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2;
+        .info p {
+            font-size: 7px;
+
+            line-height: 1.5;
+
+            color:
+                var(--muted);
         }
 
-        .nav a.active {
-            color: #111111;
-            font-weight: 800;
+
+        /* ======================================
+           BOTTOM NAVIGATION
+        ====================================== */
+
+        .bottom-nav {
+            position: fixed;
+
+            bottom: 0;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            width: 100%;
+
+            max-width: 480px;
+
+            height: 68px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5,1fr);
+
+            background:
+                rgba(14,14,14,.96);
+
+            border-top:
+                1px solid #252525;
+
+            backdrop-filter:
+                blur(18px);
+
+            z-index: 500;
         }
 
-        .nav a.active::before {
+        .nav-item {
+            position: relative;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 4px;
+
+            text-decoration: none;
+
+            color:
+                #686868;
+
+            font-size: 7px;
+
+            transition: .2s;
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-item.active {
+            color:
+                var(--green);
+        }
+
+        .nav-item.active::before {
             content: "";
+
             position: absolute;
+
             top: 0;
+
             width: 28px;
-            height: 3px;
-            border-radius: 0 0 5px 5px;
-            background: #111111;
+            height: 2px;
+
+            border-radius:
+                0 0 5px 5px;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 10px
+                rgba(0,255,85,.5);
         }
 
-        /* =========================
-           SMALL SCREEN
-        ========================= */
+
+        /* ======================================
+           LOADING SCREEN
+        ====================================== */
+
+        .page-loader {
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.96);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-direction: column;
+
+            gap: 12px;
+
+            z-index: 9999;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transition:
+                opacity .2s ease,
+                visibility .2s ease;
+        }
+
+        .page-loader.show {
+            opacity: 1;
+
+            visibility: visible;
+        }
+
+        .loader-logo {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--green),
+                    #8affae
+                );
+
+            color:
+                #001b09;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 900;
+
+            font-size: 18px;
+
+            box-shadow:
+                0 0 30px
+                rgba(0,255,85,.18);
+        }
+
+        .loader-ring {
+            width: 25px;
+            height: 25px;
+
+            border-radius: 50%;
+
+            border:
+                2px solid
+                rgba(255,255,255,.12);
+
+            border-top-color:
+                var(--green);
+
+            animation:
+                spin .7s linear infinite;
+        }
+
+        .loader-text {
+            color: #858585;
+
+            font-size: 8px;
+
+            letter-spacing: .4px;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+
+        /* ======================================
+           RESPONSIVE
+        ====================================== */
 
         @media(max-width:360px) {
 
+            .product-img-box {
+                height: 105px;
+            }
+
+            .product-card {
+                padding: 9px;
+            }
+
             .hero {
-                height: 190px;
+                height: 175px;
             }
 
-            .hero-title {
-                font-size: 22px;
+            .hero h1 {
+                font-size: 21px;
             }
 
-            .phone-image {
-                width: 96px;
-                height: 115px;
-            }
-
-            .plan-name {
-                font-size: 13px;
-            }
-
-            .data-value {
-                font-size: 10px;
-            }
         }
+
     </style>
 </head>
 
 <body>
 
-<div class="phone">
+<!-- =========================================
+     GLOBAL PAGE LOADER
+========================================= -->
 
-    <!-- HEADER -->
+<div
+    class="page-loader"
+    id="pageLoader">
+
+    <div class="loader-logo">
+        Z
+    </div>
+
+    <div class="loader-ring"></div>
+
+    <div class="loader-text">
+        Loading Zenith Capital...
+    </div>
+
+</div>
+
+
+<div class="phone-container">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
 
     <header class="top-header">
 
         <div class="brand">
-            <div class="brand-logo">Z</div>
 
-            <div class="brand-name">
-                Zenith Capital
+            <div class="brand-logo">
+                Z
             </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    ZENITH CAPITAL
+                </strong>
+
+                <span>
+                    SMART FINANCIAL PLATFORM
+                </span>
+
+            </div>
+
         </div>
 
-        <div class="notification">
+
+        <a
+            href="{{ url_for('support') }}"
+            class="header-button loading-link">
+
             <i data-lucide="bell"></i>
-        </div>
+
+        </a>
 
     </header>
 
 
-    <!-- HERO -->
+    <!-- =========================================
+         HERO
+    ========================================== -->
 
     <section class="hero">
 
         <img
             id="heroImage"
-            src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=80"
-            alt="Smartphone"
-        >
+            class="hero-image"
+            src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=85"
+            alt="Premium smartphone">
 
         <div class="hero-content">
 
-            <div class="hero-small">
-                Welcome
+            <div class="eyebrow">
+
+                <span></span>
+
+                PREMIUM EXPERIENCE
+
             </div>
 
-            <div class="hero-title">
-                Smart choices.<br>
-                Better opportunities.
-            </div>
+            <h1>
 
-            <div class="hero-text">
-                Welcome back, {{ user.fullname }}
-            </div>
+                Welcome back,
+                <span>
+                    {{ user.fullname }}
+                </span>
+
+            </h1>
+
+            <p>
+                Explore available packages
+                and manage your account.
+            </p>
 
         </div>
 
+
         <div class="hero-dots">
 
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+            <span class="hero-dot active"></span>
+            <span class="hero-dot"></span>
+            <span class="hero-dot"></span>
+            <span class="hero-dot"></span>
 
         </div>
 
     </section>
 
 
-    <!-- WELCOME -->
+    <!-- =========================================
+         QUICK ACTIONS
+    ========================================== -->
 
-    <div class="welcome">
+    <div class="top-actions">
 
-        <p>
-            Your account
-        </p>
-
-        <h2>
-            Welcome back 👋
-        </h2>
-
-    </div>
-
-
-    <!-- QUICK ACTIONS -->
-
-    <div class="quick-actions">
 
         <a
             href="{{ url_for('deposit') }}"
-            class="quick-item"
-        >
+            class="action-btn loading-link">
 
-            <div class="quick-icon deposit">
+            <div class="action-icon"
+                 style="color:#00ff55">
+
                 <i data-lucide="wallet"></i>
+
             </div>
 
-            Deposit
+            <div class="action-label">
+                Deposit
+            </div>
 
         </a>
 
 
         <a
             href="{{ url_for('withdraw') }}"
-            class="quick-item"
-        >
+            class="action-btn loading-link">
 
-            <div class="quick-icon withdraw">
-                <i data-lucide="credit-card"></i>
+            <div class="action-icon"
+                 style="color:#ffb45b">
+
+                <i data-lucide="arrow-up-right"></i>
+
             </div>
 
-            Withdraw
+            <div class="action-label">
+                Withdraw
+            </div>
 
         </a>
 
 
         <a
             href="{{ url_for('support') }}"
-            class="quick-item"
-        >
+            class="action-btn loading-link">
 
-            <div class="quick-icon service">
+            <div class="action-icon"
+                 style="color:#67b5ff">
+
                 <i data-lucide="headphones"></i>
+
             </div>
 
-            Service
+            <div class="action-label">
+                Support
+            </div>
 
         </a>
 
 
         <a
             href="{{ url_for('profile') }}"
-            class="quick-item"
-        >
+            class="action-btn loading-link">
 
-            <div class="quick-icon profile">
-                <i data-lucide="user"></i>
+            <div class="action-icon"
+                 style="color:#d78cff">
+
+                <i data-lucide="user-round"></i>
+
             </div>
 
-            Profile
+            <div class="action-label">
+                Profile
+            </div>
 
         </a>
 
     </div>
 
 
-    <!-- BALANCE -->
+    <!-- =========================================
+         ACCOUNT
+    ========================================== -->
 
-    <div class="balance-card">
+    <section class="account">
 
-        <div class="balance-heading">
-            Total Account Balance
-        </div>
+        <div class="account-header">
 
-        <div class="total-balance">
+            <h3>
+                Account Overview
+            </h3>
 
-            GHS {{
-                "%.2f"|format(
-                    (
-                        account.deposit_account|float
-                        + account.withdraw_account|float
-                        + account.income_account|float
-                        + account.referral_account|float
-                    )
-                )
-            }}
+            <span>
+                Available balances
+            </span>
 
         </div>
+
+
+        <div class="balance-main">
+
+            GHS
+            {{ "%.2f"|format(account.deposit_account|float) }}
+
+            <small>
+                Deposit
+            </small>
+
+        </div>
+
 
         <div class="balance-grid">
 
-            <div class="balance-item">
 
-                <div class="balance-label">
-                    Deposit
-                </div>
+            <div class="balance-box">
 
-                <div class="balance-value">
-                    GHS {{ "%.2f"|format(account.deposit_account|float) }}
-                </div>
-
-            </div>
-
-
-            <div class="balance-item">
-
-                <div class="balance-label">
+                <label>
                     Withdraw
-                </div>
+                </label>
 
-                <div class="balance-value">
-                    GHS {{ "%.2f"|format(account.withdraw_account|float) }}
-                </div>
+                <strong>
+                    GHS
+                    {{ "%.2f"|format(account.withdraw_account|float) }}
+                </strong>
 
             </div>
 
 
-            <div class="balance-item">
+            <div class="balance-box">
 
-                <div class="balance-label">
+                <label>
                     Income
-                </div>
+                </label>
 
-                <div class="balance-value">
-                    GHS {{ "%.2f"|format(account.income_account|float) }}
-                </div>
+                <strong>
+                    GHS
+                    {{ "%.2f"|format(account.income_account|float) }}
+                </strong>
 
             </div>
 
 
-            <div class="balance-item">
+            <div class="balance-box">
 
-                <div class="balance-label">
+                <label>
                     Referral
-                </div>
+                </label>
 
-                <div class="balance-value">
-                    GHS {{ "%.2f"|format(account.referral_account|float) }}
-                </div>
+                <strong>
+                    GHS
+                    {{ "%.2f"|format(account.referral_account|float) }}
+                </strong>
 
             </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         PLANS
+    ========================================== -->
+
+    <section class="section">
+
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>
+                    Available Products
+                </h2>
+
+                <p>
+                    Select a package to Buy
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('my_plan') }}"
+                class="loading-link">
+
+                My Product
+
+            </a>
+
+        </div>
+
+
+        <div class="product-grid">
+
+
+            <!-- ================= PLAN 1 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 1
+
+                    <span>
+                        STARTER
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 1 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 22
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 4,400
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 100
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=1) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 2 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 2
+
+                    <span>
+                        BASIC
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 2 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 45
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 9000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 200
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=2) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 3 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 3
+
+                    <span>
+                        GROWTH
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 3 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 80
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 16,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 400
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=3) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 4 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 4
+
+                    <span>
+                        ADVANCED
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 4 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 110
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 22,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 600
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=4) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 5 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 5
+
+                    <span>
+                        PREMIUM
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1592286927505-2fd0b4f5c0e5?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 5 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 200
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 40,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 800
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=5) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 6 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 6
+
+                    <span>
+                        ELITE
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 6 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 300
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 60,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 900
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=6) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 7 ================= -->
+
+            <article class="product-card">
+
+                <div class="vip-tag">
+
+                    VIP 7
+
+                    <span>
+                        MASTER
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 7 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span class="income">
+                        GHS 460
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 92,00
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        300 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 1000
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('buy_plan', plan_id=7) }}"
+                    class="buy-btn plan-link">
+
+                    Buy now
+
+                    <i data-lucide="arrow-right"></i>
+
+                </a>
+
+            </article>
+
+
+            <!-- ================= PLAN 8 ================= -->
+
+            <article class="product-card locked">
+
+                <div class="vip-tag">
+
+                    VIP 8
+
+                    <span>
+                        Coming soon
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 8 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span>
+                        GHS 500
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 100,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        200 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 1500
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <button
+                    class="locked-button"
+                    disabled>
+
+                    <i data-lucide="lock"></i>
+
+                    Coming soon
+
+                </button>
+
+            </article>
+
+
+            <!-- ================= PLAN 9 ================= -->
+
+            <article class="product-card locked">
+
+                <div class="vip-tag">
+
+                    VIP 9
+
+                    <span>
+                        coming soon
+                    </span>
+
+                </div>
+
+
+                <div class="product-img-box">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=700&q=85"
+                        alt="Plan 9 smartphone">
+
+                </div>
+
+
+                <div class="info-row">
+                    Daily income:
+                    <span>
+                        GHS 800
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Total income:
+                    <span>
+                        GHS 144,000
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    Validity:
+                    <span>
+                        180 Days
+                    </span>
+                </div>
+
+
+                <div class="price-tag">
+
+                    GHS 4000
+
+                    <small>
+                        / PLAN
+                    </small>
+
+                </div>
+
+
+                <button
+                    class="locked-button"
+                    disabled>
+
+                    <i data-lucide="lock"></i>
+
+                    Coming soon
+
+                </button>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         INFORMATION
+    ========================================== -->
+
+    <div class="info">
+
+        <div class="info-icon">
+
+            <i data-lucide="shield-check"></i>
+
+        </div>
+
+        <div>
+
+            <h4>
+                Platform information
+            </h4>
+
+            <p>
+                Please review the package information
+                carefully before buying. The figures
+                displayed here are affordable to be purchase 
+            </>
 
         </div>
 
     </div>
 
 
-    <!-- PLANS -->
+    <!-- =========================================
+         BOTTOM NAVIGATION
+    ========================================== -->
 
-    <div class="section-header">
+    <nav class="bottom-nav">
 
-        <h2>
-            Available Plans
-        </h2>
-
-        <span>
-            View all
-        </span>
-
-    </div>
-
-
-    <!-- PLAN 1 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 01
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 01
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 50</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 5</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=1) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 2 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 02
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 02
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 100</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 20</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=2) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 3 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 03
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 03
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 200</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 40</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=3) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 4 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 04
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 04
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 300</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 65</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=4) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 5 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 05
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 05
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 500</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 100</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=5) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 6 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 06
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 06
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 600</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 200</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=6) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 7 -->
-
-    <div class="plan">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 07
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 07
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 1000</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 360</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value status">
-                            <span class="status-dot"></span>
-                            Active
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <a
-            href="{{ url_for('buy_plan', plan_id=7) }}"
-            class="plan-button"
-        >
-            Continue
-        </a>
-
-    </div>
-
-
-    <!-- PLAN 8 -->
-
-    <div class="plan locked">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 08
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1592286927505-2fd9a10b6b7a?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 08
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 2000</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 500</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value">
-                            Locked
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <button
-            class="locked-button"
-            disabled
-        >
-            Locked
-        </button>
-
-    </div>
-
-
-    <!-- PLAN 9 -->
-
-    <div class="plan locked">
-
-        <div class="plan-top">
-
-            <div class="phone-image">
-
-                <div class="plan-number">
-                    PLAN 09
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1551355738-187c3b8e7f3d?auto=format&fit=crop&w=600&q=80"
-                    alt="Smartphone"
-                >
-
-            </div>
-
-
-            <div class="plan-info">
-
-                <div class="plan-name">
-                    Smartphone Plan 09
-                </div>
-
-                <div class="plan-data">
-
-                    <div class="data-box">
-                        <div class="data-label">PRICE</div>
-                        <div class="data-value">GHS 4000</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DAILY</div>
-                        <div class="data-value">GHS 800</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">DURATION</div>
-                        <div class="data-value">180 Days</div>
-                    </div>
-
-                    <div class="data-box">
-                        <div class="data-label">STATUS</div>
-                        <div class="data-value">
-                            Locked
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <button
-            class="locked-button"
-            disabled
-        >
-            Locked
-        </button>
-
-    </div>
-
-
-    <!-- BOTTOM NAV -->
-
-    <nav class="nav">
 
         <a
             href="{{ url_for('dashboard') }}"
-            class="active"
-        >
-            <i data-lucide="home"></i>
-            <span>Home</span>
+            class="nav-item active loading-link">
+
+            <i data-lucide="house"></i>
+
+            <span>
+                Home
+            </span>
+
         </a>
 
 
-        <a href="{{ url_for('my_plan') }}">
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="nav-item loading-link">
+
             <i data-lucide="chart-no-axes-combined"></i>
-            <span>Income</span>
+
+            <span>
+                Income
+            </span>
+
         </a>
 
 
-        <a href="{{ url_for('team') }}">
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-item loading-link">
+
             <i data-lucide="users"></i>
-            <span>Team</span>
+
+            <span>
+                Team
+            </span>
+
         </a>
 
 
-        <a href="{{ url_for('team') }}">
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-item loading-link">
+
             <i data-lucide="share-2"></i>
-            <span>Share</span>
+
+            <span>
+                Share
+            </span>
+
         </a>
 
 
-        <a href="{{ url_for('profile') }}">
+        <a
+            href="{{ url_for('profile') }}"
+            class="nav-item loading-link">
+
             <i data-lucide="user-round"></i>
-            <span>My</span>
+
+            <span>
+                My
+            </span>
+
         </a>
 
     </nav>
@@ -1452,69 +2173,202 @@
 
 <script>
 
-    /* =========================
+    /* =========================================
        HERO SLIDER
-    ========================= */
+    ========================================== */
 
     const heroImages = [
 
-        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=1000&q=85",
 
-        "https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=1000&q=85",
 
-        "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=85",
 
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=80"
+        "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=1000&q=85"
 
     ];
+
 
     let heroIndex = 0;
 
     const heroImage =
         document.getElementById("heroImage");
 
-    const dots =
-        document.querySelectorAll(".dot");
+    const heroDots =
+        document.querySelectorAll(".hero-dot");
 
 
     function changeHero() {
 
         heroIndex++;
 
-        if (heroIndex >= heroImages.length) {
+        if (
+            heroIndex >=
+            heroImages.length
+        ) {
+
             heroIndex = 0;
+
         }
 
+
         heroImage.style.opacity = "0";
+
 
         setTimeout(() => {
 
             heroImage.src =
                 heroImages[heroIndex];
 
-            heroImage.style.opacity = "1";
+            heroImage.style.opacity =
+                ".62";
 
-        }, 250);
+        }, 300);
 
 
-        dots.forEach((dot, index) => {
+        heroDots.forEach(
+            (dot,index) => {
 
-            dot.classList.toggle(
-                "active",
-                index === heroIndex
-            );
+                dot.classList.toggle(
+                    "active",
+                    index === heroIndex
+                );
 
-        });
+            }
+        );
 
     }
 
 
-    setInterval(changeHero, 5000);
+    setInterval(
+        changeHero,
+        4500
+    );
 
 
-    /* =========================
-       ICONS
-    ========================= */
+    /* =========================================
+       GLOBAL LOADING SYSTEM
+    ========================================== */
+
+    const pageLoader =
+        document.getElementById(
+            "pageLoader"
+        );
+
+
+    function showLoader() {
+
+        pageLoader.classList.add(
+            "show"
+        );
+
+    }
+
+
+    function hideLoader() {
+
+        pageLoader.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    /*
+       Show loader when the user
+       navigates to another page.
+    */
+
+    document.querySelectorAll(
+        ".loading-link"
+    ).forEach(link => {
+
+        link.addEventListener(
+            "click",
+            function(event) {
+
+                const href =
+                    this.getAttribute("href");
+
+                if (
+                    !href ||
+                    href === "#" ||
+                    this.target === "_blank"
+                ) {
+
+                    return;
+
+                }
+
+                event.preventDefault();
+
+                showLoader();
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        href;
+
+                }, 250);
+
+            }
+        );
+
+    });
+
+
+    /*
+       Plan buttons get the same
+       loading experience.
+    */
+
+    document.querySelectorAll(
+        ".plan-link"
+    ).forEach(link => {
+
+        link.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                const destination =
+                    this.href;
+
+                showLoader();
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        destination;
+
+                }, 300);
+
+            }
+        );
+
+    });
+
+
+    /*
+       If the user comes back using
+       browser history, remove loader.
+    */
+
+    window.addEventListener(
+        "pageshow",
+        function() {
+
+            hideLoader();
+
+        }
+    );
+
+
+    /* =========================================
+       LUCIDE ICONS
+    ========================================== */
 
     lucide.createIcons();
 
