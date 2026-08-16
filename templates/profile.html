@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Profile - Zenith Capital</title>
+    <title>Infinix - My Profile</title>
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -13,231 +13,317 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Arial, sans-serif;
         }
 
         body {
-            background: #f1f5f9;
+            background: #050505;
+            color: #fff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
+            padding-bottom: 75px;
             -webkit-tap-highlight-color: transparent;
-            color: #334155;
-            padding-bottom: 70px;
         }
 
         .phone {
             width: 100%;
             max-width: 440px;
             min-height: 100vh;
-            background: white;
+            background: #080808;
             position: relative;
-            padding-bottom: 75px;
-            box-shadow: 0 0 18px rgba(0,0,0,.06);
+            padding-bottom: 80px;
+            overflow: hidden;
         }
 
         /* =========================
-           PROFILE SECTION
+           TOP PROFILE AREA
         ========================= */
 
-        .profile-section {
-            padding: 28px 20px 24px;
-            background: linear-gradient(
-                to bottom,
-                #eff6ff,
-                #ffffff
-            );
-
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .avatar-wrap {
+        .profile-header {
             position: relative;
+            padding: 22px 18px 30px;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(0,255,70,.16),
+                    rgba(0,0,0,0) 85%
+                );
         }
 
-        .avatar {
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            background: white;
-            border: 1px solid #e2e8f0;
-
+        .brand-row {
             display: flex;
-            justify-content: center;
             align-items: center;
-
-            box-shadow: 0 3px 10px rgba(0,0,0,.06);
-            color: #2563eb;
+            justify-content: space-between;
+            margin-bottom: 25px;
         }
 
-        .avatar svg {
-            width: 34px;
-            height: 34px;
+        .brand {
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #00ff4c;
         }
 
-        .vip {
+        .brand span {
+            color: #fff;
+        }
+
+        .notification {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #151515;
+            border: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification svg {
+            width: 19px;
+            color: #00ff4c;
+        }
+
+        .profile-card {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            min-height: 190px;
+            border: 1px solid #252525;
+            background: #111;
+        }
+
+        .profile-photo {
             position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-
-            background: #10144c;
-            color: white;
-
-            font-size: 9px;
-            font-weight: bold;
-
-            padding: 3px 10px;
-            border-radius: 20px;
-
-            white-space: nowrap;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .profile-info h2 {
-            font-size: 20px;
-            color: #334155;
+        .profile-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,0,0,.92) 0%,
+                    rgba(0,0,0,.68) 42%,
+                    rgba(0,0,0,.18) 100%
+                );
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 2;
+            min-height: 190px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .small-title {
+            color: #00ff4c;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             margin-bottom: 5px;
+        }
+
+        .profile-content h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
             word-break: break-word;
         }
 
-        .profile-info .user-id {
-            display: inline-block;
-            background: #eef2ff;
-            color: #4c64bc;
+        .user-id {
+            display: inline-flex;
+            width: fit-content;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(0,255,76,.12);
+            border: 1px solid rgba(0,255,76,.3);
+            color: #00ff4c;
             font-size: 10px;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 5px;
+            font-weight: bold;
         }
 
         .phone-number {
-            margin-top: 5px;
-            color: #64748b;
+            margin-top: 8px;
+            color: #bdbdbd;
             font-size: 12px;
         }
 
         /* =========================
-           DARK STATISTICS BOX
+           BALANCE
         ========================= */
 
-        .stats-container {
+        .balance-section {
             padding: 0 16px;
-            margin-bottom: 15px;
+            margin-top: -8px;
+            position: relative;
+            z-index: 5;
         }
 
-        .stats {
-            background: #10144c;
-            border-radius: 13px;
-
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-
-            padding: 15px 5px;
-            color: white;
-
-            box-shadow: 0 5px 15px rgba(16,20,76,.16);
+        .balance-card {
+            background: linear-gradient(135deg, #153b20, #07150b);
+            border: 1px solid rgba(0,255,76,.25);
+            border-radius: 16px;
+            padding: 19px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.35);
         }
 
-        .stat {
-            text-align: center;
-            padding: 0 5px;
+        .balance-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .stat:not(:last-child) {
-            border-right: 1px solid rgba(255,255,255,.15);
+        .balance-label {
+            color: #a9b0aa;
+            font-size: 11px;
         }
 
-        .stat strong {
-            display: block;
-            font-size: 18px;
-            margin-bottom: 3px;
+        .balance-amount {
+            font-size: 25px;
+            font-weight: 800;
+            margin-top: 5px;
         }
 
-        .stat span {
-            color: #cbd5e1;
-            font-size: 10px;
+        .balance-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: #00ff4c;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .balance-icon svg {
+            width: 21px;
         }
 
         /* =========================
-           INFORMATION
+           QUICK ACTIONS
+        ========================= */
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 18px 16px;
+        }
+
+        .action {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            border-radius: 13px;
+            padding: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .deposit-btn {
+            background: #00ff4c;
+            color: #000;
+            animation: depositMove 2.8s ease-in-out infinite;
+        }
+
+        @keyframes depositMove {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        .withdraw-btn {
+            background: #171717;
+            color: #fff;
+            border: 1px solid #303030;
+        }
+
+        .action:active {
+            transform: scale(.97);
+        }
+
+        /* =========================
+           ACCOUNT CARDS
         ========================= */
 
         .section {
             padding: 0 16px;
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
-        .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #0f172a;
-            margin-bottom: 8px;
-        }
-
-        .info-card {
-            background: #fff;
-            border: 1px solid #f1f5f9;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .info-row {
+        .section-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
-
-            padding: 13px 14px;
-
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 13px;
+            margin-bottom: 10px;
         }
 
-        .info-row:last-child {
-            border-bottom: none;
+        .section-heading h3 {
+            font-size: 15px;
         }
 
-        .info-label {
-            color: #64748b;
+        .section-heading span {
+            color: #777;
+            font-size: 10px;
         }
 
-        .info-value {
-            color: #334155;
-            font-weight: 600;
-            max-width: 55%;
-            text-align: right;
-            word-break: break-word;
-        }
-
-        /* =========================
-           BALANCES
-        ========================= */
-
-        .balance-grid {
+        .account-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            gap: 9px;
         }
 
-        .balance-box {
-            background: #f8fafc;
-            border: 1px solid #f1f5f9;
-            border-radius: 10px;
-            padding: 12px 8px;
-            text-align: center;
+        .account-card {
+            background: #121212;
+            border: 1px solid #252525;
+            border-radius: 13px;
+            padding: 14px;
         }
 
-        .balance-box .label {
-            color: #8c96a3;
+        .account-icon {
+            width: 31px;
+            height: 31px;
+            border-radius: 9px;
+            background: #1d1d1d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .account-icon svg {
+            width: 16px;
+            color: #00ff4c;
+        }
+
+        .account-label {
+            color: #777;
             font-size: 10px;
             margin-bottom: 5px;
         }
 
-        .balance-box .amount {
-            color: #0e2954;
-            font-size: 13px;
-            font-weight: bold;
+        .account-value {
+            font-size: 14px;
+            font-weight: 800;
             word-break: break-word;
         }
 
@@ -245,71 +331,112 @@
            MENU
         ========================= */
 
-        .menu-area {
-            background: #f8fafc;
-            padding: 10px 16px 15px;
+        .menu-section {
+            margin: 0 16px 18px;
         }
 
         .menu-title {
-            color: #64748b;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            color: #777;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 9px;
         }
 
         .menu {
-            width: 100%;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            background: white;
-
-            padding: 13px 14px;
-            margin-bottom: 7px;
-
-            border-radius: 11px;
-            border: 1px solid #f1f5f9;
-
             text-decoration: none;
-            color: #334155;
-
-            font-size: 13px;
+            color: #fff;
+            background: #121212;
+            border: 1px solid #242424;
+            padding: 14px;
+            margin-bottom: 7px;
+            border-radius: 12px;
+            transition: .2s;
         }
 
         .menu:active {
-            background: #f8fafc;
+            transform: scale(.98);
+            background: #181818;
         }
 
         .menu-left {
             display: flex;
             align-items: center;
-            gap: 13px;
+            gap: 12px;
+            font-size: 13px;
         }
 
         .menu-icon {
             width: 20px;
             height: 20px;
-            color: #475569;
+            color: #00ff4c;
         }
 
         .arrow {
             width: 17px;
-            height: 17px;
-            color: #cbd5e1;
+            color: #666;
         }
 
         .logout {
-            color: #dc2626;
+            color: #ff4d4d;
         }
 
         .logout .menu-icon {
-            color: #dc2626;
+            color: #ff4d4d;
         }
 
         /* =========================
-           FIXED BOTTOM NAVIGATION
+           LOADING SCREEN
+        ========================= */
+
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.86);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-box {
+            width: 115px;
+            padding: 20px 15px;
+            background: #141414;
+            border: 1px solid #292929;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .loader {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #333;
+            border-top-color: #00ff4c;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: auto;
+        }
+
+        .loading-text {
+            color: #aaa;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           5-BUTTON NAVIGATION
         ========================= */
 
         .bottom-nav {
@@ -317,32 +444,24 @@
             bottom: 0;
             width: 100%;
             max-width: 440px;
-            height: 65px;
-
-            background: white;
-            border-top: 1px solid #e2e8f0;
-
+            height: 67px;
+            background: #101010;
+            border-top: 1px solid #292929;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-
             z-index: 1000;
-
-            box-shadow: 0 -3px 12px rgba(0,0,0,.05);
+            box-shadow: 0 -5px 20px rgba(0,0,0,.4);
         }
 
         .bottom-nav a {
             position: relative;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
             gap: 3px;
-
+            color: #777;
             text-decoration: none;
-
-            color: #94a3b8;
             font-size: 9px;
         }
 
@@ -352,45 +471,31 @@
         }
 
         .bottom-nav a.active {
-            color: #10144c;
-            font-weight: bold;
+            color: #00ff4c;
+            font-weight: 800;
         }
 
         .bottom-nav a.active::after {
             content: "";
-
             position: absolute;
             bottom: 0;
             left: 25%;
             right: 25%;
-
             height: 3px;
-
-            background: #10144c;
-
+            background: #00ff4c;
             border-radius: 4px 4px 0 0;
         }
 
         @media(max-width:360px) {
-
-            .profile-section {
-                padding: 22px 15px;
+            .profile-content h1 {
+                font-size: 21px;
             }
 
-            .avatar {
-                width: 68px;
-                height: 68px;
+            .balance-amount {
+                font-size: 22px;
             }
 
-            .profile-info h2 {
-                font-size: 18px;
-            }
-
-            .menu {
-                padding: 12px;
-            }
-
-            .balance-box .amount {
+            .account-value {
                 font-size: 12px;
             }
         }
@@ -402,35 +507,50 @@
 <div class="phone">
 
     <!-- =========================
-         PROFILE
+         INFINIX PROFILE
     ========================= -->
 
-    <div class="profile-section">
+    <div class="profile-header">
 
-        <div class="avatar-wrap">
-
-            <div class="avatar">
-                <i data-lucide="user"></i>
+        <div class="brand-row">
+            <div class="brand">
+                INFINIX<span>.</span>
             </div>
 
-            <span class="vip">
-                VIP0
-            </span>
-
+            <div class="notification">
+                <i data-lucide="bell"></i>
+            </div>
         </div>
 
-        <div class="profile-info">
+        <div class="profile-card">
 
-            <h2>
-                {{ user.username }}
-            </h2>
+            <!-- REAL PHOTO INSIDE PROFILE -->
+            <img
+                class="profile-photo"
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85"
+                alt="Infinix profile"
+            >
 
-            <span class="user-id">
-                ID {{ user.id }}
-            </span>
+            <div class="profile-overlay"></div>
 
-            <div class="phone-number">
-                {{ user.phone }}
+            <div class="profile-content">
+
+                <div class="small-title">
+                    WELCOME BACK
+                </div>
+
+                <h1>
+                    {{ user.username }}
+                </h1>
+
+                <span class="user-id">
+                    ID {{ user.id }}
+                </span>
+
+                <div class="phone-number">
+                    {{ user.phone }}
+                </div>
+
             </div>
 
         </div>
@@ -439,32 +559,29 @@
 
 
     <!-- =========================
-         STATISTICS
+         MAIN BALANCE
     ========================= -->
 
-    <div class="stats-container">
+    <div class="balance-section">
 
-        <div class="stats">
+        <div class="balance-card">
 
-            <div class="stat">
-                <strong>
-                    GHS {{ "%.2f"|format(withdraw_balance|float) }}
-                </strong>
-                <span>Balance</span>
-            </div>
+            <div class="balance-top">
 
-            <div class="stat">
-                <strong>
-                    GHS {{ "%.2f"|format(deposit_balance|float) }}
-                </strong>
-                <span>Deposit</span>
-            </div>
+                <div>
+                    <div class="balance-label">
+                        AVAILABLE BALANCE
+                    </div>
 
-            <div class="stat">
-                <strong>
-                    GHS {{ "%.2f"|format(income_balance|float) }}
-                </strong>
-                <span>Total Income</span>
+                    <div class="balance-amount">
+                        GHS {{ "%.2f"|format(withdraw_balance|float) }}
+                    </div>
+                </div>
+
+                <div class="balance-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+
             </div>
 
         </div>
@@ -473,80 +590,108 @@
 
 
     <!-- =========================
-         PERSONAL INFORMATION
+         ACTION BUTTONS
+    ========================= -->
+
+    <div class="actions">
+
+        <a href="/deposit"
+           class="action deposit-btn loading-link">
+
+            <i data-lucide="plus-circle"></i>
+            Deposit
+
+        </a>
+
+        <a href="/withdraw"
+           class="action withdraw-btn loading-link">
+
+            <i data-lucide="arrow-up-right"></i>
+            Withdraw
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         ACCOUNT OVERVIEW
     ========================= -->
 
     <div class="section">
 
-        <div class="section-title">
-            Personal Information
+        <div class="section-heading">
+            <h3>Account Overview</h3>
+            <span>INFINIX ACCOUNT</span>
         </div>
 
-        <div class="info-card">
+        <div class="account-grid">
 
-            <div class="info-row">
-                <span class="info-label">Username</span>
-                <span class="info-value">{{ user.username }}</span>
-            </div>
+            <div class="account-card">
 
-            <div class="info-row">
-                <span class="info-label">User ID</span>
-                <span class="info-value">{{ user.id }}</span>
-            </div>
+                <div class="account-icon">
+                    <i data-lucide="credit-card"></i>
+                </div>
 
-            <div class="info-row">
-                <span class="info-label">Phone Number</span>
-                <span class="info-value">{{ user.phone }}</span>
-            </div>
+                <div class="account-label">
+                    Deposit Account
+                </div>
 
-            <div class="info-row">
-                <span class="info-label">Referral Code</span>
-                <span class="info-value">{{ user.referral_code }}</span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         ACCOUNT BALANCES
-    ========================= -->
-
-    <div class="section">
-
-        <div class="section-title">
-            Account Balances
-        </div>
-
-        <div class="balance-grid">
-
-            <div class="balance-box">
-                <div class="label">Deposit Account</div>
-                <div class="amount">
+                <div class="account-value">
                     GHS {{ "%.2f"|format(deposit_balance|float) }}
                 </div>
+
             </div>
 
-            <div class="balance-box">
-                <div class="label">Withdrawal Account</div>
-                <div class="amount">
-                    GHS {{ "%.2f"|format(withdraw_balance|float) }}
+
+            <div class="account-card">
+
+                <div class="account-icon">
+                    <i data-lucide="trending-up"></i>
                 </div>
-            </div>
 
-            <div class="balance-box">
-                <div class="label">Income Account</div>
-                <div class="amount">
+                <div class="account-label">
+                    Income Account
+                </div>
+
+                <div class="account-value">
                     GHS {{ "%.2f"|format(income_balance|float) }}
                 </div>
+
             </div>
 
-            <div class="balance-box">
-                <div class="label">Referral Account</div>
-                <div class="amount">
+
+            <div class="account-card">
+
+                <div class="account-icon">
+                    <i data-lucide="users"></i>
+                </div>
+
+                <div class="account-label">
+                    Referral Account
+                </div>
+
+                <div class="account-value">
                     GHS {{ "%.2f"|format(referral_balance|float) }}
                 </div>
+
+            </div>
+
+
+            <div class="account-card">
+
+                <div class="account-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+
+                <div class="account-label">
+                    Withdrawal Account
+                </div>
+
+                <div class="account-value">
+                    GHS {{ "%.2f"|format(withdraw_balance|float) }}
+                </div>
+
             </div>
 
         </div>
@@ -555,96 +700,131 @@
 
 
     <!-- =========================
-         ACCOUNT & SERVICES
+         SERVICES
     ========================= -->
 
-    <div class="menu-area">
+    <div class="menu-section">
 
         <div class="menu-title">
-            Account & Services
+            Services
         </div>
 
-        <a href="/bind_account" class="menu">
+
+        <a href="/bind_account" class="menu loading-link">
+
             <div class="menu-left">
                 <i data-lucide="landmark" class="menu-icon"></i>
-                <span>Bind Account</span>
+                <span>Withdrawal Account</span>
             </div>
+
             <i data-lucide="chevron-right" class="arrow"></i>
+
         </a>
 
-        <a href="/deposit" class="menu">
-            <div class="menu-left">
-                <i data-lucide="credit-card" class="menu-icon"></i>
-                <span>Deposit</span>
-            </div>
-            <i data-lucide="chevron-right" class="arrow"></i>
-        </a>
 
-        <a href="/withdraw" class="menu">
-            <div class="menu-left">
-                <i data-lucide="wallet-cards" class="menu-icon"></i>
-                <span>Withdraw</span>
-            </div>
-            <i data-lucide="chevron-right" class="arrow"></i>
-        </a>
+        <a href="/transaction_history" class="menu loading-link">
 
-        <a href="/transaction_history" class="menu">
             <div class="menu-left">
-                <i data-lucide="receipt-text" class="menu-icon"></i>
+                <i data-lucide="receipt" class="menu-icon"></i>
                 <span>Transaction History</span>
             </div>
+
             <i data-lucide="chevron-right" class="arrow"></i>
+
         </a>
 
-        <a href="/my_plan" class="menu">
+
+        <a href="/my_plan" class="menu loading-link">
+
             <div class="menu-left">
                 <i data-lucide="package" class="menu-icon"></i>
                 <span>My Product</span>
             </div>
+
             <i data-lucide="chevron-right" class="arrow"></i>
+
         </a>
 
-        <a href="/support" class="menu">
+
+        <a href="/team" class="menu loading-link">
+
+            <div class="menu-left">
+                <i data-lucide="users" class="menu-icon"></i>
+                <span>My Team</span>
+            </div>
+
+            <i data-lucide="chevron-right" class="arrow"></i>
+
+        </a>
+
+
+        <a href="/support" class="menu loading-link">
+
             <div class="menu-left">
                 <i data-lucide="headphones" class="menu-icon"></i>
                 <span>Support Center</span>
             </div>
+
             <i data-lucide="chevron-right" class="arrow"></i>
+
         </a>
 
-        <a href="/logout" class="menu logout">
+
+        <a href="/logout" class="menu logout loading-link">
+
             <div class="menu-left">
                 <i data-lucide="log-out" class="menu-icon"></i>
                 <span>Logout</span>
             </div>
+
             <i data-lucide="chevron-right" class="arrow"></i>
+
         </a>
 
     </div>
 
 
     <!-- =========================
-         FIXED BOTTOM NAVIGATION
+         LOADING
+    ========================= -->
+
+    <div class="loading" id="loading">
+
+        <div class="loading-box">
+
+            <div class="loader"></div>
+
+            <div class="loading-text">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SAME 5 BOTTOM BUTTONS
     ========================= -->
 
     <div class="bottom-nav">
 
-        <a href="/dashboard">
+        <a href="/dashboard" class="loading-link">
             <i data-lucide="home"></i>
             <span>Home</span>
         </a>
 
-        <a href="/my_plan">
+        <a href="/my_plan" class="loading-link">
             <i data-lucide="trending-up"></i>
             <span>Income</span>
         </a>
 
-        <a href="/team">
+        <a href="/team" class="loading-link">
             <i data-lucide="users"></i>
             <span>Team</span>
         </a>
 
-        <a href="/team">
+        <a href="/team" class="loading-link">
             <i data-lucide="share-2"></i>
             <span>Share</span>
         </a>
@@ -660,7 +840,36 @@
 
 
 <script>
+
     lucide.createIcons();
+
+    /* =========================
+       LOADING FOR NAVIGATION
+    ========================= */
+
+    const loading = document.getElementById("loading");
+
+    document.querySelectorAll(".loading-link").forEach(function(link) {
+
+        link.addEventListener("click", function(event) {
+
+            const destination = this.href;
+
+            /*
+             * Allow normal navigation but show loading first.
+             */
+            event.preventDefault();
+
+            loading.style.display = "flex";
+
+            setTimeout(function() {
+                window.location.href = destination;
+            }, 350);
+
+        });
+
+    });
+
 </script>
 
 </body>
