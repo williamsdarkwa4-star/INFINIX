@@ -15,26 +15,31 @@
     font-family:Arial,Helvetica,sans-serif;
 }
 
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
 body{
-    min-height:100vh;
     background:#050505;
-    color:#ffffff;
+    color:#fff;
     overflow-x:hidden;
 }
 
+
 /* =========================
-   BACKGROUND IMAGE
+   BACKGROUND
 ========================= */
 
 .background{
     position:fixed;
     inset:0;
-    z-index:-2;
+    z-index:-5;
 
     background-image:
         linear-gradient(
             rgba(0,0,0,.78),
-            rgba(0,0,0,.94)
+            rgba(0,0,0,.92)
         ),
         url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=85");
 
@@ -42,82 +47,84 @@ body{
     background-position:center;
 }
 
-/* =========================
-   APP
-========================= */
+.background:after{
+    content:"";
+    position:absolute;
+    inset:0;
 
-.app{
-    width:100%;
-    max-width:430px;
-    min-height:100vh;
-
-    margin:auto;
-
-    padding:18px 15px 35px;
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(214,246,0,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(214,246,0,.07),
+            transparent 35%
+        );
 }
 
+
 /* =========================
-   TOP BAR
+   FLOATING X
 ========================= */
 
-.topbar{
-    height:48px;
+.floating-x{
+    position:fixed;
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    top:15%;
+    right:8%;
 
-    margin-bottom:20px;
-}
+    width:55px;
+    height:55px;
 
-.back{
-    width:40px;
-    height:40px;
+    border:1px solid rgba(214,246,0,.30);
+    border-radius:50%;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    border-radius:50%;
+    color:#d6f600;
 
-    background:rgba(255,255,255,.08);
+    font-size:27px;
+    font-weight:900;
 
-    border:1px solid rgba(255,255,255,.1);
+    opacity:.45;
 
-    color:#ffffff;
+    animation:floatX 4s ease-in-out infinite;
 
-    font-size:21px;
-
-    text-decoration:none;
+    z-index:-1;
 }
 
-.top-title{
-    text-align:center;
+@keyframes floatX{
+
+    0%,100%{
+        transform:translateY(0) rotate(0deg);
+    }
+
+    50%{
+        transform:translateY(35px) rotate(8deg);
+    }
 }
 
-.top-title strong{
-    display:block;
 
-    font-size:15px;
+/* =========================
+   PAGE
+========================= */
 
-    letter-spacing:.5px;
+.page{
+    width:100%;
+    max-width:470px;
+
+    min-height:100vh;
+
+    margin:auto;
+
+    padding:25px 18px 40px;
 }
 
-.top-title span{
-    display:block;
-
-    margin-top:3px;
-
-    color:#777777;
-
-    font-size:8px;
-
-    letter-spacing:1px;
-}
-
-.top-space{
-    width:40px;
-}
 
 /* =========================
    BRAND
@@ -125,141 +132,141 @@ body{
 
 .brand{
     text-align:center;
-
-    padding:5px 0 23px;
+    padding:15px 0 28px;
 }
 
-.logo{
-    width:74px;
-    height:74px;
+.brand-logo{
+    width:72px;
+    height:72px;
 
-    margin:0 auto 12px;
+    margin:0 auto 14px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    border-radius:21px;
+    border-radius:22px;
 
     background:#d6f600;
-
     color:#050505;
 
-    font-size:30px;
+    font-size:31px;
     font-weight:900;
 
     box-shadow:
-        0 0 28px rgba(214,246,0,.16);
+        0 0 0 1px rgba(214,246,0,.3),
+        0 12px 35px rgba(214,246,0,.18);
 }
 
 .brand h1{
-    font-size:26px;
-
+    font-size:27px;
     font-weight:900;
+    letter-spacing:-.7px;
 
-    letter-spacing:.5px;
+    color:#fff;
+
+    margin-bottom:6px;
 }
 
 .brand p{
-    margin-top:6px;
-
-    color:#777777;
-
-    font-size:11px;
+    color:#8f8f8f;
+    font-size:12px;
 }
 
+
 /* =========================
-   MAIN CARD
+   CARD
 ========================= */
 
 .card{
-    width:100%;
+    background:rgba(15,15,15,.94);
 
-    background:rgba(17,17,17,.96);
-
-    border:1px solid #272727;
+    border:1px solid #262626;
 
     border-radius:22px;
 
-    padding:23px 17px 21px;
+    padding:25px 20px 24px;
 
     box-shadow:
-        0 20px 50px rgba(0,0,0,.45);
+        0 25px 70px rgba(0,0,0,.55);
+
+    backdrop-filter:blur(14px);
 }
+
 
 /* =========================
    HEADER
 ========================= */
 
 .card-header{
-    margin-bottom:20px;
+    margin-bottom:22px;
 }
 
 .card-header h2{
-    font-size:22px;
+    color:#fff;
+
+    font-size:23px;
+    font-weight:800;
 
     margin-bottom:6px;
 }
 
 .card-header p{
-    color:#777777;
-
-    font-size:11px;
+    color:#858585;
+    font-size:12px;
+    line-height:1.5;
 }
+
 
 /* =========================
    FLASH MESSAGE
 ========================= */
 
 .message{
-    padding:12px;
+    padding:12px 14px;
 
     border-radius:10px;
 
-    margin-bottom:14px;
+    margin-bottom:16px;
 
-    font-size:11px;
-
+    font-size:12px;
     line-height:1.5;
 
     text-align:center;
 }
 
 .success{
-    background:rgba(55,200,100,.1);
-
-    color:#7be59a;
-
-    border:1px solid rgba(55,200,100,.25);
+    background:#102000;
+    color:#d6f600;
+    border:1px solid #334500;
 }
 
 .error{
-    background:rgba(255,60,60,.1);
-
-    color:#ff8989;
-
-    border:1px solid rgba(255,60,60,.25);
+    background:#250f0f;
+    color:#ff8585;
+    border:1px solid #542222;
 }
+
 
 /* =========================
    REFERRAL NOTICE
 ========================= */
 
 .referral-box{
-    padding:12px;
+    background:#151515;
 
-    margin-bottom:18px;
+    border:1px solid #292929;
+    border-left:3px solid #d6f600;
 
-    border-radius:11px;
+    border-radius:10px;
 
-    background:#171a05;
+    padding:13px;
 
-    border:1px solid rgba(214,246,0,.15);
+    margin-bottom:20px;
 
-    color:#777777;
+    color:#858585;
 
-    font-size:10px;
-
+    font-size:11px;
     line-height:1.6;
 }
 
@@ -267,72 +274,74 @@ body{
     color:#d6f600;
 }
 
+
 /* =========================
    FORM
 ========================= */
 
 .form-group{
-    margin-bottom:14px;
+    margin-bottom:16px;
 }
 
 label{
     display:block;
 
-    margin-bottom:6px;
+    color:#d0d0d0;
 
-    color:#cccccc;
+    font-size:11px;
+    font-weight:700;
 
-    font-size:10px;
+    margin-bottom:7px;
 
-    font-weight:bold;
-
-    letter-spacing:.4px;
+    letter-spacing:.2px;
 }
+
 
 /* =========================
    INPUT
 ========================= */
 
 .input-box{
+    height:53px;
     width:100%;
-    height:52px;
 
     display:flex;
     align-items:center;
 
-    background:#202020;
+    background:#191919;
 
-    border:1px solid #2b2b2b;
+    border:1px solid #292929;
 
     border-radius:10px;
 
-    transition:.2s;
+    transition:.2s ease;
 }
 
 .input-box:focus-within{
     border-color:#d6f600;
 
     box-shadow:
-        0 0 0 2px rgba(214,246,0,.06);
+        0 0 0 2px rgba(214,246,0,.07);
+
+    background:#161616;
 }
 
 .input-icon{
-    width:44px;
+    width:45px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    color:#777777;
+    color:#777;
 
-    font-size:15px;
+    font-size:16px;
 }
 
 .input-box input{
     flex:1;
 
-    min-width:0;
-
+    width:100%;
     height:100%;
 
     border:none;
@@ -340,51 +349,48 @@ label{
 
     background:transparent;
 
-    color:#ffffff;
+    color:#fff;
 
     font-size:13px;
+
+    padding-right:10px;
 }
 
 .input-box input::placeholder{
-    color:#5f5f5f;
+    color:#666;
 }
 
+
 /* =========================
-   PASSWORD BUTTON
+   PASSWORD
 ========================= */
 
 .password-toggle{
-    width:43px;
+    width:45px;
     height:100%;
 
-    border:0;
-
+    border:none;
     background:transparent;
 
-    color:#777777;
+    color:#777;
 
     cursor:pointer;
 
-    font-size:14px;
+    font-size:15px;
+}
+
+.password-toggle:active{
+    color:#d6f600;
 }
 
 .password-note{
-    margin-top:5px;
+    margin-top:6px;
 
-    color:#5d5d5d;
+    color:#666;
 
     font-size:9px;
 }
 
-/* =========================
-   REFERRAL INPUT
-========================= */
-
-.referral-input{
-    background:#191d05;
-
-    border-color:#292d0b;
-}
 
 /* =========================
    REGISTER BUTTON
@@ -392,38 +398,104 @@ label{
 
 .register-btn{
     width:100%;
-    height:54px;
+    height:55px;
 
-    margin-top:5px;
+    margin-top:8px;
 
-    border:0;
-
+    border:none;
     border-radius:10px;
 
     background:#d6f600;
-
     color:#050505;
 
-    font-size:13px;
-
+    font-size:14px;
     font-weight:900;
 
-    letter-spacing:1px;
+    letter-spacing:.7px;
 
     cursor:pointer;
 
-    transition:.15s;
+    position:relative;
+    overflow:hidden;
+
+    box-shadow:
+        0 0 0 rgba(214,246,0,0);
+
+    animation:
+        buttonGrow 2.5s ease-in-out infinite;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+
+/* BUTTON SLOWLY GROWS */
+
+@keyframes buttonGrow{
+
+    0%,100%{
+        transform:scale(1);
+
+        box-shadow:
+            0 0 0 rgba(214,246,0,0);
+    }
+
+    50%{
+        transform:scale(1.025);
+
+        box-shadow:
+            0 8px 25px rgba(214,246,0,.20);
+    }
 }
 
 .register-btn:active{
-    transform:scale(.97);
+    transform:scale(.98);
+
+    animation:none;
 }
 
-.register-btn:disabled{
-    opacity:.7;
 
-    cursor:not-allowed;
+/* =========================
+   BUTTON LOADING
+========================= */
+
+.register-btn.loading{
+    pointer-events:none;
+    color:transparent;
+
+    animation:none;
 }
+
+.register-btn.loading:after{
+    content:"";
+
+    position:absolute;
+
+    width:19px;
+    height:19px;
+
+    top:50%;
+    left:50%;
+
+    margin-left:-9.5px;
+    margin-top:-9.5px;
+
+    border:2px solid rgba(0,0,0,.25);
+
+    border-top-color:#000;
+
+    border-radius:50%;
+
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
 
 /* =========================
    LOGIN
@@ -434,7 +506,7 @@ label{
 
     margin-top:19px;
 
-    color:#777777;
+    color:#777;
 
     font-size:11px;
 }
@@ -442,171 +514,133 @@ label{
 .login-link a{
     color:#d6f600;
 
-    font-weight:bold;
+    font-weight:800;
 
     text-decoration:none;
+
+    margin-left:3px;
 }
+
 
 /* =========================
    SECURITY
 ========================= */
 
 .security{
-    margin-top:17px;
+    margin-top:19px;
 
-    padding-top:14px;
+    padding-top:15px;
 
-    border-top:1px solid #282828;
+    border-top:1px solid #252525;
 
     text-align:center;
 
-    color:#555555;
+    color:#555;
 
     font-size:9px;
+
+    letter-spacing:.2px;
 }
 
-/* =====================================================
-   FULL SCREEN LOADING
-===================================================== */
 
-.loading-screen{
+/* =========================
+   FULL PAGE LOADING
+========================= */
 
+.page-loader{
     position:fixed;
+    inset:0;
 
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-
-    width:100%;
-    height:100%;
-
-    background:rgba(0,0,0,.88);
+    background:rgba(0,0,0,.95);
 
     display:none;
 
     align-items:center;
     justify-content:center;
 
-    z-index:99999;
+    flex-direction:column;
+
+    z-index:9999;
 }
 
-.loading-card{
-
-    width:170px;
-
-    padding:25px 20px;
-
-    background:#151515;
-
-    border:1px solid #303030;
-
-    border-radius:16px;
-
-    text-align:center;
-
-    box-shadow:
-        0 15px 50px rgba(0,0,0,.7);
+.page-loader.show{
+    display:flex;
 }
 
-/* =========================
-   SPINNER
-========================= */
+.loader-logo{
+    width:62px;
+    height:62px;
 
-.spinner{
+    border-radius:18px;
 
-    width:38px;
-    height:38px;
+    background:#d6f600;
+    color:#000;
 
-    margin:0 auto 14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:26px;
+    font-weight:900;
+
+    margin-bottom:18px;
+
+    animation:
+        loaderPulse 1.3s ease-in-out infinite;
+}
+
+.loader-spinner{
+    width:28px;
+    height:28px;
+
+    border:2px solid #333;
+
+    border-top-color:#d6f600;
 
     border-radius:50%;
 
-    border:3px solid #333333;
+    animation:spin .7s linear infinite;
 
-    border-top:3px solid #d6f600;
-
-    animation:
-        loadingSpin .7s linear infinite;
+    margin-bottom:12px;
 }
 
-@keyframes loadingSpin{
+.loader-text{
+    color:#888;
 
-    from{
-        transform:rotate(0deg);
-    }
+    font-size:11px;
 
-    to{
-        transform:rotate(360deg);
-    }
-
+    letter-spacing:.5px;
 }
 
-.loading-title{
-
-    color:#ffffff;
-
-    font-size:12px;
-
-    font-weight:bold;
-
-    margin-bottom:5px;
-}
-
-.loading-text{
-
-    color:#777777;
-
-    font-size:9px;
-}
-
-/* =========================
-   BOTTOM DECORATION
-========================= */
-
-.bottom-light{
-
-    width:150px;
-    height:2px;
-
-    margin:22px auto 0;
-
-    background:#d6f600;
-
-    border-radius:10px;
-
-    opacity:.45;
-
-    animation:lightMove 2s ease-in-out infinite;
-}
-
-@keyframes lightMove{
+@keyframes loaderPulse{
 
     0%,100%{
-        transform:scaleX(.6);
-        opacity:.25;
+        transform:scale(1);
     }
 
     50%{
-        transform:scaleX(1);
-        opacity:.8;
+        transform:scale(1.07);
     }
-
 }
 
+
 /* =========================
-   SMALL DEVICES
+   MOBILE
 ========================= */
 
 @media(max-width:360px){
 
-    .app{
-        padding:15px 12px 30px;
+    .page{
+        padding:18px 12px 30px;
     }
 
-    .logo{
-        width:66px;
-        height:66px;
+    .brand-logo{
+        width:64px;
+        height:64px;
+
+        border-radius:19px;
+
+        font-size:27px;
     }
 
     .brand h1{
@@ -614,9 +648,12 @@ label{
     }
 
     .card{
-        padding:20px 14px;
+        padding:22px 16px;
     }
 
+    .card-header h2{
+        font-size:21px;
+    }
 }
 
 </style>
@@ -624,72 +661,72 @@ label{
 
 <body>
 
-<!-- BACKGROUND -->
 
 <div class="background"></div>
 
 
-<div class="app">
+<div class="floating-x">
+    X
+</div>
 
-    <!-- TOP BAR -->
 
-    <div class="topbar">
+<!-- =========================
+     LOADING SCREEN
+========================= -->
 
-        <a
-            href="{{ url_for('login') }}"
-            class="back"
-        >
-            ←
-        </a>
+<div class="page-loader" id="pageLoader">
 
-        <div class="top-title">
-
-            <strong>
-                Create Account
-            </strong>
-
-            <span>
-                INFINIX
-            </span>
-
-        </div>
-
-        <div class="top-space"></div>
-
+    <div class="loader-logo">
+        X
     </div>
 
+    <div class="loader-spinner"></div>
 
-    <!-- BRAND -->
+    <div class="loader-text">
+        Creating your account...
+    </div>
+
+</div>
+
+
+<div class="page">
+
+
+    <!-- =========================
+         BRAND
+    ========================= -->
 
     <div class="brand">
 
-        <div class="logo">
+        <div class="brand-logo">
             X
         </div>
 
         <h1>
-            INFINIX
+            Infinix
         </h1>
 
         <p>
-            Smart technology. Smart experience.
+            Welcome to the Infinix platform
         </p>
 
     </div>
 
 
-    <!-- REGISTER CARD -->
+    <!-- =========================
+         REGISTER CARD
+    ========================= -->
 
     <div class="card">
 
         <div class="card-header">
 
             <h2>
-                Create your account
+                Create Account
             </h2>
 
             <p>
-                Enter your details to get started.
+                Enter your information below to continue.
             </p>
 
         </div>
@@ -710,13 +747,13 @@ label{
         {% endwith %}
 
 
-        <!-- REFERRAL NOTICE -->
+        <!-- REFERRAL -->
 
         {% if invite_code %}
 
             <div class="referral-box">
 
-                🎁 Referral code detected:
+                Referral code detected:
 
                 <strong>
                     {{ invite_code }}
@@ -732,20 +769,18 @@ label{
 
             <div class="referral-box">
 
-                💡
+                <strong>Referral code</strong>
 
-                <strong>
-                    Referral code
-                </strong>
-
-                is optional. You can continue without one.
+                is optional. You can register without one.
 
             </div>
 
         {% endif %}
 
 
-        <!-- FORM -->
+        <!-- =========================
+             FORM
+        ========================= -->
 
         <form
             method="POST"
@@ -914,7 +949,7 @@ label{
                 </div>
 
                 <div class="password-note">
-                    Required to authorize withdrawals.
+                    Used when authorizing withdrawals.
                 </div>
 
             </div>
@@ -928,9 +963,10 @@ label{
 
                     REFERRAL CODE
 
-                    <span
-                        style="color:#555;font-weight:normal;"
-                    >
+                    <span style="
+                        color:#666;
+                        font-weight:normal;
+                    ">
                         (OPTIONAL)
                     </span>
 
@@ -955,7 +991,7 @@ label{
             </div>
 
 
-            <!-- REGISTER BUTTON -->
+            <!-- CREATE ACCOUNT -->
 
             <button
                 type="submit"
@@ -964,6 +1000,7 @@ label{
             >
                 CREATE ACCOUNT
             </button>
+
 
         </form>
 
@@ -985,37 +1022,8 @@ label{
 
         <div class="security">
 
-            🔒 Your account information is protected.
+            🔒 Your account information is securely handled.
 
-        </div>
-
-    </div>
-
-
-    <div class="bottom-light"></div>
-
-</div>
-
-
-<!-- =====================================================
-     LOADING SCREEN
-===================================================== -->
-
-<div
-    class="loading-screen"
-    id="loadingScreen"
->
-
-    <div class="loading-card">
-
-        <div class="spinner"></div>
-
-        <div class="loading-title">
-            Creating Account
-        </div>
-
-        <div class="loading-text">
-            Please wait...
         </div>
 
     </div>
@@ -1026,13 +1034,17 @@ label{
 <script>
 
 /* =========================
-   PASSWORD SHOW / HIDE
+   PASSWORD TOGGLE
 ========================= */
 
 function togglePassword(id,button){
 
     const input =
         document.getElementById(id);
+
+    if(!input){
+        return;
+    }
 
     if(input.type === "password"){
 
@@ -1052,7 +1064,7 @@ function togglePassword(id,button){
 
 
 /* =========================
-   FORM LOADING
+   LOADING
 ========================= */
 
 const registerForm =
@@ -1061,37 +1073,36 @@ const registerForm =
 const registerButton =
     document.getElementById("registerButton");
 
-const loadingScreen =
-    document.getElementById("loadingScreen");
+const pageLoader =
+    document.getElementById("pageLoader");
 
 
-registerForm.addEventListener(
-    "submit",
-    function(){
+if(registerForm){
 
-        /*
-         * Show loading immediately
-         */
+    registerForm.addEventListener(
+        "submit",
+        function(){
 
-        loadingScreen.style.display = "flex";
+            if(registerButton){
 
+                registerButton.classList.add(
+                    "loading"
+                );
 
-        /*
-         * Disable button
-         */
+            }
 
-        registerButton.disabled = true;
+            if(pageLoader){
 
+                pageLoader.classList.add(
+                    "show"
+                );
 
-        /*
-         * Change button text
-         */
+            }
 
-        registerButton.textContent =
-            "CREATING...";
+        }
+    );
 
-    }
-);
+}
 
 </script>
 
