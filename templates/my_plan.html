@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Income - Zenith Capital</title>
+    <title>My Device - Infinix</title>
 
     <link
         rel="stylesheet"
@@ -12,531 +12,785 @@
     >
 
     <style>
+        :root {
+            --bg-black: #000000;
+            --header-grey: #1a1a1a;
+            --card-bg-dark: #0d0d0d;
+            --card-border: #191919;
+
+            --razer-green: #3cdc3c;
+            --razer-green-soft: rgba(60,220,60,.12);
+
+            --text-white: #ffffff;
+            --text-muted: #888888;
+            --text-dark: #444444;
+
+            --font-stack:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            font-family: var(--font-stack);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
         }
 
         body {
-            background: #f1f4fa;
-            color: #334155;
             min-height: 100vh;
-            padding-bottom: 85px;
-        }
+            background: #000;
+            color: var(--text-white);
 
-        .phone {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            margin: auto;
-            background: #f1f4fa;
-        }
-
-        .header {
-            background: #0b1c4d;
-            color: white;
-            padding: 20px 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,.10);
-        }
-
-        .header-top {
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .header h1 {
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .header p {
-            margin-top: 4px;
-            color: #cbd5e1;
-            font-size: 11px;
-        }
-
-        .status {
-            background: #dcfce7;
-            color: #15803d;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 800;
-        }
-
-        .content {
-            padding: 16px;
-        }
-
-        .flash {
-            padding: 11px 13px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .flash.success {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .flash.error {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .flash.info {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 5px 2px 10px;
-        }
-
-        .section-title h2 {
-            color: #0f172a;
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .section-title span {
-            color: #94a3b8;
-            font-size: 10px;
         }
 
         /* =========================
-           INDIVIDUAL PLAN CARD
+           MOBILE APP SHELL
         ========================= */
 
-        .plan-card {
-            background: white;
-            border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 18px;
-            border: 1px solid #edf0f5;
-            box-shadow: 0 7px 22px rgba(15,23,42,.07);
+        .app-viewport {
+            width: 100%;
+            max-width: 412px;
+            height: 100vh;
+            max-height: 892px;
+
+            background: var(--bg-black);
+
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 50px rgba(0,0,0,.9);
         }
 
-        .plan-number {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: #eef2ff;
-            color: #0b1c4d;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
 
-        .plan-header {
+        /* =========================
+           TOP SYSTEM HEADER
+        ========================= */
+
+        .system-header {
             display: flex;
             align-items: center;
-            gap: 13px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+
+            min-height: 62px;
+
+            padding: 10px 14px;
+
+            background: var(--header-grey);
+
+            border-bottom: 1px solid #222;
         }
 
-        .plan-icon {
-            width: 55px;
-            height: 55px;
-            flex-shrink: 0;
-            border-radius: 15px;
-            background: #eef2ff;
-            color: #0b1c4d;
+        .header-center {
+            text-align: center;
+            line-height: 1.25;
+        }
+
+        .header-title {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
+
+        .header-domain {
+            margin-top: 2px;
+
+            color: var(--text-muted);
+
+            font-size: 10px;
+        }
+
+        .header-btn {
+            width: 25px;
+            height: 25px;
+
+            border: none;
+            background: transparent;
+
+            color: #fff;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+
+            font-size: 19px;
+
+            cursor: pointer;
         }
 
-        .plan-title {
-            min-width: 0;
+        .header-btn.small-arrow {
+            font-size: 12px;
         }
 
-        .plan-title h2 {
-            color: #0f172a;
-            font-size: 18px;
-            font-weight: 800;
-            word-break: break-word;
-        }
-
-        .plan-title p {
-            color: #64748b;
-            font-size: 11px;
-            margin-top: 3px;
-        }
-
-        .running {
+        .header-right-group {
             display: flex;
             align-items: center;
-            gap: 7px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            color: #15803d;
-            padding: 9px 11px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 14px;
+            gap: 13px;
         }
 
-        .dot {
-            width: 7px;
-            height: 7px;
-            background: #22c55e;
+
+        /* =========================
+           MAIN SCROLL AREA
+        ========================= */
+
+        .main-scroll-container {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 14px;
+
+            padding-bottom: 85px;
+
+            scrollbar-width: none;
+        }
+
+        .main-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero-banner-frame {
+            position: relative;
+
+            width: 100%;
+            height: 125px;
+
+            margin-bottom: 13px;
+
+            overflow: hidden;
+
+            border-radius: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #101010 0%,
+                    #1b1b1b 50%,
+                    #090909 100%
+                );
+        }
+
+        .hero-banner-frame::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 25% 20%,
+                    rgba(60,220,60,.18),
+                    transparent 55%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(60,220,60,.10),
+                    transparent 50%
+                );
+        }
+
+        .hero-banner-frame::after {
+            content: "";
+
+            position: absolute;
+
+            width: 150px;
+            height: 150px;
+
+            border: 1px solid rgba(60,220,60,.12);
+
             border-radius: 50%;
-            box-shadow: 0 0 0 4px rgba(34,197,94,.10);
+
+            top: -70px;
+            right: -50px;
         }
 
-        .countdown-box {
-            background: #0b1c4d;
-            color: white;
-            border-radius: 15px;
-            padding: 18px 12px;
+        .banner-brand-logo {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
             text-align: center;
-            margin-bottom: 14px;
+        }
+
+        .razer-glow-text {
+            color: var(--razer-green);
+
+            font-size: 22px;
+            font-weight: 800;
+
+            letter-spacing: 7px;
+
+            text-shadow:
+                0 0 8px rgba(60,220,60,.7),
+                0 0 20px rgba(60,220,60,.25);
+        }
+
+        .hero-subtitle {
+            margin-top: 7px;
+
+            color: #777;
+
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+
+        /* =========================
+           METRICS
+        ========================= */
+
+        .dashboard-metrics-row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+
+            margin-bottom: 13px;
+        }
+
+        .metric-panel {
+            min-height: 78px;
+
+            padding: 12px;
+
+            background: var(--razer-green);
+
+            border-radius: 7px;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: space-between;
+        }
+
+        .metric-label {
+            color: #000;
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .metric-counter-value {
+            color: #000;
+
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           SECTION HEADER
+        ========================= */
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin: 4px 2px 9px;
+        }
+
+        .section-title {
+            color: #fff;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .section-count {
+            color: #555;
+
+            font-size: 9px;
+        }
+
+
+        /* =========================
+           SMALL DEVICE CARD
+        ========================= */
+
+        .portfolio-ledger-card {
+            background: var(--card-bg-dark);
+
+            border: 1px solid var(--card-border);
+
+            border-radius: 8px;
+
+            padding: 12px;
+
+            margin-bottom: 10px;
+        }
+
+        .ledger-top-flex-row {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .vip-tier-indicator {
+            color: var(--razer-green);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .asset-valuation-tag {
+            color: var(--razer-green);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           DEVICE CONTENT
+        ========================= */
+
+        .ledger-inner-body {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+        }
+
+
+        /* SMALL INFINIX DEVICE THUMBNAIL */
+
+        .hardware-thumbnail-wrapper {
+            width: 48px;
+            height: 58px;
+
+            flex-shrink: 0;
+
+            background: #111113;
+
+            border: 1px solid #222;
+
+            border-radius: 7px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .infinix-device {
+            position: relative;
+
+            width: 25px;
+            height: 44px;
+
+            border-radius: 5px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #343438,
+                    #171719
+                );
+
+            border: 1px solid #444;
+
+            box-shadow:
+                0 4px 10px rgba(0,0,0,.6);
+        }
+
+        .infinix-device::before {
+            content: "";
+
+            position: absolute;
+
+            top: 3px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 8px;
+            height: 2px;
+
+            background: #050505;
+
+            border-radius: 5px;
+        }
+
+        .infinix-device::after {
+            content: "";
+
+            position: absolute;
+
+            left: 4px;
+            right: 4px;
+
+            bottom: 5px;
+
+            height: 1px;
+
+            background: #3cdc3c;
+
+            opacity: .5;
+        }
+
+
+        /* =========================
+           DEVICE DETAILS
+        ========================= */
+
+        .ledger-specs-column {
+            flex: 1;
+
+            min-width: 0;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 4px;
+        }
+
+        .product-name {
+            color: #fff;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            margin-bottom: 2px;
+        }
+
+        .spec-line-item {
+            color: var(--text-muted);
+
+            font-size: 10px;
+
+            line-height: 1.35;
+        }
+
+        .spec-highlight-value {
+            color: var(--razer-green);
+
+            margin-left: 4px;
+
+            font-weight: 600;
+        }
+
+        .system-log-timestamp {
+            color: var(--text-dark);
+
+            font-size: 8px;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================
+           COUNTDOWN
+        ========================= */
+
+        .income-status-row {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+            padding-top: 9px;
+
+            border-top: 1px solid #181818;
         }
 
         .countdown-label {
-            color: #cbd5e1;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: .6px;
+            color: #555;
+
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
         }
 
         .countdown {
-            margin-top: 7px;
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 2px;
+            color: var(--razer-green);
+
+            font-size: 12px;
+
+            font-weight: 700;
+
             font-variant-numeric: tabular-nums;
         }
 
         .countdown.ready {
-            color: #86efac;
+            text-shadow:
+                0 0 8px rgba(60,220,60,.5);
         }
 
-        .countdown-sub {
-            margin-top: 6px;
-            color: #94a3b8;
-            font-size: 9px;
-        }
 
-        .details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .detail {
-            background: #f8fafc;
-            border: 1px solid #edf0f5;
-            border-radius: 11px;
-            padding: 11px;
-        }
-
-        .detail span {
-            display: block;
-            color: #64748b;
-            font-size: 10px;
-            margin-bottom: 5px;
-        }
-
-        .detail strong {
-            color: #0f172a;
-            font-size: 13px;
-        }
-
-        .income-box {
-            margin-top: 9px;
-            background: #eef2ff;
-            border: 1px solid #dbeafe;
-            border-radius: 11px;
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .income-box span {
-            color: #475569;
-            font-size: 11px;
-        }
-
-        .income-box strong {
-            color: #0b1c4d;
-            font-size: 15px;
-        }
+        /* =========================
+           CLAIM BUTTON
+        ========================= */
 
         .claim-form {
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .claim-button {
             width: 100%;
-            border: none;
-            background: #0b1c4d;
-            color: white;
-            padding: 13px;
-            border-radius: 10px;
-            font-size: 11px;
+
+            border: 1px solid var(--razer-green);
+
+            background: var(--razer-green);
+
+            color: #000;
+
+            padding: 8px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
             font-weight: 800;
+
             cursor: pointer;
-            display: inline-flex;
+
+            display: flex;
+
             align-items: center;
             justify-content: center;
-            gap: 8px;
+
+            gap: 6px;
         }
 
         .claim-button.disabled {
-            background: #cbd5e1;
-            color: #64748b;
+            background: #181818;
+
+            border-color: #292929;
+
+            color: #555;
+
             cursor: not-allowed;
         }
 
+
         /* =========================
-           AVAILABLE PLANS
+           EMPTY STATE
         ========================= */
 
-        .available-plan {
-            background: white;
-            border: 1px solid #edf0f5;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 9px;
-            box-shadow: 0 3px 10px rgba(15,23,42,.035);
-        }
+        .empty-card {
+            background: var(--card-bg-dark);
 
-        .available-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
+            border: 1px solid var(--card-border);
 
-        .available-name {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            min-width: 0;
-        }
+            border-radius: 8px;
 
-        .available-icon {
-            width: 38px;
-            height: 38px;
-            flex-shrink: 0;
-            border-radius: 11px;
-            background: #eef2ff;
-            color: #0b1c4d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-        }
+            padding: 30px 15px;
 
-        .available-name h3 {
-            color: #0f172a;
-            font-size: 14px;
-            font-weight: 800;
-            word-break: break-word;
-        }
-
-        .available-name p {
-            color: #94a3b8;
-            font-size: 9px;
-            margin-top: 2px;
-        }
-
-        .plan-badge {
-            padding: 5px 8px;
-            border-radius: 15px;
-            font-size: 8px;
-            font-weight: 800;
-            white-space: nowrap;
-            background: #f1f5f9;
-            color: #64748b;
-        }
-
-        .available-details {
-            display: grid;
-            grid-template-columns: repeat(3,1fr);
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-
-        .available-detail {
-            background: #f8fafc;
-            border-radius: 9px;
-            padding: 9px 6px;
             text-align: center;
-        }
-
-        .available-detail span {
-            display: block;
-            color: #94a3b8;
-            font-size: 8px;
-            margin-bottom: 4px;
-        }
-
-        .available-detail strong {
-            color: #0b1c4d;
-            font-size: 11px;
-        }
-
-        .select-plan {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            padding: 11px;
-            border-radius: 10px;
-            background: #0b1c4d;
-            color: white;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 25px 15px;
-            color: #64748b;
         }
 
         .empty-icon {
-            width: 55px;
-            height: 55px;
+            width: 45px;
+            height: 45px;
+
             margin: 0 auto 10px;
-            border-radius: 15px;
-            background: #eef2ff;
-            color: #0b1c4d;
+
+            border-radius: 50%;
+
+            background: #151515;
+
+            color: #555;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
-            font-size: 23px;
-        }
 
-        .empty h2 {
-            color: #0f172a;
             font-size: 17px;
         }
 
-        .empty p {
-            margin-top: 5px;
-            font-size: 11px;
+        .empty-title {
+            color: #777;
+
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .info {
-            background: white;
-            border: 1px solid #edf0f5;
-            border-radius: 16px;
-            padding: 15px;
-            margin-top: 15px;
+        .empty-text {
+            margin-top: 4px;
+
+            color: #444;
+
+            font-size: 9px;
+        }
+
+
+        /* =========================
+           INFORMATION CARD
+        ========================= */
+
+        .info-card {
+            margin-top: 12px;
+
+            padding: 12px;
+
+            background: #090909;
+
+            border: 1px solid #141414;
+
+            border-radius: 8px;
         }
 
         .info-title {
             display: flex;
+
             align-items: center;
-            gap: 8px;
-            color: #0f172a;
-            font-size: 13px;
-            font-weight: 800;
-            margin-bottom: 7px;
+
+            gap: 7px;
+
+            color: #777;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            margin-bottom: 5px;
         }
 
         .info-title i {
-            color: #0b1c4d;
+            color: var(--razer-green);
         }
 
-        .info p {
-            color: #64748b;
-            font-size: 11px;
-            line-height: 1.55;
+        .info-card p {
+            color: #444;
+
+            font-size: 9px;
+
+            line-height: 1.5;
         }
+
 
         /* =========================
-           BOTTOM NAV
+           BOTTOM NAVIGATION
         ========================= */
 
-        .bottom-nav {
-            position: fixed;
+        .global-bottom-navigation {
+            position: absolute;
+
             bottom: 0;
             left: 0;
-            right: 0;
-            height: 67px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: center;
-            z-index: 9999;
-            box-shadow: 0 -4px 14px rgba(0,0,0,.05);
-        }
 
-        .bottom-nav-inner {
             width: 100%;
-            max-width: 440px;
+
             display: grid;
-            grid-template-columns: repeat(5,1fr);
-            align-items: center;
+
+            grid-template-columns: repeat(5, 1fr);
+
+            background:
+                linear-gradient(
+                    to top,
+                    #0f0f11,
+                    #151517
+                );
+
+            border-top: 1px solid #1c1c1f;
+
+            padding: 8px 0 5px;
+
+            z-index: 50;
         }
 
-        .bottom-nav a {
-            height: 100%;
-            position: relative;
+        .nav-tab-node {
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
             justify-content: center;
-            gap: 4px;
+
+            gap: 3px;
+
             text-decoration: none;
-            color: #94a3b8;
-            font-size: 9px;
+
+            color: #555;
+
+            min-height: 38px;
         }
 
-        .bottom-nav i {
-            font-size: 18px;
+        .nav-icon-glyph {
+            font-size: 17px;
+
+            line-height: 1;
         }
 
-        .bottom-nav a.active {
-            color: #0b1c4d;
-            font-weight: 800;
+        .nav-text-label {
+            font-size: 8px;
+
+            font-weight: 500;
         }
 
-        .bottom-nav a.active::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 25%;
-            right: 25%;
-            height: 3px;
-            background: #0b1c4d;
-            border-radius: 4px 4px 0 0;
+        .nav-tab-node.active-focus-state {
+            color: var(--razer-green);
         }
 
-        @media (max-width:360px) {
-            .content {
-                padding: 12px;
+
+        /* =========================
+           SMALL SCREENS
+        ========================= */
+
+        @media (max-width: 360px) {
+
+            .main-scroll-container {
+                padding: 11px;
+
+                padding-bottom: 80px;
             }
 
-            .plan-card {
-                padding: 15px;
+            .hero-banner-frame {
+                height: 110px;
             }
 
-            .countdown {
-                font-size: 27px;
+            .portfolio-ledger-card {
+                padding: 10px;
+            }
+
+            .hardware-thumbnail-wrapper {
+                width: 44px;
+                height: 53px;
+            }
+
+            .infinix-device {
+                width: 23px;
+                height: 40px;
             }
         }
     </style>
@@ -544,79 +798,261 @@
 
 <body>
 
-<div class="phone">
+<div class="app-viewport">
 
-    <header class="header">
-        <div class="header-top">
 
-            <div>
-                <h1>My Income</h1>
-                <p>Manage your plans and daily income</p>
-            </div>
+    <!-- =========================
+         SYSTEM HEADER
+    ========================== -->
 
-            {% if user_plans %}
-                <div class="status">
-                    {{ user_plans|length }} ACTIVE
-                </div>
-            {% endif %}
+    <header class="system-header">
+
+        <button
+            class="header-btn"
+            aria-label="Close"
+        >
+            &times;
+        </button>
+
+        <button
+            class="header-btn small-arrow"
+            aria-label="Menu"
+        >
+            &#8964;
+        </button>
+
+        <div class="header-center">
+
+            <h1 class="header-title">
+                My device
+            </h1>
+
+            <p class="header-domain">
+                infinix.com
+            </p>
 
         </div>
+
+        <div class="header-right-group">
+
+            <button
+                class="header-btn"
+                aria-label="Share"
+            >
+                &#9586;
+            </button>
+
+            <button
+                class="header-btn"
+                aria-label="More"
+            >
+                &#8942;
+            </button>
+
+        </div>
+
     </header>
 
-    <main class="content">
 
-        <!-- FLASH MESSAGES -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}" role="status">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-scroll-container">
+
+
+        <!-- HERO -->
+
+        <section class="hero-banner-frame">
+
+            <div class="banner-brand-logo">
+
+                <div class="razer-glow-text">
+                    INFINIX
+                </div>
+
+                <div class="hero-subtitle">
+                    DEVICE CENTER
+                </div>
+
+            </div>
+
+        </section>
+
 
 
         <!-- =========================
-             USER'S PURCHASED PLANS
+             METRICS
         ========================== -->
 
-        <div class="section-title">
-            <h2>My Active Plans</h2>
+        <section class="dashboard-metrics-row">
+
+            <div class="metric-panel">
+
+                <h2 class="metric-label">
+                    My device
+                </h2>
+
+                <span class="metric-counter-value">
+                    {{ user_plans|length if user_plans else 0 }}
+                </span>
+
+            </div>
+
+
+            <div class="metric-panel">
+
+                <h2 class="metric-label">
+                    My income
+                </h2>
+
+                <span class="metric-counter-value">
+                    GHS 0
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             MY DEVICES
+        ========================== -->
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                My Device
+            </h2>
 
             {% if user_plans %}
-                <span>{{ user_plans|length }} Running</span>
+
+                <span class="section-count">
+                    {{ user_plans|length }} device
+                    {% if user_plans|length != 1 %}
+                        s
+                    {% endif %}
+                </span>
+
             {% endif %}
+
         </div>
+
 
 
         {% if user_plans %}
 
+
             {% for user_plan in user_plans %}
 
-            <!-- EACH PURCHASE GETS ITS OWN CARD -->
+            <!-- SMALL DEVICE CARD -->
 
-            <div class="plan-card">
+            <section class="portfolio-ledger-card">
 
-                <div class="plan-number">
-                    <i class="fa-solid fa-layer-group"></i>
-                    Plan #{{ loop.index }}
+
+                <!-- TOP -->
+
+                <div class="ledger-top-flex-row">
+
+                    <span class="vip-tier-indicator">
+
+                        {{ user_plan.plan_name }}
+
+                    </span>
+
+                    <span class="asset-valuation-tag">
+
+                        GHS {{ "%.2f"|format(
+                            user_plan.investment_amount|float
+                        ) }}
+
+                    </span>
+
                 </div>
 
-                <div class="plan-header">
 
-                    <div class="plan-icon">
-                        <i class="fa-solid fa-chart-line"></i>
+
+                <!-- DEVICE BODY -->
+
+                <div class="ledger-inner-body">
+
+
+                    <!-- SMALL INFINIX DEVICE -->
+
+                    <div class="hardware-thumbnail-wrapper">
+
+                        <div class="infinix-device"></div>
+
                     </div>
 
-                    <div class="plan-title">
 
-                        <h2>
-                            {{ user_plan.plan_name }}
-                        </h2>
 
-                        <p>
-                            Purchased plan
+                    <!-- DETAILS -->
+
+                    <div class="ledger-specs-column">
+
+                        <div class="product-name">
+                            Infinix Device
+                        </div>
+
+
+                        <p class="spec-line-item">
+
+                            Daily income:
+
+                            <span class="spec-highlight-value">
+
+                                GHS {{
+                                    "%.2f"|format(
+                                        user_plan.daily_income|float
+                                    )
+                                }}
+
+                            </span>
+
+                        </p>
+
+
+                        <p class="spec-line-item">
+
+                            Total income:
+
+                            <span class="spec-highlight-value">
+
+                                GHS {{
+                                    "%.2f"|format(
+                                        (
+                                            user_plan.daily_income|float
+                                            *
+                                            user_plan.duration|int
+                                        )
+                                    )
+                                }}
+
+                            </span>
+
+                        </p>
+
+
+                        <p class="spec-line-item">
+
+                            Validity period:
+
+                            <span class="spec-highlight-value">
+
+                                {{ user_plan.duration }} days
+
+                            </span>
+
+                        </p>
+
+
+                        <p class="system-log-timestamp">
+
+                            Plan #{{ loop.index }}
+
                         </p>
 
                     </div>
@@ -624,111 +1060,36 @@
                 </div>
 
 
-                <div class="running">
 
-                    <span class="dot"></span>
+                <!-- INCOME STATUS -->
 
-                    Plan Running
+                <div class="income-status-row">
 
-                </div>
+                    <span class="countdown-label">
+
+                        Next income
+
+                    </span>
 
 
-                <!-- COUNTDOWN -->
-
-                <div class="countdown-box">
-
-                    <div class="countdown-label">
-                        NEXT INCOME IN
-                    </div>
-
-                    <div
+                    <span
                         id="countdown-{{ user_plan.id }}"
-                        class="countdown"
+                        class="countdown
+                        {% if user_plan.can_claim %}
+                            ready
+                        {% endif %}"
                     >
+
                         {% if user_plan.can_claim %}
                             00:00:00
                         {% else %}
                             --:--:--
                         {% endif %}
-                    </div>
 
-                    <div
-                        id="countdownSub-{{ user_plan.id }}"
-                        class="countdown-sub"
-                    >
-                        {% if user_plan.can_claim %}
-                            Income is ready
-                        {% else %}
-                            Calculating next income...
-                        {% endif %}
-                    </div>
-
-                </div>
-
-
-                <!-- DETAILS -->
-
-                <div class="details">
-
-                    <div class="detail">
-
-                        <span>Investment</span>
-
-                        <strong>
-                            GHS {{ "%.2f"|format(user_plan.investment_amount|float) }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <span>Daily Income</span>
-
-                        <strong>
-                            GHS {{ "%.2f"|format(user_plan.daily_income|float) }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <span>Duration</span>
-
-                        <strong>
-                            {{ user_plan.duration }} Days
-                        </strong>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <span>Status</span>
-
-                        <strong>
-                            Active
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- DAILY INCOME -->
-
-                <div class="income-box">
-
-                    <span>
-                        Expected Daily Income
                     </span>
 
-                    <strong>
-                        GHS {{ "%.2f"|format(user_plan.daily_income|float) }}
-                    </strong>
-
                 </div>
+
 
 
                 <!-- CLAIM -->
@@ -739,39 +1100,37 @@
                     class="claim-form"
                 >
 
-                    <!-- IMPORTANT:
-                         tells Flask WHICH purchased plan
-                         is being claimed
-                    -->
-
                     <input
                         type="hidden"
                         name="user_plan_id"
                         value="{{ user_plan.id }}"
                     >
 
+
                     <button
                         type="submit"
                         id="claimButton-{{ user_plan.id }}"
-                        class="claim-button {% if not user_plan.can_claim %}disabled{% endif %}"
-                        {% if not user_plan.can_claim %}disabled{% endif %}
+                        class="claim-button
+                        {% if not user_plan.can_claim %}
+                            disabled
+                        {% endif %}"
+
+                        {% if not user_plan.can_claim %}
+                            disabled
+                        {% endif %}
                     >
 
                         {% if user_plan.can_claim %}
 
                             <i class="fa-solid fa-coins"></i>
 
-                            <span>
-                                Claim Income
-                            </span>
+                            Claim Income
 
                         {% else %}
 
                             <i class="fa-solid fa-clock"></i>
 
-                            <span>
-                                Income Not Ready
-                            </span>
+                            Income Not Ready
 
                         {% endif %}
 
@@ -779,22 +1138,22 @@
 
                 </form>
 
-            </div>
+
+            </section>
 
 
-            <!-- COUNTDOWN SCRIPT FOR THIS SPECIFIC PLAN -->
+
+            <!-- =========================
+                 COUNTDOWN
+            ========================== -->
 
             <script>
+
                 (function () {
 
                     const countdownEl =
                         document.getElementById(
                             "countdown-{{ user_plan.id }}"
-                        );
-
-                    const countdownSub =
-                        document.getElementById(
-                            "countdownSub-{{ user_plan.id }}"
                         );
 
                     const claimButton =
@@ -821,29 +1180,42 @@
                     {% endif %}
 
 
+
                     function pad(value) {
 
-                        return String(value).padStart(2, "0");
+                        return String(value)
+                            .padStart(2, "0");
 
                     }
+
 
 
                     function formatTime(milliseconds) {
 
                         if (milliseconds <= 0) {
+
                             return "00:00:00";
+
                         }
 
+
                         const totalSeconds =
-                            Math.floor(milliseconds / 1000);
+                            Math.floor(
+                                milliseconds / 1000
+                            );
+
 
                         const hours =
-                            Math.floor(totalSeconds / 3600);
+                            Math.floor(
+                                totalSeconds / 3600
+                            );
+
 
                         const minutes =
                             Math.floor(
                                 (totalSeconds % 3600) / 60
                             );
+
 
                         const seconds =
                             totalSeconds % 60;
@@ -860,22 +1232,19 @@
                     }
 
 
-                    function ready() {
+
+                    function setReady() {
 
                         if (!countdownEl) return;
+
 
                         countdownEl.textContent =
                             "00:00:00";
 
-                        countdownEl.classList.add("ready");
 
-
-                        if (countdownSub) {
-
-                            countdownSub.textContent =
-                                "Your income is ready";
-
-                        }
+                        countdownEl.classList.add(
+                            "ready"
+                        );
 
 
                         if (claimButton) {
@@ -888,31 +1257,26 @@
 
                             claimButton.innerHTML =
                                 '<i class="fa-solid fa-coins"></i>' +
-                                '<span>Claim Income</span>';
+                                ' Claim Income';
 
                         }
 
                     }
 
 
-                    function waiting(milliseconds) {
+
+                    function setWaiting(milliseconds) {
 
                         if (!countdownEl) return;
+
 
                         countdownEl.textContent =
                             formatTime(milliseconds);
 
+
                         countdownEl.classList.remove(
                             "ready"
                         );
-
-
-                        if (countdownSub) {
-
-                            countdownSub.textContent =
-                                "Time remaining until your next income";
-
-                        }
 
 
                         if (claimButton) {
@@ -925,18 +1289,19 @@
 
                             claimButton.innerHTML =
                                 '<i class="fa-solid fa-clock"></i>' +
-                                '<span>Income Not Ready</span>';
+                                ' Income Not Ready';
 
                         }
 
                     }
 
 
-                    function update() {
+
+                    function updateCountdown() {
 
                         if (canClaim) {
 
-                            ready();
+                            setReady();
 
                             return;
 
@@ -949,13 +1314,10 @@
                         ) {
 
                             if (countdownEl) {
+
                                 countdownEl.textContent =
                                     "--:--:--";
-                            }
 
-                            if (countdownSub) {
-                                countdownSub.textContent =
-                                    "Next income time unavailable";
                             }
 
                             return;
@@ -969,298 +1331,187 @@
 
                         if (remaining <= 0) {
 
-                            ready();
+                            setReady();
 
                         } else {
 
-                            waiting(remaining);
+                            setWaiting(
+                                remaining
+                            );
 
                         }
 
                     }
 
 
-                    update();
+
+                    updateCountdown();
+
 
                     setInterval(
-                        update,
+                        updateCountdown,
                         1000
                     );
 
                 })();
+
             </script>
+
 
             {% endfor %}
 
 
         {% else %}
 
-            <div class="plan-card">
 
-                <div class="empty">
+            <!-- EMPTY -->
 
-                    <div class="empty-icon">
-                        <i class="fa-solid fa-box-open"></i>
-                    </div>
+            <section class="empty-card">
 
-                    <h2>
-                        No Active Plans
-                    </h2>
+                <div class="empty-icon">
 
-                    <p>
-                        You currently don't have any active plans.
-                    </p>
+                    <i class="fa-solid fa-mobile-screen"></i>
 
                 </div>
 
-            </div>
+
+                <h2 class="empty-title">
+
+                    No Device
+
+                </h2>
+
+
+                <p class="empty-text">
+
+                    You currently have no registered device.
+
+                </p>
+
+            </section>
+
 
         {% endif %}
 
 
 
         <!-- =========================
-             AVAILABLE PLANS
+             INFORMATION
         ========================== -->
 
-        <div class="section-title">
-
-            <h2>
-                Available Plans
-            </h2>
-
-            <span>
-                Choose a product
-            </span>
-
-        </div>
-
-
-        {% if plans %}
-
-            {% for plan in plans %}
-
-            <div class="available-plan">
-
-                <div class="available-top">
-
-                    <div class="available-name">
-
-                        <div class="available-icon">
-
-                            <i class="fa-solid fa-box"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
-                                {{ plan.plan_name }}
-                            </h3>
-
-                            <p>
-                                Zenith Capital Plan
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <span class="plan-badge">
-                        AVAILABLE
-                    </span>
-
-                </div>
-
-
-                <div class="available-details">
-
-                    <div class="available-detail">
-
-                        <span>
-                            Investment
-                        </span>
-
-                        <strong>
-                            GHS {{ "%.2f"|format(plan.investment_amount|float) }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="available-detail">
-
-                        <span>
-                            Daily Income
-                        </span>
-
-                        <strong>
-                            GHS {{ "%.2f"|format(plan.daily_income|float) }}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="available-detail">
-
-                        <span>
-                            Duration
-                        </span>
-
-                        <strong>
-                            {{ plan.duration }} Days
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- USER CAN BUY SAME PLAN AGAIN -->
-
-                <a
-                    href="{{ url_for('buy_plan', plan_id=plan.id) }}"
-                    class="select-plan"
-                >
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                    <span>
-                        View / Select Plan
-                    </span>
-
-                </a>
-
-            </div>
-
-            {% endfor %}
-
-        {% else %}
-
-            <div class="available-plan">
-
-                <div class="empty">
-
-                    <div class="empty-icon">
-
-                        <i class="fa-solid fa-box-open"></i>
-
-                    </div>
-
-                    <h2>
-                        No Plans Available
-                    </h2>
-
-                    <p>
-                        There are currently no plans available.
-                    </p>
-
-                </div>
-
-            </div>
-
-        {% endif %}
-
-
-
-        <!-- INFORMATION -->
-
-        <div class="info">
+        <section class="info-card">
 
             <div class="info-title">
 
                 <i class="fa-solid fa-circle-info"></i>
 
                 <span>
-                    Income Information
+                    Device Information
                 </span>
 
             </div>
 
+
             <p>
-                Each plan purchase is displayed separately.
-                If you purchase the same plan more than once,
-                every purchase receives its own card and its
-                own income claim cycle.
+
+                Your registered device information
+                and its associated plan details are
+                displayed above.
+
             </p>
 
-        </div>
+        </section>
+
 
     </main>
 
-</div>
 
 
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================== -->
 
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
+    <nav class="global-bottom-navigation">
 
-<nav class="bottom-nav">
 
-    <div class="bottom-nav-inner">
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="nav-tab-node"
+        >
 
-        <a href="{{ url_for('dashboard') }}">
+            <i class="fa-solid fa-house nav-icon-glyph"></i>
 
-            <i class="fa-solid fa-house"></i>
-
-            <span>
+            <span class="nav-text-label">
                 Home
             </span>
 
         </a>
 
 
+
         <a
             href="{{ url_for('my_plan') }}"
-            class="active"
+            class="nav-tab-node active-focus-state"
         >
 
-            <i class="fa-solid fa-chart-line"></i>
+            <i class="fa-solid fa-chart-line nav-icon-glyph"></i>
 
-            <span>
+            <span class="nav-text-label">
                 Income
             </span>
 
         </a>
 
 
-        <a href="{{ url_for('team') }}">
 
-            <i class="fa-solid fa-users"></i>
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-tab-node"
+        >
 
-            <span>
+            <i class="fa-solid fa-users nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
                 Team
             </span>
 
         </a>
 
 
-        <a href="{{ url_for('team') }}">
 
-            <i class="fa-solid fa-share-nodes"></i>
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-tab-node"
+        >
 
-            <span>
+            <i class="fa-solid fa-share-nodes nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
                 Share
             </span>
 
         </a>
 
 
-        <a href="{{ url_for('profile') }}">
 
-            <i class="fa-solid fa-user"></i>
+        <a
+            href="{{ url_for('profile') }}"
+            class="nav-tab-node"
+        >
 
-            <span>
+            <i class="fa-solid fa-user nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
                 My
             </span>
 
         </a>
 
-    </div>
 
-</nav>
+    </nav>
+
+
+</div>
 
 </body>
 </html>
