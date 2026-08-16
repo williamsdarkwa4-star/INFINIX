@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>INFINIX</title>
+    <title>INFINIX | Device Store</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +20,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
+        /* ==================================================
+           RESET
+        ================================================== */
 
         * {
             margin: 0;
@@ -26,17 +32,23 @@
         }
 
         :root {
-            --bg: #050505;
-            --surface: #0b0b0b;
-            --surface2: #111111;
-            --surface3: #171717;
+            --black: #050505;
+            --black-2: #090909;
+            --surface: #101010;
+            --surface-2: #161616;
+            --surface-3: #1c1c1c;
 
-            --text: #ffffff;
+            --white: #ffffff;
             --muted: #858585;
+            --muted-light: #b5b5b5;
 
             --green: #00ff55;
-            --green2: #00d948;
             --green-dark: #00a83a;
+            --green-mid: #00d948;
+
+            --orange: #ffb45b;
+            --blue: #67b5ff;
+            --purple: #d78cff;
 
             --border: rgba(255,255,255,.08);
         }
@@ -46,24 +58,35 @@
         }
 
         body {
-            margin: 0;
-            background: #000;
-            color: white;
             min-height: 100vh;
-            padding-bottom: 78px;
+            margin: 0;
+            padding-bottom: 75px;
+            background: #000;
+            color: var(--white);
         }
 
-        /* =========================================
-           PHONE CONTAINER
-        ========================================= */
+        a {
+            color: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* ==================================================
+           MAIN PHONE LAYOUT
+        ================================================== */
 
         .phone-container {
+            position: relative;
+
             width: 100%;
             max-width: 480px;
             min-height: 100vh;
-            margin: auto;
 
-            position: relative;
+            margin: auto;
             overflow: hidden;
 
             background:
@@ -72,15 +95,19 @@
                     rgba(0,255,85,.08),
                     transparent 30%
                 ),
-                #050505;
+                var(--black);
         }
 
 
-        /* =========================================
+        /* ==================================================
            HEADER
-        ========================================= */
+        ================================================== */
 
         .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
             height: 64px;
 
             display: flex;
@@ -90,15 +117,9 @@
             padding: 0 15px;
 
             background: rgba(5,5,5,.96);
-
             border-bottom: 1px solid var(--border);
 
             backdrop-filter: blur(20px);
-
-            position: sticky;
-            top: 0;
-
-            z-index: 100;
         }
 
         .brand {
@@ -107,30 +128,31 @@
             gap: 10px;
         }
 
-        .brand-logo {
-            width: 38px;
-            height: 38px;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #00ff55,
-                    #8affae
-                );
-
-            color: #001b09;
-
+        .brand-logo,
+        .loader-logo {
             display: flex;
             align-items: center;
             justify-content: center;
 
+            color: #001b09;
             font-weight: 900;
-            font-size: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--green),
+                    #8affae
+                );
 
             box-shadow:
-                0 0 22px rgba(0,255,85,.18);
+                0 0 25px rgba(0,255,85,.18);
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 17px;
         }
 
         .brand-text strong {
@@ -138,38 +160,33 @@
 
             font-size: 13px;
             font-weight: 900;
-
             letter-spacing: .5px;
         }
 
         .brand-text span {
             display: block;
 
-            color: var(--muted);
-
-            font-size: 8px;
-
             margin-top: 2px;
+
+            color: var(--muted);
+            font-size: 8px;
         }
 
         .header-button {
             width: 38px;
             height: 38px;
 
-            border-radius: 10px;
-
             display: flex;
             align-items: center;
             justify-content: center;
 
-            color: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
 
             background: #101010;
-
-            border: 1px solid var(--border);
+            color: white;
 
             text-decoration: none;
-
             transition: .2s;
         }
 
@@ -182,15 +199,14 @@
         }
 
 
-        /* =========================================
+        /* ==================================================
            HERO
-        ========================================= */
+        ================================================== */
 
         .hero {
-            height: 200px;
-
             position: relative;
 
+            height: 200px;
             overflow: hidden;
 
             background: #111;
@@ -198,7 +214,6 @@
 
         .hero-image {
             position: absolute;
-
             inset: 0;
 
             width: 100%;
@@ -208,34 +223,30 @@
 
             opacity: .72;
 
+            transform: scale(1.03);
+
             transition:
                 opacity .4s ease,
                 transform 5s ease;
-
-            transform: scale(1.03);
         }
 
         .hero::after {
             content: "";
 
             position: absolute;
-
             inset: 0;
 
             background:
                 linear-gradient(
                     180deg,
                     rgba(0,0,0,.05),
-                    rgba(0,0,0,.40),
+                    rgba(0,0,0,.42),
                     rgba(5,5,5,1)
                 );
-
-            pointer-events: none;
         }
 
         .hero-content {
             position: absolute;
-
             z-index: 5;
 
             left: 16px;
@@ -245,25 +256,21 @@
 
         .eyebrow {
             display: inline-flex;
-
             align-items: center;
-
             gap: 6px;
 
+            margin-bottom: 8px;
             padding: 5px 8px;
 
+            border: 1px solid rgba(0,255,85,.22);
             border-radius: 20px;
 
             background: rgba(0,255,85,.09);
-
-            border: 1px solid rgba(0,255,85,.22);
 
             color: var(--green);
 
             font-size: 8px;
             font-weight: 800;
-
-            margin-bottom: 8px;
         }
 
         .eyebrow span {
@@ -279,13 +286,11 @@
         }
 
         .hero h1 {
-            font-size: 23px;
-
-            line-height: 1.1;
-
-            font-weight: 900;
-
             margin-bottom: 5px;
+
+            font-size: 23px;
+            line-height: 1.1;
+            font-weight: 900;
         }
 
         .hero h1 span {
@@ -293,25 +298,21 @@
         }
 
         .hero p {
-            font-size: 9px;
-
-            color: #b5b5b5;
-
-            line-height: 1.5;
-
             max-width: 290px;
+
+            color: var(--muted-light);
+
+            font-size: 9px;
+            line-height: 1.5;
         }
 
         .hero-dots {
             position: absolute;
-
             right: 16px;
             bottom: 22px;
-
             z-index: 10;
 
             display: flex;
-
             gap: 4px;
         }
 
@@ -328,7 +329,6 @@
 
         .hero-dot.active {
             width: 17px;
-
             background: var(--green);
 
             box-shadow:
@@ -336,27 +336,29 @@
         }
 
 
-        /* =========================================
+        /* ==================================================
            QUICK ACTIONS
-        ========================================= */
+        ================================================== */
 
         .top-actions {
             display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
+            grid-template-columns: repeat(4, 1fr);
             gap: 6px;
 
             padding: 10px;
 
             background: #090909;
-
             border-bottom: 1px solid var(--border);
         }
 
         .action-btn {
-            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+
+            padding: 10px 4px;
+
+            border: 1px solid var(--border);
+            border-radius: 9px;
 
             background:
                 linear-gradient(
@@ -365,47 +367,11 @@
                     #0e0e0e
                 );
 
-            border: 1px solid var(--border);
-
-            border-radius: 9px;
-
-            padding: 10px 4px;
-
-            text-align: center;
-
             color: white;
+            text-align: center;
+            text-decoration: none;
 
             transition: .2s;
-
-            position: relative;
-
-            overflow: hidden;
-        }
-
-        .action-btn::after {
-            content: "";
-
-            position: absolute;
-
-            left: 50%;
-            top: 50%;
-
-            width: 0;
-            height: 0;
-
-            background:
-                rgba(0,255,85,.08);
-
-            border-radius: 50%;
-
-            transform: translate(-50%,-50%);
-
-            transition: .3s;
-        }
-
-        .action-btn:active::after {
-            width: 150px;
-            height: 150px;
         }
 
         .action-btn:active {
@@ -416,15 +382,13 @@
             width: 28px;
             height: 28px;
 
-            margin: auto auto 4px;
-
             display: flex;
-
             align-items: center;
             justify-content: center;
 
-            border-radius: 8px;
+            margin: auto auto 4px;
 
+            border-radius: 8px;
             background: rgba(255,255,255,.04);
         }
 
@@ -434,21 +398,20 @@
         }
 
         .action-label {
-            font-size: 8px;
-
             color: #a0a0a0;
+            font-size: 8px;
         }
 
 
-        /* =========================================
+        /* ==================================================
            ACCOUNT
-        ========================================= */
+        ================================================== */
 
         .account {
             margin: 14px 10px;
-
             padding: 14px;
 
+            border: 1px solid var(--border);
             border-radius: 14px;
 
             background:
@@ -458,15 +421,12 @@
                     #0c0c0c
                 );
 
-            border: 1px solid var(--border);
-
             box-shadow:
-                0 10px 30px rgba(0,0,0,.20);
+                0 10px 30px rgba(0,0,0,.2);
         }
 
         .account-header {
             display: flex;
-
             align-items: center;
             justify-content: space-between;
 
@@ -478,58 +438,51 @@
         }
 
         .account-header span {
-            font-size: 8px;
-
             color: var(--muted);
+            font-size: 8px;
         }
 
         .balance-main {
-            font-size: 22px;
-
-            font-weight: 900;
+            margin-bottom: 12px;
 
             color: white;
 
-            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 900;
         }
 
         .balance-main small {
-            font-size: 8px;
-
             color: var(--muted);
 
+            font-size: 8px;
             font-weight: 500;
         }
 
         .balance-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            border-top: 1px solid var(--border);
+            grid-template-columns: repeat(3, 1fr);
 
             padding-top: 11px;
+
+            border-top: 1px solid var(--border);
         }
 
         .balance-box {
             padding: 0 7px;
-
             border-right: 1px solid var(--border);
         }
 
         .balance-box:last-child {
-            border-right: none;
+            border-right: 0;
         }
 
         .balance-box label {
             display: block;
 
-            color: var(--muted);
-
-            font-size: 7px;
-
             margin-bottom: 4px;
+
+            color: var(--muted);
+            font-size: 7px;
         }
 
         .balance-box strong {
@@ -537,9 +490,9 @@
         }
 
 
-        /* =========================================
-           SECTION
-        ========================================= */
+        /* ==================================================
+           SECTIONS
+        ================================================== */
 
         .section {
             padding: 0 10px;
@@ -547,9 +500,7 @@
 
         .section-head {
             display: flex;
-
             align-items: end;
-
             justify-content: space-between;
 
             margin: 18px 2px 10px;
@@ -557,70 +508,53 @@
 
         .section-head h2 {
             font-size: 18px;
-
             letter-spacing: -.4px;
         }
 
         .section-head p {
-            font-size: 8px;
+            margin-top: 3px;
 
             color: var(--muted);
-
-            margin-top: 3px;
+            font-size: 8px;
         }
 
         .section-head a {
             color: var(--green);
-
-            text-decoration: none;
-
             font-size: 8px;
+            text-decoration: none;
         }
 
 
-        /* =========================================
+        /* ==================================================
            PRODUCT GRID
-        ========================================= */
+        ================================================== */
 
         .product-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0,1fr));
-
+            grid-template-columns: repeat(2, minmax(0,1fr));
             gap: 2px;
 
-            background: #262626;
-
             border: 1px solid #242424;
+            background: #262626;
         }
 
-
-        /* =========================================
-           PRODUCT CARD
-        ========================================= */
-
         .product-card {
-            background: #090909;
-
-            padding: 11px;
+            position: relative;
 
             min-width: 0;
+            padding: 11px;
 
             display: flex;
-
             flex-direction: column;
-
             align-items: center;
 
-            position: relative;
+            background: #090909;
         }
 
         .product-card::before {
             content: "";
 
             position: absolute;
-
             top: 0;
             left: 0;
             right: 0;
@@ -639,14 +573,12 @@
         .vip-tag {
             width: 100%;
 
-            color: var(--green);
-
-            font-weight: 900;
-
-            font-size: 12px;
-
             margin-bottom: 8px;
 
+            color: var(--green);
+
+            font-size: 12px;
+            font-weight: 900;
             text-align: left;
         }
 
@@ -654,24 +586,22 @@
             float: right;
 
             color: #666;
-
             font-size: 7px;
-
             font-weight: 600;
         }
 
 
-        /* =========================================
+        /* ==================================================
            PRODUCT IMAGE
-        ========================================= */
+        ================================================== */
 
         .product-img-box {
-            width: 100%;
+            position: relative;
 
+            width: 100%;
             height: 145px;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
@@ -679,6 +609,7 @@
 
             overflow: hidden;
 
+            border: 1px solid rgba(255,255,255,.06);
             border-radius: 9px;
 
             background:
@@ -687,17 +618,12 @@
                     #292929,
                     #090909 75%
                 );
-
-            border: 1px solid rgba(255,255,255,.06);
-
-            position: relative;
         }
 
         .product-img-box::after {
             content: "";
 
             position: absolute;
-
             inset: 0;
 
             background:
@@ -714,11 +640,9 @@
             width: 100%;
             height: 100%;
 
-            object-fit: contain;
-
             padding: 5px;
 
-            opacity: 1;
+            object-fit: contain;
 
             transition:
                 transform .5s ease,
@@ -731,28 +655,26 @@
         }
 
 
-        /* =========================================
-           IMAGE FALLBACK
-        ========================================= */
+        /* ==================================================
+           FALLBACK PHONE
+        ================================================== */
 
         .image-fallback {
+            position: absolute;
+            inset: 0;
+
             display: none;
-
-            width: 100%;
-            height: 100%;
-
             align-items: center;
             justify-content: center;
-
-            position: absolute;
-
-            inset: 0;
         }
 
         .fake-phone {
+            position: relative;
+
             width: 62px;
             height: 112px;
 
+            border: 2px solid #4a4a4a;
             border-radius: 13px;
 
             background:
@@ -762,12 +684,8 @@
                     #080808
                 );
 
-            border: 2px solid #4a4a4a;
-
             box-shadow:
                 0 15px 35px rgba(0,0,0,.6);
-
-            position: relative;
         }
 
         .fake-phone::before {
@@ -775,15 +693,14 @@
 
             position: absolute;
 
+            top: 5px;
+            left: 50%;
+
             width: 30px;
             height: 4px;
 
             border-radius: 10px;
-
             background: #050505;
-
-            top: 5px;
-            left: 50%;
 
             transform: translateX(-50%);
         }
@@ -796,115 +713,93 @@
             bottom: 20px;
             left: 50%;
 
-            transform:
-                translateX(-50%)
-                rotate(90deg);
-
             color: rgba(255,255,255,.45);
 
             font-size: 6px;
-
             font-weight: 800;
+
+            transform:
+                translateX(-50%)
+                rotate(90deg);
         }
 
 
-        /* =========================================
-           INFO ROW
-        ========================================= */
+        /* ==================================================
+           PRODUCT INFORMATION
+        ================================================== */
 
         .info-row {
             width: 100%;
-
-            font-size: 8px;
 
             margin-bottom: 5px;
 
             color: #777;
 
+            font-size: 8px;
             text-align: left;
         }
 
         .info-row span {
-            color: #d0d0d0;
-
-            font-weight: 600;
-
             float: right;
+
+            color: #d0d0d0;
+            font-weight: 600;
         }
 
-        .info-row .income {
-            color: var(--green);
-        }
-
-
-        /* =========================================
-           PRICE
-        ========================================= */
-
-        .price-tag {
+        .product-price {
             width: 100%;
-
-            color: var(--green);
-
-            font-weight: 900;
-
-            font-size: 14px;
 
             margin: 7px 0 9px;
 
+            color: var(--green);
+
+            font-size: 14px;
+            font-weight: 900;
             text-align: left;
         }
 
-        .price-tag small {
-            font-size: 7px;
-
+        .product-price small {
             color: #666;
 
+            font-size: 7px;
             font-weight: 500;
         }
 
 
-        /* =========================================
-           BUY BUTTON
-        ========================================= */
+        /* ==================================================
+           BUTTON
+        ================================================== */
 
         .buy-btn {
             width: 100%;
-
             min-height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+
+            padding: 7px 0;
+
+            border: 0;
+            border-radius: 6px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #00d948,
-                    #00a83a
+                    var(--green-mid),
+                    var(--green-dark)
                 );
 
             color: #001407;
 
-            border: none;
-
-            border-radius: 6px;
-
-            padding: 7px 0;
-
+            font-size: 10px;
             font-weight: 900;
 
-            font-size: 10px;
-
-            cursor: pointer;
-
             text-align: center;
-
             text-decoration: none;
 
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 5px;
+            cursor: pointer;
 
             transition: .2s;
         }
@@ -919,9 +814,9 @@
         }
 
 
-        /* =========================================
-           LOCKED
-        ========================================= */
+        /* ==================================================
+           LOCKED PRODUCT
+        ================================================== */
 
         .locked {
             opacity: .65;
@@ -937,27 +832,21 @@
 
         .locked-button {
             width: 100%;
-
             min-height: 32px;
 
-            border: 1px solid #272727;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
 
+            border: 1px solid #272727;
             border-radius: 6px;
 
             background: #151515;
-
             color: #707070;
 
             font-size: 9px;
-
             font-weight: 700;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            gap: 5px;
         }
 
         .locked-button svg {
@@ -965,43 +854,38 @@
         }
 
 
-        /* =========================================
-           INFORMATION
-        ========================================= */
+        /* ==================================================
+           INFORMATION BOX
+        ================================================== */
 
         .info {
+            display: flex;
+            gap: 9px;
+
             margin: 15px 10px;
-
             padding: 13px;
-
-            border-radius: 12px;
-
-            background: #0e1110;
 
             border:
                 1px solid
                 rgba(0,255,85,.10);
 
-            display: flex;
+            border-radius: 12px;
 
-            gap: 9px;
+            background: #0e1110;
         }
 
         .info-icon {
             min-width: 30px;
             height: 30px;
 
-            border-radius: 8px;
-
             display: flex;
-
             align-items: center;
             justify-content: center;
 
-            color: var(--green);
+            border-radius: 8px;
 
-            background:
-                rgba(0,255,85,.08);
+            background: rgba(0,255,85,.08);
+            color: var(--green);
         }
 
         .info-icon svg {
@@ -1009,75 +893,58 @@
         }
 
         .info h4 {
-            font-size: 9px;
-
             margin-bottom: 3px;
+            font-size: 9px;
         }
 
         .info p {
-            font-size: 7px;
-
-            line-height: 1.5;
-
             color: var(--muted);
+
+            font-size: 7px;
+            line-height: 1.5;
         }
 
 
-        /* =========================================
-           BOTTOM NAV
-        ========================================= */
+        /* ==================================================
+           BOTTOM NAVIGATION
+        ================================================== */
 
         .bottom-nav {
             position: fixed;
-
             bottom: 0;
-
             left: 50%;
-
-            transform:
-                translateX(-50%);
+            z-index: 500;
 
             width: 100%;
-
             max-width: 480px;
-
             height: 68px;
 
             display: grid;
+            grid-template-columns: repeat(5,1fr);
 
-            grid-template-columns:
-                repeat(5,1fr);
+            border-top: 1px solid #252525;
 
-            background:
-                rgba(14,14,14,.97);
+            background: rgba(14,14,14,.97);
 
-            border-top:
-                1px solid #252525;
+            backdrop-filter: blur(18px);
 
-            backdrop-filter:
-                blur(18px);
-
-            z-index: 500;
+            transform: translateX(-50%);
         }
 
         .nav-item {
             position: relative;
 
             display: flex;
-
             flex-direction: column;
-
             align-items: center;
-
             justify-content: center;
 
             gap: 4px;
 
-            text-decoration: none;
-
             color: #686868;
 
             font-size: 7px;
+            text-decoration: none;
 
             transition: .2s;
         }
@@ -1099,54 +966,42 @@
             content: "";
 
             position: absolute;
-
             top: 0;
 
             width: 28px;
             height: 2px;
 
-            border-radius:
-                0 0 5px 5px;
+            border-radius: 0 0 5px 5px;
 
             background: var(--green);
 
             box-shadow:
-                0 0 10px
-                rgba(0,255,85,.5);
+                0 0 10px rgba(0,255,85,.5);
         }
 
 
-        /* =========================================
-           PROFESSIONAL LOADING SCREEN
-        ========================================= */
+        /* ==================================================
+           LOADING SCREEN
+        ================================================== */
 
         .page-loader {
             position: fixed;
-
             inset: 0;
-
-            background:
-                rgba(0,0,0,.88);
-
-            backdrop-filter:
-                blur(12px);
+            z-index: 99999;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
             flex-direction: column;
 
             gap: 14px;
 
-            z-index: 99999;
+            background: rgba(0,0,0,.88);
+
+            backdrop-filter: blur(12px);
 
             opacity: 0;
-
             visibility: hidden;
-
             pointer-events: none;
 
             transition:
@@ -1156,16 +1011,24 @@
 
         .page-loader.show {
             opacity: 1;
-
             visibility: visible;
-
             pointer-events: all;
         }
 
         .loader-card {
             width: 155px;
 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 13px;
+
             padding: 22px 15px;
+
+            border:
+                1px solid
+                rgba(0,255,85,.16);
 
             border-radius: 18px;
 
@@ -1176,21 +1039,8 @@
                     #090909
                 );
 
-            border:
-                1px solid
-                rgba(0,255,85,.16);
-
             box-shadow:
-                0 25px 80px
-                rgba(0,0,0,.7);
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            gap: 13px;
+                0 25px 80px rgba(0,0,0,.7);
         }
 
         .loader-logo {
@@ -1199,44 +1049,18 @@
 
             border-radius: 12px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--green),
-                    #8affae
-                );
-
-            color: #001b09;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            font-weight: 900;
-
             font-size: 18px;
-
-            box-shadow:
-                0 0 30px
-                rgba(0,255,85,.18);
         }
 
         .loader-ring {
             width: 28px;
             height: 28px;
 
+            border: 2px solid rgba(255,255,255,.10);
+            border-top-color: var(--green);
+            border-right-color: rgba(0,255,85,.35);
+
             border-radius: 50%;
-
-            border:
-                2px solid
-                rgba(255,255,255,.10);
-
-            border-top-color:
-                var(--green);
-
-            border-right-color:
-                rgba(0,255,85,.35);
 
             animation:
                 spin .65s linear infinite;
@@ -1246,7 +1070,6 @@
             color: #a0a0a0;
 
             font-size: 8px;
-
             font-weight: 600;
 
             letter-spacing: .5px;
@@ -1259,22 +1082,18 @@
             overflow: hidden;
 
             border-radius: 20px;
-
-            background:
-                #242424;
+            background: #242424;
         }
 
         .loader-bar span {
             display: block;
 
-            height: 100%;
-
             width: 40%;
+            height: 100%;
 
             border-radius: 20px;
 
-            background:
-                var(--green);
+            background: var(--green);
 
             animation:
                 loadingBar 1.1s ease-in-out infinite;
@@ -1297,32 +1116,21 @@
         }
 
 
-        /* =========================================
-           TOUCH FEEDBACK
-        ========================================= */
+        /* ==================================================
+           LOADING LINK
+        ================================================== */
 
         .loading-link.loading-now {
             pointer-events: none;
-        }
-
-        .loading-now {
             opacity: .7;
         }
 
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
+        /* ==================================================
+           SMALL DEVICES
+        ================================================== */
 
-        @media(max-width:360px) {
-
-            .product-img-box {
-                height: 120px;
-            }
-
-            .product-card {
-                padding: 9px;
-            }
+        @media (max-width: 360px) {
 
             .hero {
                 height: 180px;
@@ -1331,22 +1139,30 @@
             .hero h1 {
                 font-size: 21px;
             }
-        }
 
+            .product-card {
+                padding: 9px;
+            }
+
+            .product-img-box {
+                height: 120px;
+            }
+        }
     </style>
 </head>
+
 
 <body>
 
 
-<!-- =========================================
-     PROFESSIONAL LOADER
-========================================= -->
+<!-- ==================================================
+     LOADER
+================================================== -->
 
 <div
     class="page-loader"
-    id="pageLoader">
-
+    id="pageLoader"
+>
     <div class="loader-card">
 
         <div class="loader-logo">
@@ -1355,7 +1171,10 @@
 
         <div class="loader-ring"></div>
 
-        <div class="loader-text" id="loaderText">
+        <div
+            class="loader-text"
+            id="loaderText"
+        >
             Loading Infinix...
         </div>
 
@@ -1364,16 +1183,17 @@
         </div>
 
     </div>
-
 </div>
 
+
+<!-- ==================================================
+     MAIN APP
+================================================== -->
 
 <div class="phone-container">
 
 
-    <!-- =========================================
-         HEADER
-    ========================================== -->
+    <!-- HEADER -->
 
     <header class="top-header">
 
@@ -1385,9 +1205,7 @@
 
             <div class="brand-text">
 
-                <strong>
-                    INFINIX
-                </strong>
+                <strong>INFINIX</strong>
 
                 <span>
                     SMARTPHONE SHOWCASE
@@ -1401,18 +1219,16 @@
         <a
             href="{{ url_for('support') }}"
             class="header-button loading-link"
-            data-loading="Opening Support...">
-
+            data-loading="Opening Support..."
+            aria-label="Support"
+        >
             <i data-lucide="bell"></i>
-
         </a>
 
     </header>
 
 
-    <!-- =========================================
-         HERO
-    ========================================== -->
+    <!-- HERO -->
 
     <section class="hero">
 
@@ -1421,140 +1237,116 @@
             class="hero-image"
             src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
             alt="Infinix smartphone"
-            loading="eager"
-            onerror="this.style.display='none';"
         >
 
         <div class="hero-content">
 
             <div class="eyebrow">
-
                 <span></span>
-
                 FEATURED DEVICE
-
             </div>
 
             <h1>
-
                 Welcome,
-                <span>
-                    {{ user.fullname }}
-                </span>
-
+                <span>{{ user.fullname }}</span>
             </h1>
 
             <p>
-                Explore Infinix devices and manage your purchases.
+                Explore the latest Infinix devices
+                and manage your account.
             </p>
 
         </div>
 
-
         <div class="hero-dots">
-
             <span class="hero-dot active"></span>
             <span class="hero-dot"></span>
             <span class="hero-dot"></span>
             <span class="hero-dot"></span>
-
         </div>
 
     </section>
 
 
-    <!-- =========================================
-         QUICK ACTIONS
-    ========================================== -->
+    <!-- QUICK ACTIONS -->
 
     <div class="top-actions">
-
 
         <a
             href="{{ url_for('deposit') }}"
             class="action-btn loading-link"
-            data-loading="Opening Deposit...">
-
+            data-loading="Opening Account..."
+        >
             <div
                 class="action-icon"
-                style="color:#00ff55">
-
+                style="color:#00ff55"
+            >
                 <i data-lucide="wallet"></i>
-
             </div>
 
             <div class="action-label">
-                Deposit
+                Account
             </div>
-
         </a>
 
 
         <a
             href="{{ url_for('withdraw') }}"
             class="action-btn loading-link"
-            data-loading="Opening Withdraw...">
-
+            data-loading="Opening Transactions..."
+        >
             <div
                 class="action-icon"
-                style="color:#ffb45b">
-
+                style="color:#ffb45b"
+            >
                 <i data-lucide="arrow-up-right"></i>
-
             </div>
 
             <div class="action-label">
-                Withdraw
+                Transactions
             </div>
-
         </a>
 
 
         <a
             href="{{ url_for('support') }}"
             class="action-btn loading-link"
-            data-loading="Opening Support...">
-
+            data-loading="Opening Support..."
+        >
             <div
                 class="action-icon"
-                style="color:#67b5ff">
-
+                style="color:#67b5ff"
+            >
                 <i data-lucide="headphones"></i>
-
             </div>
 
             <div class="action-label">
                 Support
             </div>
-
         </a>
 
 
         <a
-            href="{{ url_for('profile') }}"
+            href="{{ url_for('my_plan') }}"
             class="action-btn loading-link"
-            data-loading="Opening Profile...">
-
+            data-loading="Opening my paln..."
+        >
             <div
                 class="action-icon"
-                style="color:#d78cff">
-
-                <i data-lucide="user-round"></i>
-
+                style="color:#d78cff"
+            >
+                <i data-lucide="trading"></i>
             </div>
 
             <div class="action-label">
-                Profile
+                my plan
             </div>
-
         </a>
 
     </div>
 
 
-    <!-- =========================================
-         ACCOUNT
-    ========================================== -->
+    <!-- ACCOUNT -->
 
     <section class="account">
 
@@ -1565,7 +1357,7 @@
             </h3>
 
             <span>
-                Available balances
+                Available balance
             </span>
 
         </div>
@@ -1577,14 +1369,13 @@
             {{ "%.2f"|format(account.deposit_account|float) }}
 
             <small>
-                Deposit
+                Account Balance
             </small>
 
         </div>
 
 
         <div class="balance-grid">
-
 
             <div class="balance-box">
 
@@ -1632,12 +1423,9 @@
     </section>
 
 
-    <!-- =========================================
-         AVAILABLE DEVICES
-    ========================================== -->
+    <!-- PRODUCTS -->
 
     <section class="section">
-
 
         <div class="section-head">
 
@@ -1648,7 +1436,7 @@
                 </h2>
 
                 <p>
-                    Select an Infinix model to view
+                    Explore available Infinix models
                 </p>
 
             </div>
@@ -1657,10 +1445,9 @@
             <a
                 href="{{ url_for('my_plan') }}"
                 class="loading-link"
-                data-loading="Opening My Devices...">
-
+                data-loading="Opening My Devices..."
+            >
                 My Devices
-
             </a>
 
         </div>
@@ -1669,22 +1456,14 @@
         <div class="product-grid">
 
 
-            <!-- =================================
-                 DEVICE 1
-            ================================= -->
+            <!-- DEVICE 1 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 1
-
-                    <span>
-                        STARTER
-                    </span>
-
+                    <span>STARTER</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -1692,81 +1471,54 @@
                         src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
                         alt="Infinix Note 10"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
-
                         <div class="fake-phone"></div>
-
                     </div>
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 22
-                    </span>
+                    Model:
+                    <span>Note 10</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 4,400
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 100
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=1) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 1...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 1..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 2
-            ================================= -->
+            <!-- DEVICE 2 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 2
-
-                    <span>
-                        BASIC
-                    </span>
-
+                    <span>BASIC</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -1774,7 +1526,6 @@
                         src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
                         alt="Infinix Hot 60 Pro"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -1783,70 +1534,46 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 45
-                    </span>
+                    Model:
+                    <span>Hot Series</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 9,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 200
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=2) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 2...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 2..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 3
-            ================================= -->
+            <!-- DEVICE 3 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 3
-
-                    <span>
-                        GROWTH
-                    </span>
-
+                    <span>GROWTH</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -1854,7 +1581,6 @@
                         src="https://usbdriverspie.com/wp-content/uploads/2022/04/Infinix-Hot-12i.png"
                         alt="Infinix Hot 12i"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -1863,70 +1589,46 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 80
-                    </span>
+                    Model:
+                    <span>Hot 12i</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 16,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 400
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=3) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 3...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 3..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 4
-            ================================= -->
+            <!-- DEVICE 4 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 4
-
-                    <span>
-                        ADVANCED
-                    </span>
-
+                    <span>ADVANCED</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -1934,7 +1636,6 @@
                         src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
                         alt="Infinix S5 Pro"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -1943,70 +1644,46 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 110
-                    </span>
+                    Model:
+                    <span>S5 Pro</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 22,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 600
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=4) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 4...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 4..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 5
-            ================================= -->
+            <!-- DEVICE 5 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 5
-
-                    <span>
-                        PREMIUM
-                    </span>
-
+                    <span>PREMIUM</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -2014,7 +1691,6 @@
                         src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-s2-pro.png"
                         alt="Infinix S2 Pro"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -2023,78 +1699,53 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 200
-                    </span>
+                    Model:
+                    <span>S2 Pro</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 40,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 800
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=5) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 5...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 5..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 6
-            ================================= -->
+            <!-- DEVICE 6 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 6
-
-                    <span>
-                        ELITE
-                    </span>
-
+                    <span>ELITE</span>
                 </div>
-
 
                 <div class="product-img-box">
 
                     <img
                         src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
-                        alt="Infinix Note device"
+                        alt="Infinix Note"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -2103,70 +1754,46 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 300
-                    </span>
+                    Model:
+                    <span>Note Series</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 60,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
+                <div class="product-price">
                     GHS 900
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=6) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 6...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 6..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 7
-            ================================= -->
+            <!-- DEVICE 7 -->
 
             <article class="product-card">
 
                 <div class="vip-tag">
-
                     INFINIX 7
-
-                    <span>
-                        MASTER
-                    </span>
-
+                    <span>MASTER</span>
                 </div>
-
 
                 <div class="product-img-box">
 
@@ -2174,7 +1801,6 @@
                         src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
                         alt="Infinix Note 12 Pro"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -2183,78 +1809,53 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span class="income">
-                        GHS 460
-                    </span>
+                    Model:
+                    <span>Note 12 Pro</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 92,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        300 Days
-                    </span>
+                    Availability:
+                    <span>Available</span>
                 </div>
 
-
-                <div class="price-tag">
-
-                    GHS 1000
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                <div class="product-price">
+                    GHS 1,000
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <a
                     href="{{ url_for('buy_plan', plan_id=7) }}"
                     class="buy-btn loading-link"
-                    data-loading="Opening Infinix 7...">
-
-                    Buy now
-
+                    data-loading="Opening Infinix 7..."
+                >
+                    View device
                     <i data-lucide="arrow-right"></i>
-
                 </a>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 8
-            ================================= -->
+            <!-- COMING SOON -->
 
             <article class="product-card locked">
 
                 <div class="vip-tag">
-
                     INFINIX X
-
-                    <span>
-                        COMING SOON
-                    </span>
-
+                    <span>COMING SOON</span>
                 </div>
-
 
                 <div class="product-img-box">
 
                     <img
                         src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
-                        alt="Infinix Hot 60 Pro"
+                        alt="Upcoming Infinix device"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -2263,77 +1864,53 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span>
-                        GHS 500
-                    </span>
+                    Model:
+                    <span>Upcoming</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 100,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        200 Days
-                    </span>
+                    Availability:
+                    <span>Coming Soon</span>
                 </div>
 
-
-                <div class="price-tag">
-
-                    GHS 1500
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                <div class="product-price">
+                    GHS 1,500
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <button
                     class="locked-button"
-                    disabled>
-
+                    type="button"
+                    disabled
+                >
                     <i data-lucide="lock"></i>
-
                     Coming soon
-
                 </button>
 
             </article>
 
 
-            <!-- =================================
-                 DEVICE 9
-            ================================= -->
+            <!-- COMING SOON -->
 
             <article class="product-card locked">
 
                 <div class="vip-tag">
-
                     INFINIX Y
-
-                    <span>
-                        COMING SOON
-                    </span>
-
+                    <span>COMING SOON</span>
                 </div>
-
 
                 <div class="product-img-box">
 
                     <img
                         src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
-                        alt="Infinix S5 Pro"
+                        alt="Upcoming Infinix device"
                         loading="lazy"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
 
                     <div class="image-fallback">
@@ -2342,48 +1919,33 @@
 
                 </div>
 
-
                 <div class="info-row">
-                    Daily income:
-                    <span>
-                        GHS 800
-                    </span>
+                    Model:
+                    <span>Upcoming</span>
                 </div>
 
                 <div class="info-row">
-                    Total income:
-                    <span>
-                        GHS 144,000
-                    </span>
+                    Category:
+                    <span>Smartphone</span>
                 </div>
 
                 <div class="info-row">
-                    Validity:
-                    <span>
-                        180 Days
-                    </span>
+                    Availability:
+                    <span>Coming Soon</span>
                 </div>
 
-
-                <div class="price-tag">
-
-                    GHS 4000
-
-                    <small>
-                        / DEVICE
-                    </small>
-
+                <div class="product-price">
+                    GHS 4,000
+                    <small>/ DEVICE</small>
                 </div>
-
 
                 <button
                     class="locked-button"
-                    disabled>
-
+                    type="button"
+                    disabled
+                >
                     <i data-lucide="lock"></i>
-
                     Coming soon
-
                 </button>
 
             </article>
@@ -2393,28 +1955,24 @@
     </section>
 
 
-    <!-- =========================================
-         INFORMATION
-    ========================================== -->
+    <!-- INFORMATION -->
 
     <div class="info">
 
         <div class="info-icon">
-
             <i data-lucide="shield-check"></i>
-
         </div>
 
         <div>
 
             <h4>
-                Platform information
+                Device information
             </h4>
 
             <p>
-                Please review the device information
-                carefully before buying. Images are
-                used for device presentation.
+                Review the product name, availability,
+                specifications and price carefully before
+                proceeding with a purchase.
             </p>
 
         </div>
@@ -2422,80 +1980,57 @@
     </div>
 
 
-    <!-- =========================================
-         BOTTOM NAVIGATION
-    ========================================== -->
+    <!-- BOTTOM NAVIGATION -->
 
     <nav class="bottom-nav">
-
 
         <a
             href="{{ url_for('dashboard') }}"
             class="nav-item active loading-link"
-            data-loading="Loading Home...">
-
+            data-loading="Loading Home..."
+        >
             <i data-lucide="house"></i>
-
-            <span>
-                Home
-            </span>
-
+            <span>Home</span>
         </a>
 
 
         <a
             href="{{ url_for('my_plan') }}"
             class="nav-item loading-link"
-            data-loading="Loading Income...">
-
-            <i data-lucide="chart-no-axes-combined"></i>
-
-            <span>
-                Income
-            </span>
-
+            data-loading="Loading Devices..."
+        >
+            <i data-lucide="smartphone"></i>
+            <span>Devices</span>
         </a>
 
 
         <a
             href="{{ url_for('team') }}"
             class="nav-item loading-link"
-            data-loading="Loading Team...">
-
+            data-loading="Loading Team..."
+        >
             <i data-lucide="users"></i>
-
-            <span>
-                Team
-            </span>
-
+            <span>Team</span>
         </a>
 
 
         <a
             href="{{ url_for('team') }}"
             class="nav-item loading-link"
-            data-loading="Opening Share...">
-
+            data-loading="Opening Share..."
+        >
             <i data-lucide="share-2"></i>
-
-            <span>
-                Share
-            </span>
-
+            <span>Share</span>
         </a>
 
 
         <a
             href="{{ url_for('profile') }}"
             class="nav-item loading-link"
-            data-loading="Loading Profile...">
-
+            data-loading="Loading Profile..."
+        >
             <i data-lucide="user-round"></i>
-
-            <span>
-                My
-            </span>
-
+            <span>My</span>
         </a>
 
     </nav>
@@ -2504,23 +2039,16 @@
 
 
 <script>
-
-    /* =========================================
-       HERO IMAGES
-    ========================================== */
+    /* ==================================================
+       HERO SLIDER
+    ================================================== */
 
     const heroImages = [
-
         "https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png",
-
         "https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png",
-
         "https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png",
-
         "https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
-
     ];
-
 
     let heroIndex = 0;
 
@@ -2533,17 +2061,11 @@
 
     function changeHero() {
 
-        if (!heroImage) {
-            return;
-        }
+        if (!heroImage) return;
 
-        heroIndex++;
-
-        if (
-            heroIndex >= heroImages.length
-        ) {
-            heroIndex = 0;
-        }
+        heroIndex =
+            (heroIndex + 1) %
+            heroImages.length;
 
         heroImage.style.opacity = "0";
 
@@ -2557,40 +2079,29 @@
         }, 300);
 
 
-        heroDots.forEach(
-            (dot, index) => {
+        heroDots.forEach((dot, index) => {
 
-                dot.classList.toggle(
-                    "active",
-                    index === heroIndex
-                );
+            dot.classList.toggle(
+                "active",
+                index === heroIndex
+            );
 
-            }
-        );
-
+        });
     }
 
 
-    setInterval(
-        changeHero,
-        4500
-    );
+    setInterval(changeHero, 4500);
 
 
-    /* =========================================
-       GLOBAL PROFESSIONAL LOADER
-    ========================================== */
+    /* ==================================================
+       LOADER
+    ================================================== */
 
     const pageLoader =
-        document.getElementById(
-            "pageLoader"
-        );
+        document.getElementById("pageLoader");
 
     const loaderText =
-        document.getElementById(
-            "loaderText"
-        );
-
+        document.getElementById("loaderText");
 
     let navigationStarted = false;
 
@@ -2598,196 +2109,129 @@
     function showLoader(message) {
 
         if (loaderText) {
-
             loaderText.textContent =
-                message ||
-                "Loading Infinix...";
-
+                message || "Loading Infinix...";
         }
 
-        pageLoader.classList.add(
-            "show"
-        );
-
+        pageLoader.classList.add("show");
     }
 
 
     function hideLoader() {
-
-        pageLoader.classList.remove(
-            "show"
-        );
-
+        pageLoader.classList.remove("show");
     }
 
 
-    /* =========================================
-       ALL NAVIGATION LINKS
-    ========================================== */
+    /* ==================================================
+       NAVIGATION LOADING
+    ================================================== */
 
-    document.querySelectorAll(
-        ".loading-link"
-    ).forEach(link => {
+    document
+        .querySelectorAll(".loading-link")
+        .forEach(link => {
 
-        link.addEventListener(
-            "click",
-            function(event) {
+            link.addEventListener(
+                "click",
+                function(event) {
 
-                if (navigationStarted) {
+                    if (navigationStarted) {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    const href =
+                        this.getAttribute("href");
+
+                    if (
+                        !href ||
+                        href === "#" ||
+                        href.startsWith("javascript:")
+                    ) {
+                        return;
+                    }
+
                     event.preventDefault();
-                    return;
+
+                    navigationStarted = true;
+
+                    this.classList.add(
+                        "loading-now"
+                    );
+
+                    showLoader(
+                        this.dataset.loading ||
+                        "Loading Infinix..."
+                    );
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            href;
+
+                    }, 420);
                 }
+            );
+        });
 
 
-                const href =
-                    this.getAttribute("href");
-
-
-                if (
-                    !href ||
-                    href === "#" ||
-                    href.startsWith("javascript:")
-                ) {
-
-                    return;
-
-                }
-
-
-                event.preventDefault();
-
-
-                navigationStarted = true;
-
-
-                this.classList.add(
-                    "loading-now"
-                );
-
-
-                const message =
-                    this.dataset.loading ||
-                    "Loading Infinix...";
-
-
-                showLoader(message);
-
-
-                /*
-                    Small delay makes the
-                    loading animation visible
-                    before Flask navigation.
-                */
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        href;
-
-                }, 420);
-
-            }
-        );
-
-    });
-
-
-    /* =========================================
-       PAGE HISTORY
-    ========================================== */
+    /* ==================================================
+       PAGE RESTORE
+    ================================================== */
 
     window.addEventListener(
         "pageshow",
-        function() {
+        () => {
 
             navigationStarted = false;
 
             hideLoader();
-
         }
     );
 
 
-    /* =========================================
-       PREVENT DOUBLE CLICK
-    ========================================== */
+    /* ==================================================
+       IMAGE FALLBACK
+    ================================================== */
 
-    document.querySelectorAll(
-        ".buy-btn"
-    ).forEach(button => {
+    document
+        .querySelectorAll(".product-img-box img")
+        .forEach(img => {
 
-        button.addEventListener(
-            "click",
-            function() {
+            img.addEventListener(
+                "error",
+                function() {
 
-                this.style.transform =
-                    "scale(.96)";
+                    this.style.display = "none";
 
-                setTimeout(() => {
+                    const fallback =
+                        this.nextElementSibling;
 
-                    this.style.transform =
-                        "";
-
-                }, 150);
-
-            }
-        );
-
-    });
-
-
-    /* =========================================
-       IMAGE CHECK
-    ========================================== */
-
-    document.querySelectorAll(
-        ".product-img-box img"
-    ).forEach(img => {
-
-        img.addEventListener(
-            "load",
-            function() {
-
-                this.style.opacity = "1";
-
-            }
-        );
-
-        img.addEventListener(
-            "error",
-            function() {
-
-                this.style.display =
-                    "none";
-
-                const fallback =
-                    this.nextElementSibling;
-
-                if (fallback) {
-
-                    fallback.style.display =
-                        "flex";
-
+                    if (fallback) {
+                        fallback.style.display =
+                            "flex";
+                    }
                 }
+            );
 
-            }
-        );
+            img.addEventListener(
+                "load",
+                function() {
 
-    });
+                    this.style.opacity = "1";
+                }
+            );
+        });
 
 
-    /* =========================================
-       LUCIDE ICONS
-    ========================================== */
+    /* ==================================================
+       LUCIDE
+    ================================================== */
 
     if (
         typeof lucide !== "undefined"
     ) {
-
         lucide.createIcons();
-
     }
-
 </script>
 
 </body>
