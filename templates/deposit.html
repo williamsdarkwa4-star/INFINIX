@@ -1,1048 +1,1226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Deposit - Infinix</title>
-
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
->
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#f1f4fa;
-    color:#334155;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    padding-bottom:85px;
-    -webkit-tap-highlight-color:transparent;
-}
-
-.phone{
-    width:100%;
-    max-width:440px;
-    min-height:100vh;
-    background:#f1f4fa;
-    position:relative;
-    padding-bottom:80px;
-}
-
-/* HEADER */
-
-.top-header{
-    width:100%;
-    background:#0b1c4d;
-    color:white;
-    padding:17px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 4px 12px rgba(0,0,0,.10);
-}
-
-.top-header h1{
-    font-size:18px;
-    font-weight:700;
-}
-
-/* CONTENT */
-
-.content{
-    width:100%;
-    padding:16px;
-}
-
-/* CARD */
-
-.card{
-    width:100%;
-    background:white;
-    border-radius:24px;
-    padding:22px;
-    box-shadow:0 8px 25px rgba(15,23,42,.08);
-    border:1px solid #eef2f7;
-}
-
-/* BRAND */
-
-.logo-area{
-    text-align:center;
-    margin-bottom:18px;
-}
-
-.logo{
-    width:62px;
-    height:62px;
-    margin:0 auto 10px;
-    border-radius:18px;
-    background:#0b1c4d;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:23px;
-    font-weight:900;
-    box-shadow:0 7px 18px rgba(11,28,77,.20);
-}
-
-.brand-name{
-    color:#0b1c4d;
-    font-size:18px;
-    font-weight:800;
-}
-
-.subtitle{
-    color:#64748b;
-    font-size:12px;
-    margin-top:4px;
-}
-
-/* TITLE */
-
-.title{
-    margin-top:20px;
-    margin-bottom:18px;
-}
-
-.title h2{
-    color:#0f172a;
-    font-size:20px;
-    font-weight:800;
-}
-
-.title p{
-    color:#64748b;
-    font-size:12px;
-    margin-top:5px;
-}
-
-/* FLASH */
-
-.flash-message{
-    padding:12px 14px;
-    border-radius:12px;
-    margin-bottom:16px;
-    font-size:13px;
-    line-height:1.4;
-    text-align:center;
-}
-
-.flash-success{
-    background:#dcfce7;
-    border:1px solid #bbf7d0;
-    color:#166534;
-}
-
-.flash-error{
-    background:#fee2e2;
-    border:1px solid #fecaca;
-    color:#991b1b;
-}
-
-/* LABEL */
-
-label{
-    display:block;
-    font-size:13px;
-    font-weight:700;
-    color:#334155;
-    margin-bottom:7px;
-}
-
-/* INPUTS */
-
-input[type="number"],
-input[type="tel"],
-input[type="text"],
-input[type="file"]{
-    width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border:1px solid #e2e8f0;
-    border-radius:12px;
-    background:#f8fafc;
-    color:#0f172a;
-    outline:none;
-    font-size:14px;
-}
-
-input:focus{
-    border-color:#4c64bc;
-    background:white;
-    box-shadow:0 0 0 3px rgba(76,100,188,.08);
-}
-
-/* FILE INPUT */
-
-input[type="file"]{
-    padding:11px;
-    cursor:pointer;
-}
-
-input[type="file"]::file-selector-button{
-    border:none;
-    background:#0b1c4d;
-    color:white;
-    padding:9px 12px;
-    border-radius:8px;
-    margin-right:8px;
-    cursor:pointer;
-    font-weight:700;
-}
-
-/* QUICK AMOUNTS */
-
-.amount-title{
-    font-size:12px;
-    color:#64748b;
-    font-weight:600;
-    margin-bottom:8px;
-}
-
-.amount-buttons{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin-bottom:18px;
-}
-
-.amount-buttons button{
-    padding:11px 6px;
-    border:none;
-    border-radius:11px;
-    background:#eef2ff;
-    color:#334fa4;
-    font-size:12px;
-    font-weight:800;
-    cursor:pointer;
-    transition:.15s;
-}
-
-.amount-buttons button:active{
-    transform:scale(.96);
-}
-
-/* BUTTONS */
-
-.next-button,
-.submit-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:13px;
-    background:#0b1c4d;
-    color:white;
-    font-size:15px;
-    font-weight:800;
-    cursor:pointer;
-    box-shadow:0 5px 14px rgba(11,28,77,.18);
-}
-
-.next-button:active,
-.submit-button:active{
-    transform:scale(.99);
-}
-
-.submit-button:disabled{
-    opacity:.65;
-    cursor:not-allowed;
-}
-
-/* PAYMENT CARD */
-
-.payment-card{
-    display:none;
-    margin-top:5px;
-    padding:17px;
-    border-radius:18px;
-    background:#eff6ff;
-    border:1px solid #dbeafe;
-}
-
-.payment-card h3{
-    color:#0b1c4d;
-    font-size:16px;
-    margin-bottom:13px;
-}
-
-/* AMOUNT */
-
-.amount-display{
-    background:white;
-    border:1px solid #dbeafe;
-    padding:13px;
-    border-radius:12px;
-    font-size:18px;
-    font-weight:800;
-    color:#2563eb;
-    margin-bottom:12px;
-}
-
-/* DESCRIPTION */
-
-.payment-description{
-    color:#475569;
-    font-size:13px;
-    line-height:1.5;
-    margin-bottom:10px;
-}
-
-/* PAYMENT NUMBER */
-
-.payment-number{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    margin:12px 0 15px;
-}
-
-.payment-number input{
-    flex:1;
-    margin:0;
-    background:white;
-    font-weight:800;
-    color:#0f172a;
-}
-
-.copy-button{
-    padding:13px 12px;
-    border:none;
-    border-radius:10px;
-    background:#0b1c4d;
-    color:white;
-    font-size:12px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-/* WARNING */
-
-.warning{
-    background:#fff7ed;
-    border:1px solid #fed7aa;
-    color:#9a3412;
-    padding:13px;
-    border-radius:12px;
-    font-size:12px;
-    line-height:1.5;
-    margin-bottom:17px;
-}
-
-/* INFO */
-
-.info-box{
-    margin-top:15px;
-    background:#f8fafc;
-    border:1px solid #eef2f7;
-    border-radius:13px;
-    padding:12px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.info-icon{
-    width:32px;
-    height:32px;
-    border-radius:9px;
-    background:#eef2ff;
-    color:#334fa4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-}
-
-.info-text{
-    color:#64748b;
-    font-size:11px;
-    line-height:1.4;
-}
-
-/* NOTE */
-
-.note{
-    text-align:center;
-    color:#64748b;
-    font-size:11px;
-    margin-top:17px;
-    line-height:1.6;
-}
-
-/* PREVIEW */
-
-.preview-box{
-    display:none;
-    margin-bottom:17px;
-    background:white;
-    border:1px solid #dbeafe;
-    border-radius:12px;
-    padding:10px;
-    text-align:center;
-}
-
-.preview-box img{
-    max-width:100%;
-    max-height:220px;
-    border-radius:9px;
-    object-fit:contain;
-}
-
-.preview-text{
-    color:#64748b;
-    font-size:11px;
-    margin-top:6px;
-}
-
-/* BACK BUTTON */
-
-.back-button{
-    width:100%;
-    margin-bottom:10px;
-    padding:12px;
-    border:1px solid #cbd5e1;
-    border-radius:12px;
-    background:white;
-    color:#334155;
-    font-size:13px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-/* =========================
-   LOADING OVERLAY
-========================= */
-
-.loading-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.72);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-    backdrop-filter:blur(4px);
-}
-
-.loading-box{
-    width:135px;
-    padding:22px 15px;
-    background:#ffffff;
-    border-radius:17px;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,.25);
-}
-
-.loading-spinner{
-    width:36px;
-    height:36px;
-    margin:0 auto;
-    border:4px solid #dbe3f0;
-    border-top-color:#0b1c4d;
-    border-radius:50%;
-    animation:spin .75s linear infinite;
-}
-
-.loading-text{
-    color:#334155;
-    font-size:12px;
-    font-weight:700;
-    margin-top:12px;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:65px;
-    background:white;
-    border-top:1px solid #e2e8f0;
-    display:flex;
-    justify-content:center;
-    z-index:1000;
-    box-shadow:0 -3px 12px rgba(0,0,0,.05);
-}
-
-.bottom-nav-inner{
-    width:100%;
-    max-width:440px;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-}
-
-.bottom-nav a{
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:3px;
-    text-decoration:none;
-    color:#94a3b8;
-    font-size:9px;
-    font-weight:500;
-}
-
-.bottom-nav i{
-    font-size:19px;
-}
-
-.bottom-nav a.active{
-    color:#10144c;
-    font-weight:bold;
-}
-
-.bottom-nav a.active::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:25%;
-    right:25%;
-    height:3px;
-    background:#10144c;
-    border-radius:4px 4px 0 0;
-}
-
-/* MOBILE */
-
-@media(max-width:360px){
-
-    .content{
-        padding:12px;
-    }
-
-    .card{
-        padding:18px;
-        border-radius:20px;
-    }
-
-    .logo{
-        width:55px;
-        height:55px;
-        font-size:20px;
-    }
-
-    .amount-buttons button{
-        font-size:11px;
-        padding:10px 5px;
-    }
-
-    .bottom-nav{
-        height:64px;
-    }
-
-    .bottom-nav i{
-        font-size:17px;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Infinix - Deposit</title>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #050505;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 80px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            background: #080808;
+            position: relative;
+            padding-bottom: 80px;
+            overflow: hidden;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .top-header {
+            padding: 22px 18px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(0,255,76,.13),
+                    rgba(0,0,0,0)
+                );
+            border-bottom: 1px solid #1d1d1d;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .back-link {
+            width: 37px;
+            height: 37px;
+            border-radius: 11px;
+            background: #151515;
+            border: 1px solid #292929;
+            color: #00ff4c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .back-link svg {
+            width: 18px;
+        }
+
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .notification {
+            width: 37px;
+            height: 37px;
+            border-radius: 50%;
+            background: #151515;
+            border: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification svg {
+            width: 18px;
+            color: #00ff4c;
+        }
+
+        /* =========================
+           BRAND
+        ========================= */
+
+        .brand-area {
+            padding: 25px 16px 10px;
+            text-align: center;
+        }
+
+        .brand-logo {
+            width: 62px;
+            height: 62px;
+            margin: auto;
+            border-radius: 18px;
+            background: #00ff4c;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            font-weight: 900;
+            box-shadow: 0 8px 25px rgba(0,255,76,.16);
+        }
+
+        .brand-name {
+            margin-top: 11px;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: .7px;
+        }
+
+        .brand-name span {
+            color: #00ff4c;
+        }
+
+        .brand-subtitle {
+            margin-top: 5px;
+            color: #777;
+            font-size: 11px;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 16px;
+        }
+
+        .deposit-card {
+            background: #111;
+            border: 1px solid #252525;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.35);
+        }
+
+        .section-title {
+            margin-bottom: 17px;
+        }
+
+        .section-title h2 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .section-title p {
+            color: #777;
+            font-size: 11px;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           FLASH
+        ========================= */
+
+        .flash-message {
+            padding: 12px;
+            border-radius: 11px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .flash-success {
+            background: rgba(0,255,76,.10);
+            border: 1px solid rgba(0,255,76,.25);
+            color: #00ff4c;
+        }
+
+        .flash-error {
+            background: rgba(255,77,77,.10);
+            border: 1px solid rgba(255,77,77,.25);
+            color: #ff7070;
+        }
+
+        /* =========================
+           LABELS
+        ========================= */
+
+        label {
+            display: block;
+            color: #aaa;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        input[type="number"],
+        input[type="tel"],
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            background: #181818;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+        }
+
+        input:focus {
+            border-color: rgba(0,255,76,.65);
+            box-shadow: 0 0 0 3px rgba(0,255,76,.07);
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            border: none;
+            background: #00ff4c;
+            color: #000;
+            padding: 9px 11px;
+            border-radius: 8px;
+            margin-right: 8px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        /* =========================
+           QUICK AMOUNTS
+        ========================= */
+
+        .amount-title {
+            color: #777;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .amount-buttons button {
+            padding: 11px 5px;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            background: #181818;
+            color: #00ff4c;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .amount-buttons button:active {
+            transform: scale(.95);
+            background: #00ff4c;
+            color: #000;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .next-button,
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 13px;
+            background: #00ff4c;
+            color: #000;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,255,76,.13);
+        }
+
+        .next-button:active,
+        .submit-button:active {
+            transform: scale(.98);
+        }
+
+        .submit-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           PAYMENT CARD
+        ========================= */
+
+        .payment-card {
+            display: none;
+            margin-top: 5px;
+        }
+
+        .payment-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .payment-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: rgba(0,255,76,.10);
+            color: #00ff4c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-icon svg {
+            width: 19px;
+        }
+
+        .payment-title h3 {
+            font-size: 15px;
+        }
+
+        .payment-title p {
+            color: #666;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        /* =========================
+           AMOUNT DISPLAY
+        ========================= */
+
+        .amount-display {
+            background: linear-gradient(135deg, #153b20, #07150b);
+            border: 1px solid rgba(0,255,76,.23);
+            padding: 16px;
+            border-radius: 13px;
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 14px;
+        }
+
+        .amount-display strong {
+            display: block;
+            color: #fff;
+            font-size: 25px;
+            margin-top: 4px;
+        }
+
+        .amount-display span {
+            color: #00ff4c;
+        }
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
+        .payment-description {
+            color: #999;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 13px;
+        }
+
+        /* =========================
+           PAYMENT NUMBER
+        ========================= */
+
+        .payment-label {
+            color: #777;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .payment-number {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 15px;
+        }
+
+        .payment-number input {
+            flex: 1;
+            margin: 0;
+            background: #181818;
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .copy-button {
+            padding: 13px 12px;
+            border: none;
+            border-radius: 10px;
+            background: #00ff4c;
+            color: #000;
+            font-size: 11px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        /* =========================
+           WARNING
+        ========================= */
+
+        .warning {
+            background: rgba(255,170,0,.07);
+            border: 1px solid rgba(255,170,0,.20);
+            color: #d9aa50;
+            padding: 12px;
+            border-radius: 11px;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 17px;
+        }
+
+        /* =========================
+           PREVIEW
+        ========================= */
+
+        .preview-box {
+            display: none;
+            margin-bottom: 15px;
+            background: #181818;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .preview-box img {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 9px;
+            object-fit: contain;
+        }
+
+        .preview-text {
+            color: #777;
+            font-size: 10px;
+            margin-top: 6px;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-button {
+            width: 100%;
+            margin-bottom: 9px;
+            padding: 12px;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            background: #181818;
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* =========================
+           INFO BOX
+        ========================= */
+
+        .info-box {
+            margin-top: 15px;
+            background: #151515;
+            border: 1px solid #252525;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: rgba(0,255,76,.09);
+            color: #00ff4c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-icon svg {
+            width: 16px;
+        }
+
+        .info-text {
+            color: #777;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           NOTE
+        ========================= */
+
+        .note {
+            text-align: center;
+            color: #666;
+            font-size: 10px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .note strong {
+            color: #00ff4c;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.88);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-box {
+            width: 120px;
+            padding: 20px 15px;
+            background: #141414;
+            border: 1px solid #292929;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0,0,0,.5);
+        }
+
+        .loader {
+            width: 33px;
+            height: 33px;
+            border: 3px solid #333;
+            border-top-color: #00ff4c;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: auto;
+        }
+
+        .loading-text {
+            color: #aaa;
+            font-size: 10px;
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           BOTTOM NAVIGATION
+        ========================= */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 67px;
+            background: #101010;
+            border-top: 1px solid #292929;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,.4);
+        }
+
+        .bottom-nav a {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: #777;
+            text-decoration: none;
+            font-size: 9px;
+        }
+
+        .bottom-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bottom-nav a.active {
+            color: #00ff4c;
+            font-weight: 800;
+        }
+
+        .bottom-nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: #00ff4c;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:360px) {
+
+            .content {
+                padding: 12px;
+            }
+
+            .deposit-card {
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .brand-logo {
+                width: 55px;
+                height: 55px;
+                font-size: 20px;
+            }
+
+            .amount-buttons button {
+                font-size: 10px;
+                padding: 10px 4px;
+            }
+
+            .bottom-nav {
+                height: 64px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <div class="phone">
 
-<header class="top-header">
-    <h1>Deposit</h1>
-</header>
+    <!-- =========================
+         HEADER
+    ========================= -->
 
-<main class="content">
+    <header class="top-header">
 
-<div class="card">
+        <div class="header-title">
 
-<!-- BRAND -->
+            <a href="/dashboard"
+               class="back-link loading-link">
 
-<div class="logo-area">
+                <i data-lucide="arrow-left"></i>
 
-    <div class="logo">
-        IN
-    </div>
+            </a>
 
-    <div class="brand-name">
-        Infinix
-    </div>
+            <h1>Deposit</h1>
 
-    <div class="subtitle">
-        Secure Deposit Center
-    </div>
-
-</div>
-
-<!-- TITLE -->
-
-<div class="title">
-
-    <h2>
-        Deposit Funds
-    </h2>
-
-    <p>
-        Create a deposit request for administrator review.
-    </p>
-
-</div>
-
-<!-- FLASH -->
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-
-    {% for category, message in messages %}
-
-        <div class="flash-message
-            {% if category == 'success' %}
-                flash-success
-            {% else %}
-                flash-error
-            {% endif %}
-        ">
-            {{ message }}
         </div>
 
-    {% endfor %}
+        <div class="notification">
 
-{% endwith %}
+            <i data-lucide="bell"></i>
 
-<!-- STEP ONE -->
+        </div>
 
-<div id="stepOne">
+    </header>
 
-    <label for="phone">
-        Phone Number
-    </label>
 
-    <input
-        type="tel"
-        id="phone"
-        placeholder="Enter your phone number"
-        autocomplete="tel"
-        required
-    >
+    <!-- =========================
+         BRAND
+    ========================= -->
 
-    <label for="amount">
-        Deposit Amount
-    </label>
+    <div class="brand-area">
 
-    <input
-        type="number"
-        id="amount"
-        placeholder="Minimum GHS 45"
-        min="45"
-        step="0.01"
-        required
-    >
+        <div class="brand-logo">
+            IX
+        </div>
 
-    <div class="amount-title">
-        Select Quick Amount
-    </div>
+        <div class="brand-name">
+            INFINIX<span>.</span>
+        </div>
 
-    <div class="amount-buttons">
-
-        <button type="button" onclick="setAmount(45)">
-            GHS 45
-        </button>
-
-        <button type="button" onclick="setAmount(50)">
-            GHS 50
-        </button>
-
-        <button type="button" onclick="setAmount(100)">
-            GHS 100
-        </button>
-
-        <button type="button" onclick="setAmount(200)">
-            GHS 200
-        </button>
-
-        <button type="button" onclick="setAmount(300)">
-            GHS 300
-        </button>
-
-        <button type="button" onclick="setAmount(400)">
-            GHS 400
-        </button>
+        <div class="brand-subtitle">
+            Secure Deposit Center
+        </div>
 
     </div>
 
-    <button
-        type="button"
-        class="next-button"
-        onclick="showPaymentCard()"
-        id="continueButton"
-    >
-        Continue to Payment
-    </button>
 
-</div>
+    <!-- =========================
+         CONTENT
+    ========================= -->
 
-<!-- STEP TWO -->
+    <main class="content">
 
-<div
-    class="payment-card"
-    id="paymentCard"
->
+        <div class="deposit-card">
 
-    <h3>
-        Payment Instructions
-    </h3>
+            <div class="section-title">
 
-    <div class="amount-display">
+                <h2>Deposit Funds</h2>
 
-        GHS
-        <span id="displayAmount">
-            0.00
-        </span>
+                <p>
+                    Enter your details and create a deposit
+                    request for administrator review.
+                </p>
 
-    </div>
+            </div>
 
-    <p class="payment-description">
 
-        Send the exact amount to the payment number
-        below. After payment, upload a clear screenshot
-        of the successful transaction.
+            <!-- FLASH MESSAGES -->
 
-    </p>
+            {% with messages = get_flashed_messages(with_categories=true) %}
 
-    <div class="payment-number">
+                {% for category, message in messages %}
 
-        <input
-            type="text"
-            id="paymentNumber"
-            value="0257425844"
-            readonly
-        >
+                    <div class="flash-message
+                        {% if category == 'success' %}
+                            flash-success
+                        {% else %}
+                            flash-error
+                        {% endif %}
+                    ">
+                        {{ message }}
+                    </div>
 
-        <button
-            type="button"
-            class="copy-button"
-            onclick="copyNumber()"
-        >
-            Copy
-        </button>
+                {% endfor %}
 
-    </div>
+            {% endwith %}
 
-    <div class="warning">
 
-        ⚠️ Make sure the payment is successful before
-        submitting your request. The administrator will
-        review the uploaded screenshot before your
-        deposit balance is credited.
+            <!-- =========================
+                 STEP ONE
+            ========================= -->
 
-    </div>
+            <div id="stepOne">
 
-    <form
-        method="POST"
-        action="{{ url_for('deposit') }}"
-        enctype="multipart/form-data"
-        onsubmit="return validateDeposit()"
-    >
+                <label for="phone">
+                    Phone Number
+                </label>
 
-        <input
-            type="hidden"
-            name="amount"
-            id="finalAmount"
-        >
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                    autocomplete="tel"
+                    required
+                >
 
-        <input
-            type="hidden"
-            name="phone"
-            id="finalPhone"
-        >
 
-        <input
-            type="hidden"
-            name="payment_number"
-            id="finalPaymentNumber"
-        >
+                <label for="amount">
+                    Deposit Amount
+                </label>
 
-        <label for="screenshot">
-            Payment Screenshot
-        </label>
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Minimum GHS 45"
+                    min="45"
+                    step="0.01"
+                    required
+                >
 
-        <input
-            type="file"
-            id="screenshot"
-            name="screenshot"
-            accept="image/jpeg,image/png,image/webp"
-            required
-        >
 
-        <div
-            class="preview-box"
-            id="previewBox"
-        >
+                <div class="amount-title">
+                    QUICK AMOUNTS
+                </div>
 
-            <img
-                id="previewImage"
-                alt="Payment screenshot preview"
+
+                <div class="amount-buttons">
+
+                    <button type="button" onclick="setAmount(45)">
+                        GHS 45
+                    </button>
+
+                    <button type="button" onclick="setAmount(50)">
+                        GHS 50
+                    </button>
+
+                    <button type="button" onclick="setAmount(100)">
+                        GHS 100
+                    </button>
+
+                    <button type="button" onclick="setAmount(200)">
+                        GHS 200
+                    </button>
+
+                    <button type="button" onclick="setAmount(300)">
+                        GHS 300
+                    </button>
+
+                    <button type="button" onclick="setAmount(400)">
+                        GHS 400
+                    </button>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="next-button"
+                    onclick="showPaymentCard()"
+                >
+                    Continue to Payment
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 STEP TWO
+            ========================= -->
+
+            <div
+                class="payment-card"
+                id="paymentCard"
             >
 
-            <div class="preview-text">
-                Screenshot selected successfully.
+                <div class="payment-title">
+
+                    <div class="payment-icon">
+                        <i data-lucide="wallet"></i>
+                    </div>
+
+                    <div>
+                        <h3>Payment Instructions</h3>
+                        <p>Complete your payment carefully</p>
+                    </div>
+
+                </div>
+
+
+                <div class="amount-display">
+
+                    Selected Deposit
+
+                    <strong>
+                        GHS <span id="displayAmount">0.00</span>
+                    </strong>
+
+                </div>
+
+
+                <p class="payment-description">
+
+                    Send the exact amount to the payment number
+                    below. After completing the payment, upload
+                    a clear screenshot of the successful transaction.
+
+                </p>
+
+
+                <div class="payment-label">
+                    PAYMENT NUMBER
+                </div>
+
+
+                <div class="payment-number">
+
+                    <input
+                        type="text"
+                        id="paymentNumber"
+                        value="0257425844"
+                        readonly
+                    >
+
+                    <button
+                        type="button"
+                        class="copy-button"
+                        onclick="copyNumber()"
+                    >
+                        Copy
+                    </button>
+
+                </div>
+
+
+                <div class="warning">
+
+                    ⚠️ Make sure the payment is successful before
+                    submitting your request. Your deposit remains
+                    pending until it has been reviewed and approved.
+
+                </div>
+
+
+                <!-- =========================
+                     DEPOSIT FORM
+                ========================= -->
+
+                <form
+                    method="POST"
+                    action="{{ url_for('deposit') }}"
+                    enctype="multipart/form-data"
+                    onsubmit="return validateDeposit()"
+                >
+
+                    <input
+                        type="hidden"
+                        name="amount"
+                        id="finalAmount"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="phone"
+                        id="finalPhone"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="payment_number"
+                        id="finalPaymentNumber"
+                    >
+
+
+                    <label for="screenshot">
+                        Payment Screenshot
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="screenshot"
+                        name="screenshot"
+                        accept="image/jpeg,image/png,image/webp"
+                        required
+                    >
+
+
+                    <!-- PREVIEW -->
+
+                    <div
+                        class="preview-box"
+                        id="previewBox"
+                    >
+
+                        <img
+                            id="previewImage"
+                            alt="Payment screenshot preview"
+                        >
+
+                        <div class="preview-text">
+                            Screenshot selected successfully.
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="back-button"
+                        onclick="goBack()"
+                    >
+                        <i data-lucide="arrow-left"></i>
+                        Change Amount
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                        id="submitButton"
+                    >
+                        <i data-lucide="send"></i>
+                        Submit Deposit Request
+                    </button>
+
+                </form>
+
+
+                <!-- INFO -->
+
+                <div class="info-box">
+
+                    <div class="info-icon">
+
+                        <i data-lucide="shield-check"></i>
+
+                    </div>
+
+                    <div class="info-text">
+
+                        Your screenshot is uploaded securely.
+                        The deposit remains pending until an
+                        administrator reviews and approves it.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="note">
+
+                Minimum deposit:
+                <strong>GHS 45</strong>.<br>
+
+                Your deposit balance is credited only after
+                administrator approval.
+
             </div>
 
         </div>
 
-        <button
-            type="button"
-            class="back-button"
-            onclick="goBack()"
-        >
-            <i class="fa-solid fa-arrow-left"></i>
-            Change Amount
-        </button>
+    </main>
 
-        <button
-            type="submit"
-            class="submit-button"
-            id="submitButton"
-        >
-            <i class="fa-solid fa-paper-plane"></i>
-            Submit Deposit Request
-        </button>
 
-    </form>
+    <!-- =========================
+         LOADING
+    ========================= -->
 
-    <div class="info-box">
+    <div
+        class="loading"
+        id="loading"
+    >
 
-        <div class="info-icon">
-            <i class="fa-solid fa-shield-halved"></i>
-        </div>
+        <div class="loading-box">
 
-        <div class="info-text">
+            <div class="loader"></div>
 
-            Your screenshot is securely uploaded to the
-            server. The deposit remains pending until an
-            administrator reviews and approves it.
+            <div class="loading-text">
+                Loading...
+            </div>
 
         </div>
 
     </div>
 
-</div>
 
-<div class="note">
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================= -->
 
-    Minimum deposit: GHS 45.<br>
+    <nav class="bottom-nav">
 
-    Your deposit balance is credited only after
-    administrator approval.
-
-</div>
-
-</div>
-
-</main>
-
-</div>
-
-<!-- =========================
-     LOADING OVERLAY
-========================= -->
-
-<div
-    class="loading-overlay"
-    id="loadingOverlay"
->
-
-    <div class="loading-box">
-
-        <div class="loading-spinner"></div>
-
-        <div
-            class="loading-text"
-            id="loadingText"
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="loading-link active"
         >
-            Loading...
-        </div>
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
 
-    </div>
 
-</div>
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="loading-link"
+        >
+            <i data-lucide="trending-up"></i>
+            <span>Income</span>
+        </a>
 
-<!-- BOTTOM NAV -->
 
-<nav class="bottom-nav">
+        <a
+            href="{{ url_for('team_members') }}"
+            class="loading-link"
+        >
+            <i data-lucide="users"></i>
+            <span>Team</span>
+        </a>
 
-<div class="bottom-nav-inner">
 
-    <a
-        href="{{ url_for('dashboard') }}"
-        class="active loading-link"
-    >
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-    </a>
+        <a
+            href="{{ url_for('team') }}"
+            class="loading-link"
+        >
+            <i data-lucide="share-2"></i>
+            <span>Share</span>
+        </a>
 
-    <a
-        href="{{ url_for('my_plan') }}"
-        class="loading-link"
-    >
-        <i class="fa-solid fa-chart-line"></i>
-        <span>Income</span>
-    </a>
 
-    <a
-        href="{{ url_for('team_members') }}"
-        class="loading-link"
-    >
-        <i class="fa-solid fa-users"></i>
-        <span>Team</span>
-    </a>
+        <a
+            href="{{ url_for('profile') }}"
+            class="loading-link"
+        >
+            <i data-lucide="user"></i>
+            <span>My</span>
+        </a>
 
-    <a
-        href="{{ url_for('team') }}"
-        class="loading-link"
-    >
-        <i class="fa-solid fa-share-nodes"></i>
-        <span>Share</span>
-    </a>
-
-    <a
-        href="{{ url_for('profile') }}"
-        class="loading-link"
-    >
-        <i class="fa-solid fa-user"></i>
-        <span>My</span>
-    </a>
+    </nav>
 
 </div>
 
-</nav>
 
 <script>
 
-/* =========================
-   LOADING SYSTEM
-========================= */
+    /* =========================
+       LUCIDE ICONS
+    ========================= */
 
-const loadingOverlay =
-    document.getElementById("loadingOverlay");
-
-const loadingText =
-    document.getElementById("loadingText");
+    lucide.createIcons();
 
 
-function showLoading(message = "Loading..."){
+    /* =========================
+       LOADING
+    ========================= */
 
-    loadingText.textContent = message;
-
-    loadingOverlay.style.display = "flex";
-
-}
-
-
-function hideLoading(){
-
-    loadingOverlay.style.display = "none";
-
-}
+    const loading =
+        document.getElementById("loading");
 
 
-/* =========================
-   NAVIGATION LOADING
-========================= */
+    document
+        .querySelectorAll(".loading-link")
+        .forEach(function(link) {
 
-document
-    .querySelectorAll(".loading-link")
-    .forEach(function(link){
+            link.addEventListener("click", function(event) {
 
-        link.addEventListener("click", function(event){
+                const destination = this.href;
 
-            const destination = this.href;
+                event.preventDefault();
 
-            event.preventDefault();
+                loading.style.display = "flex";
 
-            showLoading("Loading...");
+                setTimeout(function() {
 
-            setTimeout(function(){
+                    window.location.href = destination;
 
-                window.location.href = destination;
+                }, 350);
 
-            }, 350);
+            });
 
         });
 
-    });
 
+    /* =========================
+       QUICK AMOUNT
+    ========================= */
 
-/* =========================
-   QUICK AMOUNT
-========================= */
+    function setAmount(value) {
 
-function setAmount(value){
-
-    document.getElementById("amount").value = value;
-
-}
-
-
-/* =========================
-   SHOW PAYMENT CARD
-========================= */
-
-function showPaymentCard(){
-
-    const phone =
-        document.getElementById("phone")
-        .value
-        .trim();
-
-    const amount =
-        parseFloat(
-            document.getElementById("amount").value
-        );
-
-    if(!phone){
-
-        alert("Please enter your phone number.");
-
-        return;
+        document.getElementById("amount").value = value;
 
     }
 
-    if(!amount || amount < 45){
 
-        alert("Minimum deposit is GHS 45.");
+    /* =========================
+       SHOW PAYMENT
+    ========================= */
 
-        return;
+    function showPaymentCard() {
 
-    }
+        const phone =
+            document.getElementById("phone")
+            .value
+            .trim();
 
-    showLoading("Preparing payment...");
+        const amount =
+            parseFloat(
+                document.getElementById("amount").value
+            );
 
-    setTimeout(function(){
+
+        if (!phone) {
+
+            alert("Please enter your phone number.");
+
+            return;
+
+        }
+
+
+        if (!amount || amount < 45) {
+
+            alert("Minimum deposit is GHS 45.");
+
+            return;
+
+        }
+
 
         document.getElementById("displayAmount")
             .textContent = amount.toFixed(2);
 
+
         document.getElementById("finalAmount")
             .value = amount.toFixed(2);
 
+
         document.getElementById("finalPhone")
             .value = phone;
+
 
         document.getElementById("finalPaymentNumber")
             .value =
@@ -1050,238 +1228,264 @@ function showPaymentCard(){
             .value
             .trim();
 
+
         document.getElementById("paymentCard")
             .style.display = "block";
+
 
         document.getElementById("stepOne")
             .style.display = "none";
 
-        hideLoading();
 
         window.scrollTo({
-            top:0,
-            behavior:"smooth"
+            top: 0,
+            behavior: "smooth"
         });
 
-    }, 350);
 
-}
+        lucide.createIcons();
+
+    }
 
 
-/* =========================
-   BACK
-========================= */
+    /* =========================
+       BACK
+    ========================= */
 
-function goBack(){
-
-    showLoading("Going back...");
-
-    setTimeout(function(){
+    function goBack() {
 
         document.getElementById("paymentCard")
             .style.display = "none";
 
+
         document.getElementById("stepOne")
             .style.display = "block";
 
-        hideLoading();
-
-        window.scrollTo({
-            top:0,
-            behavior:"smooth"
-        });
-
-    }, 250);
-
-}
-
-
-/* =========================
-   COPY PAYMENT NUMBER
-========================= */
-
-function copyNumber(){
-
-    const number =
-        document.getElementById("paymentNumber")
-        .value;
-
-    if(!number){
-
-        alert("Payment number is not configured.");
-
-        return;
-
     }
 
-    if(
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-    ){
 
-        navigator.clipboard
-            .writeText(number)
-            .then(function(){
+    /* =========================
+       COPY PAYMENT NUMBER
+    ========================= */
 
-                alert("Payment number copied.");
+    function copyNumber() {
 
-            })
-            .catch(function(){
-
-                alert("Please copy the number manually.");
-
-            });
-
-    }else{
-
-        alert("Please copy the number manually.");
-
-    }
-
-}
+        const number =
+            document.getElementById("paymentNumber")
+            .value;
 
 
-/* =========================
-   SCREENSHOT PREVIEW
-========================= */
+        if (!number) {
 
-document
-    .getElementById("screenshot")
-    .addEventListener("change", function(){
-
-        const file = this.files[0];
-
-        if(!file){
-            return;
-        }
-
-        if(!file.type.startsWith("image/")){
-
-            alert("Please select an image file.");
-
-            this.value = "";
+            alert("Payment number is not configured.");
 
             return;
 
         }
 
-        const reader = new FileReader();
 
-        reader.onload = function(event){
+        if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+        ) {
 
-            document.getElementById("previewImage")
-                .src = event.target.result;
+            navigator.clipboard
+                .writeText(number)
+                .then(function() {
 
-            document.getElementById("previewBox")
-                .style.display = "block";
+                    alert("Payment number copied.");
 
-        };
+                })
+                .catch(function() {
 
-        reader.readAsDataURL(file);
+                    alert("Please copy the number manually.");
 
-    });
+                });
+
+        } else {
+
+            alert("Please copy the number manually.");
+
+        }
+
+    }
 
 
-/* =========================
-   FINAL VALIDATION
-========================= */
+    /* =========================
+       SCREENSHOT PREVIEW
+    ========================= */
 
-function validateDeposit(){
+    document
+        .getElementById("screenshot")
+        .addEventListener("change", function() {
 
-    const amount =
-        parseFloat(
-            document.getElementById("finalAmount")
+            const file = this.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                alert("Please select an image file.");
+
+                this.value = "";
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    document.getElementById("previewImage")
+                        .src = event.target.result;
+
+
+                    document.getElementById("previewBox")
+                        .style.display = "block";
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        });
+
+
+    /* =========================
+       FINAL VALIDATION
+    ========================= */
+
+    function validateDeposit() {
+
+        const amount =
+            parseFloat(
+                document.getElementById("finalAmount")
+                .value
+            );
+
+
+        const phone =
+            document.getElementById("finalPhone")
             .value
-        );
+            .trim();
 
-    const phone =
-        document.getElementById("finalPhone")
-        .value
-        .trim();
 
-    const paymentNumber =
-        document.getElementById("finalPaymentNumber")
-        .value
-        .trim();
+        const paymentNumber =
+            document.getElementById("finalPaymentNumber")
+            .value
+            .trim();
 
-    const screenshot =
-        document.getElementById("screenshot")
-        .files[0];
 
-    if(!phone){
+        const screenshot =
+            document.getElementById("screenshot")
+            .files[0];
 
-        alert("Phone number is required.");
 
-        return false;
+        if (!phone) {
+
+            alert("Phone number is required.");
+
+            return false;
+
+        }
+
+
+        if (!amount || amount < 45) {
+
+            alert("Minimum deposit is GHS 45.");
+
+            return false;
+
+        }
+
+
+        if (!paymentNumber) {
+
+            alert("Payment number is missing.");
+
+            return false;
+
+        }
+
+
+        if (!screenshot) {
+
+            alert("Please upload your payment screenshot.");
+
+            return false;
+
+        }
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+
+        if (!allowedTypes.includes(screenshot.type)) {
+
+            alert(
+                "Only JPG, PNG, and WEBP images are allowed."
+            );
+
+            return false;
+
+        }
+
+
+        const maxSize =
+            5 * 1024 * 1024;
+
+
+        if (screenshot.size > maxSize) {
+
+            alert(
+                "Screenshot is too large. Maximum size is 5 MB."
+            );
+
+            return false;
+
+        }
+
+
+        const button =
+            document.getElementById("submitButton");
+
+
+        button.disabled = true;
+
+
+        button.innerHTML =
+            '<i data-lucide="loader-circle"></i> Uploading...';
+
+
+        lucide.createIcons();
+
+
+        /*
+         * Show the same loading screen used
+         * by the bottom navigation.
+         */
+
+        loading.style.display = "flex";
+
+
+        return true;
 
     }
-
-    if(!amount || amount < 45){
-
-        alert("Minimum deposit is GHS 45.");
-
-        return false;
-
-    }
-
-    if(!paymentNumber){
-
-        alert("Payment number is missing.");
-
-        return false;
-
-    }
-
-    if(!screenshot){
-
-        alert("Please upload your payment screenshot.");
-
-        return false;
-
-    }
-
-    const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/webp"
-    ];
-
-    if(!allowedTypes.includes(screenshot.type)){
-
-        alert(
-            "Only JPG, PNG, and WEBP images are allowed."
-        );
-
-        return false;
-
-    }
-
-    const maxSize =
-        5 * 1024 * 1024;
-
-    if(screenshot.size > maxSize){
-
-        alert(
-            "Screenshot is too large. Maximum size is 5 MB."
-        );
-
-        return false;
-
-    }
-
-    const button =
-        document.getElementById("submitButton");
-
-    button.disabled = true;
-
-    button.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
-
-    showLoading("Uploading deposit...");
-
-    return true;
-
-}
 
 </script>
 
