@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Device - Infinix</title>
 
@@ -16,10 +13,9 @@
     >
 
     <style>
-
-        /* =========================================================
+        /* =====================================================
            ROOT
-        ========================================================= */
+        ===================================================== */
 
         :root {
             --bg: #000000;
@@ -27,7 +23,7 @@
             --card-light: #111111;
 
             --border: #1b1b1b;
-            --border-light: #252525;
+            --border-light: #282828;
 
             --green: #3cdc3c;
             --green-dark: #1e9f1e;
@@ -46,9 +42,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            RESET
-        ========================================================= */
+        ===================================================== */
 
         * {
             margin: 0;
@@ -79,9 +75,9 @@
         }
 
 
-        /* =========================================================
-           APP VIEWPORT
-        ========================================================= */
+        /* =====================================================
+           APP
+        ===================================================== */
 
         .app-viewport {
             position: relative;
@@ -96,9 +92,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            HEADER
-        ========================================================= */
+        ===================================================== */
 
         .header {
             position: relative;
@@ -167,9 +163,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            MAIN SCROLL
-        ========================================================= */
+        ===================================================== */
 
         .main-scroll-container {
             width: 100%;
@@ -179,7 +175,7 @@
 
             padding: 12px;
 
-            padding-bottom: 85px;
+            padding-bottom: 88px;
 
             scrollbar-width: none;
         }
@@ -190,9 +186,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            PAGE TITLE
-        ========================================================= */
+        ===================================================== */
 
         .page-title {
             padding: 5px 2px 12px;
@@ -216,9 +212,157 @@
         }
 
 
-        /* =========================================================
-           GLOWING BLACK & WHITE CARD
-        ========================================================= */
+        /* =====================================================
+           INFINIX PHOTO CARD
+        ===================================================== */
+
+        .infinix-photo-card {
+            position: relative;
+
+            width: 100%;
+            height: 185px;
+
+            margin-bottom: 12px;
+
+            overflow: hidden;
+
+            background: #050505;
+
+            border: 1px solid #ffffff;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 0 6px rgba(255,255,255,.30),
+                0 0 18px rgba(255,255,255,.15),
+                inset 0 0 20px rgba(255,255,255,.04);
+        }
+
+
+        .infinix-photo {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            opacity: .88;
+
+            filter:
+                brightness(.72)
+                contrast(1.12);
+        }
+
+
+        /* Dark overlay */
+
+        .infinix-photo-card::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,.10),
+                    rgba(0,0,0,.82)
+                );
+
+            z-index: 1;
+        }
+
+
+        /* White glowing edge */
+
+        .infinix-photo-card::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            bottom: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 0 8px #ffffff,
+                0 0 18px rgba(255,255,255,.65);
+
+            z-index: 3;
+        }
+
+
+        .photo-content {
+            position: absolute;
+
+            left: 14px;
+            right: 14px;
+            bottom: 13px;
+
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 10px;
+
+            z-index: 2;
+        }
+
+
+        .photo-title {
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+            letter-spacing: .5px;
+
+            text-shadow:
+                0 0 8px rgba(255,255,255,.35);
+        }
+
+
+        .photo-subtitle {
+            margin-top: 3px;
+
+            color: #bdbdbd;
+
+            font-size: 8px;
+        }
+
+
+        .photo-status {
+            flex-shrink: 0;
+
+            padding: 6px 9px;
+
+            color: #000000;
+
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            font-size: 7px;
+
+            font-weight: 900;
+
+            box-shadow:
+                0 0 8px rgba(255,255,255,.45),
+                0 0 16px rgba(255,255,255,.18);
+        }
+
+
+        /* =====================================================
+           BLACK + WHITE GLOW CARD
+        ===================================================== */
 
         .glow-card {
             position: relative;
@@ -227,7 +371,7 @@
 
             margin-bottom: 12px;
 
-            padding: 14px;
+            padding: 13px;
 
             overflow: hidden;
 
@@ -255,8 +399,8 @@
 
             position: absolute;
 
-            top: -80px;
-            right: -80px;
+            top: -70px;
+            right: -70px;
 
             width: 150px;
             height: 150px;
@@ -298,7 +442,6 @@
             display: flex;
 
             align-items: center;
-
             justify-content: space-between;
 
             gap: 10px;
@@ -321,6 +464,7 @@
             flex-shrink: 0;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -334,7 +478,7 @@
 
             box-shadow:
                 0 0 8px rgba(255,255,255,.45),
-                0 0 18px rgba(255,255,255,.2);
+                0 0 18px rgba(255,255,255,.20);
         }
 
 
@@ -342,6 +486,7 @@
             color: #ffffff;
 
             font-size: 12px;
+
             font-weight: 800;
         }
 
@@ -365,6 +510,7 @@
             border-radius: 20px;
 
             font-size: 7px;
+
             font-weight: 800;
 
             box-shadow:
@@ -372,9 +518,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            METRICS
-        ========================================================= */
+        ===================================================== */
 
         .dashboard-metrics-row {
             display: grid;
@@ -393,7 +539,9 @@
             padding: 9px 10px;
 
             display: flex;
+
             flex-direction: column;
+
             justify-content: space-between;
 
             background: var(--green);
@@ -406,6 +554,7 @@
             color: #000000;
 
             font-size: 10px;
+
             font-weight: 600;
         }
 
@@ -414,17 +563,20 @@
             color: #000000;
 
             font-size: 16px;
+
             font-weight: 800;
         }
 
 
-        /* =========================================================
+        /* =====================================================
            SECTION HEADER
-        ========================================================= */
+        ===================================================== */
 
         .section-header {
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             margin: 3px 2px 7px;
@@ -435,6 +587,7 @@
             color: #ffffff;
 
             font-size: 13px;
+
             font-weight: 700;
         }
 
@@ -446,9 +599,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            DEVICE CARD
-        ========================================================= */
+        ===================================================== */
 
         .portfolio-ledger-card {
             width: 100%;
@@ -474,14 +627,11 @@
         }
 
 
-        /* =========================================================
-           DEVICE TOP
-        ========================================================= */
-
         .ledger-top-flex-row {
             display: flex;
 
             align-items: center;
+
             justify-content: space-between;
 
             margin-bottom: 7px;
@@ -492,6 +642,7 @@
             color: var(--green);
 
             font-size: 10px;
+
             font-weight: 800;
         }
 
@@ -500,13 +651,14 @@
             color: var(--green);
 
             font-size: 10px;
+
             font-weight: 800;
         }
 
 
-        /* =========================================================
+        /* =====================================================
            DEVICE BODY
-        ========================================================= */
+        ===================================================== */
 
         .ledger-inner-body {
             display: flex;
@@ -517,10 +669,6 @@
         }
 
 
-        /* =========================================================
-           DEVICE IMAGE / PHONE
-        ========================================================= */
-
         .hardware-thumbnail-wrapper {
             width: 40px;
             height: 48px;
@@ -528,6 +676,7 @@
             flex-shrink: 0;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -597,9 +746,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            DEVICE DETAILS
-        ========================================================= */
+        ===================================================== */
 
         .ledger-specs-column {
             flex: 1;
@@ -622,6 +771,7 @@
             color: #ffffff;
 
             font-size: 10px;
+
             font-weight: 700;
 
             margin-bottom: 1px;
@@ -659,14 +809,15 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            COUNTDOWN
-        ========================================================= */
+        ===================================================== */
 
         .income-status-row {
             display: flex;
 
             align-items: center;
+
             justify-content: space-between;
 
             margin-top: 7px;
@@ -706,9 +857,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            CLAIM BUTTON
-        ========================================================= */
+        ===================================================== */
 
         .claim-form {
             margin-top: 5px;
@@ -721,6 +872,7 @@
             padding: 6px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -735,6 +887,7 @@
             border-radius: 5px;
 
             font-size: 8px;
+
             font-weight: 800;
 
             cursor: pointer;
@@ -759,9 +912,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            EMPTY CARD
-        ========================================================= */
+        ===================================================== */
 
         .empty-card {
             padding: 25px 12px;
@@ -783,6 +936,7 @@
             margin: 0 auto 8px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -800,6 +954,7 @@
             color: #777777;
 
             font-size: 12px;
+
             font-weight: 600;
         }
 
@@ -813,9 +968,9 @@
         }
 
 
-        /* =========================================================
-           INFORMATION CARD
-        ========================================================= */
+        /* =====================================================
+           INFORMATION
+        ===================================================== */
 
         .info-card {
             margin-top: 9px;
@@ -832,6 +987,7 @@
 
         .info-title {
             display: flex;
+
             align-items: center;
 
             gap: 5px;
@@ -841,6 +997,7 @@
             color: #777777;
 
             font-size: 9px;
+
             font-weight: 600;
         }
 
@@ -859,9 +1016,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            BOTTOM NAVIGATION
-        ========================================================= */
+        ===================================================== */
 
         .global-bottom-navigation {
             position: absolute;
@@ -937,9 +1094,9 @@
         }
 
 
-        /* =========================================================
+        /* =====================================================
            LOADING
-        ========================================================= */
+        ===================================================== */
 
         .loading-overlay {
             position: fixed;
@@ -1009,9 +1166,9 @@
         }
 
 
-        /* =========================================================
-           SMALL DEVICES
-        ========================================================= */
+        /* =====================================================
+           SMALL SCREEN
+        ===================================================== */
 
         @media (max-width: 360px) {
 
@@ -1048,6 +1205,10 @@
                 padding: 12px;
             }
 
+
+            .infinix-photo-card {
+                height: 160px;
+            }
         }
 
     </style>
@@ -1056,815 +1217,839 @@
 
 <body>
 
-    <div class="app-viewport">
+<div class="app-viewport">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+
+        <h1>
+            My Device
+        </h1>
+
+    </header>
 
 
-        <!-- =====================================================
-             HEADER
-        ====================================================== -->
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
 
-        <header class="header">
+    <main class="main-scroll-container">
 
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="back-btn"
-            >
-                <i class="fa-solid fa-chevron-left"></i>
-            </a>
+        <!-- PAGE TITLE -->
 
-            <h1>
+        <section class="page-title">
+
+            <h2>
                 My Device
-            </h1>
+            </h2>
 
-        </header>
+            <p>
+                Your registered Infinix devices
+            </p>
 
-
-        <!-- =====================================================
-             MAIN
-        ====================================================== -->
-
-        <main class="main-scroll-container">
+        </section>
 
 
-            <!-- PAGE TITLE -->
+        <!-- =================================================
+             INFINIX PHOTO
+        ================================================== -->
 
-            <section class="page-title">
+        <section class="infinix-photo-card">
 
-                <h2>
-                    My Device
-                </h2>
+            <!--
+                Put your Infinix image here:
 
-                <p>
-                    Your registered Infinix devices
-                </p>
+                static/images/infinix-phone.jpg
 
-            </section>
+                Flask automatically serves files inside
+                the static folder.
+            -->
+
+            <img
+                src="{{ url_for('static', filename='images/infinix-phone.jpg') }}"
+                alt="Infinix Device"
+                class="infinix-photo"
+            >
 
 
-            <!-- =================================================
-                 BLACK & WHITE GLOW CARD
-            ================================================== -->
+            <div class="photo-content">
 
-            <section class="glow-card">
+                <div>
 
-                <div class="glow-card-content">
+                    <div class="photo-title">
+                        INFINIX
+                    </div>
 
-                    <div class="glow-card-left">
+                    <div class="photo-subtitle">
+                        Smart device technology
+                    </div>
 
-                        <div class="glow-icon">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
-                        </div>
+                </div>
 
-                        <div>
 
-                            <div class="glow-title">
-                                INFINIX DEVICE
-                            </div>
+                <span class="photo-status">
+                    ACTIVE
+                </span>
 
-                            <div class="glow-description">
-                                Your active device portfolio
-                            </div>
+            </div>
 
-                        </div>
+        </section>
+
+
+        <!-- =================================================
+             BLACK & WHITE GLOW CARD
+        ================================================== -->
+
+        <section class="glow-card">
+
+            <div class="glow-card-content">
+
+                <div class="glow-card-left">
+
+                    <div class="glow-icon">
+
+                        <i class="fa-solid fa-mobile-screen-button"></i>
 
                     </div>
 
 
-                    <span class="glow-status">
-                        ACTIVE
-                    </span>
+                    <div>
 
-                </div>
+                        <div class="glow-title">
+                            INFINIX DEVICE
+                        </div>
 
-            </section>
+                        <div class="glow-description">
+                            Your active device portfolio
+                        </div>
 
-
-            <!-- =================================================
-                 METRICS
-            ================================================== -->
-
-            <section class="dashboard-metrics-row">
-
-
-                <div class="metric-panel">
-
-                    <span class="metric-label">
-                        My Device
-                    </span>
-
-                    <span class="metric-counter-value">
-                        {{ user_plans|length if user_plans else 0 }}
-                    </span>
+                    </div>
 
                 </div>
 
 
-                <div class="metric-panel">
+                <span class="glow-status">
+                    ACTIVE
+                </span>
 
-                    <span class="metric-label">
-                        My Income
-                    </span>
+            </div>
 
-                    <span class="metric-counter-value">
-                        GHS 0
-                    </span>
-
-                </div>
+        </section>
 
 
-            </section>
+        <!-- =================================================
+             METRICS
+        ================================================== -->
 
+        <section class="dashboard-metrics-row">
 
-            <!-- =================================================
-                 DEVICE SECTION HEADER
-            ================================================== -->
+            <div class="metric-panel">
 
-            <div class="section-header">
-
-                <h2 class="section-title">
+                <span class="metric-label">
                     My Device
-                </h2>
+                </span>
 
-
-                {% if user_plans %}
-
-                    <span class="section-count">
-
-                        {{ user_plans|length }}
-
-                        device{% if user_plans|length != 1 %}s{% endif %}
-
-                    </span>
-
-                {% endif %}
+                <span class="metric-counter-value">
+                    {{ user_plans|length if user_plans else 0 }}
+                </span>
 
             </div>
 
 
-            <!-- =================================================
-                 DEVICE LIST
-            ================================================== -->
+            <div class="metric-panel">
+
+                <span class="metric-label">
+                    My Income
+                </span>
+
+                <span class="metric-counter-value">
+                    GHS 0
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DEVICE SECTION
+        ================================================== -->
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                My Device
+            </h2>
+
 
             {% if user_plans %}
 
+                <span class="section-count">
 
-                {% for user_plan in user_plans %}
+                    {{ user_plans|length }}
 
+                    device{% if user_plans|length != 1 %}s{% endif %}
 
-                    <section class="portfolio-ledger-card">
-
-
-                        <!-- DEVICE TOP -->
-
-                        <div class="ledger-top-flex-row">
-
-                            <span class="vip-tier-indicator">
-
-                                {{ user_plan.plan_name }}
-
-                            </span>
-
-
-                            <span class="asset-valuation-tag">
-
-                                GHS
-                                {{
-                                    "%.2f"|format(
-                                        user_plan.investment_amount|float
-                                    )
-                                }}
-
-                            </span>
-
-                        </div>
-
-
-                        <!-- DEVICE BODY -->
-
-                        <div class="ledger-inner-body">
-
-
-                            <div class="hardware-thumbnail-wrapper">
-
-                                <div class="infinix-device"></div>
-
-                            </div>
-
-
-                            <div class="ledger-specs-column">
-
-
-                                <div class="product-name">
-
-                                    Infinix Device
-
-                                </div>
-
-
-                                <p class="spec-line-item">
-
-                                    Daily:
-
-                                    <span class="spec-highlight-value">
-
-                                        GHS
-                                        {{
-                                            "%.2f"|format(
-                                                user_plan.daily_income|float
-                                            )
-                                        }}
-
-                                    </span>
-
-                                </p>
-
-
-                                <p class="spec-line-item">
-
-                                    Total:
-
-                                    <span class="spec-highlight-value">
-
-                                        GHS
-                                        {{
-                                            "%.2f"|format(
-                                                user_plan.daily_income|float
-                                                *
-                                                user_plan.duration|int
-                                            )
-                                        }}
-
-                                    </span>
-
-                                </p>
-
-
-                                <p class="spec-line-item">
-
-                                    Valid:
-
-                                    <span class="spec-highlight-value">
-
-                                        {{ user_plan.duration }}d
-
-                                    </span>
-
-                                </p>
-
-
-                                <p class="system-log-timestamp">
-
-                                    Device #{{ loop.index }}
-
-                                </p>
-
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- COUNTDOWN -->
-
-                        <div class="income-status-row">
-
-                            <span class="countdown-label">
-                                Next income
-                            </span>
-
-
-                            <span
-                                id="countdown-{{ user_plan.id }}"
-                                class="countdown {% if user_plan.can_claim %}ready{% endif %}"
-                            >
-
-                                {% if user_plan.can_claim %}
-
-                                    00:00:00
-
-                                {% else %}
-
-                                    --:--:--
-
-                                {% endif %}
-
-                            </span>
-
-                        </div>
-
-
-                        <!-- CLAIM BUTTON -->
-
-                        <form
-                            method="POST"
-                            action="{{ url_for('my_plan') }}"
-                            class="claim-form"
-                        >
-
-                            <input
-                                type="hidden"
-                                name="user_plan_id"
-                                value="{{ user_plan.id }}"
-                            >
-
-
-                            <button
-                                type="submit"
-                                id="claimButton-{{ user_plan.id }}"
-                                class="claim-button {% if not user_plan.can_claim %}disabled{% endif %}"
-
-                                {% if not user_plan.can_claim %}
-                                    disabled
-                                {% endif %}
-                            >
-
-                                {% if user_plan.can_claim %}
-
-                                    <i class="fa-solid fa-coins"></i>
-
-                                    Claim Income
-
-                                {% else %}
-
-                                    <i class="fa-solid fa-clock"></i>
-
-                                    Income Not Ready
-
-                                {% endif %}
-
-                            </button>
-
-                        </form>
-
-
-                    </section>
-
-
-                    <!-- =================================================
-                         COUNTDOWN
-                    ================================================== -->
-
-                    <script>
-
-                        (function () {
-
-                            const countdownEl =
-                                document.getElementById(
-                                    "countdown-{{ user_plan.id }}"
-                                );
-
-
-                            const claimButton =
-                                document.getElementById(
-                                    "claimButton-{{ user_plan.id }}"
-                                );
-
-
-                            const canClaim =
-                                {{ 'true' if user_plan.can_claim else 'false' }};
-
-
-                            {% if user_plan.next_income_at %}
-
-                                const nextIncome =
-                                    new Date(
-                                        "{{ user_plan.next_income_at.isoformat() }}"
-                                    ).getTime();
-
-                            {% else %}
-
-                                const nextIncome = null;
-
-                            {% endif %}
-
-
-                            function pad(value) {
-
-                                return String(value)
-                                    .padStart(2, "0");
-
-                            }
-
-
-                            function formatTime(milliseconds) {
-
-                                if (milliseconds <= 0) {
-
-                                    return "00:00:00";
-
-                                }
-
-
-                                const totalSeconds =
-                                    Math.floor(
-                                        milliseconds / 1000
-                                    );
-
-
-                                const hours =
-                                    Math.floor(
-                                        totalSeconds / 3600
-                                    );
-
-
-                                const minutes =
-                                    Math.floor(
-                                        (totalSeconds % 3600) / 60
-                                    );
-
-
-                                const seconds =
-                                    totalSeconds % 60;
-
-
-                                return (
-                                    pad(hours) +
-                                    ":" +
-                                    pad(minutes) +
-                                    ":" +
-                                    pad(seconds)
-                                );
-
-                            }
-
-
-                            function setReady() {
-
-                                if (!countdownEl) {
-                                    return;
-                                }
-
-
-                                countdownEl.textContent =
-                                    "00:00:00";
-
-
-                                countdownEl.classList.add(
-                                    "ready"
-                                );
-
-
-                                if (claimButton) {
-
-                                    claimButton.disabled =
-                                        false;
-
-                                    claimButton.classList.remove(
-                                        "disabled"
-                                    );
-
-                                    claimButton.innerHTML =
-                                        '<i class="fa-solid fa-coins"></i> Claim Income';
-
-                                }
-
-                            }
-
-
-                            function setWaiting(milliseconds) {
-
-                                if (!countdownEl) {
-                                    return;
-                                }
-
-
-                                countdownEl.textContent =
-                                    formatTime(
-                                        milliseconds
-                                    );
-
-
-                                countdownEl.classList.remove(
-                                    "ready"
-                                );
-
-
-                                if (claimButton) {
-
-                                    claimButton.disabled =
-                                        true;
-
-                                    claimButton.classList.add(
-                                        "disabled"
-                                    );
-
-                                    claimButton.innerHTML =
-                                        '<i class="fa-solid fa-clock"></i> Income Not Ready';
-
-                                }
-
-                            }
-
-
-                            function updateCountdown() {
-
-                                if (canClaim) {
-
-                                    setReady();
-
-                                    return;
-
-                                }
-
-
-                                if (
-                                    nextIncome === null ||
-                                    isNaN(nextIncome)
-                                ) {
-
-                                    if (countdownEl) {
-
-                                        countdownEl.textContent =
-                                            "--:--:--";
-
-                                    }
-
-                                    return;
-
-                                }
-
-
-                                const remaining =
-                                    nextIncome - Date.now();
-
-
-                                if (remaining <= 0) {
-
-                                    setReady();
-
-                                } else {
-
-                                    setWaiting(
-                                        remaining
-                                    );
-
-                                }
-
-                            }
-
-
-                            updateCountdown();
-
-
-                            setInterval(
-                                updateCountdown,
-                                1000
-                            );
-
-                        })();
-
-                    </script>
-
-
-                {% endfor %}
-
-
-            {% else %}
-
-
-                <!-- =================================================
-                     EMPTY DEVICE
-                ================================================== -->
-
-                <section class="empty-card">
-
-
-                    <div class="empty-icon">
-
-                        <i class="fa-solid fa-mobile-screen"></i>
-
-                    </div>
-
-
-                    <h2 class="empty-title">
-
-                        No Device
-
-                    </h2>
-
-
-                    <p class="empty-text">
-
-                        You currently have no registered device.
-
-                    </p>
-
-
-                </section>
-
+                </span>
 
             {% endif %}
-
-
-            <!-- =================================================
-                 INFORMATION
-            ================================================== -->
-
-            <section class="info-card">
-
-
-                <div class="info-title">
-
-                    <i class="fa-solid fa-circle-info"></i>
-
-                    <span>
-                        Device Information
-                    </span>
-
-                </div>
-
-
-                <p>
-
-                    Your registered Infinix device
-                    and its associated plan details
-                    are displayed above.
-
-                </p>
-
-
-            </section>
-
-
-        </main>
-
-
-        <!-- =====================================================
-             BOTTOM NAVIGATION
-        ====================================================== -->
-
-        <nav class="global-bottom-navigation">
-
-
-            <a
-                href="{{ url_for('dashboard') }}"
-                class="nav-tab-node"
-            >
-
-                <i class="fa-solid fa-house nav-icon-glyph"></i>
-
-                <span class="nav-text-label">
-                    Home
-                </span>
-
-            </a>
-
-
-            <a
-                href="{{ url_for('my_plan') }}"
-                class="nav-tab-node active-focus-state"
-            >
-
-                <i class="fa-solid fa-chart-line nav-icon-glyph"></i>
-
-                <span class="nav-text-label">
-                    Income
-                </span>
-
-            </a>
-
-
-            <a
-                href="{{ url_for('team') }}"
-                class="nav-tab-node"
-            >
-
-                <i class="fa-solid fa-users nav-icon-glyph"></i>
-
-                <span class="nav-text-label">
-                    Team
-                </span>
-
-            </a>
-
-
-            <a
-                href="{{ url_for('team') }}"
-                class="nav-tab-node"
-            >
-
-                <i class="fa-solid fa-share-nodes nav-icon-glyph"></i>
-
-                <span class="nav-text-label">
-                    Share
-                </span>
-
-            </a>
-
-
-            <a
-                href="{{ url_for('profile') }}"
-                class="nav-tab-node"
-            >
-
-                <i class="fa-solid fa-user nav-icon-glyph"></i>
-
-                <span class="nav-text-label">
-                    My
-                </span>
-
-            </a>
-
-
-        </nav>
-
-
-        <!-- =====================================================
-             LOADING OVERLAY
-        ====================================================== -->
-
-        <div
-            id="loadingOverlay"
-            class="loading-overlay"
-        >
-
-            <div class="loading-box">
-
-                <div class="loading-spinner"></div>
-
-                <div class="loading-text">
-                    Loading...
-                </div>
-
-            </div>
 
         </div>
 
 
+        <!-- =================================================
+             DEVICE LIST
+        ================================================== -->
+
+        {% if user_plans %}
+
+            {% for user_plan in user_plans %}
+
+                <section class="portfolio-ledger-card">
+
+                    <!-- DEVICE TOP -->
+
+                    <div class="ledger-top-flex-row">
+
+                        <span class="vip-tier-indicator">
+
+                            {{ user_plan.plan_name }}
+
+                        </span>
+
+
+                        <span class="asset-valuation-tag">
+
+                            GHS
+                            {{
+                                "%.2f"|format(
+                                    user_plan.investment_amount|float
+                                )
+                            }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- DEVICE BODY -->
+
+                    <div class="ledger-inner-body">
+
+                        <div class="hardware-thumbnail-wrapper">
+
+                            <div class="infinix-device"></div>
+
+                        </div>
+
+
+                        <div class="ledger-specs-column">
+
+                            <div class="product-name">
+
+                                Infinix Device
+
+                            </div>
+
+
+                            <p class="spec-line-item">
+
+                                Daily:
+
+                                <span class="spec-highlight-value">
+
+                                    GHS
+                                    {{
+                                        "%.2f"|format(
+                                            user_plan.daily_income|float
+                                        )
+                                    }}
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="spec-line-item">
+
+                                Total:
+
+                                <span class="spec-highlight-value">
+
+                                    GHS
+                                    {{
+                                        "%.2f"|format(
+                                            user_plan.daily_income|float
+                                            *
+                                            user_plan.duration|int
+                                        )
+                                    }}
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="spec-line-item">
+
+                                Valid:
+
+                                <span class="spec-highlight-value">
+
+                                    {{ user_plan.duration }}d
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="system-log-timestamp">
+
+                                Device #{{ loop.index }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COUNTDOWN -->
+
+                    <div class="income-status-row">
+
+                        <span class="countdown-label">
+                            Next income
+                        </span>
+
+
+                        <span
+                            id="countdown-{{ user_plan.id }}"
+                            class="countdown
+                            {% if user_plan.can_claim %}
+                                ready
+                            {% endif %}"
+                        >
+
+                            {% if user_plan.can_claim %}
+
+                                00:00:00
+
+                            {% else %}
+
+                                --:--:--
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- CLAIM -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('my_plan') }}"
+                        class="claim-form"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="user_plan_id"
+                            value="{{ user_plan.id }}"
+                        >
+
+
+                        <button
+                            type="submit"
+                            id="claimButton-{{ user_plan.id }}"
+                            class="claim-button
+                            {% if not user_plan.can_claim %}
+                                disabled
+                            {% endif %}"
+
+                            {% if not user_plan.can_claim %}
+                                disabled
+                            {% endif %}
+                        >
+
+                            {% if user_plan.can_claim %}
+
+                                <i class="fa-solid fa-coins"></i>
+
+                                Claim Income
+
+                            {% else %}
+
+                                <i class="fa-solid fa-clock"></i>
+
+                                Income Not Ready
+
+                            {% endif %}
+
+                        </button>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =================================================
+                     COUNTDOWN SCRIPT
+                ================================================== -->
+
+                <script>
+
+                    (function () {
+
+                        const countdownEl =
+                            document.getElementById(
+                                "countdown-{{ user_plan.id }}"
+                            );
+
+
+                        const claimButton =
+                            document.getElementById(
+                                "claimButton-{{ user_plan.id }}"
+                            );
+
+
+                        const canClaim =
+                            {{ 'true' if user_plan.can_claim else 'false' }};
+
+
+                        {% if user_plan.next_income_at %}
+
+                        const nextIncome =
+                            new Date(
+                                "{{ user_plan.next_income_at.isoformat() }}"
+                            ).getTime();
+
+                        {% else %}
+
+                        const nextIncome = null;
+
+                        {% endif %}
+
+
+                        function pad(value) {
+
+                            return String(value)
+                                .padStart(2, "0");
+
+                        }
+
+
+                        function formatTime(milliseconds) {
+
+                            if (milliseconds <= 0) {
+
+                                return "00:00:00";
+
+                            }
+
+
+                            const totalSeconds =
+                                Math.floor(
+                                    milliseconds / 1000
+                                );
+
+
+                            const hours =
+                                Math.floor(
+                                    totalSeconds / 3600
+                                );
+
+
+                            const minutes =
+                                Math.floor(
+                                    (totalSeconds % 3600) / 60
+                                );
+
+
+                            const seconds =
+                                totalSeconds % 60;
+
+
+                            return (
+                                pad(hours) +
+                                ":" +
+                                pad(minutes) +
+                                ":" +
+                                pad(seconds)
+                            );
+
+                        }
+
+
+                        function setReady() {
+
+                            if (!countdownEl) {
+                                return;
+                            }
+
+
+                            countdownEl.textContent =
+                                "00:00:00";
+
+
+                            countdownEl.classList.add(
+                                "ready"
+                            );
+
+
+                            if (claimButton) {
+
+                                claimButton.disabled = false;
+
+                                claimButton.classList.remove(
+                                    "disabled"
+                                );
+
+                                claimButton.innerHTML =
+                                    '<i class="fa-solid fa-coins"></i> Claim Income';
+
+                            }
+
+                        }
+
+
+                        function setWaiting(milliseconds) {
+
+                            if (!countdownEl) {
+                                return;
+                            }
+
+
+                            countdownEl.textContent =
+                                formatTime(
+                                    milliseconds
+                                );
+
+
+                            countdownEl.classList.remove(
+                                "ready"
+                            );
+
+
+                            if (claimButton) {
+
+                                claimButton.disabled = true;
+
+                                claimButton.classList.add(
+                                    "disabled"
+                                );
+
+                                claimButton.innerHTML =
+                                    '<i class="fa-solid fa-clock"></i> Income Not Ready';
+
+                            }
+
+                        }
+
+
+                        function updateCountdown() {
+
+                            if (canClaim) {
+
+                                setReady();
+
+                                return;
+
+                            }
+
+
+                            if (
+                                nextIncome === null ||
+                                isNaN(nextIncome)
+                            ) {
+
+                                if (countdownEl) {
+
+                                    countdownEl.textContent =
+                                        "--:--:--";
+
+                                }
+
+                                return;
+
+                            }
+
+
+                            const remaining =
+                                nextIncome - Date.now();
+
+
+                            if (remaining <= 0) {
+
+                                setReady();
+
+                            } else {
+
+                                setWaiting(
+                                    remaining
+                                );
+
+                            }
+
+                        }
+
+
+                        updateCountdown();
+
+
+                        setInterval(
+                            updateCountdown,
+                            1000
+                        );
+
+                    })();
+
+                </script>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <!-- =================================================
+                 EMPTY DEVICE
+            ================================================== -->
+
+            <section class="empty-card">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-mobile-screen"></i>
+
+                </div>
+
+
+                <h2 class="empty-title">
+                    No Device
+                </h2>
+
+
+                <p class="empty-text">
+                    You currently have no registered device.
+                </p>
+
+            </section>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             INFORMATION
+        ================================================== -->
+
+        <section class="info-card">
+
+            <div class="info-title">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Device Information
+                </span>
+
+            </div>
+
+
+            <p>
+                Your registered Infinix device
+                and its associated plan details
+                are displayed above.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         BOTTOM NAVIGATION
+    ====================================================== -->
+
+    <nav class="global-bottom-navigation">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="nav-tab-node"
+        >
+
+            <i class="fa-solid fa-house nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
+                Home
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="nav-tab-node active-focus-state"
+        >
+
+            <i class="fa-solid fa-chart-line nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
+                Income
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-tab-node"
+        >
+
+            <i class="fa-solid fa-users nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
+                Team
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('team') }}"
+            class="nav-tab-node"
+        >
+
+            <i class="fa-solid fa-share-nodes nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
+                Share
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('profile') }}"
+            class="nav-tab-node"
+        >
+
+            <i class="fa-solid fa-user nav-icon-glyph"></i>
+
+            <span class="nav-text-label">
+                My
+            </span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- =====================================================
+         LOADING OVERLAY
+    ====================================================== -->
+
+    <div
+        id="loadingOverlay"
+        class="loading-overlay"
+    >
+
+        <div class="loading-box">
+
+            <div class="loading-spinner"></div>
+
+            <div class="loading-text">
+                Loading...
+            </div>
+
+        </div>
+
     </div>
 
-
-    <!-- =========================================================
-         GLOBAL LOADING SCRIPT
-    ========================================================= -->
-
-    <script>
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                const link =
-                    event.target.closest("a");
+</div>
 
 
-                const button =
-                    event.target.closest("button");
+<!-- =========================================================
+     GLOBAL LOADING SCRIPT
+========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest("a");
+
+            const button =
+                event.target.closest("button");
 
 
-                if (!link && !button) {
-                    return;
-                }
+            if (!link && !button) {
+                return;
+            }
 
 
-                if (
-                    button &&
-                    button.disabled
-                ) {
-                    return;
-                }
+            if (
+                button &&
+                button.disabled
+            ) {
+                return;
+            }
 
 
-                const overlay =
-                    document.getElementById(
-                        "loadingOverlay"
-                    );
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
 
 
-                if (overlay) {
+            if (overlay) {
 
-                    overlay.classList.add(
-                        "active"
-                    );
-
-                }
+                overlay.classList.add(
+                    "active"
+                );
 
             }
-        );
+
+        }
+    );
 
 
-        document.addEventListener(
-            "submit",
-            function () {
+    document.addEventListener(
+        "submit",
+        function () {
 
-                const overlay =
-                    document.getElementById(
-                        "loadingOverlay"
-                    );
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
 
 
-                if (overlay) {
+            if (overlay) {
 
-                    overlay.classList.add(
-                        "active"
-                    );
-
-                }
+                overlay.classList.add(
+                    "active"
+                );
 
             }
-        );
 
-    </script>
+        }
+    );
+
+</script>
 
 </body>
 </html>
