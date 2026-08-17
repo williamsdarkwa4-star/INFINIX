@@ -1,603 +1,1037 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Bind Account - Zenith Capital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Lucide Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
+    <title>Infinix - Bind Account</title>
 
-<style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: system-ui, -apple-system, Arial, sans-serif;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Arial, sans-serif;
+        }
 
-    body {
-        background: #f1f5f9;
-        display: flex;
-        justify-content: center;
-        min-height: 100vh;
-        -webkit-tap-highlight-color: transparent;
-        color: #334155;
-        padding-bottom: 70px;
-    }
+        body {
+            background: #050505;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 75px;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .phone {
-        width: 100%;
-        max-width: 440px;
-        min-height: 100vh;
-        background: #f8fafc;
-        position: relative;
-        padding-bottom: 75px;
-        box-shadow: 0 0 18px rgba(0,0,0,.06);
-    }
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            background: #080808;
+            position: relative;
+            padding-bottom: 80px;
+            overflow: hidden;
+        }
 
-    /* =========================
-       PAGE HEADER
-    ========================= */
+        /* =========================
+           HEADER
+        ========================= */
 
-    .page-header {
-        background: #10144c;
-        color: white;
-        padding: 18px;
-        text-align: center;
-    }
+        .profile-header {
+            padding: 22px 18px 25px;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(0,255,70,.16),
+                    rgba(0,0,0,0) 90%
+                );
+        }
 
-    .page-header h1 {
-        font-size: 19px;
-        font-weight: 700;
-    }
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
 
-    .page-header p {
-        font-size: 11px;
-        color: #cbd5e1;
-        margin-top: 4px;
-    }
+        .brand {
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #00ff4c;
+        }
 
-    /* =========================
-       CONTENT
-    ========================= */
+        .brand span {
+            color: #fff;
+        }
 
-    .content {
-        padding: 15px;
-    }
+        .notification {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #151515;
+            border: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    /* =========================
-       BACK BUTTON
-    ========================= */
+        .notification svg {
+            width: 19px;
+            color: #00ff4c;
+        }
 
-    .back {
-        display: block;
-        text-decoration: none;
-        background: white;
-        color: #10144c;
-        padding: 12px;
-        border-radius: 12px;
-        text-align: center;
-        font-size: 13px;
-        font-weight: 600;
-        border: 1px solid #e5e7eb;
-        margin-bottom: 12px;
-    }
+        /* =========================
+           PAGE BANNER
+        ========================= */
 
-    /* =========================
-       FLASH MESSAGES
-    ========================= */
+        .page-card {
+            background: linear-gradient(
+                135deg,
+                #12351d,
+                #0b0f0c
+            );
 
-    .flash {
-        padding: 12px;
-        border-radius: 11px;
-        margin-bottom: 12px;
-        font-size: 13px;
-        font-weight: 600;
-    }
+            border: 1px solid rgba(0,255,76,.25);
+            border-radius: 18px;
+            padding: 21px 18px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .flash.success {
-        background: #dcfce7;
-        color: #166534;
-    }
+        .page-card::after {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            right: -45px;
+            top: -45px;
+            border-radius: 50%;
+            background: rgba(0,255,76,.08);
+        }
 
-    .flash.error {
-        background: #fee2e2;
-        color: #991b1b;
-    }
+        .page-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: #00ff4c;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 13px;
+        }
 
-    /* =========================
-       NOTICE
-    ========================= */
+        .page-icon svg {
+            width: 22px;
+        }
 
-    .notice {
-        background: #eef2ff;
-        color: #373b7a;
-        border: 1px solid #e0e7ff;
-        padding: 13px;
-        border-radius: 12px;
-        margin-bottom: 12px;
-        font-size: 12px;
-        line-height: 1.5;
-    }
+        .page-card h1 {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
 
-    /* =========================
-       CARDS
-    ========================= */
+        .page-card p {
+            color: #9ca39e;
+            font-size: 11px;
+            line-height: 1.5;
+        }
 
-    .card {
-        background: white;
-        padding: 15px;
-        border-radius: 14px;
-        border: 1px solid #edf1f7;
-        margin-bottom: 12px;
-    }
-
-    .card-title {
-        color: #10144c;
-        font-size: 15px;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-
-    /* =========================
-       SAVED ACCOUNT
-    ========================= */
-
-    .account {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 13px;
-        margin-bottom: 9px;
-    }
-
-    .account:last-child {
-        margin-bottom: 0;
-    }
-
-    .account-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 11px;
-    }
-
-    .account input[type="radio"] {
-        width: 19px;
-        height: 19px;
-        margin-top: 2px;
-        accent-color: #10144c;
-    }
-
-    .account strong {
-        display: block;
-        color: #10144c;
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
-
-    .info {
-        color: #64748b;
-        font-size: 12px;
-        line-height: 1.6;
-    }
-
-    .empty {
-        text-align: center;
-        color: #94a3b8;
-        background: #f8fafc;
-        padding: 15px;
-        border-radius: 11px;
-        font-size: 12px;
-    }
-
-    /* =========================
-       FORM
-    ========================= */
-
-    .form-group {
-        margin-bottom: 10px;
-    }
-
-    .form-group label {
-        display: block;
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-
-    input,
-    select {
-        width: 100%;
-        padding: 13px 14px;
-        border-radius: 11px;
-        border: 1px solid #dbe2ea;
-        background: white;
-        outline: none;
-        font-size: 14px;
-        color: #1e293b;
-    }
-
-    input:focus,
-    select:focus {
-        border-color: #10144c;
-        box-shadow: 0 0 0 2px rgba(16,20,76,.08);
-    }
-
-    .save-btn {
-        width: 100%;
-        padding: 13px;
-        border: none;
-        border-radius: 20px;
-        background: #10144c;
-        color: white;
-        font-size: 14px;
-        font-weight: 700;
-        margin-top: 4px;
-        cursor: pointer;
-    }
-
-    .save-btn:active {
-        transform: scale(.99);
-    }
-
-    /* =========================
-       INFORMATION
-    ========================= */
-
-    .information {
-        color: #64748b;
-        font-size: 12px;
-        line-height: 1.6;
-    }
-
-    /* =========================
-       FIXED 5-ITEM NAVIGATION
-    ========================= */
-
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 440px;
-        height: 65px;
-        background: white;
-        border-top: 1px solid #e2e8f0;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        z-index: 1000;
-        box-shadow: 0 -3px 12px rgba(0,0,0,.05);
-    }
-
-    .bottom-nav a {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 3px;
-        text-decoration: none;
-        color: #94a3b8;
-        font-size: 9px;
-    }
-
-    .bottom-nav svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    .bottom-nav a.active {
-        color: #10144c;
-        font-weight: bold;
-    }
-
-    .bottom-nav a.active::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 25%;
-        right: 25%;
-        height: 3px;
-        background: #10144c;
-        border-radius: 4px 4px 0 0;
-    }
-
-    /* =========================
-       SMALL PHONES
-    ========================= */
-
-    @media(max-width:360px) {
+        /* =========================
+           CONTENT
+        ========================= */
 
         .content {
-            padding: 12px;
+            padding: 18px 16px;
         }
 
-        .page-header {
-            padding: 16px;
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            background: #121212;
+            border: 1px solid #252525;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
+
+        .back svg {
+            width: 17px;
+            color: #00ff4c;
+        }
+
+        .back:active {
+            transform: scale(.98);
+        }
+
+        /* =========================
+           FLASH
+        ========================= */
+
+        .flash {
+            padding: 12px 13px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .flash.success {
+            background: rgba(0,255,76,.10);
+            border: 1px solid rgba(0,255,76,.25);
+            color: #00ff4c;
+        }
+
+        .flash.error {
+            background: rgba(255,60,60,.10);
+            border: 1px solid rgba(255,60,60,.25);
+            color: #ff6868;
+        }
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .notice {
+            background: #121212;
+            border: 1px solid #252525;
+            border-left: 3px solid #00ff4c;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 12px;
+            color: #999;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .notice strong {
+            color: #fff;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
 
         .card {
-            padding: 13px;
+            background: #121212;
+            border: 1px solid #252525;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
         }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 13px;
+        }
+
+        .card-title svg {
+            width: 18px;
+            color: #00ff4c;
+        }
+
+        /* =========================
+           SAVED ACCOUNTS
+        ========================= */
+
+        .account {
+            background: #181818;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 8px;
+        }
+
+        .account:last-child {
+            margin-bottom: 0;
+        }
+
+        .account-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .account input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #00ff4c;
+        }
+
+        .account strong {
+            display: block;
+            color: #00ff4c;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .info {
+            color: #888;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .empty {
+            text-align: center;
+            background: #181818;
+            border: 1px solid #252525;
+            border-radius: 11px;
+            padding: 18px 12px;
+            color: #777;
+            font-size: 11px;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #888;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 11px;
+            border: 1px solid #292929;
+            background: #181818;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #00ff4c;
+            box-shadow: 0 0 0 2px rgba(0,255,76,.08);
+        }
+
+        select option {
+            background: #121212;
+            color: #fff;
+        }
+
+        /* =========================
+           SAVE BUTTON
+        ========================= */
+
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 13px;
+            background: #00ff4c;
+            color: #000;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .save-btn svg {
+            width: 17px;
+        }
+
+        .save-btn:active {
+            transform: scale(.98);
+        }
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .information {
+            color: #888;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 9px;
+            margin-bottom: 10px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item svg {
+            width: 16px;
+            min-width: 16px;
+            color: #00ff4c;
+            margin-top: 1px;
+        }
+
+        /* =========================
+           LOADING SCREEN
+        ========================= */
+
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.88);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-box {
+            width: 120px;
+            padding: 20px 15px;
+            background: #141414;
+            border: 1px solid #292929;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .loader {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #333;
+            border-top-color: #00ff4c;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: auto;
+        }
+
+        .loading-text {
+            color: #aaa;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           BOTTOM NAV
+        ========================= */
 
         .bottom-nav {
-            height: 63px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 67px;
+            background: #101010;
+            border-top: 1px solid #292929;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,.4);
         }
 
-    }
+        .bottom-nav a {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: #777;
+            text-decoration: none;
+            font-size: 9px;
+        }
 
-</style>
+        .bottom-nav svg {
+            width: 20px;
+            height: 20px;
+        }
 
-</head><body><div class="phone"><!-- PAGE HEADER -->
+        .bottom-nav a.active {
+            color: #00ff4c;
+            font-weight: 800;
+        }
 
-<div class="page-header">
+        .bottom-nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: #00ff4c;
+            border-radius: 4px 4px 0 0;
+        }
 
-    <h1>Bind Account</h1>
+        @media(max-width:360px) {
+            .content {
+                padding: 15px 12px;
+            }
 
-    <p>Manage your withdrawal account</p>
+            .page-card h1 {
+                font-size: 20px;
+            }
 
-</div>
+            .bottom-nav {
+                height: 64px;
+            }
 
+            .bottom-nav svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
 
-<div class="content">
+<body>
 
-    <!-- BACK -->
+<div class="phone">
 
-    <a href="{{ url_for('withdraw') }}" class="back">
-        ← Back to Withdrawal
-    </a>
+    <!-- =========================
+         HEADER
+    ========================= -->
 
+    <div class="profile-header">
 
-    <!-- FLASH MESSAGES -->
+        <div class="brand-row">
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-
-        {% for category, message in messages %}
-
-            <div class="flash {{ category }}">
-                {{ message }}
+            <div class="brand">
+                INFINIX<span>.</span>
             </div>
 
-        {% endfor %}
+            <div class="notification">
+                <i data-lucide="bell"></i>
+            </div>
 
-    {% endwith %}
+        </div>
 
 
-    <!-- NOTICE -->
+        <div class="page-card">
 
-    <div class="notice">
-        Add your own withdrawal account. Make sure the
-        account name and mobile money number are correct
-        before saving.
+            <div class="page-icon">
+                <i data-lucide="landmark"></i>
+            </div>
+
+            <h1>
+                Bind Account
+            </h1>
+
+            <p>
+                Manage your withdrawal account securely.
+            </p>
+
+        </div>
+
     </div>
 
 
-    <!-- SAVED ACCOUNTS -->
+    <!-- =========================
+         CONTENT
+    ========================= -->
 
-    <div class="card">
+    <div class="content">
 
-        <div class="card-title">
-            Saved Accounts
+        <!-- BACK -->
+
+        <a
+            href="{{ url_for('withdraw') }}"
+            class="back loading-link"
+        >
+            <i data-lucide="arrow-left"></i>
+            <span>Back to Withdrawal</span>
+        </a>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- NOTICE -->
+
+        <div class="notice">
+
+            <strong>
+                <i data-lucide="shield-check"
+                   style="width:14px;vertical-align:middle;color:#00ff4c;">
+                </i>
+                Account Information
+            </strong>
+
+            <br>
+
+            Add an account that belongs to you.
+            Check the account name, network and mobile
+            money number carefully before saving.
+
         </div>
 
-        {% if accounts %}
 
-            {% for account in accounts %}
+        <!-- =========================
+             SAVED ACCOUNTS
+        ========================= -->
 
-            <div class="account">
+        <div class="card">
 
-                <div class="account-row">
+            <div class="card-title">
 
-                    <input
-                        type="radio"
-                        name="selected_account"
-                        value="{{ account.id }}"
-                    >
+                <i data-lucide="wallet-cards"></i>
 
-                    <div>
+                <span>
+                    Saved Accounts
+                </span>
 
-                        <strong>
-                            {{ account.network }}
-                        </strong>
+            </div>
 
-                        <div class="info">
-                            Account Name:
-                            {{ account.account_name }}
-                        </div>
 
-                        <div class="info">
-                            Number:
-                            {{ account.phone }}
+            {% if accounts %}
+
+                {% for account in accounts %}
+
+                    <div class="account">
+
+                        <div class="account-row">
+
+                            <input
+                                type="radio"
+                                name="selected_account"
+                                value="{{ account.id }}"
+                            >
+
+                            <div>
+
+                                <strong>
+                                    {{ account.network }}
+                                </strong>
+
+                                <div class="info">
+                                    Account Name:
+                                    {{ account.account_name }}
+                                </div>
+
+                                <div class="info">
+                                    Number:
+                                    {{ account.phone }}
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty">
+
+                    <i
+                        data-lucide="wallet"
+                        style="width:25px;color:#00ff4c;margin-bottom:7px;"
+                    ></i>
+
+                    <div>
+                        No withdrawal account has been added yet.
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================
+             ADD NEW ACCOUNT
+        ========================= -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <i data-lucide="plus-circle"></i>
+
+                <span>
+                    Add New Account
+                </span>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('bind_account') }}"
+                id="bindForm"
+            >
+
+                <div class="form-group">
+
+                    <label>
+                        Account Holder Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="account_name"
+                        placeholder="Enter account holder name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Money Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Enter mobile money number"
+                        autocomplete="tel"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mobile Money Network
+                    </label>
+
+                    <select
+                        name="network"
+                        required
+                    >
+
+                        <option value="">
+                            Select network
+                        </option>
+
+                        <option value="MTN Mobile Money">
+                            MTN Mobile Money
+                        </option>
+
+                        <option value="Telecel Cash">
+                            Telecel Cash
+                        </option>
+
+                        <option value="AirtelTigo Money">
+                            AirtelTigo Money
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+
+                    <i data-lucide="save"></i>
+
+                    Save Withdrawal Account
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <i data-lucide="info"></i>
+
+                <span>
+                    Account Information
+                </span>
+
+            </div>
+
+
+            <div class="information">
+
+                <div class="info-item">
+
+                    <i data-lucide="check-circle"></i>
+
+                    <span>
+                        Saved accounts are linked to your
+                        account and can be selected when
+                        submitting a withdrawal request.
+                    </span>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <i data-lucide="shield-check"></i>
+
+                    <span>
+                        Make sure the account information
+                        you enter is accurate.
+                    </span>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <i data-lucide="smartphone"></i>
+
+                    <span>
+                        Use the correct mobile money network
+                        for the number you provide.
+                    </span>
 
                 </div>
 
             </div>
 
-            {% endfor %}
-
-        {% else %}
-
-            <div class="empty">
-                No withdrawal account has been added yet.
-            </div>
-
-        {% endif %}
+        </div>
 
     </div>
 
 
-    <!-- ADD NEW ACCOUNT -->
+    <!-- =========================
+         LOADING
+    ========================= -->
 
-    <div class="card">
+    <div
+        class="loading"
+        id="loading"
+    >
 
-        <div class="card-title">
-            Add New Account
+        <div class="loading-box">
+
+            <div class="loader"></div>
+
+            <div class="loading-text">
+                Loading...
+            </div>
+
         </div>
 
-        <form
-            method="POST"
-            action="{{ url_for('bind_account') }}"
+    </div>
+
+
+    <!-- =========================
+         SAME 5-BUTTON NAV
+    ========================= -->
+
+    <div class="bottom-nav">
+
+        <a
+            href="/dashboard"
+            class="loading-link"
         >
 
-            <div class="form-group">
+            <i data-lucide="home"></i>
 
-                <label>
-                    Account Holder Name
-                </label>
+            <span>
+                Home
+            </span>
 
-                <input
-                    type="text"
-                    name="account_name"
-                    placeholder="Enter account holder name"
-                    required
-                >
-
-            </div>
+        </a>
 
 
-            <div class="form-group">
+        <a
+            href="/my_plan"
+            class="loading-link"
+        >
 
-                <label>
-                    Mobile Money Number
-                </label>
+            <i data-lucide="trending-up"></i>
 
-                <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Enter mobile money number"
-                    required
-                >
+            <span>
+                Income
+            </span>
 
-            </div>
+        </a>
 
 
-            <div class="form-group">
+        <a
+            href="/team_members"
+            class="loading-link"
+        >
 
-                <label>
-                    Mobile Money Network
-                </label>
+            <i data-lucide="users"></i>
 
-                <select name="network" required>
+            <span>
+                Team
+            </span>
 
-                    <option value="">
-                        Select network
-                    </option>
-
-                    <option value="MTN Mobile Money">
-                        MTN Mobile Money
-                    </option>
-
-                    <option value="Telecel Cash">
-                        Telecel Cash
-                    </option>
-
-                    <option value="AirtelTigo Money">
-                        AirtelTigo Money
-                    </option>
-
-                </select>
-
-            </div>
+        </a>
 
 
-            <button
-                type="submit"
-                class="save-btn"
-            >
-                Save Withdrawal Account
-            </button>
+        <a
+            href="/team"
+            class="loading-link"
+        >
 
-        </form>
+            <i data-lucide="share-2"></i>
 
-    </div>
+            <span>
+                Share
+            </span>
+
+        </a>
 
 
-    <!-- INFORMATION -->
+        <a
+            href="/profile"
+            class="active loading-link"
+        >
 
-    <div class="card">
+            <i data-lucide="user"></i>
 
-        <div class="card-title">
-            Account Information
-        </div>
+            <span>
+                My
+            </span>
 
-        <div class="information">
-
-            Saved withdrawal accounts are linked to your
-            user account. You can select one when submitting
-            a withdrawal request.
-
-        </div>
+        </a>
 
     </div>
 
 </div>
 
 
-<!-- =========================
-     SAME BOTTOM NAV AS PROFILE
-========================= -->
+<script>
 
-<div class="bottom-nav">
+    /* =========================
+       LUCIDE ICONS
+    ========================= */
 
-    <a href="/dashboard">
-
-        <i data-lucide="home"></i>
-
-        <span>
-            Home
-        </span>
-
-    </a>
-
-
-    <a href="/my_plan">
-
-        <i data-lucide="trending-up"></i>
-
-        <span>
-            Income
-        </span>
-
-    </a>
-
-
-    <a href="/team">
-
-        <i data-lucide="users"></i>
-
-        <span>
-            Team
-        </span>
-
-    </a>
-
-
-    <a href="/team">
-
-        <i data-lucide="share-2"></i>
-
-        <span>
-            Share
-        </span>
-
-    </a>
-
-
-    <a href="/profile" class="active">
-
-        <i data-lucide="user"></i>
-
-        <span>
-            My
-        </span>
-
-    </a>
-
-</div>
-
-</div><script>
     lucide.createIcons();
-</script></body>
+
+
+    /* =========================
+       LOADING NAVIGATION
+    ========================= */
+
+    const loading =
+        document.getElementById("loading");
+
+
+    document
+        .querySelectorAll(".loading-link")
+        .forEach(function(link) {
+
+            link.addEventListener(
+                "click",
+                function(event) {
+
+                    /*
+                     * Do not show loading when
+                     * clicking the current page.
+                     */
+                    if (
+                        this.classList.contains("active")
+                    ) {
+                        return;
+                    }
+
+                    const destination =
+                        this.href;
+
+                    event.preventDefault();
+
+                    loading.style.display = "flex";
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            destination;
+
+                    }, 350);
+
+                }
+            );
+
+        });
+
+
+    /* =========================
+       FORM LOADING
+    ========================= */
+
+    const bindForm =
+        document.getElementById("bindForm");
+
+
+    if (bindForm) {
+
+        bindForm.addEventListener(
+            "submit",
+            function() {
+
+                loading.style.display = "flex";
+
+            }
+        );
+
+    }
+
+</script>
+
+</body>
 </html>
