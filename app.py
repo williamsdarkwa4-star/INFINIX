@@ -65,6 +65,16 @@ def create_app(config_object=None):
                 deposit_url = None
                 logger.warning("No 'deposit' endpoint found; dashboard will render without a deposit link")
 
+        # Build withdraw_url safely so templates don't raise BuildError
+        try:
+            withdraw_url = url_for("withdraw")
+        except BuildError:
+            try:
+                withdraw_url = url_for("withdraw_bp.withdraw")  # change if your blueprint name differs
+            except BuildError:
+                withdraw_url = None
+                logger.warning("No 'withdraw' endpoint found; dashboard will render without a withdraw link")
+
         return render_template(
             "dashboard.html",
             user=user,
@@ -72,6 +82,7 @@ def create_app(config_object=None):
             plans=PLANS,
             support_url=support_url,
             deposit_url=deposit_url,
+            withdraw_url=withdraw_url,
         )
 
     # Provide a support route so url_for('support') works.
@@ -93,6 +104,14 @@ def create_app(config_object=None):
             return render_template("deposit.html")
         except Exception:
             return ("<h1>Deposit</h1><p>Please create templates/deposit.html to show a deposit page.</p>"), 200
+
+    # Provide a withdraw route so url_for('withdraw') works.
+    @app.route("/withdraw", endpoint="withdraw")
+    def withdraw():
+        try:
+            return render_template("withdraw.html")
+        except Exception:
+            return ("<h1>Withdraw</h1><p>Please create templates/withdraw.html to show a withdraw page.</p>"), 200
 
     # Admin login route to avoid 404s seen in logs (define real logic)
     @app.route("/admin/login", methods=["GET", "POST"])
