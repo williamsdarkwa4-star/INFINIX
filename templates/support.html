@@ -1,718 +1,1442 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Support Center - Zenith Capital</title><!-- Font Awesome --><link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-><style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#f1f4f9;
-    min-height:100vh;
-    padding-bottom:85px;
-    color:#334155;
-}
-
-
-/* =========================
-   PHONE FRAME
-========================= */
-
-.phone{
-    width:100%;
-    max-width:440px;
-    min-height:100vh;
-    margin:auto;
-    background:#f1f4f9;
-    position:relative;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-    background:#0b1c4d;
-    color:white;
-    padding:25px 20px 28px;
-    border-radius:0 0 24px 24px;
-    box-shadow:0 5px 15px rgba(11,28,77,.15);
-}
-
-.header-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:22px;
-}
-
-.header-icon{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    background:rgba(255,255,255,.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-}
-
-.header-text{
-    flex:1;
-    margin-left:14px;
-}
-
-.header-text h1{
-    font-size:21px;
-    margin-bottom:5px;
-}
-
-.header-text p{
-    font-size:12px;
-    color:#cbd5e1;
-}
-
-.header-badge{
-    background:#2563eb;
-    padding:7px 10px;
-    border-radius:20px;
-    font-size:10px;
-    font-weight:bold;
-}
-
-
-/* =========================
-   INTRODUCTION
-========================= */
-
-.intro{
-    padding:18px 16px 5px;
-}
-
-.intro-card{
-    background:white;
-    border-radius:16px;
-    padding:17px;
-    border:1px solid #e8edf3;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    box-shadow:0 3px 10px rgba(0,0,0,.04);
-}
-
-.intro-icon{
-    width:45px;
-    height:45px;
-    flex-shrink:0;
-    border-radius:13px;
-    background:#eff6ff;
-    color:#2563eb;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:19px;
-}
-
-.intro-text h3{
-    font-size:14px;
-    color:#0f172a;
-    margin-bottom:4px;
-}
-
-.intro-text p{
-    font-size:11px;
-    color:#64748b;
-    line-height:1.5;
-}
-
-
-/* =========================
-   SUPPORT SECTION
-========================= */
-
-.section{
-    padding:16px;
-}
-
-.section-title{
-    font-size:14px;
-    font-weight:bold;
-    color:#0f172a;
-    margin-bottom:10px;
-}
-
-
-/* =========================
-   SUPPORT CARDS
-========================= */
-
-.support-card{
-    background:white;
-    border-radius:16px;
-    padding:17px;
-    margin-bottom:10px;
-    border:1px solid #e8edf3;
-    box-shadow:0 3px 10px rgba(0,0,0,.04);
-}
-
-.support-top{
-    display:flex;
-    align-items:center;
-    gap:13px;
-    margin-bottom:14px;
-}
-
-.support-icon{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:21px;
-    flex-shrink:0;
-}
-
-.telegram{
-    background:#e8f4ff;
-    color:#229ed9;
-}
-
-.whatsapp{
-    background:#eafaf0;
-    color:#16a34a;
-}
-
-.customer{
-    background:#eef2ff;
-    color:#4f46e5;
-}
-
-.support-info{
-    flex:1;
-}
-
-.support-info h2{
-    font-size:15px;
-    color:#0f172a;
-    margin-bottom:4px;
-}
-
-.support-info p{
-    font-size:11px;
-    color:#64748b;
-    line-height:1.4;
-}
-
-.status{
-    font-size:9px;
-    font-weight:bold;
-    color:#16a34a;
-    background:#dcfce7;
-    padding:4px 7px;
-    border-radius:20px;
-}
-
-
-/* =========================
-   SUPPORT BUTTON
-========================= */
-
-.support-btn{
-    width:100%;
-    height:43px;
-    border:none;
-    border-radius:11px;
-    background:#0b1c4d;
-    color:white;
-    text-decoration:none;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.support-btn:active{
-    transform:scale(.98);
-}
-
-.support-btn i{
-    font-size:13px;
-}
-
-
-/* =========================
-   INFORMATION CARD
-========================= */
-
-.info-card{
-    background:#0b1c4d;
-    color:white;
-    border-radius:17px;
-    padding:18px;
-    margin-top:3px;
-    box-shadow:0 5px 15px rgba(11,28,77,.15);
-}
-
-.info-card h3{
-    font-size:14px;
-    margin-bottom:7px;
-}
-
-.info-card p{
-    color:#cbd5e1;
-    font-size:11px;
-    line-height:1.6;
-}
-
-.info-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:13px;
-}
-
-.info-row i{
-    color:#60a5fa;
-    font-size:14px;
-}
-
-.info-row span{
-    font-size:11px;
-    color:#e2e8f0;
-}
-
-
-/* =========================
-   BOTTOM NAVIGATION
-========================= */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:67px;
-    background:white;
-    border-top:1px solid #e2e8f0;
-    display:flex;
-    justify-content:center;
-    z-index:9999;
-    box-shadow:0 -3px 12px rgba(0,0,0,.05);
-}
-
-.bottom-nav-inner{
-    width:100%;
-    max-width:440px;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    align-items:center;
-}
-
-.bottom-nav a{
-    height:100%;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:4px;
-    text-decoration:none;
-    color:#94a3b8;
-    font-size:9px;
-    font-weight:500;
-}
-
-.bottom-nav i{
-    font-size:18px;
-}
-
-.bottom-nav a.active{
-    color:#0b1c4d;
-    font-weight:bold;
-}
-
-.bottom-nav a.active::after{
-    content:"";
-    position:absolute;
-    bottom:0;
-    left:25%;
-    right:25%;
-    height:3px;
-    background:#0b1c4d;
-    border-radius:4px 4px 0 0;
-}
-
-
-/* =========================
-   SMALL SCREEN
-========================= */
-
-@media(max-width:360px){
-
-    .header{
-        padding:22px 15px 25px;
-    }
-
-    .section,
-    .intro{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-    .support-card{
-        padding:14px;
-    }
-
-    .header-text h1{
-        font-size:19px;
-    }
-
-    .bottom-nav{
-        height:64px;
-    }
-
-    .bottom-nav i{
-        font-size:16px;
-    }
-
-}
-
-</style></head><body><div class="phone"><!-- =========================
-     HEADER
-========================= -->
-
-<header class="header">
-
-    <div class="header-top">
-
-        <div class="header-icon">
-            <i class="fa-solid fa-headset"></i>
-        </div>
-
-        <div class="header-text">
-
-            <h1>
-                Support Center
-            </h1>
-
-            <p>
-                Zenith Capital assistance
-            </p>
-
-        </div>
-
-        <div class="header-badge">
-            ONLINE
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- =========================
-     INTRO
-========================= -->
-
-<div class="intro">
-
-    <div class="intro-card">
-
-        <div class="intro-icon">
-            <i class="fa-solid fa-circle-question"></i>
-        </div>
-
-        <div class="intro-text">
-
-            <h3>
-                How can we help?
-            </h3>
-
-            <p>
-                Choose a support option below to get assistance
-                or receive the latest platform updates.
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     SUPPORT OPTIONS
-========================= -->
-
-<div class="section">
-
-    <div class="section-title">
-        Contact & Community
-    </div>
-
-
-    <!-- TELEGRAM -->
-
-    <div class="support-card">
-
-        <div class="support-top">
-
-            <div class="support-icon telegram">
-                <i class="fa-brands fa-telegram"></i>
-            </div>
-
-            <div class="support-info">
-
-                <h2>
-                    Telegram Community
-                </h2>
-
-                <p>
-                    Get announcements, updates and community
-                    information.
-                </p>
-
-            </div>
-
-            <span class="status">
-                ACTIVE
-            </span>
-
-        </div>
-
-        <a
-            class="support-btn"
-            href="https://t.me/ZenithCapital5567"
-            target="_blank"
-            rel="noopener"
-        >
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-            <i class="fa-brands fa-telegram"></i>
+    <title>Support - Infinix</title>
 
-            Join Telegram
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
-        </a>
+    <style>
 
-    </div>
+        :root {
 
+            --bg-black: #000000;
+            --header-dark: #1a1a1a;
+            --card-bg: #0d0d0d;
+            --card-border: #1b1b1b;
 
-    <!-- WHATSAPP -->
+            --green: #3cdc3c;
+            --green-soft: rgba(60,220,60,.12);
 
-    <div class="support-card">
+            --text-white: #ffffff;
+            --text-muted: #888888;
+            --text-dark: #444444;
 
-        <div class="support-top">
+            --telegram: #229ed9;
+            --whatsapp: #25d366;
 
-            <div class="support-icon whatsapp">
-                <i class="fa-brands fa-whatsapp"></i>
-            </div>
+            --font:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
 
-            <div class="support-info">
 
-                <h2>
-                    WhatsApp Community
-                </h2>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
 
-                <p>
-                    Connect with the community and receive
-                    important updates.
-                </p>
+            font-family: var(--font);
 
-            </div>
+            -webkit-font-smoothing: antialiased;
+        }
 
-            <span class="status">
-                ACTIVE
-            </span>
 
-        </div>
+        html,
+        body {
 
-        <a
-            class="support-btn"
-            href="https://t.me/ZenithCapital5567"
-            target="_blank"
-            rel="noopener"
-        >
+            width: 100%;
+            min-height: 100%;
 
-            <i class="fa-brands fa-whatsapp"></i>
+            margin: 0;
+            padding: 0;
 
-            Join WhatsApp
+            background: #000;
+        }
 
-        </a>
 
-    </div>
+        body {
 
+            min-height: 100vh;
 
-    <!-- CUSTOMER SERVICE -->
+            display: flex;
+            justify-content: center;
 
-    <div class="support-card">
+            color: var(--text-white);
+        }
 
-        <div class="support-top">
 
-            <div class="support-icon customer">
-                <i class="fa-solid fa-headset"></i>
-            </div>
+        /* =========================
+           APP VIEWPORT
+        ========================= */
 
-            <div class="support-info">
+        .app-viewport {
 
-                <h2>
-                    Customer Service
-                </h2>
+            width: 100%;
+            max-width: 412px;
 
-                <p>
-                    Contact the support team for assistance
-                    with your account.
-                </p>
+            height: 100vh;
 
-            </div>
+            background: var(--bg-black);
 
-            <span class="status">
-                ONLINE
-            </span>
+            position: relative;
 
-        </div>
+            overflow: hidden;
 
-        <a
-            class="support-btn"
-            href="https://t.me/ZenithCapital6556"
-            target="_blank"
-            rel="noopener"
-        >
+            box-shadow:
+                0 15px 50px rgba(0,0,0,.9);
+        }
 
-            <i class="fa-brands fa-telegram"></i>
 
-            Contact Support
+        /* =========================
+           MAIN SCROLL
+        ========================= */
 
-        </a>
+        .main-scroll-container {
 
-    </div>
+            width: 100%;
+            height: 100%;
+
+            overflow-y: auto;
+
+            padding: 14px;
+
+            padding-bottom: 88px;
+
+            scrollbar-width: none;
+        }
+
+
+        .main-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .support-header {
+
+            position: relative;
+
+            width: 100%;
+
+            min-height: 105px;
+
+            margin-bottom: 13px;
+
+            padding: 15px;
+
+            overflow: hidden;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #101010,
+                    #1b1b1b,
+                    #090909
+                );
+
+            border: 1px solid #1c1c1c;
+        }
+
+
+        .support-header::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(60,220,60,.18),
+                    transparent 55%
+                ),
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(60,220,60,.09),
+                    transparent 50%
+                );
+        }
+
+
+        .support-header::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            top: -75px;
+            right: -45px;
+
+            border: 1px solid rgba(60,220,60,.12);
+
+            border-radius: 50%;
+        }
+
+
+        .header-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            height: 100%;
+        }
+
+
+        .header-icon {
+
+            width: 43px;
+            height: 43px;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background: var(--green-soft);
+
+            border: 1px solid rgba(60,220,60,.18);
+
+            color: var(--green);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+
+            box-shadow:
+                0 0 15px rgba(60,220,60,.08);
+        }
+
+
+        .header-text {
+
+            flex: 1;
+        }
+
+
+        .header-text h1 {
+
+            color: var(--green);
+
+            font-size: 19px;
+
+            font-weight: 800;
+
+            letter-spacing: 2px;
+
+            text-shadow:
+                0 0 8px rgba(60,220,60,.4);
+        }
+
+
+        .header-text p {
+
+            margin-top: 5px;
+
+            color: #777;
+
+            font-size: 9px;
+
+            letter-spacing: 1.3px;
+
+            text-transform: uppercase;
+        }
+
+
+        .header-status {
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            background: var(--green-soft);
+
+            border: 1px solid rgba(60,220,60,.2);
+
+            color: var(--green);
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            letter-spacing: .5px;
+        }
+
+
+        /* =========================
+           INTRODUCTION
+        ========================= */
+
+        .intro-card {
+
+            background: var(--card-bg);
+
+            border: 1px solid var(--card-border);
+
+            border-radius: 8px;
+
+            padding: 12px;
+
+            margin-bottom: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+        }
+
+
+        .intro-icon {
+
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 8px;
+
+            background: var(--green-soft);
+
+            color: var(--green);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+        }
+
+
+        .intro-text {
+
+            min-width: 0;
+        }
+
+
+        .intro-text h3 {
+
+            color: #fff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+
+        .intro-text p {
+
+            color: var(--text-muted);
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           SECTION HEADER
+        ========================= */
+
+        .section-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin: 4px 2px 9px;
+        }
+
+
+        .section-title {
+
+            color: #fff;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .section-count {
+
+            color: #555;
+
+            font-size: 8px;
+        }
+
+
+        /* =========================
+           SUPPORT CARD
+        ========================= */
+
+        .support-card {
+
+            width: 100%;
+
+            background: var(--card-bg);
+
+            border: 1px solid var(--card-border);
+
+            border-radius: 8px;
+
+            padding: 11px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .support-top {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .support-icon {
+
+            width: 42px;
+            height: 42px;
+
+            flex-shrink: 0;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+        }
+
+
+        .telegram {
+
+            background: rgba(34,158,217,.12);
+
+            color: var(--telegram);
+
+            border: 1px solid rgba(34,158,217,.16);
+        }
+
+
+        .whatsapp {
+
+            background: rgba(37,211,102,.10);
+
+            color: var(--whatsapp);
+
+            border: 1px solid rgba(37,211,102,.15);
+        }
+
+
+        .customer {
+
+            background: var(--green-soft);
+
+            color: var(--green);
+
+            border: 1px solid rgba(60,220,60,.16);
+        }
+
+
+        .support-info {
+
+            flex: 1;
+
+            min-width: 0;
+        }
+
+
+        .support-info h2 {
+
+            color: #fff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 3px;
+        }
+
+
+        .support-info p {
+
+            color: var(--text-muted);
+
+            font-size: 9px;
+
+            line-height: 1.4;
+        }
+
+
+        .status {
+
+            flex-shrink: 0;
+
+            color: var(--green);
+
+            background: var(--green-soft);
+
+            border: 1px solid rgba(60,220,60,.15);
+
+            padding: 4px 6px;
+
+            border-radius: 20px;
+
+            font-size: 7px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           SUPPORT BUTTON
+        ========================= */
+
+        .support-btn {
+
+            width: 100%;
+
+            min-height: 36px;
+
+            padding: 7px;
+
+            border-radius: 5px;
+
+            border: 1px solid var(--green);
+
+            background: var(--green);
+
+            color: #000;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 6px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            transition: .15s ease;
+        }
+
+
+        .support-btn:active {
+
+            transform: scale(.98);
+        }
+
+
+        .support-btn i {
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           INFORMATION CARD
+        ========================= */
+
+        .info-card {
+
+            margin-top: 12px;
+
+            padding: 12px;
+
+            background: #090909;
+
+            border: 1px solid #141414;
+
+            border-radius: 8px;
+        }
+
+
+        .info-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #777;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            margin-bottom: 6px;
+        }
+
+
+        .info-title i {
+
+            color: var(--green);
+        }
+
+
+        .info-card p {
+
+            color: #444;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        .info-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 9px;
+        }
+
+
+        .info-row i {
+
+            width: 17px;
+
+            color: var(--green);
+
+            font-size: 10px;
+
+            text-align: center;
+        }
+
+
+        .info-row span {
+
+            color: #555;
+
+            font-size: 8px;
+
+            line-height: 1.4;
+        }
+
+
+        /* =========================
+           BOTTOM NAVIGATION
+        ========================= */
+
+        .global-bottom-navigation {
+
+            position: absolute;
+
+            left: 0;
+            bottom: 0;
+
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            background:
+                linear-gradient(
+                    to top,
+                    #0f0f11,
+                    #151517
+                );
+
+            border-top: 1px solid #1c1c1f;
+
+            padding: 8px 0 5px;
+
+            z-index: 50;
+        }
+
+
+        .nav-tab-node {
+
+            position: relative;
+
+            min-height: 38px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 3px;
+
+            text-decoration: none;
+
+            color: #555;
+
+            transition: .15s ease;
+        }
+
+
+        .nav-icon-glyph {
+
+            font-size: 17px;
+
+            line-height: 1;
+        }
+
+
+        .nav-text-label {
+
+            font-size: 8px;
+
+            font-weight: 500;
+        }
+
+
+        .nav-tab-node.active-focus-state {
+
+            color: var(--green);
+        }
+
+
+        .nav-tab-node.active-focus-state::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 28%;
+
+            right: 28%;
+
+            height: 2px;
+
+            background: var(--green);
+
+            border-radius: 0 0 5px 5px;
+
+            box-shadow:
+                0 0 7px rgba(60,220,60,.5);
+        }
+
+
+        /* =========================
+           LOADING OVERLAY
+        ========================= */
+
+        .loading-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,.78);
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 9999;
+
+            backdrop-filter: blur(3px);
+        }
+
+
+        .loading-overlay.active {
+
+            display: flex;
+        }
+
+
+        .loading-box {
+
+            width: 100px;
+
+            padding: 16px;
+
+            background: #101010;
+
+            border: 1px solid #222;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+
+        .loading-spinner {
+
+            width: 25px;
+            height: 25px;
+
+            margin: 0 auto 8px;
+
+            border: 3px solid #333;
+
+            border-top-color: var(--green);
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+
+        .loading-text {
+
+            color: #888;
+
+            font-size: 9px;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* =========================
+           SMALL SCREENS
+        ========================= */
+
+        @media (max-width: 360px) {
+
+            .main-scroll-container {
+
+                padding: 11px;
+
+                padding-bottom: 80px;
+            }
+
+
+            .support-header {
+
+                min-height: 98px;
+
+                padding: 13px;
+            }
+
+
+            .header-text h1 {
+
+                font-size: 17px;
+            }
+
+
+            .support-card {
+
+                padding: 10px;
+            }
+
+
+            .support-icon {
+
+                width: 39px;
+                height: 39px;
+
+                font-size: 16px;
+            }
+
+
+            .support-info h2 {
+
+                font-size: 11px;
+            }
+
+
+            .bottom-nav {
+
+                padding-bottom: 4px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<div class="app-viewport">
 
 
     <!-- =========================
-         SUPPORT INFORMATION
+         MAIN CONTENT
     ========================= -->
 
-    <div class="info-card">
+    <main class="main-scroll-container">
 
-        <h3>
-            Support Information
-        </h3>
 
-        <p>
-            For account-related assistance, please use the
-            official support channel and provide the relevant
-            information needed to identify your request.
-        </p>
+        <!-- =========================
+             SUPPORT HEADER
+        ========================= -->
 
-        <div class="info-row">
+        <section class="support-header">
 
-            <i class="fa-solid fa-shield-halved"></i>
+            <div class="header-content">
 
-            <span>
-                Never share your password or security PIN.
+
+                <div class="header-icon">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                </div>
+
+
+                <div class="header-text">
+
+                    <h1>
+                        SUPPORT
+                    </h1>
+
+                    <p>
+                        INFINIX DEVICE CENTER
+                    </p>
+
+                </div>
+
+
+                <div class="header-status">
+                    ONLINE
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             INTRODUCTION
+        ========================= -->
+
+        <section class="intro-card">
+
+
+            <div class="intro-icon">
+
+                <i class="fa-solid fa-circle-question"></i>
+
+            </div>
+
+
+            <div class="intro-text">
+
+                <h3>
+                    How can we help?
+                </h3>
+
+                <p>
+                    Choose one of the support channels below
+                    to get assistance or receive platform updates.
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =========================
+             SECTION HEADER
+        ========================= -->
+
+        <div class="section-header">
+
+            <h2 class="section-title">
+                Contact & Community
+            </h2>
+
+            <span class="section-count">
+                3 CHANNELS
             </span>
 
         </div>
 
-        <div class="info-row">
 
-            <i class="fa-solid fa-clock"></i>
+        <!-- =========================
+             TELEGRAM
+        ========================= -->
 
-            <span>
-                Please allow time for your request to be reviewed.
-            </span>
-
-        </div>
-
-    </div>
-
-</div>
+        <section class="support-card">
 
 
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
+            <div class="support-top">
 
-<nav class="bottom-nav">
 
-    <div class="bottom-nav-inner">
+                <div class="support-icon telegram">
 
+                    <i class="fa-brands fa-telegram"></i>
+
+                </div>
+
+
+                <div class="support-info">
+
+                    <h2>
+                        Telegram Community
+                    </h2>
+
+                    <p>
+                        Get announcements, updates and
+                        community information.
+                    </p>
+
+                </div>
+
+
+                <span class="status">
+                    ACTIVE
+                </span>
+
+
+            </div>
+
+
+            <a
+                class="support-btn"
+                href="https://t.me/ZenithCapital5567"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <i class="fa-brands fa-telegram"></i>
+
+                Join Telegram
+
+            </a>
+
+
+        </section>
+
+
+        <!-- =========================
+             WHATSAPP
+        ========================= -->
+
+        <section class="support-card">
+
+
+            <div class="support-top">
+
+
+                <div class="support-icon whatsapp">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                </div>
+
+
+                <div class="support-info">
+
+                    <h2>
+                        WhatsApp Community
+                    </h2>
+
+                    <p>
+                        Connect with the community and receive
+                        important updates.
+                    </p>
+
+                </div>
+
+
+                <span class="status">
+                    ACTIVE
+                </span>
+
+
+            </div>
+
+
+            <a
+                class="support-btn"
+                href="https://t.me/ZenithCapital5567"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <i class="fa-brands fa-whatsapp"></i>
+
+                Join WhatsApp
+
+            </a>
+
+
+        </section>
+
+
+        <!-- =========================
+             CUSTOMER SERVICE
+        ========================= -->
+
+        <section class="support-card">
+
+
+            <div class="support-top">
+
+
+                <div class="support-icon customer">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                </div>
+
+
+                <div class="support-info">
+
+                    <h2>
+                        Customer Service
+                    </h2>
+
+                    <p>
+                        Contact the support team for assistance
+                        with your account.
+                    </p>
+
+                </div>
+
+
+                <span class="status">
+                    ONLINE
+                </span>
+
+
+            </div>
+
+
+            <a
+                class="support-btn"
+                href="https://t.me/ZenithCapital6556"
+                target="_blank"
+                rel="noopener"
+            >
+
+                <i class="fa-brands fa-telegram"></i>
+
+                Contact Support
+
+            </a>
+
+
+        </section>
+
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <section class="info-card">
+
+
+            <div class="info-title">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Support Information
+                </span>
+
+            </div>
+
+
+            <p>
+                For account-related assistance, please use
+                the official support channel and provide
+                the relevant information needed to identify
+                your request.
+            </p>
+
+
+            <div class="info-row">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Never share your password or security PIN.
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <span>
+                    Please allow time for your request to be reviewed.
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================= -->
+
+    <nav class="global-bottom-navigation">
+
+
+        <!-- HOME -->
 
         <a
             href="{{ url_for('dashboard') }}"
+            class="nav-tab-node"
         >
 
-            <i class="fa-solid fa-house"></i>
+            <i
+                class="fa-solid fa-house nav-icon-glyph"
+            ></i>
 
-            <span>
+            <span class="nav-text-label">
                 Home
             </span>
 
         </a>
 
 
+        <!-- INCOME -->
+
         <a
             href="{{ url_for('my_plan') }}"
+            class="nav-tab-node"
         >
 
-            <i class="fa-solid fa-chart-line"></i>
+            <i
+                class="fa-solid fa-chart-line nav-icon-glyph"
+            ></i>
 
-            <span>
+            <span class="nav-text-label">
                 Income
             </span>
 
         </a>
 
 
+        <!-- TEAM -->
+
         <a
             href="{{ url_for('team') }}"
+            class="nav-tab-node"
         >
 
-            <i class="fa-solid fa-users"></i>
+            <i
+                class="fa-solid fa-users nav-icon-glyph"
+            ></i>
 
-            <span>
+            <span class="nav-text-label">
                 Team
             </span>
 
         </a>
 
 
+        <!-- SHARE -->
+
         <a
             href="{{ url_for('team') }}"
+            class="nav-tab-node"
         >
 
-            <i class="fa-solid fa-share-nodes"></i>
+            <i
+                class="fa-solid fa-share-nodes nav-icon-glyph"
+            ></i>
 
-            <span>
+            <span class="nav-text-label">
                 Share
             </span>
 
         </a>
 
 
+        <!-- MY -->
+
         <a
             href="{{ url_for('profile') }}"
-            class="active"
+            class="nav-tab-node active-focus-state"
         >
 
-            <i class="fa-solid fa-user"></i>
+            <i
+                class="fa-solid fa-user nav-icon-glyph"
+            ></i>
 
-            <span>
+            <span class="nav-text-label">
                 My
             </span>
 
         </a>
 
 
+    </nav>
+
+
+    <!-- =========================
+         LOADING OVERLAY
+    ========================= -->
+
+    <div
+        id="loadingOverlay"
+        class="loading-overlay"
+    >
+
+        <div class="loading-box">
+
+
+            <div class="loading-spinner"></div>
+
+
+            <div class="loading-text">
+                Loading...
+            </div>
+
+
+        </div>
+
     </div>
 
-</nav>
 
-</div></body></html>
+</div>
+
+
+<!-- =========================
+     GLOBAL LOADING
+========================= -->
+
+<script>
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest("a");
+
+            const button =
+                event.target.closest("button");
+
+
+            if (!link && !button) {
+
+                return;
+
+            }
+
+
+            if (
+                button &&
+                button.disabled
+            ) {
+
+                return;
+
+            }
+
+
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
+
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "submit",
+        function () {
+
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
+
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>
