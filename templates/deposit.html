@@ -21,8 +21,8 @@
 }
 
 body{
-    background:#050505;
-    color:#ffffff;
+    background:#f1f4fa;
+    color:#334155;
     min-height:100vh;
     display:flex;
     justify-content:center;
@@ -34,56 +34,48 @@ body{
     width:100%;
     max-width:440px;
     min-height:100vh;
-    background:#080808;
+    background:#f1f4fa;
     position:relative;
     padding-bottom:80px;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .top-header{
     width:100%;
-    background:#080808;
-    color:#ffffff;
-    padding:18px;
+    background:#0b1c4d;
+    color:white;
+    padding:17px 18px;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-bottom:1px solid #242424;
+    box-shadow:0 4px 12px rgba(0,0,0,.10);
 }
 
 .top-header h1{
     font-size:18px;
-    font-weight:800;
+    font-weight:700;
 }
 
-/* =========================
-   CONTENT
-========================= */
+/* CONTENT */
 
 .content{
     width:100%;
     padding:16px;
 }
 
-/* =========================
-   CARD
-========================= */
+/* CARD */
 
 .card{
     width:100%;
-    background:#0d0d0d;
-    border-radius:22px;
+    background:white;
+    border-radius:24px;
     padding:22px;
-    border:1px solid #252525;
-    box-shadow:0 8px 25px rgba(0,0,0,.35);
+    box-shadow:0 8px 25px rgba(15,23,42,.08);
+    border:1px solid #eef2f7;
 }
 
-/* =========================
-   BRAND
-========================= */
+/* BRAND */
 
 .logo-area{
     text-align:center;
@@ -95,32 +87,29 @@ body{
     height:62px;
     margin:0 auto 10px;
     border-radius:18px;
-    background:#00ff4c;
-    color:#000000;
+    background:#0b1c4d;
+    color:white;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:23px;
     font-weight:900;
-    box-shadow:0 7px 18px rgba(0,255,76,.18);
+    box-shadow:0 7px 18px rgba(11,28,77,.20);
 }
 
 .brand-name{
-    color:#00ff4c;
+    color:#0b1c4d;
     font-size:18px;
-    font-weight:900;
-    letter-spacing:.5px;
+    font-weight:800;
 }
 
 .subtitle{
-    color:#777777;
+    color:#64748b;
     font-size:12px;
     margin-top:4px;
 }
 
-/* =========================
-   TITLE
-========================= */
+/* TITLE */
 
 .title{
     margin-top:20px;
@@ -128,20 +117,18 @@ body{
 }
 
 .title h2{
-    color:#ffffff;
+    color:#0f172a;
     font-size:20px;
     font-weight:800;
 }
 
 .title p{
-    color:#777777;
+    color:#64748b;
     font-size:12px;
     margin-top:5px;
 }
 
-/* =========================
-   FLASH
-========================= */
+/* FLASH */
 
 .flash-message{
     padding:12px 14px;
@@ -153,32 +140,28 @@ body{
 }
 
 .flash-success{
-    background:#052e16;
-    border:1px solid #14532d;
-    color:#4ade80;
+    background:#dcfce7;
+    border:1px solid #bbf7d0;
+    color:#166534;
 }
 
 .flash-error{
-    background:#350b0b;
-    border:1px solid #7f1d1d;
-    color:#f87171;
+    background:#fee2e2;
+    border:1px solid #fecaca;
+    color:#991b1b;
 }
 
-/* =========================
-   LABEL
-========================= */
+/* LABEL */
 
 label{
     display:block;
     font-size:13px;
     font-weight:700;
-    color:#dddddd;
+    color:#334155;
     margin-bottom:7px;
 }
 
-/* =========================
-   INPUTS
-========================= */
+/* INPUTS */
 
 input[type="number"],
 input[type="tel"],
@@ -187,27 +170,21 @@ input[type="file"]{
     width:100%;
     padding:14px;
     margin-bottom:15px;
-    border:1px solid #303030;
+    border:1px solid #e2e8f0;
     border-radius:12px;
-    background:#151515;
-    color:#ffffff;
+    background:#f8fafc;
+    color:#0f172a;
     outline:none;
     font-size:14px;
 }
 
 input:focus{
-    border-color:#00ff4c;
-    background:#111111;
-    box-shadow:0 0 0 3px rgba(0,255,76,.08);
+    border-color:#4c64bc;
+    background:white;
+    box-shadow:0 0 0 3px rgba(76,100,188,.08);
 }
 
-input::placeholder{
-    color:#666666;
-}
-
-/* =========================
-   FILE INPUT
-========================= */
+/* FILE INPUT */
 
 input[type="file"]{
     padding:11px;
@@ -216,22 +193,20 @@ input[type="file"]{
 
 input[type="file"]::file-selector-button{
     border:none;
-    background:#00ff4c;
-    color:#000000;
+    background:#0b1c4d;
+    color:white;
     padding:9px 12px;
     border-radius:8px;
     margin-right:8px;
     cursor:pointer;
-    font-weight:800;
+    font-weight:700;
 }
 
-/* =========================
-   QUICK AMOUNTS
-========================= */
+/* QUICK AMOUNTS */
 
 .amount-title{
     font-size:12px;
-    color:#777777;
+    color:#64748b;
     font-weight:600;
     margin-bottom:8px;
 }
@@ -245,28 +220,21 @@ input[type="file"]::file-selector-button{
 
 .amount-buttons button{
     padding:11px 6px;
-    border:1px solid #292929;
+    border:none;
     border-radius:11px;
-    background:#151515;
-    color:#00ff4c;
+    background:#eef2ff;
+    color:#334fa4;
     font-size:12px;
     font-weight:800;
     cursor:pointer;
     transition:.15s;
 }
 
-.amount-buttons button:hover{
-    background:#1b1b1b;
-    border-color:#00ff4c;
-}
-
 .amount-buttons button:active{
     transform:scale(.96);
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 
 .next-button,
 .submit-button{
@@ -274,12 +242,12 @@ input[type="file"]::file-selector-button{
     padding:15px;
     border:none;
     border-radius:13px;
-    background:#00ff4c;
-    color:#000000;
+    background:#0b1c4d;
+    color:white;
     font-size:15px;
-    font-weight:900;
+    font-weight:800;
     cursor:pointer;
-    box-shadow:0 5px 14px rgba(0,255,76,.14);
+    box-shadow:0 5px 14px rgba(11,28,77,.18);
 }
 
 .next-button:active,
@@ -292,54 +260,46 @@ input[type="file"]::file-selector-button{
     cursor:not-allowed;
 }
 
-/* =========================
-   PAYMENT CARD
-========================= */
+/* PAYMENT CARD */
 
 .payment-card{
     display:none;
     margin-top:5px;
     padding:17px;
     border-radius:18px;
-    background:#101510;
-    border:1px solid #1d4d2b;
+    background:#eff6ff;
+    border:1px solid #dbeafe;
 }
 
 .payment-card h3{
-    color:#00ff4c;
+    color:#0b1c4d;
     font-size:16px;
     margin-bottom:13px;
 }
 
-/* =========================
-   AMOUNT
-========================= */
+/* AMOUNT */
 
 .amount-display{
-    background:#080808;
-    border:1px solid #29412f;
+    background:white;
+    border:1px solid #dbeafe;
     padding:13px;
     border-radius:12px;
     font-size:18px;
     font-weight:800;
-    color:#00ff4c;
+    color:#2563eb;
     margin-bottom:12px;
 }
 
-/* =========================
-   DESCRIPTION
-========================= */
+/* DESCRIPTION */
 
 .payment-description{
-    color:#999999;
+    color:#475569;
     font-size:13px;
     line-height:1.5;
     margin-bottom:10px;
 }
 
-/* =========================
-   PAYMENT NUMBER
-========================= */
+/* PAYMENT NUMBER */
 
 .payment-number{
     display:flex;
@@ -351,30 +311,28 @@ input[type="file"]::file-selector-button{
 .payment-number input{
     flex:1;
     margin:0;
-    background:#080808;
+    background:white;
     font-weight:800;
-    color:#ffffff;
+    color:#0f172a;
 }
 
 .copy-button{
     padding:13px 12px;
     border:none;
     border-radius:10px;
-    background:#00ff4c;
-    color:#000000;
+    background:#0b1c4d;
+    color:white;
     font-size:12px;
-    font-weight:900;
+    font-weight:800;
     cursor:pointer;
 }
 
-/* =========================
-   WARNING
-========================= */
+/* WARNING */
 
 .warning{
-    background:#241707;
-    border:1px solid #5c3b12;
-    color:#fbbf24;
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    color:#9a3412;
     padding:13px;
     border-radius:12px;
     font-size:12px;
@@ -382,14 +340,12 @@ input[type="file"]::file-selector-button{
     margin-bottom:17px;
 }
 
-/* =========================
-   INFO
-========================= */
+/* INFO */
 
 .info-box{
     margin-top:15px;
-    background:#151515;
-    border:1px solid #292929;
+    background:#f8fafc;
+    border:1px solid #eef2f7;
     border-radius:13px;
     padding:12px;
     display:flex;
@@ -401,8 +357,8 @@ input[type="file"]::file-selector-button{
     width:32px;
     height:32px;
     border-radius:9px;
-    background:#12351d;
-    color:#00ff4c;
+    background:#eef2ff;
+    color:#334fa4;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -410,32 +366,28 @@ input[type="file"]::file-selector-button{
 }
 
 .info-text{
-    color:#777777;
+    color:#64748b;
     font-size:11px;
     line-height:1.4;
 }
 
-/* =========================
-   NOTE
-========================= */
+/* NOTE */
 
 .note{
     text-align:center;
-    color:#666666;
+    color:#64748b;
     font-size:11px;
     margin-top:17px;
     line-height:1.6;
 }
 
-/* =========================
-   PREVIEW
-========================= */
+/* PREVIEW */
 
 .preview-box{
     display:none;
     margin-bottom:17px;
-    background:#111111;
-    border:1px solid #29412f;
+    background:white;
+    border:1px solid #dbeafe;
     border-radius:12px;
     padding:10px;
     text-align:center;
@@ -449,31 +401,74 @@ input[type="file"]::file-selector-button{
 }
 
 .preview-text{
-    color:#777777;
+    color:#64748b;
     font-size:11px;
     margin-top:6px;
 }
 
-/* =========================
-   BACK BUTTON
-========================= */
+/* BACK BUTTON */
 
 .back-button{
     width:100%;
     margin-bottom:10px;
     padding:12px;
-    border:1px solid #333333;
+    border:1px solid #cbd5e1;
     border-radius:12px;
-    background:#151515;
-    color:#cccccc;
+    background:white;
+    color:#334155;
     font-size:13px;
     font-weight:700;
     cursor:pointer;
 }
 
 /* =========================
-   BOTTOM NAV
+   LOADING OVERLAY
 ========================= */
+
+.loading-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    backdrop-filter:blur(4px);
+}
+
+.loading-box{
+    width:135px;
+    padding:22px 15px;
+    background:#ffffff;
+    border-radius:17px;
+    text-align:center;
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
+}
+
+.loading-spinner{
+    width:36px;
+    height:36px;
+    margin:0 auto;
+    border:4px solid #dbe3f0;
+    border-top-color:#0b1c4d;
+    border-radius:50%;
+    animation:spin .75s linear infinite;
+}
+
+.loading-text{
+    color:#334155;
+    font-size:12px;
+    font-weight:700;
+    margin-top:12px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* BOTTOM NAV */
 
 .bottom-nav{
     position:fixed;
@@ -481,12 +476,12 @@ input[type="file"]::file-selector-button{
     left:0;
     right:0;
     height:65px;
-    background:#101010;
-    border-top:1px solid #292929;
+    background:white;
+    border-top:1px solid #e2e8f0;
     display:flex;
     justify-content:center;
     z-index:1000;
-    box-shadow:0 -3px 12px rgba(0,0,0,.5);
+    box-shadow:0 -3px 12px rgba(0,0,0,.05);
 }
 
 .bottom-nav-inner{
@@ -504,7 +499,7 @@ input[type="file"]::file-selector-button{
     justify-content:center;
     gap:3px;
     text-decoration:none;
-    color:#666666;
+    color:#94a3b8;
     font-size:9px;
     font-weight:500;
 }
@@ -514,7 +509,7 @@ input[type="file"]::file-selector-button{
 }
 
 .bottom-nav a.active{
-    color:#00ff4c;
+    color:#10144c;
     font-weight:bold;
 }
 
@@ -525,13 +520,11 @@ input[type="file"]::file-selector-button{
     left:25%;
     right:25%;
     height:3px;
-    background:#00ff4c;
+    background:#10144c;
     border-radius:4px 4px 0 0;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
 @media(max-width:360px){
 
@@ -588,7 +581,7 @@ input[type="file"]::file-selector-button{
     </div>
 
     <div class="brand-name">
-        INFINIX
+        Infinix
     </div>
 
     <div class="subtitle">
@@ -596,7 +589,6 @@ input[type="file"]::file-selector-button{
     </div>
 
 </div>
-
 
 <!-- TITLE -->
 
@@ -612,8 +604,7 @@ input[type="file"]::file-selector-button{
 
 </div>
 
-
-<!-- FLASH MESSAGES -->
+<!-- FLASH -->
 
 {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -633,7 +624,6 @@ input[type="file"]::file-selector-button{
 
 {% endwith %}
 
-
 <!-- STEP ONE -->
 
 <div id="stepOne">
@@ -650,7 +640,6 @@ input[type="file"]::file-selector-button{
         required
     >
 
-
     <label for="amount">
         Deposit Amount
     </label>
@@ -664,11 +653,9 @@ input[type="file"]::file-selector-button{
         required
     >
 
-
     <div class="amount-title">
         Select Quick Amount
     </div>
-
 
     <div class="amount-buttons">
 
@@ -698,17 +685,16 @@ input[type="file"]::file-selector-button{
 
     </div>
 
-
     <button
         type="button"
         class="next-button"
         onclick="showPaymentCard()"
+        id="continueButton"
     >
         Continue to Payment
     </button>
 
 </div>
-
 
 <!-- STEP TWO -->
 
@@ -721,7 +707,6 @@ input[type="file"]::file-selector-button{
         Payment Instructions
     </h3>
 
-
     <div class="amount-display">
 
         GHS
@@ -731,7 +716,6 @@ input[type="file"]::file-selector-button{
 
     </div>
 
-
     <p class="payment-description">
 
         Send the exact amount to the payment number
@@ -739,9 +723,6 @@ input[type="file"]::file-selector-button{
         of the successful transaction.
 
     </p>
-
-
-    <!-- PAYMENT NUMBER -->
 
     <div class="payment-number">
 
@@ -762,9 +743,6 @@ input[type="file"]::file-selector-button{
 
     </div>
 
-
-    <!-- WARNING -->
-
     <div class="warning">
 
         ⚠️ Make sure the payment is successful before
@@ -773,9 +751,6 @@ input[type="file"]::file-selector-button{
         deposit balance is credited.
 
     </div>
-
-
-    <!-- DEPOSIT FORM -->
 
     <form
         method="POST"
@@ -802,14 +777,9 @@ input[type="file"]::file-selector-button{
             id="finalPaymentNumber"
         >
 
-
-        <label
-            class="file-label"
-            for="screenshot"
-        >
+        <label for="screenshot">
             Payment Screenshot
         </label>
-
 
         <input
             type="file"
@@ -818,9 +788,6 @@ input[type="file"]::file-selector-button{
             accept="image/jpeg,image/png,image/webp"
             required
         >
-
-
-        <!-- IMAGE PREVIEW -->
 
         <div
             class="preview-box"
@@ -838,7 +805,6 @@ input[type="file"]::file-selector-button{
 
         </div>
 
-
         <button
             type="button"
             class="back-button"
@@ -847,7 +813,6 @@ input[type="file"]::file-selector-button{
             <i class="fa-solid fa-arrow-left"></i>
             Change Amount
         </button>
-
 
         <button
             type="submit"
@@ -859,9 +824,6 @@ input[type="file"]::file-selector-button{
         </button>
 
     </form>
-
-
-    <!-- INFO -->
 
     <div class="info-box">
 
@@ -881,9 +843,6 @@ input[type="file"]::file-selector-button{
 
 </div>
 
-
-<!-- NOTE -->
-
 <div class="note">
 
     Minimum deposit: GHS 45.<br>
@@ -897,6 +856,31 @@ input[type="file"]::file-selector-button{
 
 </main>
 
+</div>
+
+<!-- =========================
+     LOADING OVERLAY
+========================= -->
+
+<div
+    class="loading-overlay"
+    id="loadingOverlay"
+>
+
+    <div class="loading-box">
+
+        <div class="loading-spinner"></div>
+
+        <div
+            class="loading-text"
+            id="loadingText"
+        >
+            Loading...
+        </div>
+
+    </div>
+
+</div>
 
 <!-- BOTTOM NAV -->
 
@@ -906,32 +890,40 @@ input[type="file"]::file-selector-button{
 
     <a
         href="{{ url_for('dashboard') }}"
-        class="active"
+        class="active loading-link"
     >
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
 
-
-    <a href="{{ url_for('my_plan') }}">
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="loading-link"
+    >
         <i class="fa-solid fa-chart-line"></i>
         <span>Income</span>
     </a>
 
-
-    <a href="{{ url_for('team_members') }}">
+    <a
+        href="{{ url_for('team_members') }}"
+        class="loading-link"
+    >
         <i class="fa-solid fa-users"></i>
         <span>Team</span>
     </a>
 
-
-    <a href="{{ url_for('team') }}">
+    <a
+        href="{{ url_for('team') }}"
+        class="loading-link"
+    >
         <i class="fa-solid fa-share-nodes"></i>
         <span>Share</span>
     </a>
 
-
-    <a href="{{ url_for('profile') }}">
+    <a
+        href="{{ url_for('profile') }}"
+        class="loading-link"
+    >
         <i class="fa-solid fa-user"></i>
         <span>My</span>
     </a>
@@ -940,8 +932,61 @@ input[type="file"]::file-selector-button{
 
 </nav>
 
-
 <script>
+
+/* =========================
+   LOADING SYSTEM
+========================= */
+
+const loadingOverlay =
+    document.getElementById("loadingOverlay");
+
+const loadingText =
+    document.getElementById("loadingText");
+
+
+function showLoading(message = "Loading..."){
+
+    loadingText.textContent = message;
+
+    loadingOverlay.style.display = "flex";
+
+}
+
+
+function hideLoading(){
+
+    loadingOverlay.style.display = "none";
+
+}
+
+
+/* =========================
+   NAVIGATION LOADING
+========================= */
+
+document
+    .querySelectorAll(".loading-link")
+    .forEach(function(link){
+
+        link.addEventListener("click", function(event){
+
+            const destination = this.href;
+
+            event.preventDefault();
+
+            showLoading("Loading...");
+
+            setTimeout(function(){
+
+                window.location.href = destination;
+
+            }, 350);
+
+        });
+
+    });
+
 
 /* =========================
    QUICK AMOUNT
@@ -986,31 +1031,39 @@ function showPaymentCard(){
 
     }
 
-    document.getElementById("displayAmount")
-        .textContent = amount.toFixed(2);
+    showLoading("Preparing payment...");
 
-    document.getElementById("finalAmount")
-        .value = amount.toFixed(2);
+    setTimeout(function(){
 
-    document.getElementById("finalPhone")
-        .value = phone;
+        document.getElementById("displayAmount")
+            .textContent = amount.toFixed(2);
 
-    document.getElementById("finalPaymentNumber")
-        .value =
-        document.getElementById("paymentNumber")
-        .value
-        .trim();
+        document.getElementById("finalAmount")
+            .value = amount.toFixed(2);
 
-    document.getElementById("paymentCard")
-        .style.display = "block";
+        document.getElementById("finalPhone")
+            .value = phone;
 
-    document.getElementById("stepOne")
-        .style.display = "none";
+        document.getElementById("finalPaymentNumber")
+            .value =
+            document.getElementById("paymentNumber")
+            .value
+            .trim();
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+        document.getElementById("paymentCard")
+            .style.display = "block";
+
+        document.getElementById("stepOne")
+            .style.display = "none";
+
+        hideLoading();
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }, 350);
 
 }
 
@@ -1021,11 +1074,24 @@ function showPaymentCard(){
 
 function goBack(){
 
-    document.getElementById("paymentCard")
-        .style.display = "none";
+    showLoading("Going back...");
 
-    document.getElementById("stepOne")
-        .style.display = "block";
+    setTimeout(function(){
+
+        document.getElementById("paymentCard")
+            .style.display = "none";
+
+        document.getElementById("stepOne")
+            .style.display = "block";
+
+        hideLoading();
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }, 250);
 
 }
 
@@ -1190,7 +1256,8 @@ function validateDeposit(){
 
     }
 
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize =
+        5 * 1024 * 1024;
 
     if(screenshot.size > maxSize){
 
@@ -1209,6 +1276,8 @@ function validateDeposit(){
 
     button.innerHTML =
         '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+
+    showLoading("Uploading deposit...");
 
     return true;
 
