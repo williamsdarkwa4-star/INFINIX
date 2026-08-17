@@ -117,11 +117,9 @@ def create_app(config_object=None):
         except Exception:
             return ("An internal error occurred."), 500
 
-    # Log available routes once app context is ready
-    @app.before_first_request
-    def log_routes():
-        routes = sorted([r.endpoint for r in app.url_map.iter_rules()])
-        logger.info("Registered routes: %s", routes)
+    # Log available routes now (avoid before_first_request compatibility issues)
+    routes = sorted([r.endpoint for r in app.url_map.iter_rules()])
+    logger.info("Registered routes: %s", routes)
 
     return app
 
