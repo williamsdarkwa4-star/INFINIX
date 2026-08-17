@@ -1189,10 +1189,17 @@ def team():
         if account
         else Decimal("0.00")
     )
+
+    # ==========================================
+    # SITE / REFERRAL LINK
+    # ==========================================
+
     site_url = "https://infinix-3afi.onrender.com"
 
     referral_link = (
         f"{site_url}/register?ref={user['referral_code']}"
+    )
+
     # ==========================================
     # TEAM RULES
     # ==========================================
@@ -1204,7 +1211,6 @@ def team():
     LEVEL1_RATE = 20
     LEVEL2_RATE = 3
     LEVEL3_RATE = 1
-
 
     # ==========================================
     # LEVEL 1
@@ -1232,17 +1238,22 @@ def team():
         )
     )
 
-
     # ==========================================
     # LEVEL 2
-    # 2 members for EACH Level 1 member
+    # Maximum 2 members per Level 1 member
     # ==========================================
+
+    level1_codes = [
+        member["referral_code"]
+        for member in level1_users
+        if member.get("referral_code")
+    ]
 
     level2_users = []
 
-    for level1_member in level1_users:
+    if level1_codes:
 
-        children = query_all(
+        level2_users = query_all(
             """
             SELECT
                 id,
@@ -1253,24 +1264,35 @@ def team():
                 referred_by,
                 created_at
             FROM users
-            WHERE referred_by=%s
+            WHERE referred_by = ANY(%s)
             ORDER BY created_at ASC, id ASC
-            LIMIT %s
             """,
-            (
-                level1_member["referral_code"],
-                LEVEL2_PER_LEVEL1
-            )
+            (level1_codes,)
         )
 
-        for member in children:
-            member["referral_level"] = 2
-            level2_users.append(member)
+        # Maximum 2 Level 2 members for each Level 1 member
+        limited_level2 = []
 
+        for level1_code in level1_codes:
+
+            count = 0
+
+            for member in level2_users:
+
+                if member["referred_by"] == level1_code:
+
+                    if count < LEVEL2_PER_LEVEL1:
+
+                        member["referral_level"] = 2
+                        limited_level2.append(member)
+
+                        count += 1
+
+        level2_users = limited_level2
 
     # ==========================================
     # LEVEL 3
-    # Maximum 300
+    # Maximum 300 members
     # ==========================================
 
     level2_codes = [
@@ -1304,12 +1326,57 @@ def team():
             )
         )
 
-        for member in level3_users:
-            member["referral_level"] = 3
+    # ==========================================
+    # ADD LEVEL INFORMATION
+    # ==========================================
 
+    members = []
+
+    for member in level1_users:
+
+        member["referral_level"] = 1
+
+        members.append(member)
+
+    for member in level2_users:
+
+        member["referral_level"] = 2
+
+        members.append(member)
+
+    for member in level3_users:
+
+        member["referral_level"] = 3
+
+        members.append(member)
 
     # ==========================================
-    # COUNTS
+    # CALCULATE INVESTMENT FOR EACH MEMBER
+    # ==========================================
+
+    for member in members:
+
+        inv = query_one(
+            """
+            SELECT
+                COALESCE(
+                    SUM(investment_amount),
+                    0
+                ) AS total_investment
+            FROM plans
+            WHERE user_id=%s
+            """,
+            (member["id"],)
+        )
+
+        member["invest_amount"] = money(
+            inv["total_investment"]
+            if inv
+            else Decimal("0.00")
+        )
+
+    # ==========================================
+    # TEAM COUNTS
     # ==========================================
 
     level1_count = len(level1_users)
@@ -1322,33 +1389,35 @@ def team():
         + level3_count
     )
 
-
     # ==========================================
-    # RENDER TEAM SUMMARY
+    # SEND DATA TO TEMPLATE
     # ==========================================
 
     return render_template(
         "team.html",
-
         user=user,
+        members=members,
 
         total_team=total_team,
 
         referral_income=referral_income,
+
+        referral_code=user["referral_code"],
+        referral_link=referral_link,
+        site_url=site_url,
 
         level1_count=level1_count,
         level2_count=level2_count,
         level3_count=level3_count,
 
         level1_limit=LEVEL1_LIMIT,
-        level2_limit=LEVEL2_PER_LEVEL1,
+        level2_per_level1=LEVEL2_PER_LEVEL1,
         level3_limit=LEVEL3_LIMIT,
 
         level1_rate=LEVEL1_RATE,
         level2_rate=LEVEL2_RATE,
         level3_rate=LEVEL3_RATE
     )
-
 
 
 @app.route("/team_members")
