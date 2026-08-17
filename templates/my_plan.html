@@ -2177,84 +2177,85 @@
     </main>
 
 
-    <!-- =====================================================
-         BOTTOM NAVIGATION
-    ====================================================== -->
+    <!-- =========================================  
+     BOTTOM NAVIGATION  
+========================================== -->  
 
-    <nav class="global-bottom-navigation">
-
-
-        <a
-            href="{{ url_for('dashboard') }}"
-            class="nav-tab-node"
-        >
-
-            <i class="fa-solid fa-house nav-icon-glyph"></i>
-
-            <span class="nav-text-label">
-                Home
-            </span>
-
-        </a>
+<nav class="bottom-nav">  
 
 
-        <a
-            href="{{ url_for('my_plan') }}"
-            class="nav-tab-node active-focus-state"
-        >
+    <a  
+        href="{{ url_for('dashboard') }}"  
+        class="nav-item active loading-link"  
+        data-loading="Loading Home...">  
 
-            <i class="fa-solid fa-chart-line nav-icon-glyph"></i>
+        <i data-lucide="house"></i>  
 
-            <span class="nav-text-label">
-                Income
-            </span>
+        <span>  
+            Home  
+        </span>  
 
-        </a>
-
-
-        <a
-            href="{{ url_for('team') }}"
-            class="nav-tab-node"
-        >
-
-            <i class="fa-solid fa-users nav-icon-glyph"></i>
-
-            <span class="nav-text-label">
-                Team
-            </span>
-
-        </a>
+    </a>  
 
 
-        <a
-            href="{{ url_for('team') }}"
-            class="nav-tab-node"
-        >
+    <a  
+        href="{{ url_for('my_plan') }}"  
+        class="nav-item loading-link"  
+        data-loading="Loading Income...">  
 
-            <i class="fa-solid fa-share-nodes nav-icon-glyph"></i>
+        <i data-lucide="chart-no-axes-combined"></i>  
 
-            <span class="nav-text-label">
-                Share
-            </span>
+        <span>  
+            My device  
+        </span>  
 
-        </a>
-
-
-        <a
-            href="{{ url_for('profile') }}"
-            class="nav-tab-node"
-        >
-
-            <i class="fa-solid fa-user nav-icon-glyph"></i>
-
-            <span class="nav-text-label">
-                My
-            </span>
-
-        </a>
+    </a>  
 
 
-    </nav>
+    <a  
+        href="{{ url_for('team_members') }}"  
+        class="nav-item loading-link"  
+        data-loading="Loading Team...">  
+
+        <i data-lucide="users"></i>  
+
+        <span>  
+            Team  
+        </span>  
+
+    </a>  
+
+
+    <a  
+        href="{{ url_for('team') }}"  
+        class="nav-item loading-link"  
+        data-loading="Opening Share...">  
+
+        <i data-lucide="share-2"></i>  
+
+        <span>  
+            Share  
+        </span>  
+
+    </a>  
+
+
+    <a  
+        href="{{ url_for('profile') }}"  
+        class="nav-item loading-link"  
+        data-loading="Loading Profile...">  
+
+        <i data-lucide="user-round"></i>  
+
+        <span>  
+            My  
+        </span>  
+
+    </a>  
+
+</nav>
+
+</div>  <script>
 
 
     <!-- =====================================================
