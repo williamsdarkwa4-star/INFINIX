@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Team Members - Zenith Capital</title>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    background:#000000;
+
+    color:#ffffff;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+
+    padding-bottom:80px;
+}
+
+.phone{
+    width:100%;
+    max-width:440px;
+
+    min-height:100vh;
+
+    background:#000000;
+
+    position:relative;
+
+    padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    width:100%;
+
+    background:#000000;
+
+    color:#ffffff;
+
+    padding:18px 20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    border-bottom:1px solid #242424;
+}
+
+.header h1{
+
+    font-size:18px;
+
+    font-weight:800;
+}
+
+.back-btn{
+
+    position:absolute;
+
+    left:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:36px;
+
+    height:36px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#111111;
+
+    color:#ffffff;
+
+    text-decoration:none;
+}
+
+.back-btn:active{
+
+    background:#1b1b1b;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.container{
+
+    padding:16px;
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary{
+
+    background:#0b0b0b;
+
+    border:1px solid #242424;
+
+    border-radius:16px;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.summary-icon{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:13px;
+
+    background:#071d10;
+
+    border:1px solid #123d23;
+
+    color:#22c55e;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.summary-icon i{
+
+    width:21px;
+
+    height:21px;
+}
+
+.summary-title{
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:800;
+}
+
+.summary-text{
+
+    color:#666666;
+
+    font-size:10px;
+
+    margin-top:3px;
+}
+
+
+/* =========================
+   MEMBER CARD
+========================= */
+
+.member{
+
+    background:#0b0b0b;
+
+    border:1px solid #242424;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    margin-bottom:10px;
+
+    box-shadow:
+        0 5px 16px rgba(0,0,0,.35);
+}
+
+.member:last-child{
+
+    margin-bottom:0;
+}
+
+
+/* =========================
+   MEMBER TOP
+========================= */
+
+.member-top{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.member-name{
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    word-break:break-word;
+}
+
+.member-level{
+
+    background:#071d10;
+
+    border:1px solid #123d23;
+
+    color:#22c55e;
+
+    padding:5px 9px;
+
+    border-radius:15px;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+
+/* =========================
+   MEMBER INFORMATION
+========================= */
+
+.member-info{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+}
+
+.info-item{
+
+    background:#111111;
+
+    border:1px solid #242424;
+
+    border-radius:10px;
+
+    padding:10px;
+
+    color:#666666;
+
+    font-size:10px;
+}
+
+.info-item strong{
+
+    display:block;
+
+    color:#dddddd;
+
+    font-size:12px;
+
+    margin-top:4px;
+
+    word-break:break-word;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-active{
+
+    color:#22c55e !important;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+    background:#0b0b0b;
+
+    border:1px solid #242424;
+
+    border-radius:16px;
+
+    padding:35px 15px;
+
+    text-align:center;
+}
+
+.empty-icon{
+
+    color:#22c55e;
+
+    margin-bottom:10px;
+}
+
+.empty-icon i{
+
+    width:40px;
+
+    height:40px;
+}
+
+.empty-title{
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:800;
+}
+
+.empty-text{
+
+    color:#666666;
+
+    font-size:11px;
+
+    margin-top:5px;
+
+    line-height:1.5;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+
+    left:0;
+
+    right:0;
+
+    height:67px;
+
+    background:#080808;
+
+    border-top:1px solid #242424;
+
+    display:flex;
+
+    justify-content:center;
+
+    z-index:9999;
+
+    box-shadow:
+        0 -4px 15px rgba(0,0,0,.5);
+}
+
+.bottom-nav-inner{
+
+    width:100%;
+
+    max-width:440px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    align-items:center;
+}
+
+.bottom-nav a{
+
+    height:100%;
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    text-decoration:none;
+
+    color:#666666;
+
+    font-size:9px;
+
+    font-weight:500;
+}
+
+.bottom-nav i{
+
+    width:18px;
+
+    height:18px;
+}
+
+.bottom-nav a.active{
+
+    color:#22c55e;
+
+    font-weight:800;
+}
+
+.bottom-nav a.active::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:25%;
+
+    right:25%;
+
+    height:3px;
+
+    background:#22c55e;
+
+    border-radius:
+        4px 4px 0 0;
+}
+
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+    .container{
+
+        padding:12px;
+    }
+
+    .member{
+
+        padding:12px;
+    }
+
+    .member-info{
+
+        grid-template-columns:1fr;
+    }
+
+    .bottom-nav{
+
+        height:64px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="phone">
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <a
+        href="{{ url_for('team') }}"
+        class="back-btn"
+    >
+
+        <i data-lucide="chevron-left"></i>
+
+    </a>
+
+    <h1>
+        Team Members
+    </h1>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- =========================
+     SUMMARY
+========================= -->
+
+<div class="summary">
+
+    <div class="summary-icon">
+
+        <i data-lucide="users"></i>
+
+    </div>
+
+    <div>
+
+        <div class="summary-title">
+            My Team
+        </div>
+
+        <div class="summary-text">
+
+            {{ total_team|default(0) }}
+            member{% if total_team|default(0) != 1 %}s{% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TEAM MEMBERS
+========================= -->
+
+{% if members %}
+
+
+    {% for member in members %}
+
+
+    <div class="member">
+
+
+        <div class="member-top">
+
+            <div class="member-name">
+
+                {{ member.username }}
+
+            </div>
+
+
+            <div class="member-level">
+
+                Level
+                {{ member.referral_level|default(1) }}
+
+            </div>
+
+        </div>
+
+
+        <div class="member-info">
+
+
+            <!-- PHONE -->
+
+            <div class="info-item">
+
+                Phone
+
+                <strong>
+
+                    {{ member.phone }}
+
+                </strong>
+
+            </div>
+
+
+            <!-- INVESTMENT -->
+
+            <div class="info-item">
+
+                Investment
+
+                <strong>
+
+                    GHS
+                    {{ "%.2f"|format(
+                        member.invest_amount|default(0)|float
+                    ) }}
+
+                </strong>
+
+            </div>
+
+
+            <!-- JOINED -->
+
+            <div class="info-item">
+
+                Joined
+
+                <strong>
+
+                    {% if member.created_at %}
+
+                        {{ member.created_at.strftime(
+                            "%d %b %Y"
+                        ) }}
+
+                    {% else %}
+
+                        N/A
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="info-item">
+
+                Status
+
+                <strong
+                    class="{% if member.invest_amount|default(0)|float > 0 %}status-active{% endif %}"
+                >
+
+                    {% if member.invest_amount|default(0)|float > 0 %}
+
+                        Active
+
+                    {% else %}
+
+                        Registered
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% endfor %}
+
+
+{% else %}
+
+
+    <div class="empty">
+
+        <div class="empty-icon">
+
+            <i data-lucide="users"></i>
+
+        </div>
+
+        <div class="empty-title">
+
+            No Team Members Yet
+
+        </div>
+
+        <div class="empty-text">
+
+            Share your invite code to start
+            building your team.
+
+        </div>
+
+    </div>
+
+
+{% endif %}
+
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bottom-nav">
+
+    <div class="bottom-nav-inner">
+
+
+        <a href="{{ url_for('dashboard') }}">
+
+            <i data-lucide="home"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('my_plan') }}">
+
+            <i data-lucide="trending-up"></i>
+
+            <span>
+                Income
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('team') }}"
+            class="active"
+        >
+
+            <i data-lucide="users"></i>
+
+            <span>
+                Team
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('team') }}">
+
+            <i data-lucide="share-2"></i>
+
+            <span>
+                Share
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('profile') }}">
+
+            <i data-lucide="user"></i>
+
+            <span>
+                My
+            </span>
+
+        </a>
+
+
+    </div>
+
+</nav>
+
+
+</div>
+
+
+<script>
+
+lucide.createIcons();
+
+</script>
+
+</body>
+
+</html>
