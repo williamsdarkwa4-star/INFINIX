@@ -12,25 +12,21 @@
     >
 
     <style>
+
         :root {
-            --bg-black: #000000;
-            --header-grey: #1a1a1a;
-            --card-bg-dark: #0d0d0d;
-            --card-border: #191919;
+            --bg: #000000;
+            --card: #0d0d0d;
+            --border: #1b1b1b;
+            --green: #3cdc3c;
+            --white: #ffffff;
+            --muted: #777777;
+            --dark: #444444;
 
-            --razer-green: #3cdc3c;
-            --razer-green-soft: rgba(60,220,60,.12);
-
-            --text-white: #ffffff;
-            --text-muted: #888888;
-            --text-dark: #444444;
-
-            --font-stack:
+            --font:
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
                 Roboto,
-                Helvetica,
                 Arial,
                 sans-serif;
         }
@@ -39,129 +35,50 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: var(--font-stack);
+            font-family: var(--font);
             -webkit-font-smoothing: antialiased;
         }
 
         html,
         body {
-            margin: 0;
-            padding: 0;
+            width: 100%;
+            min-height: 100%;
             background: #000;
         }
 
         body {
-            min-height: 100vh;
-            background: #000;
-            color: var(--text-white);
-
+            color: var(--white);
             display: flex;
             justify-content: center;
-            align-items: center;
         }
 
         /* =========================
-           MOBILE APP SHELL
+           APP
         ========================= */
 
         .app-viewport {
             width: 100%;
             max-width: 412px;
             height: 100vh;
-            max-height: 892px;
 
-            background: var(--bg-black);
-
-            display: flex;
-            flex-direction: column;
+            background: var(--bg);
 
             position: relative;
             overflow: hidden;
-
-            box-shadow:
-                0 15px 50px rgba(0,0,0,.9);
         }
-
 
         /* =========================
-           TOP SYSTEM HEADER
-        ========================= */
-
-        .system-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            min-height: 62px;
-
-            padding: 10px 14px;
-
-            background: var(--header-grey);
-
-            border-bottom: 1px solid #222;
-        }
-
-        .header-center {
-            text-align: center;
-            line-height: 1.25;
-        }
-
-        .header-title {
-            color: #fff;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: .3px;
-        }
-
-        .header-domain {
-            margin-top: 2px;
-
-            color: var(--text-muted);
-
-            font-size: 10px;
-        }
-
-        .header-btn {
-            width: 25px;
-            height: 25px;
-
-            border: none;
-            background: transparent;
-
-            color: #fff;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 19px;
-
-            cursor: pointer;
-        }
-
-        .header-btn.small-arrow {
-            font-size: 12px;
-        }
-
-        .header-right-group {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
-
-
-        /* =========================
-           MAIN SCROLL AREA
+           MAIN
         ========================= */
 
         .main-scroll-container {
-            flex: 1;
+            width: 100%;
+            height: 100%;
 
             overflow-y: auto;
 
-            padding: 14px;
-
-            padding-bottom: 85px;
+            padding: 12px;
+            padding-bottom: 82px;
 
             scrollbar-width: none;
         }
@@ -170,100 +87,25 @@
             display: none;
         }
 
-
         /* =========================
-           HERO
+           SIMPLE TOP TITLE
         ========================= */
 
-        .hero-banner-frame {
-            position: relative;
-
-            width: 100%;
-            height: 125px;
-
-            margin-bottom: 13px;
-
-            overflow: hidden;
-
-            border-radius: 8px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #101010 0%,
-                    #1b1b1b 50%,
-                    #090909 100%
-                );
+        .page-title {
+            padding: 4px 2px 12px;
         }
 
-        .hero-banner-frame::before {
-            content: "";
-
-            position: absolute;
-            inset: 0;
-
-            background:
-                radial-gradient(
-                    circle at 25% 20%,
-                    rgba(60,220,60,.18),
-                    transparent 55%
-                ),
-                radial-gradient(
-                    circle at 80% 80%,
-                    rgba(60,220,60,.10),
-                    transparent 50%
-                );
+        .page-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
         }
 
-        .hero-banner-frame::after {
-            content: "";
-
-            position: absolute;
-
-            width: 150px;
-            height: 150px;
-
-            border: 1px solid rgba(60,220,60,.12);
-
-            border-radius: 50%;
-
-            top: -70px;
-            right: -50px;
-        }
-
-        .banner-brand-logo {
-            position: absolute;
-
-            top: 50%;
-            left: 50%;
-
-            transform: translate(-50%, -50%);
-
-            text-align: center;
-        }
-
-        .razer-glow-text {
-            color: var(--razer-green);
-
-            font-size: 22px;
-            font-weight: 800;
-
-            letter-spacing: 7px;
-
-            text-shadow:
-                0 0 8px rgba(60,220,60,.7),
-                0 0 20px rgba(60,220,60,.25);
-        }
-
-        .hero-subtitle {
-            margin-top: 7px;
-
-            color: #777;
-
+        .page-title p {
+            margin-top: 3px;
+            color: #555;
             font-size: 9px;
-            letter-spacing: 2px;
         }
-
 
         /* =========================
            METRICS
@@ -271,43 +113,39 @@
 
         .dashboard-metrics-row {
             display: grid;
-
             grid-template-columns: 1fr 1fr;
-
-            gap: 10px;
+            gap: 8px;
 
             margin-bottom: 13px;
         }
 
         .metric-panel {
-            min-height: 78px;
+            min-height: 62px;
 
-            padding: 12px;
+            padding: 9px 10px;
 
-            background: var(--razer-green);
+            background: var(--green);
 
             border-radius: 7px;
 
             display: flex;
             flex-direction: column;
-
             justify-content: space-between;
         }
 
         .metric-label {
             color: #000;
 
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
         }
 
         .metric-counter-value {
             color: #000;
 
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
         }
-
 
         /* =========================
            SECTION HEADER
@@ -318,62 +156,62 @@
             align-items: center;
             justify-content: space-between;
 
-            margin: 4px 2px 9px;
+            margin: 3px 2px 7px;
         }
 
         .section-title {
             color: #fff;
 
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .section-count {
             color: #555;
-
             font-size: 9px;
         }
-
 
         /* =========================
            SMALL DEVICE CARD
         ========================= */
 
         .portfolio-ledger-card {
-            background: var(--card-bg-dark);
+            width: 100%;
 
-            border: 1px solid var(--card-border);
+            background: var(--card);
 
-            border-radius: 8px;
+            border: 1px solid var(--border);
 
-            padding: 12px;
+            border-radius: 7px;
 
-            margin-bottom: 10px;
+            padding: 8px;
+
+            margin-bottom: 7px;
         }
+
+        /* TOP LINE */
 
         .ledger-top-flex-row {
             display: flex;
-
             align-items: center;
             justify-content: space-between;
 
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .vip-tier-indicator {
-            color: var(--razer-green);
+            color: var(--green);
 
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
         }
 
         .asset-valuation-tag {
-            color: var(--razer-green);
+            color: var(--green);
 
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
         }
-
 
         /* =========================
            DEVICE CONTENT
@@ -381,29 +219,26 @@
 
         .ledger-inner-body {
             display: flex;
-
             align-items: center;
 
-            gap: 11px;
+            gap: 8px;
         }
 
-
-        /* SMALL INFINIX DEVICE THUMBNAIL */
+        /* VERY SMALL PHONE */
 
         .hardware-thumbnail-wrapper {
-            width: 48px;
-            height: 58px;
+            width: 38px;
+            height: 46px;
 
             flex-shrink: 0;
 
-            background: #111113;
+            background: #111;
 
-            border: 1px solid #222;
+            border: 1px solid #202020;
 
-            border-radius: 7px;
+            border-radius: 6px;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
         }
@@ -411,22 +246,22 @@
         .infinix-device {
             position: relative;
 
-            width: 25px;
-            height: 44px;
+            width: 19px;
+            height: 34px;
 
-            border-radius: 5px;
+            border-radius: 4px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #343438,
-                    #171719
+                    #38383c,
+                    #151517
                 );
 
             border: 1px solid #444;
 
             box-shadow:
-                0 4px 10px rgba(0,0,0,.6);
+                0 2px 6px rgba(0,0,0,.7);
         }
 
         .infinix-device::before {
@@ -434,17 +269,17 @@
 
             position: absolute;
 
-            top: 3px;
+            top: 2px;
             left: 50%;
 
             transform: translateX(-50%);
 
-            width: 8px;
-            height: 2px;
+            width: 6px;
+            height: 1.5px;
 
             background: #050505;
 
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         .infinix-device::after {
@@ -452,67 +287,72 @@
 
             position: absolute;
 
-            left: 4px;
-            right: 4px;
+            left: 3px;
+            right: 3px;
 
-            bottom: 5px;
+            bottom: 4px;
 
             height: 1px;
 
-            background: #3cdc3c;
+            background: var(--green);
 
-            opacity: .5;
+            opacity: .55;
         }
 
-
         /* =========================
-           DEVICE DETAILS
+           DETAILS
         ========================= */
 
         .ledger-specs-column {
             flex: 1;
-
             min-width: 0;
 
-            display: flex;
-            flex-direction: column;
+            display: grid;
 
-            gap: 4px;
+            grid-template-columns: 1fr 1fr;
+
+            column-gap: 7px;
+            row-gap: 2px;
         }
 
         .product-name {
+            grid-column: 1 / -1;
+
             color: #fff;
 
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 700;
 
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .spec-line-item {
-            color: var(--text-muted);
+            color: var(--muted);
 
-            font-size: 10px;
+            font-size: 8px;
 
-            line-height: 1.35;
+            line-height: 1.3;
+
+            white-space: nowrap;
         }
 
         .spec-highlight-value {
-            color: var(--razer-green);
+            color: var(--green);
 
-            margin-left: 4px;
+            margin-left: 2px;
 
             font-weight: 600;
         }
 
         .system-log-timestamp {
-            color: var(--text-dark);
+            grid-column: 1 / -1;
 
-            font-size: 8px;
+            color: var(--dark);
 
-            margin-top: 2px;
+            font-size: 7px;
+
+            margin-top: 1px;
         }
-
 
         /* =========================
            COUNTDOWN
@@ -524,11 +364,9 @@
             align-items: center;
             justify-content: space-between;
 
-            gap: 8px;
+            margin-top: 6px;
 
-            margin-top: 10px;
-
-            padding-top: 9px;
+            padding-top: 5px;
 
             border-top: 1px solid #181818;
         }
@@ -536,15 +374,16 @@
         .countdown-label {
             color: #555;
 
-            font-size: 8px;
+            font-size: 7px;
+
             text-transform: uppercase;
-            letter-spacing: .5px;
+            letter-spacing: .4px;
         }
 
         .countdown {
-            color: var(--razer-green);
+            color: var(--green);
 
-            font-size: 12px;
+            font-size: 9px;
 
             font-weight: 700;
 
@@ -553,32 +392,32 @@
 
         .countdown.ready {
             text-shadow:
-                0 0 8px rgba(60,220,60,.5);
+                0 0 7px rgba(60,220,60,.5);
         }
-
 
         /* =========================
            CLAIM BUTTON
         ========================= */
 
         .claim-form {
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
         .claim-button {
             width: 100%;
 
-            border: 1px solid var(--razer-green);
+            border: 1px solid var(--green);
 
-            background: var(--razer-green);
+            background: var(--green);
 
             color: #000;
 
-            padding: 8px;
+            padding: 5px;
 
-            border-radius: 5px;
+            border-radius: 4px;
 
-            font-size: 10px;
+            font-size: 8px;
+
             font-weight: 800;
 
             cursor: pointer;
@@ -588,7 +427,7 @@
             align-items: center;
             justify-content: center;
 
-            gap: 6px;
+            gap: 4px;
         }
 
         .claim-button.disabled {
@@ -601,28 +440,27 @@
             cursor: not-allowed;
         }
 
-
         /* =========================
-           EMPTY STATE
+           EMPTY DEVICE
         ========================= */
 
         .empty-card {
-            background: var(--card-bg-dark);
+            background: var(--card);
 
-            border: 1px solid var(--card-border);
+            border: 1px solid var(--border);
 
-            border-radius: 8px;
+            border-radius: 7px;
 
-            padding: 30px 15px;
+            padding: 25px 12px;
 
             text-align: center;
         }
 
         .empty-icon {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
 
-            margin: 0 auto 10px;
+            margin: 0 auto 8px;
 
             border-radius: 50%;
 
@@ -635,39 +473,38 @@
             align-items: center;
             justify-content: center;
 
-            font-size: 17px;
+            font-size: 15px;
         }
 
         .empty-title {
             color: #777;
 
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
         }
 
         .empty-text {
-            margin-top: 4px;
+            margin-top: 3px;
 
             color: #444;
 
-            font-size: 9px;
+            font-size: 8px;
         }
 
-
         /* =========================
-           INFORMATION CARD
+           INFORMATION
         ========================= */
 
         .info-card {
-            margin-top: 12px;
+            margin-top: 9px;
 
-            padding: 12px;
+            padding: 9px;
 
             background: #090909;
 
             border: 1px solid #141414;
 
-            border-radius: 8px;
+            border-radius: 7px;
         }
 
         .info-title {
@@ -675,29 +512,28 @@
 
             align-items: center;
 
-            gap: 7px;
+            gap: 5px;
 
             color: #777;
 
-            font-size: 10px;
+            font-size: 9px;
 
             font-weight: 600;
 
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .info-title i {
-            color: var(--razer-green);
+            color: var(--green);
         }
 
         .info-card p {
             color: #444;
 
-            font-size: 9px;
+            font-size: 8px;
 
-            line-height: 1.5;
+            line-height: 1.4;
         }
-
 
         /* =========================
            BOTTOM NAVIGATION
@@ -706,14 +542,15 @@
         .global-bottom-navigation {
             position: absolute;
 
-            bottom: 0;
             left: 0;
+            bottom: 0;
 
             width: 100%;
 
             display: grid;
 
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns:
+                repeat(5, 1fr);
 
             background:
                 linear-gradient(
@@ -724,7 +561,7 @@
 
             border-top: 1px solid #1c1c1f;
 
-            padding: 8px 0 5px;
+            padding: 7px 0 4px;
 
             z-index: 50;
         }
@@ -737,106 +574,168 @@
             align-items: center;
             justify-content: center;
 
-            gap: 3px;
+            gap: 2px;
+
+            min-height: 35px;
 
             text-decoration: none;
 
             color: #555;
-
-            min-height: 38px;
         }
 
         .nav-icon-glyph {
-            font-size: 17px;
-
+            font-size: 15px;
             line-height: 1;
         }
 
         .nav-text-label {
-            font-size: 8px;
-
+            font-size: 7px;
             font-weight: 500;
         }
 
         .nav-tab-node.active-focus-state {
-            color: var(--razer-green);
+            color: var(--green);
         }
 
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,.78);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            z-index: 9999;
+
+            backdrop-filter: blur(3px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-box {
+            width: 90px;
+
+            padding: 14px;
+
+            background: #101010;
+
+            border: 1px solid #222;
+
+            border-radius: 9px;
+
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 23px;
+            height: 23px;
+
+            margin: 0 auto 7px;
+
+            border: 3px solid #333;
+
+            border-top-color: var(--green);
+
+            border-radius: 50%;
+
+            animation: spin .8s linear infinite;
+        }
+
+        .loading-text {
+            color: #888;
+
+            font-size: 8px;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
 
         /* =========================
-           SMALL SCREENS
+           SMALL SCREEN
         ========================= */
 
         @media (max-width: 360px) {
 
             .main-scroll-container {
-                padding: 11px;
-
-                padding-bottom: 80px;
-            }
-
-            .hero-banner-frame {
-                height: 110px;
+                padding: 10px;
+                padding-bottom: 78px;
             }
 
             .portfolio-ledger-card {
-                padding: 10px;
+                padding: 7px;
             }
 
             .hardware-thumbnail-wrapper {
-                width: 44px;
-                height: 53px;
+                width: 35px;
+                height: 43px;
             }
 
             .infinix-device {
-                width: 23px;
-                height: 40px;
+                width: 18px;
+                height: 32px;
             }
+
+            .spec-line-item {
+                font-size: 7px;
+            }
+
         }
+
     </style>
 </head>
 
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
+<body>
+
+<div class="app-viewport">
 
     <main class="main-scroll-container">
 
+        <!-- PAGE TITLE -->
 
-        <!-- HERO -->
+        <div class="page-title">
 
-        <section class="hero-banner-frame">
+            <h1>
+                My Device
+            </h1>
 
-            <div class="banner-brand-logo">
+            <p>
+                Your registered Infinix devices
+            </p>
 
-                <div class="razer-glow-text">
-                    INFINIX
-                </div>
-
-                <div class="hero-subtitle">
-                    DEVICE CENTER
-                </div>
-
-            </div>
-
-        </section>
-
+        </div>
 
 
         <!-- =========================
              METRICS
-        ========================== -->
+        ========================= -->
 
         <section class="dashboard-metrics-row">
 
             <div class="metric-panel">
 
                 <h2 class="metric-label">
-                    My device
+                    My Device
                 </h2>
 
                 <span class="metric-counter-value">
+
                     {{ user_plans|length if user_plans else 0 }}
+
                 </span>
 
             </div>
@@ -845,7 +744,7 @@
             <div class="metric-panel">
 
                 <h2 class="metric-label">
-                    My income
+                    My Income
                 </h2>
 
                 <span class="metric-counter-value">
@@ -857,10 +756,9 @@
         </section>
 
 
-
         <!-- =========================
-             MY DEVICES
-        ========================== -->
+             DEVICE HEADER
+        ========================= -->
 
         <div class="section-header">
 
@@ -871,10 +769,10 @@
             {% if user_plans %}
 
                 <span class="section-count">
-                    {{ user_plans|length }} device
-                    {% if user_plans|length != 1 %}
-                        s
-                    {% endif %}
+
+                    {{ user_plans|length }}
+                    device{% if user_plans|length != 1 %}s{% endif %}
+
                 </span>
 
             {% endif %}
@@ -882,430 +780,415 @@
         </div>
 
 
+        <!-- =========================
+             DEVICES
+        ========================= -->
 
         {% if user_plans %}
 
-
             {% for user_plan in user_plans %}
 
-            <!-- SMALL DEVICE CARD -->
+                <section class="portfolio-ledger-card">
 
-            <section class="portfolio-ledger-card">
+                    <!-- TOP -->
 
+                    <div class="ledger-top-flex-row">
 
-                <!-- TOP -->
+                        <span class="vip-tier-indicator">
 
-                <div class="ledger-top-flex-row">
+                            {{ user_plan.plan_name }}
 
-                    <span class="vip-tier-indicator">
+                        </span>
 
-                        {{ user_plan.plan_name }}
+                        <span class="asset-valuation-tag">
 
-                    </span>
+                            GHS {{
+                                "%.2f"|format(
+                                    user_plan.investment_amount|float
+                                )
+                            }}
 
-                    <span class="asset-valuation-tag">
-
-                        GHS {{ "%.2f"|format(
-                            user_plan.investment_amount|float
-                        ) }}
-
-                    </span>
-
-                </div>
-
-
-
-                <!-- DEVICE BODY -->
-
-                <div class="ledger-inner-body">
-
-
-                    <!-- SMALL INFINIX DEVICE -->
-
-                    <div class="hardware-thumbnail-wrapper">
-
-                        <div class="infinix-device"></div>
+                        </span>
 
                     </div>
 
 
+                    <!-- DEVICE -->
 
-                    <!-- DETAILS -->
+                    <div class="ledger-inner-body">
 
-                    <div class="ledger-specs-column">
+                        <div class="hardware-thumbnail-wrapper">
 
-                        <div class="product-name">
-                            Infinix Device
+                            <div class="infinix-device"></div>
+
                         </div>
 
 
-                        <p class="spec-line-item">
+                        <div class="ledger-specs-column">
 
-                            Daily income:
+                            <div class="product-name">
 
-                            <span class="spec-highlight-value">
+                                Infinix Device
 
-                                GHS {{
-                                    "%.2f"|format(
-                                        user_plan.daily_income|float
-                                    )
-                                }}
-
-                            </span>
-
-                        </p>
+                            </div>
 
 
-                        <p class="spec-line-item">
+                            <p class="spec-line-item">
 
-                            Total income:
+                                Daily:
 
-                            <span class="spec-highlight-value">
+                                <span class="spec-highlight-value">
 
-                                GHS {{
-                                    "%.2f"|format(
-                                        (
+                                    GHS {{
+                                        "%.2f"|format(
+                                            user_plan.daily_income|float
+                                        )
+                                    }}
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="spec-line-item">
+
+                                Total:
+
+                                <span class="spec-highlight-value">
+
+                                    GHS {{
+                                        "%.2f"|format(
                                             user_plan.daily_income|float
                                             *
                                             user_plan.duration|int
                                         )
-                                    )
-                                }}
+                                    }}
 
-                            </span>
+                                </span>
 
-                        </p>
-
-
-                        <p class="spec-line-item">
-
-                            Validity period:
-
-                            <span class="spec-highlight-value">
-
-                                {{ user_plan.duration }} days
-
-                            </span>
-
-                        </p>
+                            </p>
 
 
-                        <p class="system-log-timestamp">
+                            <p class="spec-line-item">
 
-                            Plan #{{ loop.index }}
+                                Valid:
 
-                        </p>
+                                <span class="spec-highlight-value">
+
+                                    {{ user_plan.duration }}d
+
+                                </span>
+
+                            </p>
+
+
+                            <p class="system-log-timestamp">
+
+                                Device #{{ loop.index }}
+
+                            </p>
+
+                        </div>
 
                     </div>
 
-                </div>
+
+                    <!-- COUNTDOWN -->
+
+                    <div class="income-status-row">
+
+                        <span class="countdown-label">
+                            Next income
+                        </span>
 
 
+                        <span
+                            id="countdown-{{ user_plan.id }}"
+                            class="countdown {% if user_plan.can_claim %}ready{% endif %}"
+                        >
 
-                <!-- INCOME STATUS -->
+                            {% if user_plan.can_claim %}
 
-                <div class="income-status-row">
+                                00:00:00
 
-                    <span class="countdown-label">
+                            {% else %}
 
-                        Next income
+                                --:--:--
 
-                    </span>
+                            {% endif %}
+
+                        </span>
+
+                    </div>
 
 
-                    <span
-                        id="countdown-{{ user_plan.id }}"
-                        class="countdown
-                        {% if user_plan.can_claim %}
-                            ready
-                        {% endif %}"
+                    <!-- CLAIM -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('my_plan') }}"
+                        class="claim-form"
                     >
 
-                        {% if user_plan.can_claim %}
-                            00:00:00
+                        <input
+                            type="hidden"
+                            name="user_plan_id"
+                            value="{{ user_plan.id }}"
+                        >
+
+
+                        <button
+                            type="submit"
+                            id="claimButton-{{ user_plan.id }}"
+                            class="claim-button {% if not user_plan.can_claim %}disabled{% endif %}"
+
+                            {% if not user_plan.can_claim %}
+                                disabled
+                            {% endif %}
+                        >
+
+                            {% if user_plan.can_claim %}
+
+                                <i class="fa-solid fa-coins"></i>
+
+                                Claim Income
+
+                            {% else %}
+
+                                <i class="fa-solid fa-clock"></i>
+
+                                Income Not Ready
+
+                            {% endif %}
+
+                        </button>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =========================
+                     COUNTDOWN SCRIPT
+                ========================= -->
+
+                <script>
+
+                    (function () {
+
+                        const countdownEl =
+                            document.getElementById(
+                                "countdown-{{ user_plan.id }}"
+                            );
+
+
+                        const claimButton =
+                            document.getElementById(
+                                "claimButton-{{ user_plan.id }}"
+                            );
+
+
+                        const canClaim =
+                            {{ 'true' if user_plan.can_claim else 'false' }};
+
+
+                        {% if user_plan.next_income_at %}
+
+                        const nextIncome =
+                            new Date(
+                                "{{ user_plan.next_income_at.isoformat() }}"
+                            ).getTime();
+
                         {% else %}
-                            --:--:--
-                        {% endif %}
 
-                    </span>
-
-                </div>
-
-
-
-                <!-- CLAIM -->
-
-                <form
-                    method="POST"
-                    action="{{ url_for('my_plan') }}"
-                    class="claim-form"
-                >
-
-                    <input
-                        type="hidden"
-                        name="user_plan_id"
-                        value="{{ user_plan.id }}"
-                    >
-
-
-                    <button
-                        type="submit"
-                        id="claimButton-{{ user_plan.id }}"
-                        class="claim-button
-                        {% if not user_plan.can_claim %}
-                            disabled
-                        {% endif %}"
-
-                        {% if not user_plan.can_claim %}
-                            disabled
-                        {% endif %}
-                    >
-
-                        {% if user_plan.can_claim %}
-
-                            <i class="fa-solid fa-coins"></i>
-
-                            Claim Income
-
-                        {% else %}
-
-                            <i class="fa-solid fa-clock"></i>
-
-                            Income Not Ready
+                        const nextIncome = null;
 
                         {% endif %}
 
-                    </button>
 
-                </form>
+                        function pad(value) {
 
-
-            </section>
-
-
-
-            <!-- =========================
-                 COUNTDOWN
-            ========================== -->
-
-            <script>
-
-                (function () {
-
-                    const countdownEl =
-                        document.getElementById(
-                            "countdown-{{ user_plan.id }}"
-                        );
-
-                    const claimButton =
-                        document.getElementById(
-                            "claimButton-{{ user_plan.id }}"
-                        );
-
-
-                    const canClaim =
-                        {{ 'true' if user_plan.can_claim else 'false' }};
-
-
-                    {% if user_plan.next_income_at %}
-
-                    const nextIncome =
-                        new Date(
-                            "{{ user_plan.next_income_at.isoformat() }}"
-                        ).getTime();
-
-                    {% else %}
-
-                    const nextIncome = null;
-
-                    {% endif %}
-
-
-
-                    function pad(value) {
-
-                        return String(value)
-                            .padStart(2, "0");
-
-                    }
-
-
-
-                    function formatTime(milliseconds) {
-
-                        if (milliseconds <= 0) {
-
-                            return "00:00:00";
+                            return String(value)
+                                .padStart(2, "0");
 
                         }
 
 
-                        const totalSeconds =
-                            Math.floor(
-                                milliseconds / 1000
-                            );
+                        function formatTime(milliseconds) {
 
+                            if (milliseconds <= 0) {
 
-                        const hours =
-                            Math.floor(
-                                totalSeconds / 3600
-                            );
-
-
-                        const minutes =
-                            Math.floor(
-                                (totalSeconds % 3600) / 60
-                            );
-
-
-                        const seconds =
-                            totalSeconds % 60;
-
-
-                        return (
-                            pad(hours) +
-                            ":" +
-                            pad(minutes) +
-                            ":" +
-                            pad(seconds)
-                        );
-
-                    }
-
-
-
-                    function setReady() {
-
-                        if (!countdownEl) return;
-
-
-                        countdownEl.textContent =
-                            "00:00:00";
-
-
-                        countdownEl.classList.add(
-                            "ready"
-                        );
-
-
-                        if (claimButton) {
-
-                            claimButton.disabled = false;
-
-                            claimButton.classList.remove(
-                                "disabled"
-                            );
-
-                            claimButton.innerHTML =
-                                '<i class="fa-solid fa-coins"></i>' +
-                                ' Claim Income';
-
-                        }
-
-                    }
-
-
-
-                    function setWaiting(milliseconds) {
-
-                        if (!countdownEl) return;
-
-
-                        countdownEl.textContent =
-                            formatTime(milliseconds);
-
-
-                        countdownEl.classList.remove(
-                            "ready"
-                        );
-
-
-                        if (claimButton) {
-
-                            claimButton.disabled = true;
-
-                            claimButton.classList.add(
-                                "disabled"
-                            );
-
-                            claimButton.innerHTML =
-                                '<i class="fa-solid fa-clock"></i>' +
-                                ' Income Not Ready';
-
-                        }
-
-                    }
-
-
-
-                    function updateCountdown() {
-
-                        if (canClaim) {
-
-                            setReady();
-
-                            return;
-
-                        }
-
-
-                        if (
-                            nextIncome === null ||
-                            isNaN(nextIncome)
-                        ) {
-
-                            if (countdownEl) {
-
-                                countdownEl.textContent =
-                                    "--:--:--";
+                                return "00:00:00";
 
                             }
 
-                            return;
 
-                        }
-
-
-                        const remaining =
-                            nextIncome - Date.now();
+                            const totalSeconds =
+                                Math.floor(
+                                    milliseconds / 1000
+                                );
 
 
-                        if (remaining <= 0) {
+                            const hours =
+                                Math.floor(
+                                    totalSeconds / 3600
+                                );
 
-                            setReady();
 
-                        } else {
+                            const minutes =
+                                Math.floor(
+                                    (totalSeconds % 3600) / 60
+                                );
 
-                            setWaiting(
-                                remaining
+
+                            const seconds =
+                                totalSeconds % 60;
+
+
+                            return (
+                                pad(hours) +
+                                ":" +
+                                pad(minutes) +
+                                ":" +
+                                pad(seconds)
                             );
 
                         }
 
-                    }
+
+                        function setReady() {
+
+                            if (!countdownEl) {
+                                return;
+                            }
 
 
+                            countdownEl.textContent =
+                                "00:00:00";
 
-                    updateCountdown();
+
+                            countdownEl.classList.add(
+                                "ready"
+                            );
 
 
-                    setInterval(
-                        updateCountdown,
-                        1000
-                    );
+                            if (claimButton) {
 
-                })();
+                                claimButton.disabled = false;
 
-            </script>
+                                claimButton.classList.remove(
+                                    "disabled"
+                                );
 
+                                claimButton.innerHTML =
+                                    '<i class="fa-solid fa-coins"></i> Claim Income';
+
+                            }
+
+                        }
+
+
+                        function setWaiting(milliseconds) {
+
+                            if (!countdownEl) {
+                                return;
+                            }
+
+
+                            countdownEl.textContent =
+                                formatTime(
+                                    milliseconds
+                                );
+
+
+                            countdownEl.classList.remove(
+                                "ready"
+                            );
+
+
+                            if (claimButton) {
+
+                                claimButton.disabled = true;
+
+                                claimButton.classList.add(
+                                    "disabled"
+                                );
+
+                                claimButton.innerHTML =
+                                    '<i class="fa-solid fa-clock"></i> Income Not Ready';
+
+                            }
+
+                        }
+
+
+                        function updateCountdown() {
+
+                            if (canClaim) {
+
+                                setReady();
+
+                                return;
+
+                            }
+
+
+                            if (
+                                nextIncome === null ||
+                                isNaN(nextIncome)
+                            ) {
+
+                                if (countdownEl) {
+
+                                    countdownEl.textContent =
+                                        "--:--:--";
+
+                                }
+
+                                return;
+
+                            }
+
+
+                            const remaining =
+                                nextIncome - Date.now();
+
+
+                            if (remaining <= 0) {
+
+                                setReady();
+
+                            } else {
+
+                                setWaiting(
+                                    remaining
+                                );
+
+                            }
+
+                        }
+
+
+                        updateCountdown();
+
+
+                        setInterval(
+                            updateCountdown,
+                            1000
+                        );
+
+                    })();
+
+                </script>
 
             {% endfor %}
 
 
         {% else %}
 
-
-            <!-- EMPTY -->
+            <!-- =========================
+                 NO DEVICE
+            ========================= -->
 
             <section class="empty-card">
 
@@ -1331,14 +1214,12 @@
 
             </section>
 
-
         {% endif %}
-
 
 
         <!-- =========================
              INFORMATION
-        ========================== -->
+        ========================= -->
 
         <section class="info-card">
 
@@ -1355,25 +1236,22 @@
 
             <p>
 
-                Your registered device information
-                and its associated plan details are
-                displayed above.
+                Your registered Infinix device
+                and its associated plan details
+                are displayed above.
 
             </p>
 
         </section>
 
-
     </main>
-
 
 
     <!-- =========================
          BOTTOM NAVIGATION
-    ========================== -->
+    ========================= -->
 
     <nav class="global-bottom-navigation">
-
 
         <a
             href="{{ url_for('dashboard') }}"
@@ -1387,7 +1265,6 @@
             </span>
 
         </a>
-
 
 
         <a
@@ -1404,7 +1281,6 @@
         </a>
 
 
-
         <a
             href="{{ url_for('team') }}"
             class="nav-tab-node"
@@ -1417,7 +1293,6 @@
             </span>
 
         </a>
-
 
 
         <a
@@ -1434,7 +1309,6 @@
         </a>
 
 
-
         <a
             href="{{ url_for('profile') }}"
             class="nav-tab-node"
@@ -1448,11 +1322,103 @@
 
         </a>
 
-
     </nav>
 
 
+    <!-- =========================
+         LOADING OVERLAY
+    ========================= -->
+
+    <div
+        id="loadingOverlay"
+        class="loading-overlay"
+    >
+
+        <div class="loading-box">
+
+            <div class="loading-spinner"></div>
+
+            <div class="loading-text">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+<!-- =========================
+     GLOBAL LOADING
+========================= -->
+
+<script>
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest("a");
+
+            const button =
+                event.target.closest("button");
+
+
+            if (!link && !button) {
+                return;
+            }
+
+
+            if (
+                button &&
+                button.disabled
+            ) {
+                return;
+            }
+
+
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
+
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "submit",
+        function () {
+
+            const overlay =
+                document.getElementById(
+                    "loadingOverlay"
+                );
+
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+</script>
 
 </body>
 </html>
