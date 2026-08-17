@@ -88,6 +88,72 @@
         }
 
         /* =========================
+   HEADER
+========================= */
+
+.header{
+
+    width:100%;
+
+    background:#000000;
+
+    color:white;
+
+    padding:18px 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+
+    border-bottom:1px solid #1f1f1f;
+}
+
+.header h1{
+
+    font-size:18px;
+
+    font-weight:800;
+
+    letter-spacing:.3px;
+}
+
+.back-btn{
+
+    position:absolute;
+
+    left:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#ffffff;
+
+    text-decoration:none;
+
+    font-size:18px;
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#111111;
+}
+
+.back-btn:active{
+    background:#1b1b1b;
+}
+       
+        
+        
+        /* =========================
            SIMPLE TOP TITLE
         ========================= */
 
@@ -701,7 +767,21 @@
 
 <body>
 
-<div class="app-viewport">
+  <header class="header">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn"
+        >
+
+            <i class="fa-solid fa-chevron-left"></i>
+
+        </a>
+    
+    
+    
+    
+    <div class="app-viewport">
 
     <main class="main-scroll-container">
 
