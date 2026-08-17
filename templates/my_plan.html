@@ -6,24 +6,17 @@
 
     <title>My Device - Infinix</title>
 
-    <!-- Font Awesome -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
     <style>
-        /* =====================================================
-           ROOT
-        ===================================================== */
 
         :root {
             --bg: #000000;
             --card: #0d0d0d;
-            --card-light: #111111;
-
             --border: #1b1b1b;
-            --border-light: #282828;
 
             --green: #3cdc3c;
             --green-dark: #1e9f1e;
@@ -41,10 +34,6 @@
                 sans-serif;
         }
 
-
-        /* =====================================================
-           RESET
-        ===================================================== */
 
         * {
             margin: 0;
@@ -71,7 +60,7 @@
             display: flex;
             justify-content: center;
 
-            color: var(--white);
+            color: #ffffff;
         }
 
 
@@ -88,7 +77,7 @@
 
             overflow: hidden;
 
-            background: var(--bg);
+            background: #000000;
         }
 
 
@@ -213,7 +202,8 @@
 
 
         /* =====================================================
-           INFINIX PHOTO CARD
+           INFINIX PHOTO
+           IMAGE IS EMBEDDED DIRECTLY IN THIS HTML
         ===================================================== */
 
         .infinix-photo-card {
@@ -240,6 +230,10 @@
 
 
         .infinix-photo {
+            position: absolute;
+
+            inset: 0;
+
             width: 100%;
             height: 100%;
 
@@ -247,19 +241,11 @@
 
             object-fit: cover;
 
-            opacity: .88;
-
-            filter:
-                brightness(.72)
-                contrast(1.12);
+            background: #080808;
         }
 
 
-        /* Dark overlay */
-
-        .infinix-photo-card::before {
-            content: "";
-
+        .photo-dark-overlay {
             position: absolute;
 
             inset: 0;
@@ -267,15 +253,16 @@
             background:
                 linear-gradient(
                     to bottom,
-                    rgba(0,0,0,.10),
-                    rgba(0,0,0,.82)
+                    rgba(0,0,0,.05),
+                    rgba(0,0,0,.25) 45%,
+                    rgba(0,0,0,.88)
                 );
 
-            z-index: 1;
+            z-index: 2;
+
+            pointer-events: none;
         }
 
-
-        /* White glowing edge */
 
         .infinix-photo-card::after {
             content: "";
@@ -294,7 +281,7 @@
                 0 0 8px #ffffff,
                 0 0 18px rgba(255,255,255,.65);
 
-            z-index: 3;
+            z-index: 4;
         }
 
 
@@ -312,7 +299,7 @@
 
             gap: 10px;
 
-            z-index: 2;
+            z-index: 3;
         }
 
 
@@ -323,7 +310,7 @@
 
             font-weight: 900;
 
-            letter-spacing: .5px;
+            letter-spacing: .7px;
 
             text-shadow:
                 0 0 8px rgba(255,255,255,.35);
@@ -361,7 +348,7 @@
 
 
         /* =====================================================
-           BLACK + WHITE GLOW CARD
+           GLOW CARD
         ===================================================== */
 
         .glow-card {
@@ -656,10 +643,6 @@
         }
 
 
-        /* =====================================================
-           DEVICE BODY
-        ===================================================== */
-
         .ledger-inner-body {
             display: flex;
 
@@ -913,7 +896,7 @@
 
 
         /* =====================================================
-           EMPTY CARD
+           EMPTY
         ===================================================== */
 
         .empty-card {
@@ -1160,9 +1143,11 @@
 
 
         @keyframes spin {
+
             to {
                 transform: rotate(360deg);
             }
+
         }
 
 
@@ -1209,15 +1194,18 @@
             .infinix-photo-card {
                 height: 160px;
             }
+
         }
 
     </style>
+
 </head>
 
 
 <body>
 
 <div class="app-viewport">
+
 
     <!-- =====================================================
          HEADER
@@ -1229,8 +1217,11 @@
             href="{{ url_for('dashboard') }}"
             class="back-btn"
         >
+
             <i class="fa-solid fa-chevron-left"></i>
+
         </a>
+
 
         <h1>
             My Device
@@ -1244,6 +1235,7 @@
     ====================================================== -->
 
     <main class="main-scroll-container">
+
 
         <!-- PAGE TITLE -->
 
@@ -1261,27 +1253,333 @@
 
 
         <!-- =================================================
-             INFINIX PHOTO
+             INFINIX IMAGE
+             
+             THE IMAGE IS INSIDE THIS HTML.
+             NO IMAGE FILE IS REQUIRED.
         ================================================== -->
 
         <section class="infinix-photo-card">
 
-            <!--
-                Put your Infinix image here:
+            <svg
+                class="infinix-photo"
+                viewBox="0 0 800 420"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice"
+            >
 
-                static/images/infinix-phone.jpg
+                <defs>
 
-                Flask automatically serves files inside
-                the static folder.
-            -->
+                    <linearGradient
+                        id="phoneBackground"
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="1"
+                    >
 
-            <div class="infinix-hero">
-    <img
-        src="{{ url_for('static', filename='infinix-phone.jpg') }}"
-        alt="Infinix Phone"
-    >
-</div>
+                        <stop
+                            offset="0%"
+                            stop-color="#050505"
+                        />
 
+                        <stop
+                            offset="55%"
+                            stop-color="#151515"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#020202"
+                        />
+
+                    </linearGradient>
+
+
+                    <linearGradient
+                        id="phoneBody"
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="1"
+                    >
+
+                        <stop
+                            offset="0%"
+                            stop-color="#555555"
+                        />
+
+                        <stop
+                            offset="35%"
+                            stop-color="#202020"
+                        />
+
+                        <stop
+                            offset="70%"
+                            stop-color="#080808"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#333333"
+                        />
+
+                    </linearGradient>
+
+
+                    <linearGradient
+                        id="screen"
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="1"
+                    >
+
+                        <stop
+                            offset="0%"
+                            stop-color="#202020"
+                        />
+
+                        <stop
+                            offset="50%"
+                            stop-color="#050505"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#101010"
+                        />
+
+                    </linearGradient>
+
+
+                    <radialGradient
+                        id="greenGlow"
+                    >
+
+                        <stop
+                            offset="0%"
+                            stop-color="#3cdc3c"
+                            stop-opacity=".45"
+                        />
+
+                        <stop
+                            offset="100%"
+                            stop-color="#3cdc3c"
+                            stop-opacity="0"
+                        />
+
+                    </radialGradient>
+
+
+                    <filter
+                        id="shadow"
+                        x="-50%"
+                        y="-50%"
+                        width="200%"
+                        height="200%"
+                    >
+
+                        <feGaussianBlur
+                            stdDeviation="12"
+                        />
+
+                    </filter>
+
+                </defs>
+
+
+                <!-- Background -->
+
+                <rect
+                    width="800"
+                    height="420"
+                    fill="url(#phoneBackground)"
+                />
+
+
+                <!-- Green ambient light -->
+
+                <ellipse
+                    cx="590"
+                    cy="220"
+                    rx="250"
+                    ry="180"
+                    fill="url(#greenGlow)"
+                />
+
+
+                <!-- Phone shadow -->
+
+                <ellipse
+                    cx="400"
+                    cy="390"
+                    rx="180"
+                    ry="22"
+                    fill="#000000"
+                    opacity=".8"
+                    filter="url(#shadow)"
+                />
+
+
+                <!-- Phone -->
+
+                <g
+                    transform="translate(300 25) rotate(-8 100 180)"
+                >
+
+                    <!-- Outer body -->
+
+                    <rect
+                        x="0"
+                        y="0"
+                        width="200"
+                        height="370"
+                        rx="30"
+                        fill="url(#phoneBody)"
+                        stroke="#666666"
+                        stroke-width="2"
+                    />
+
+
+                    <!-- Screen -->
+
+                    <rect
+                        x="9"
+                        y="9"
+                        width="182"
+                        height="352"
+                        rx="24"
+                        fill="url(#screen)"
+                    />
+
+
+                    <!-- Screen reflection -->
+
+                    <path
+                        d="M18 25 L120 15 L190 90 L190 150 Z"
+                        fill="#ffffff"
+                        opacity=".035"
+                    />
+
+
+                    <!-- Camera area -->
+
+                    <rect
+                        x="24"
+                        y="30"
+                        width="58"
+                        height="86"
+                        rx="15"
+                        fill="#080808"
+                        stroke="#555555"
+                        stroke-width="2"
+                    />
+
+
+                    <!-- Camera 1 -->
+
+                    <circle
+                        cx="43"
+                        cy="50"
+                        r="12"
+                        fill="#111111"
+                        stroke="#777777"
+                        stroke-width="3"
+                    />
+
+                    <circle
+                        cx="43"
+                        cy="50"
+                        r="6"
+                        fill="#020202"
+                    />
+
+
+                    <!-- Camera 2 -->
+
+                    <circle
+                        cx="68"
+                        cy="72"
+                        r="12"
+                        fill="#111111"
+                        stroke="#777777"
+                        stroke-width="3"
+                    />
+
+                    <circle
+                        cx="68"
+                        cy="72"
+                        r="6"
+                        fill="#020202"
+                    />
+
+
+                    <!-- Flash -->
+
+                    <circle
+                        cx="42"
+                        cy="92"
+                        r="6"
+                        fill="#dddddd"
+                    />
+
+
+                    <!-- Infinix-style branding -->
+
+                    <text
+                        x="100"
+                        y="320"
+                        text-anchor="middle"
+                        fill="#ffffff"
+                        opacity=".85"
+                        font-size="20"
+                        font-family="Arial, sans-serif"
+                        font-weight="700"
+                    >
+                        INFINIX
+                    </text>
+
+
+                    <!-- Green accent -->
+
+                    <rect
+                        x="74"
+                        y="340"
+                        width="52"
+                        height="3"
+                        rx="2"
+                        fill="#3cdc3c"
+                    />
+
+                </g>
+
+
+                <!-- Decorative lines -->
+
+                <path
+                    d="M35 350 H220"
+                    stroke="#3cdc3c"
+                    stroke-width="2"
+                    opacity=".45"
+                />
+
+                <path
+                    d="M580 70 H765"
+                    stroke="#3cdc3c"
+                    stroke-width="2"
+                    opacity=".25"
+                />
+
+            </svg>
+
+
+            <!-- Dark overlay -->
+
+            <div class="photo-dark-overlay"></div>
+
+
+            <!-- Photo information -->
 
             <div class="photo-content">
 
@@ -1298,6 +1596,8 @@
                 </div>
 
 
+                <!-- STATUS KEPT -->
+
                 <span class="photo-status">
                     ACTIVE
                 </span>
@@ -1308,7 +1608,7 @@
 
 
         <!-- =================================================
-             BLACK & WHITE GLOW CARD
+             GLOW CARD
         ================================================== -->
 
         <section class="glow-card">
@@ -1319,7 +1619,9 @@
 
                     <div class="glow-icon">
 
-                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <i
+                            class="fa-solid fa-mobile-screen-button"
+                        ></i>
 
                     </div>
 
@@ -1361,7 +1663,9 @@
                 </span>
 
                 <span class="metric-counter-value">
+
                     {{ user_plans|length if user_plans else 0 }}
+
                 </span>
 
             </div>
@@ -1416,9 +1720,9 @@
 
             {% for user_plan in user_plans %}
 
+
                 <section class="portfolio-ledger-card">
 
-                    <!-- DEVICE TOP -->
 
                     <div class="ledger-top-flex-row">
 
@@ -1443,9 +1747,8 @@
                     </div>
 
 
-                    <!-- DEVICE BODY -->
-
                     <div class="ledger-inner-body">
+
 
                         <div class="hardware-thumbnail-wrapper">
 
@@ -1455,6 +1758,7 @@
 
 
                         <div class="ledger-specs-column">
+
 
                             <div class="product-name">
 
@@ -1536,10 +1840,7 @@
 
                         <span
                             id="countdown-{{ user_plan.id }}"
-                            class="countdown
-                            {% if user_plan.can_claim %}
-                                ready
-                            {% endif %}"
+                            class="countdown {% if user_plan.can_claim %}ready{% endif %}"
                         >
 
                             {% if user_plan.can_claim %}
@@ -1575,14 +1876,8 @@
                         <button
                             type="submit"
                             id="claimButton-{{ user_plan.id }}"
-                            class="claim-button
-                            {% if not user_plan.can_claim %}
-                                disabled
-                            {% endif %}"
-
-                            {% if not user_plan.can_claim %}
-                                disabled
-                            {% endif %}
+                            class="claim-button {% if not user_plan.can_claim %}disabled{% endif %}"
+                            {% if not user_plan.can_claim %}disabled{% endif %}
                         >
 
                             {% if user_plan.can_claim %}
@@ -1603,11 +1898,12 @@
 
                     </form>
 
+
                 </section>
 
 
                 <!-- =================================================
-                     COUNTDOWN SCRIPT
+                     COUNTDOWN
                 ================================================== -->
 
                 <script>
@@ -1712,7 +2008,8 @@
 
                             if (claimButton) {
 
-                                claimButton.disabled = false;
+                                claimButton.disabled =
+                                    false;
 
                                 claimButton.classList.remove(
                                     "disabled"
@@ -1746,7 +2043,8 @@
 
                             if (claimButton) {
 
-                                claimButton.disabled = true;
+                                claimButton.disabled =
+                                    true;
 
                                 claimButton.classList.add(
                                     "disabled"
@@ -1819,14 +2117,12 @@
 
                 </script>
 
+
             {% endfor %}
 
 
         {% else %}
 
-            <!-- =================================================
-                 EMPTY DEVICE
-            ================================================== -->
 
             <section class="empty-card">
 
@@ -1847,6 +2143,7 @@
                 </p>
 
             </section>
+
 
         {% endif %}
 
@@ -1876,6 +2173,7 @@
 
         </section>
 
+
     </main>
 
 
@@ -1884,6 +2182,7 @@
     ====================================================== -->
 
     <nav class="global-bottom-navigation">
+
 
         <a
             href="{{ url_for('dashboard') }}"
@@ -1954,11 +2253,12 @@
 
         </a>
 
+
     </nav>
 
 
     <!-- =====================================================
-         LOADING OVERLAY
+         LOADING
     ====================================================== -->
 
     <div
@@ -1977,6 +2277,7 @@
         </div>
 
     </div>
+
 
 </div>
 
@@ -2051,6 +2352,7 @@
     );
 
 </script>
+
 
 </body>
 </html>
