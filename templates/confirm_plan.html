@@ -8,7 +8,6 @@
 
 <title>Confirm Plan - Zenith Capital</title>
 
-<!-- Font Awesome -->
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -24,31 +23,45 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:system-ui,-apple-system,Arial,sans-serif;
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    -webkit-tap-highlight-color:transparent;
 }
 
 body{
-    background:#f1f4fa;
-    color:#334155;
+    background:#000000;
+    color:#ffffff;
+
     min-height:100vh;
-    padding-bottom:85px;
-    -webkit-tap-highlight-color:transparent;
 
     display:flex;
     justify-content:center;
+
+    padding-bottom:80px;
 }
 
 
 /* =========================
-   PHONE CONTAINER
+   PHONE
 ========================= */
 
 .phone{
     width:100%;
     max-width:440px;
     min-height:100vh;
-    background:#f1f4fa;
+
+    background:#000000;
+
     position:relative;
+
     padding-bottom:80px;
 }
 
@@ -58,11 +71,14 @@ body{
 ========================= */
 
 .header{
+
     width:100%;
-    background:#0b1c4d;
+
+    background:#000000;
+
     color:white;
 
-    padding:17px 20px;
+    padding:18px 20px;
 
     display:flex;
     align-items:center;
@@ -70,25 +86,48 @@ body{
 
     position:relative;
 
-    box-shadow:0 4px 12px rgba(0,0,0,.10);
+    border-bottom:1px solid #1f1f1f;
 }
 
 .header h1{
+
     font-size:18px;
+
     font-weight:800;
+
     letter-spacing:.3px;
 }
 
 .back-btn{
+
     position:absolute;
+
     left:18px;
+
     top:50%;
+
     transform:translateY(-50%);
 
-    color:white;
+    color:#ffffff;
+
     text-decoration:none;
 
     font-size:18px;
+
+    width:36px;
+    height:36px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#111111;
+}
+
+.back-btn:active{
+    background:#1b1b1b;
 }
 
 
@@ -97,6 +136,7 @@ body{
 ========================= */
 
 .content{
+
     padding:16px;
 }
 
@@ -106,14 +146,17 @@ body{
 ========================= */
 
 .card{
-    background:white;
-    border-radius:22px;
+
+    background:#0b0b0b;
+
+    border-radius:20px;
+
     padding:20px;
 
-    border:1px solid #edf0f5;
+    border:1px solid #242424;
 
     box-shadow:
-        0 7px 22px rgba(15,23,42,.07);
+        0 8px 25px rgba(0,0,0,.5);
 }
 
 
@@ -122,24 +165,30 @@ body{
 ========================= */
 
 .plan-icon{
-    width:62px;
-    height:62px;
 
-    margin:2px auto 12px;
+    width:60px;
+    height:60px;
 
-    border-radius:18px;
+    margin:2px auto 13px;
 
-    background:#eef2ff;
-    color:#0b1c4d;
+    border-radius:17px;
+
+    background:#071d10;
+
+    color:#22c55e;
+
+    border:1px solid #123d23;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    font-size:25px;
+    font-size:24px;
 
     box-shadow:
-        0 5px 14px rgba(11,28,77,.08);
+        0 5px 18px rgba(34,197,94,.08);
 }
 
 
@@ -148,31 +197,42 @@ body{
 ========================= */
 
 .title{
+
     text-align:center;
+
     margin-bottom:20px;
 }
 
 .title h2{
-    color:#0f172a;
+
+    color:#ffffff;
+
     font-size:21px;
+
     font-weight:800;
 }
 
 .title p{
-    color:#64748b;
+
+    color:#888888;
+
     font-size:12px;
+
     margin-top:5px;
+
     line-height:1.5;
 }
 
 
 /* =========================
-   PLAN INFO
+   PLAN INFORMATION
 ========================= */
 
 .info{
-    background:#f8fafc;
-    border:1px solid #edf0f5;
+
+    background:#111111;
+
+    border:1px solid #242424;
 
     border-radius:15px;
 
@@ -185,35 +245,45 @@ body{
 ========================= */
 
 .row{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     gap:15px;
 
     padding:12px 0;
 
-    border-bottom:1px solid #e8edf3;
+    border-bottom:1px solid #242424;
 
     font-size:13px;
 }
 
 .row:first-child{
+
     padding-top:2px;
 }
 
 .row:last-child{
+
     border-bottom:none;
+
     padding-bottom:2px;
 }
 
 .row span{
-    color:#64748b;
+
+    color:#888888;
 }
 
 .row strong{
-    color:#334155;
+
+    color:#ffffff;
+
     text-align:right;
+
     word-break:break-word;
 }
 
@@ -223,7 +293,9 @@ body{
 ========================= */
 
 .price{
-    color:#0b1c4d !important;
+
+    color:#22c55e !important;
+
     font-size:15px;
 }
 
@@ -233,7 +305,8 @@ body{
 ========================= */
 
 .balance-value{
-    color:#0b1c4d !important;
+
+    color:#22c55e !important;
 }
 
 
@@ -242,105 +315,168 @@ body{
 ========================= */
 
 .warning{
+
     margin-top:15px;
 
-    background:#fff7ed;
+    background:#111111;
 
-    border:1px solid #fed7aa;
-    border-left:4px solid #f97316;
+    border:1px solid #333333;
 
-    color:#9a3412;
+    border-left:4px solid #22c55e;
+
+    color:#aaaaaa;
 
     padding:13px;
 
     border-radius:12px;
 
     font-size:12px;
+
     line-height:1.55;
 }
 
 .warning-title{
+
+    color:#ffffff;
+
     font-weight:800;
+
     margin-bottom:4px;
 
     display:flex;
+
     align-items:center;
+
     gap:7px;
 }
 
+.warning-title i{
 
-/* =========================
-   CONFIRM BUTTON
-========================= */
-
-.confirm-btn{
-    width:100%;
-
-    border:none;
-
-    padding:15px;
-
-    margin-top:18px;
-
-    border-radius:13px;
-
-    background:#0b1c4d;
-
-    color:white;
-
-    font-size:14px;
-    font-weight:800;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 5px 14px rgba(11,28,77,.18);
-
-    transition:.15s;
-}
-
-.confirm-btn:active{
-    transform:scale(.99);
+    color:#22c55e;
 }
 
 
 /* =========================
-   CANCEL
+   ACTION ROW
 ========================= */
 
-.cancel{
+.action-row{
+
     display:flex;
 
     align-items:center;
+
+    gap:10px;
+
+    margin-top:18px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.action-row form{
+
+    flex:1;
+
+    margin:0;
+}
+
+
+/* =========================
+   BUTTON BASE
+========================= */
+
+.cancel-btn,
+.confirm-btn{
+
+    width:100%;
+
+    height:46px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    align-items:center;
+
     justify-content:center;
 
     gap:7px;
 
-    margin-top:12px;
+    font-size:13px;
 
-    padding:12px;
+    font-weight:800;
 
-    border-radius:12px;
-
-    background:#f8fafc;
-
-    border:1px solid #e5e7eb;
-
-    color:#64748b;
+    cursor:pointer;
 
     text-decoration:none;
 
-    font-size:12px;
-    font-weight:700;
-}
-
-.cancel:active{
-    background:#f1f5f9;
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
 }
 
 
 /* =========================
-   FIXED BOTTOM NAVIGATION
+   CANCEL LEFT
+========================= */
+
+.cancel-btn{
+
+    flex:1;
+
+    background:#111111;
+
+    color:#aaaaaa;
+
+    border:1px solid #333333;
+}
+
+.cancel-btn i{
+
+    color:#777777;
+}
+
+
+/* =========================
+   CONFIRM RIGHT
+========================= */
+
+.confirm-btn{
+
+    border:none;
+
+    background:#16a34a;
+
+    color:#ffffff;
+
+    box-shadow:
+        0 5px 15px rgba(22,163,74,.25);
+}
+
+.confirm-btn i{
+
+    color:#ffffff;
+}
+
+
+/* =========================
+   BUTTON ACTIVE
+========================= */
+
+.cancel-btn:active,
+.confirm-btn:active{
+
+    transform:scale(.97);
+
+    opacity:.85;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
 ========================= */
 
 .bottom-nav{
@@ -348,27 +484,31 @@ body{
     position:fixed;
 
     bottom:0;
+
     left:0;
+
     right:0;
 
     height:67px;
 
-    background:white;
+    background:#080808;
 
-    border-top:1px solid #e2e8f0;
+    border-top:1px solid #242424;
 
     display:flex;
+
     justify-content:center;
 
     z-index:9999;
 
     box-shadow:
-        0 -4px 14px rgba(0,0,0,.05);
+        0 -4px 15px rgba(0,0,0,.5);
 }
 
 .bottom-nav-inner{
 
     width:100%;
+
     max-width:440px;
 
     display:grid;
@@ -386,28 +526,32 @@ body{
     position:relative;
 
     display:flex;
+
     flex-direction:column;
 
     align-items:center;
+
     justify-content:center;
 
     gap:4px;
 
     text-decoration:none;
 
-    color:#94a3b8;
+    color:#666666;
 
     font-size:9px;
+
     font-weight:500;
 }
 
 .bottom-nav i{
+
     font-size:18px;
 }
 
 .bottom-nav a.active{
 
-    color:#0b1c4d;
+    color:#22c55e;
 
     font-weight:800;
 }
@@ -421,11 +565,12 @@ body{
     bottom:0;
 
     left:25%;
+
     right:25%;
 
     height:3px;
 
-    background:#0b1c4d;
+    background:#22c55e;
 
     border-radius:
         4px 4px 0 0;
@@ -439,28 +584,68 @@ body{
 @media(max-width:360px){
 
     .content{
+
         padding:12px;
     }
 
     .card{
+
         padding:17px;
-        border-radius:19px;
+
+        border-radius:18px;
     }
 
     .title h2{
+
         font-size:19px;
     }
 
     .row{
+
+        font-size:12px;
+    }
+
+    .cancel-btn,
+    .confirm-btn{
+
+        height:44px;
+
         font-size:12px;
     }
 
     .bottom-nav{
+
         height:64px;
     }
 
     .bottom-nav i{
+
         font-size:16px;
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL SCREEN
+========================= */
+
+@media(max-width:320px){
+
+    .card{
+
+        padding:14px;
+    }
+
+    .action-row{
+
+        gap:7px;
+    }
+
+    .cancel-btn,
+    .confirm-btn{
+
+        font-size:11px;
     }
 
 }
@@ -486,8 +671,11 @@ body{
             href="{{ url_for('dashboard') }}"
             class="back-btn"
         >
+
             <i class="fa-solid fa-chevron-left"></i>
+
         </a>
+
 
         <h1>
             Confirm Plan
@@ -506,7 +694,9 @@ body{
         <div class="card">
 
 
-            <!-- PLAN ICON -->
+            <!-- =========================
+                 PLAN ICON
+            ========================= -->
 
             <div class="plan-icon">
 
@@ -515,7 +705,9 @@ body{
             </div>
 
 
-            <!-- TITLE -->
+            <!-- =========================
+                 TITLE
+            ========================= -->
 
             <div class="title">
 
@@ -616,48 +808,54 @@ body{
 
                 Please review the plan name, amount,
                 available balance and duration before
-                confirming this demo plan selection.
+                confirming this selection.
 
             </div>
 
 
             <!-- =========================
-                 CONFIRM FORM
+                 ACTION BUTTONS
             ========================= -->
 
-            <form
-                method="POST"
-                action="{{ url_for('confirm_buy_plan', plan_id=plan.id) }}"
-            >
+            <div class="action-row">
 
-                <button
-                    type="submit"
-                    class="confirm-btn"
+
+                <!-- CANCEL -->
+
+                <a
+                    class="cancel-btn"
+                    href="{{ url_for('dashboard') }}"
                 >
 
-                    <i class="fa-solid fa-circle-check"></i>
+                    <i class="fa-solid fa-xmark"></i>
 
-                    Confirm Selection
+                    Cancel
 
-                </button>
-
-            </form>
+                </a>
 
 
-            <!-- =========================
-                 CANCEL
-            ========================= -->
+                <!-- CONFIRM -->
 
-            <a
-                class="cancel"
-                href="{{ url_for('dashboard') }}"
-            >
+                <form
+                    method="POST"
+                    action="{{ url_for('confirm_buy_plan', plan_id=plan.id) }}"
+                >
 
-                <i class="fa-solid fa-arrow-left"></i>
+                    <button
+                        type="submit"
+                        class="confirm-btn"
+                    >
 
-                Cancel
+                        <i class="fa-solid fa-circle-check"></i>
 
-            </a>
+                        Confirm
+
+                    </button>
+
+                </form>
+
+
+            </div>
 
 
         </div>
