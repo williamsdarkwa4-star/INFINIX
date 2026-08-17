@@ -1,1109 +1,1561 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Withdraw - Zenith Capital</title>
-
-<!-- Font Awesome -->
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
->
-
-<style>
-
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial,sans-serif;
-    }
-
-    body{
-        background:#f1f4fa;
-        color:#334155;
-        min-height:100vh;
-        padding-bottom:90px;
-    }
-
-    /* =========================
-       MAIN PHONE FRAME
-    ========================= */
-
-    .phone{
-        width:100%;
-        max-width:440px;
-        min-height:100vh;
-        margin:auto;
-        background:#f1f4fa;
-        position:relative;
-    }
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    .header{
-        width:100%;
-        background:#0b1c4d;
-        color:white;
-        padding:17px 20px;
-        text-align:center;
-        position:relative;
-        box-shadow:0 3px 10px rgba(0,0,0,.08);
-    }
-
-    .header h1{
-        font-size:19px;
-        font-weight:700;
-        letter-spacing:.3px;
-    }
-
-    .back-btn{
-        position:absolute;
-        left:17px;
-        top:50%;
-        transform:translateY(-50%);
-        color:white;
-        text-decoration:none;
-        font-size:18px;
-    }
-
-    /* =========================
-       CONTENT
-    ========================= */
-
-    .container{
-        width:100%;
-        padding:16px;
-    }
-
-    /* =========================
-       FLASH MESSAGES
-    ========================= */
-
-    .flash{
-        padding:12px 14px;
-        border-radius:12px;
-        margin-bottom:12px;
-        font-size:13px;
-        font-weight:600;
-    }
-
-    .flash.success{
-        background:#dcfce7;
-        color:#166534;
-    }
-
-    .flash.error{
-        background:#fee2e2;
-        color:#991b1b;
-    }
-
-    /* =========================
-       CARDS
-    ========================= */
-
-    .card{
-        background:white;
-        border-radius:16px;
-        padding:17px;
-        margin-bottom:14px;
-        border:1px solid #edf0f5;
-        box-shadow:0 3px 10px rgba(0,0,0,.035);
-    }
-
-    /* =========================
-       BALANCE CARD
-    ========================= */
-
-    .balance-card{
-        background:white;
-        border-radius:16px;
-        padding:18px;
-        margin-bottom:14px;
-        border:1px solid #edf0f5;
-        box-shadow:0 3px 10px rgba(0,0,0,.035);
-    }
-
-    .balance-top{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:10px;
-    }
-
-    .balance-label{
-        color:#64748b;
-        font-size:13px;
-        font-weight:600;
-    }
-
-    .balance-icon{
-        width:35px;
-        height:35px;
-        border-radius:10px;
-        background:#eef2ff;
-        color:#0b1c4d;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    }
-
-    .balance{
-        color:#0b1c4d;
-        font-size:27px;
-        font-weight:800;
-    }
-
-    /* =========================
-       NOTICE
-    ========================= */
-
-    .notice{
-        background:white;
-        border-left:4px solid #0b1c4d;
-        border-radius:12px;
-        padding:13px;
-        margin-bottom:14px;
-        color:#475569;
-        font-size:12px;
-        line-height:1.6;
-        box-shadow:0 2px 8px rgba(0,0,0,.03);
-    }
-
-    .notice strong{
-        color:#0f172a;
-    }
-
-    /* =========================
-       CARD TITLE
-    ========================= */
-
-    .card-title{
-        color:#1f2937;
-        font-size:15px;
-        font-weight:700;
-        margin-bottom:14px;
-        display:flex;
-        align-items:center;
-        gap:8px;
-    }
-
-    .card-title i{
-        color:#0b1c4d;
-    }
-
-    /* =========================
-       WITHDRAWAL ACCOUNT
-    ========================= */
-
-    .account{
-        display:block;
-        background:#f8fafc;
-        border:1px solid #e5e7eb;
-        padding:13px;
-        border-radius:12px;
-        margin-bottom:9px;
-    }
-
-    .account-row{
-        display:flex;
-        gap:11px;
-        align-items:flex-start;
-    }
-
-    .account input{
-        width:18px;
-        height:18px;
-        margin-top:2px;
-        accent-color:#0b1c4d;
-    }
-
-    .account strong{
-        color:#111827;
-        font-size:14px;
-    }
-
-    .account-info{
-        color:#64748b;
-        margin-top:4px;
-        font-size:12px;
-    }
-
-    /* =========================
-       INPUT
-    ========================= */
-
-    .input-label{
-        color:#64748b;
-        font-size:12px;
-        font-weight:600;
-        margin-bottom:6px;
-        display:block;
-    }
-
-    .input-wrapper{
-        display:flex;
-        align-items:center;
-        background:#f8fafc;
-        border:1px solid #e5e7eb;
-        border-radius:12px;
-        padding:0 13px;
-        margin-bottom:12px;
-    }
-
-    .input-wrapper span{
-        color:#0b1c4d;
-        font-size:17px;
-        font-weight:800;
-        margin-right:9px;
-    }
-
-    .input-wrapper input{
-        width:100%;
-        border:none;
-        outline:none;
-        background:transparent;
-        padding:13px 0;
-        color:#1f2937;
-        font-size:14px;
-        font-weight:600;
-    }
-
-    .input-wrapper input::placeholder{
-        color:#9ca3af;
-        font-weight:400;
-    }
-
-    /* =========================
-       QUICK AMOUNTS
-    ========================= */
-
-    .quick-title{
-        color:#64748b;
-        font-size:12px;
-        font-weight:600;
-        margin-bottom:8px;
-    }
-
-    .quick-amounts{
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:7px;
-        margin-bottom:14px;
-    }
-
-    .quick-btn{
-        border:1px solid #e1e5eb;
-        background:#f8fafc;
-        color:#0b1c4d;
-        padding:10px 4px;
-        border-radius:10px;
-        font-size:12px;
-        font-weight:700;
-        cursor:pointer;
-    }
-
-    .quick-btn:active{
-        transform:scale(.97);
-    }
-
-    /* =========================
-       FEE BOX
-    ========================= */
-
-    .fee-box{
-        background:#f8fafc;
-        border:1px solid #edf0f5;
-        border-radius:12px;
-        padding:12px;
-        margin-bottom:12px;
-    }
-
-    .fee-row{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:8px 0;
-        color:#64748b;
-        font-size:12px;
-    }
-
-    .fee-row strong{
-        color:#1f2937;
-    }
-
-    .fee-row.total{
-        border-top:1px solid #e5e7eb;
-        margin-top:3px;
-        padding-top:11px;
-        font-size:14px;
-        font-weight:700;
-    }
-
-    .fee-row.total strong{
-        color:#0b1c4d;
-        font-size:15px;
-    }
-
-    /* =========================
-       SUBMIT BUTTON
-    ========================= */
-
-    .submit-btn{
-        width:100%;
-        border:none;
-        background:linear-gradient(
-            90deg,
-            #17245c,
-            #0b1c4d
-        );
-        color:white;
-        padding:13px;
-        border-radius:13px;
-        font-size:14px;
-        font-weight:700;
-        cursor:pointer;
-        box-shadow:0 4px 10px rgba(11,28,77,.15);
-    }
-
-    .submit-btn:active{
-        transform:scale(.99);
-    }
-
-    /* =========================
-       BIND BUTTON
-    ========================= */
-
-    .bind-btn{
-        width:100%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:8px;
-        padding:12px;
-        margin-top:10px;
-        background:#f8fafc;
-        color:#334155;
-        border:1px solid #e5e7eb;
-        border-radius:12px;
-        text-decoration:none;
-        font-size:12px;
-        font-weight:700;
-    }
-
-    /* =========================
-       INFORMATION
-    ========================= */
-
-    .info-row{
-        background:white;
-        border-left:4px solid #0b1c4d;
-        border-radius:10px;
-        padding:11px 12px;
-        margin-bottom:8px;
-        color:#64748b;
-        font-size:11px;
-        line-height:1.5;
-    }
-
-    .info-row:last-child{
-        margin-bottom:0;
-    }
-
-    .info-row strong{
-        color:#1f2937;
-    }
-
-    /* =========================
-       EMPTY
-    ========================= */
-
-    .empty{
-        text-align:center;
-        padding:10px 0;
-        color:#64748b;
-        font-size:13px;
-    }
-
-    /* =========================
-       PROFILE 5-ITEM BOTTOM NAV
-    ========================= */
-
-    .bottom-nav{
-        position:fixed;
-        bottom:0;
-        left:0;
-        right:0;
-        height:67px;
-        background:white;
-        border-top:1px solid #e5e7eb;
-        display:flex;
-        justify-content:center;
-        z-index:999;
-        box-shadow:0 -3px 12px rgba(0,0,0,.04);
-    }
-
-    .bottom-nav-inner{
-        width:100%;
-        max-width:440px;
-        display:grid;
-        grid-template-columns:repeat(5,1fr);
-        align-items:center;
-    }
-
-    .bottom-nav a{
-        height:100%;
-        position:relative;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        gap:3px;
-        text-decoration:none;
-        color:#94a3b8;
-        font-size:10px;
-        font-weight:500;
-    }
-
-    .bottom-nav i{
-        font-size:17px;
-    }
-
-    .bottom-nav a.active{
-        color:#0b1c4d;
-        font-weight:700;
-    }
-
-    .bottom-nav a.active::after{
-        content:"";
-        position:absolute;
-        bottom:0;
-        left:25%;
-        right:25%;
-        height:3px;
-        background:#0b1c4d;
-        border-radius:4px 4px 0 0;
-    }
-
-    /* =========================
-       SMALL SCREEN
-    ========================= */
-
-    @media(max-width:360px){
-
-        .container{
-            padding:12px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Infinix - Withdraw</title>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Arial, sans-serif;
         }
 
-        .card{
-            padding:14px;
+        body {
+            background: #050505;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 75px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .balance{
-            font-size:24px;
+        .phone {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            background: #080808;
+            position: relative;
+            padding-bottom: 85px;
+            overflow: hidden;
         }
 
-        .bottom-nav{
-            height:64px;
+        /* =========================
+           HEADER
+        ========================= */
+
+        .profile-header {
+            position: relative;
+            padding: 22px 18px 28px;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(0,255,70,.16),
+                    rgba(0,0,0,0) 90%
+                );
         }
 
-        .bottom-nav i{
-            font-size:16px;
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
         }
 
-    }
+        .brand {
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #00ff4c;
+        }
 
-</style>
+        .brand span {
+            color: #fff;
+        }
 
-</head><body><div class="phone"><!-- =========================
-     HEADER
-========================= -->
+        .header-title {
+            color: #aaa;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
-<div class="header">
+        .notification {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #151515;
+            border: 1px solid #292929;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    <a
-        href="{{ url_for('dashboard') }}"
-        class="back-btn"
-    >
-        <i class="fa-solid fa-chevron-left"></i>
-    </a>
+        .notification svg {
+            width: 19px;
+            color: #00ff4c;
+        }
 
-    <h1>Withdraw</h1>
+        /* =========================
+           PAGE HERO
+        ========================= */
 
-</div>
+        .withdraw-hero {
+            position: relative;
+            min-height: 145px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #252525;
+            background:
+                linear-gradient(
+                    135deg,
+                    #12391d,
+                    #0b0b0b 70%
+                );
+        }
 
+        .hero-glow {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -65px;
+            top: -70px;
+            border-radius: 50%;
+            background: rgba(0,255,76,.12);
+            filter: blur(5px);
+        }
 
-<div class="container">
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 22px;
+        }
+
+        .small-title {
+            color: #00ff4c;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .hero-content h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .hero-content p {
+            color: #999;
+            font-size: 11px;
+            line-height: 1.5;
+            max-width: 270px;
+        }
+
+        /* =========================
+           BALANCE
+        ========================= */
+
+        .balance-section {
+            padding: 0 16px;
+            margin-top: -8px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #153b20, #07150b);
+            border: 1px solid rgba(0,255,76,.25);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.35);
+        }
+
+        .balance-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-label {
+            color: #a9b0aa;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .balance-amount {
+            font-size: 25px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .balance-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: #00ff4c;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .balance-icon svg {
+            width: 21px;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 18px 16px;
+        }
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .notice {
+            background: #121212;
+            border: 1px solid #252525;
+            border-left: 3px solid #00ff4c;
+            border-radius: 13px;
+            padding: 13px;
+            margin-bottom: 14px;
+        }
+
+        .notice-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .notice-title svg {
+            width: 16px;
+            color: #00ff4c;
+        }
+
+        .notice p {
+            color: #888;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .notice strong {
+            color: #00ff4c;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            background: #121212;
+            border: 1px solid #252525;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 13px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .card-title svg {
+            width: 18px;
+            color: #00ff4c;
+        }
+
+        /* =========================
+           WITHDRAWAL ACCOUNTS
+        ========================= */
+
+        .account {
+            display: block;
+            background: #181818;
+            border: 1px solid #292929;
+            padding: 13px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .account:has(input:checked) {
+            border-color: rgba(0,255,76,.55);
+            background: #122217;
+        }
+
+        .account-row {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+        }
+
+        .account input {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #00ff4c;
+        }
+
+        .account strong {
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .account-info {
+            color: #777;
+            margin-top: 4px;
+            font-size: 11px;
+        }
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .input-label {
+            display: block;
+            color: #888;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #181818;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 0 13px;
+            margin-bottom: 13px;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: rgba(0,255,76,.55);
+        }
+
+        .currency {
+            color: #00ff4c;
+            font-size: 17px;
+            font-weight: 900;
+            margin-right: 9px;
+        }
+
+        .input-icon {
+            width: 17px;
+            color: #00ff4c;
+            margin-right: 9px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 13px 0;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* =========================
+           QUICK AMOUNTS
+        ========================= */
+
+        .quick-title {
+            color: #777;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            margin-bottom: 14px;
+        }
+
+        .quick-btn {
+            border: 1px solid #292929;
+            background: #181818;
+            color: #00ff4c;
+            padding: 10px 4px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .quick-btn:active {
+            transform: scale(.96);
+            background: #12351c;
+        }
+
+        /* =========================
+           FEE BOX
+        ========================= */
+
+        .fee-box {
+            background: #181818;
+            border: 1px solid #292929;
+            border-radius: 12px;
+            padding: 11px;
+            margin-bottom: 13px;
+        }
+
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            color: #777;
+            font-size: 11px;
+            gap: 10px;
+        }
+
+        .fee-row strong {
+            color: #ddd;
+        }
+
+        .fee-row.total {
+            border-top: 1px solid #292929;
+            margin-top: 3px;
+            padding-top: 11px;
+            font-size: 12px;
+        }
+
+        .fee-row.total strong {
+            color: #00ff4c;
+            font-size: 15px;
+        }
+
+        /* =========================
+           SUBMIT
+        ========================= */
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            background: #00ff4c;
+            color: #000;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 5px 18px rgba(0,255,76,.12);
+            transition: .15s;
+        }
+
+        .submit-btn:active {
+            transform: scale(.98);
+        }
+
+        .submit-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           BIND BUTTON
+        ========================= */
+
+        .bind-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            margin-top: 9px;
+            background: #181818;
+            color: #ddd;
+            border: 1px solid #292929;
+            border-radius: 11px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .bind-btn svg {
+            width: 16px;
+            color: #00ff4c;
+        }
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .info-item {
+            display: flex;
+            gap: 10px;
+            padding: 11px 0;
+            border-bottom: 1px solid #242424;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-item:first-child {
+            padding-top: 0;
+        }
+
+        .info-icon {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            border-radius: 9px;
+            background: #1c1c1c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-icon svg {
+            width: 15px;
+            color: #00ff4c;
+        }
+
+        .info-text {
+            color: #777;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .info-text strong {
+            color: #ddd;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+            text-align: center;
+            padding: 12px 0 3px;
+            color: #777;
+            font-size: 11px;
+        }
+
+        /* =========================
+           FLASH
+        ========================= */
+
+        .flash {
+            padding: 12px;
+            border-radius: 11px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .flash.success {
+            background: rgba(0,255,76,.10);
+            border: 1px solid rgba(0,255,76,.25);
+            color: #00ff4c;
+        }
+
+        .flash.error,
+        .flash.danger {
+            background: rgba(255,70,70,.10);
+            border: 1px solid rgba(255,70,70,.25);
+            color: #ff6868;
+        }
+
+        .flash.warning {
+            background: rgba(255,190,50,.10);
+            border: 1px solid rgba(255,190,50,.25);
+            color: #ffc44d;
+        }
+
+        /* =========================
+           LOADING SCREEN
+        ========================= */
+
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.86);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            backdrop-filter: blur(4px);
+        }
+
+        .loading-box {
+            width: 115px;
+            padding: 20px 15px;
+            background: #141414;
+            border: 1px solid #292929;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .loader {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #333;
+            border-top-color: #00ff4c;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: auto;
+        }
+
+        .loading-text {
+            color: #aaa;
+            font-size: 11px;
+            margin-top: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =========================
+           BOTTOM NAV
+        ========================= */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 67px;
+            background: #101010;
+            border-top: 1px solid #292929;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,.4);
+        }
+
+        .bottom-nav a {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: #777;
+            text-decoration: none;
+            font-size: 9px;
+        }
+
+        .bottom-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bottom-nav a.active {
+            color: #00ff4c;
+            font-weight: 800;
+        }
+
+        .bottom-nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: #00ff4c;
+            border-radius: 4px 4px 0 0;
+        }
+
+        @media(max-width:360px) {
+            .hero-content h1 {
+                font-size: 21px;
+            }
+
+            .balance-amount {
+                font-size: 22px;
+            }
+
+            .bottom-nav {
+                height: 64px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="phone">
 
     <!-- =========================
-         FLASH MESSAGES
+         HEADER
     ========================= -->
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <div class="profile-header">
 
-        {% for category, message in messages %}
+        <div class="brand-row">
 
-            <div class="flash {{ category }}">
-                {{ message }}
+            <div>
+                <div class="brand">
+                    INFINIX<span>.</span>
+                </div>
+
+                <div class="header-title">
+                    Withdrawal Center
+                </div>
             </div>
 
-        {% endfor %}
-
-    {% endwith %}
-
-
-    <!-- =========================
-         WITHDRAWAL BALANCE
-    ========================= -->
-
-    <div class="balance-card">
-
-        <div class="balance-top">
-
-            <span class="balance-label">
-                Available Withdrawal Balance
-            </span>
-
-            <div class="balance-icon">
-                <i class="fa-solid fa-wallet"></i>
+            <div class="notification">
+                <i data-lucide="bell"></i>
             </div>
 
         </div>
 
-        <div class="balance">
-            GHS {{ "%.2f"|format(account.withdraw_account or 0) }}
+
+        <!-- HERO -->
+
+        <div class="withdraw-hero">
+
+            <div class="hero-glow"></div>
+
+            <div class="hero-content">
+
+                <div class="small-title">
+                    SECURE WITHDRAWAL
+                </div>
+
+                <h1>
+                    Withdraw Funds
+                </h1>
+
+                <p>
+                    Select your withdrawal account and enter
+                    the amount you want to withdraw.
+                </p>
+
+            </div>
+
         </div>
 
     </div>
 
 
     <!-- =========================
-         NOTICE
+         BALANCE
     ========================= -->
 
-    <div class="notice">
+    <div class="balance-section">
 
-        <strong>
-            <i class="fa-solid fa-circle-info"></i>
-            Withdrawal Notice
-        </strong>
+        <div class="balance-card">
 
-        <br>
+            <div class="balance-top">
 
-        Minimum withdrawal amount:
-        <strong>GHS 30.00</strong>
+                <div>
 
-        <br>
+                    <div class="balance-label">
+                        AVAILABLE WITHDRAWAL BALANCE
+                    </div>
 
-        Withdrawal fee:
-        <strong>16%</strong>
+                    <div class="balance-amount">
+                        GHS {{ "%.2f"|format(account.withdraw_account|float) }}
+                    </div>
+
+                </div>
+
+                <div class="balance-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 
     <!-- =========================
-         WITHDRAWAL ACCOUNT
+         CONTENT
     ========================= -->
 
-    <div class="card">
+    <div class="content">
 
-        <div class="card-title">
+        <!-- FLASH -->
 
-            <i class="fa-solid fa-building-columns"></i>
+        {% with messages = get_flashed_messages(with_categories=true) %}
 
-            <span>
-                Select Withdrawal Account
-            </span>
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <!-- NOTICE -->
+
+        <div class="notice">
+
+            <div class="notice-title">
+
+                <i data-lucide="circle-alert"></i>
+
+                Withdrawal Notice
+
+            </div>
+
+            <p>
+                Minimum withdrawal:
+                <strong>GHS 30.00</strong>
+                <br>
+                Withdrawal fee:
+                <strong>16%</strong>
+                <br>
+                Please verify your withdrawal account before
+                submitting your request.
+            </p>
 
         </div>
 
 
-        {% if accounts %}
+        <!-- =========================
+             ACCOUNT CARD
+        ========================= -->
 
-            {% for withdrawal_account in accounts %}
+        <div class="card">
 
-                <label class="account">
+            <div class="card-title">
 
-                    <div class="account-row">
+                <i data-lucide="landmark"></i>
 
-                        <input
-                            type="radio"
-                            name="account_id"
-                            value="{{ withdrawal_account.id }}"
-                            form="withdrawForm"
-                            {% if loop.first %}checked{% endif %}
-                            required
-                        >
+                <span>
+                    Withdrawal Account
+                </span>
 
-                        <div>
+            </div>
 
-                            <strong>
-                                {{ withdrawal_account.network }}
-                            </strong>
 
-                            <div class="account-info">
+            {% if accounts %}
 
-                                Account Name:
-                                {{ withdrawal_account.account_name }}
+                {% for withdrawal_account in accounts %}
 
-                            </div>
+                    <label class="account">
 
-                            <div class="account-info">
+                        <div class="account-row">
 
-                                Number:
-                                {{ withdrawal_account.phone }}
+                            <input
+                                type="radio"
+                                name="account_id"
+                                value="{{ withdrawal_account.id }}"
+                                form="withdrawForm"
+                                {% if loop.first %}checked{% endif %}
+                                required
+                            >
+
+                            <div>
+
+                                <strong>
+                                    {{ withdrawal_account.network }}
+                                </strong>
+
+                                <div class="account-info">
+                                    Account Name:
+                                    {{ withdrawal_account.account_name }}
+                                </div>
+
+                                <div class="account-info">
+                                    Number:
+                                    {{ withdrawal_account.phone }}
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </div>
+                    </label>
 
-                </label>
+                {% endfor %}
 
-            {% endfor %}
+            {% else %}
 
-        {% else %}
+                <div class="empty">
 
-            <div class="empty">
+                    <p>
+                        No withdrawal account has been added yet.
+                    </p>
 
-                <p>
-                    You have no withdrawal account yet.
-                </p>
+                    <a
+                        href="{{ url_for('bind_account') }}"
+                        class="bind-btn loading-link"
+                    >
+                        <i data-lucide="plus"></i>
+                        Bind Withdrawal Account
+                    </a>
 
-                <a
-                    href="{{ url_for('bind_account') }}"
-                    class="bind-btn"
-                >
+                </div>
 
-                    <i class="fa-solid fa-plus"></i>
+            {% endif %}
 
-                    Bind Withdrawal Account
+        </div>
 
-                </a>
+
+        <!-- =========================
+             WITHDRAW FORM
+        ========================= -->
+
+        {% if accounts %}
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <i data-lucide="banknote-arrow-up"></i>
+
+                <span>
+                    Withdrawal Request
+                </span>
 
             </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('request_withdrawal') }}"
+                id="withdrawForm"
+                onsubmit="return validateWithdrawal()"
+            >
+
+                <label class="input-label">
+                    Withdrawal Amount
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="currency">₵</span>
+
+                    <input
+                        type="number"
+                        id="withdrawAmount"
+                        name="amount"
+                        min="30"
+                        step="0.01"
+                        max="{{ account.withdraw_account or 0 }}"
+                        placeholder="Enter amount"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="quick-title">
+                    QUICK AMOUNT
+                </div>
+
+                <div class="quick-amounts">
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(30)"
+                    >
+                        GHS 30
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(50)"
+                    >
+                        GHS 50
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(100)"
+                    >
+                        GHS 100
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(200)"
+                    >
+                        GHS 200
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(300)"
+                    >
+                        GHS 300
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-btn"
+                        onclick="setAmount(400)"
+                    >
+                        GHS 400
+                    </button>
+
+                </div>
+
+
+                <!-- FEE CALCULATION -->
+
+                <div class="fee-box">
+
+                    <div class="fee-row">
+
+                        <span>
+                            Withdrawal Amount
+                        </span>
+
+                        <strong id="displayAmount">
+                            GHS 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="fee-row">
+
+                        <span>
+                            Withdrawal Fee (16%)
+                        </span>
+
+                        <strong id="displayFee">
+                            GHS 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="fee-row total">
+
+                        <span>
+                            You Receive
+                        </span>
+
+                        <strong id="displayReceive">
+                            GHS 0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <label class="input-label">
+                    Withdrawal Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i
+                        data-lucide="lock"
+                        class="input-icon"
+                    ></i>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter withdrawal password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="submitButton"
+                >
+
+                    <i data-lucide="send"></i>
+
+                    Submit Withdrawal
+
+                </button>
+
+            </form>
+
+
+            <a
+                href="{{ url_for('bind_account') }}"
+                class="bind-btn loading-link"
+            >
+
+                <i data-lucide="settings"></i>
+
+                Manage Withdrawal Account
+
+            </a>
+
+        </div>
 
         {% endif %}
 
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <i data-lucide="info"></i>
+
+                <span>
+                    Withdrawal Information
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    <i data-lucide="clock-3"></i>
+                </div>
+
+                <div class="info-text">
+                    Your withdrawal request is submitted for
+                    review after you complete the withdrawal
+                    process.
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+
+                <div class="info-text">
+                    Make sure the selected withdrawal account
+                    belongs to you and that your withdrawal
+                    password is correct.
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-icon">
+                    <i data-lucide="calculator"></i>
+                </div>
+
+                <div class="info-text">
+                    The <strong>16% withdrawal fee</strong> is
+                    calculated automatically before submission.
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 
     <!-- =========================
-         WITHDRAWAL FORM
+         LOADING
     ========================= -->
 
-    {% if accounts %}
+    <div class="loading" id="loading">
 
-    <div class="card">
+        <div class="loading-box">
 
-        <div class="card-title">
+            <div class="loader"></div>
 
-            <i class="fa-solid fa-money-bill-transfer"></i>
-
-            <span>
-                Withdrawal Request
-            </span>
+            <div class="loading-text">
+                Loading...
+            </div>
 
         </div>
 
+    </div>
 
-        <form
-            method="POST"
-            action="{{ url_for('request_withdrawal') }}"
-            id="withdrawForm"
+
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================= -->
+
+    <div class="bottom-nav">
+
+        <a
+            href="/dashboard"
+            class="loading-link"
         >
-
-            <!-- AMOUNT -->
-
-            <label class="input-label">
-                Withdrawal Amount
-            </label>
-
-            <div class="input-wrapper">
-
-                <span>₵</span>
-
-                <input
-                    type="number"
-                    id="withdrawAmount"
-                    name="amount"
-                    min="30"
-                    step="0.01"
-                    max="{{ account.withdraw_account or 0 }}"
-                    placeholder="Enter Amount"
-                    autocomplete="off"
-                    required
-                >
-
-            </div>
-
-
-            <!-- QUICK AMOUNTS -->
-
-            <div class="quick-title">
-                Quick Amount
-            </div>
-
-            <div class="quick-amounts">
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(30)"
-                >
-                    GHS 30
-                </button>
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(50)"
-                >
-                    GHS 50
-                </button>
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(100)"
-                >
-                    GHS 100
-                </button>
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(200)"
-                >
-                    GHS 200
-                </button>
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(300)"
-                >
-                    GHS 300
-                </button>
-
-                <button
-                    type="button"
-                    class="quick-btn"
-                    onclick="setAmount(400)"
-                >
-                    GHS 400
-                </button>
-
-            </div>
-
-
-            <!-- FEE CALCULATION -->
-
-            <div class="fee-box">
-
-                <div class="fee-row">
-
-                    <span>
-                        Withdrawal Amount
-                    </span>
-
-                    <strong id="displayAmount">
-                        GHS 0.00
-                    </strong>
-
-                </div>
-
-
-                <div class="fee-row">
-
-                    <span>
-                        Withdrawal Fee (16%)
-                    </span>
-
-                    <strong id="displayFee">
-                        GHS 0.00
-                    </strong>
-
-                </div>
-
-
-                <div class="fee-row total">
-
-                    <span>
-                        You Receive
-                    </span>
-
-                    <strong id="displayReceive">
-                        GHS 0.00
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <!-- PASSWORD -->
-
-            <label class="input-label">
-                Withdrawal Password
-            </label>
-
-            <div class="input-wrapper">
-
-                <i
-                    class="fa-solid fa-lock"
-                    style="color:#64748b;margin-right:9px;"
-                ></i>
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter withdrawal password"
-                    minlength="6"
-                    required
-                >
-
-            </div>
-
-
-            <!-- SUBMIT -->
-
-            <button
-                type="submit"
-                class="submit-btn"
-            >
-
-                <i class="fa-solid fa-paper-plane"></i>
-
-                Submit Withdrawal
-
-            </button>
-
-        </form>
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
 
 
         <a
-            href="{{ url_for('bind_account') }}"
-            class="bind-btn"
+            href="/my_plan"
+            class="loading-link"
         >
-
-            <i class="fa-solid fa-gear"></i>
-
-            Manage Withdrawal Account
-
+            <i data-lucide="trending-up"></i>
+            <span>Income</span>
         </a>
 
-    </div>
 
-    {% endif %}
-
-
-    <!-- =========================
-         INFORMATION
-    ========================= -->
-
-    <div class="card">
-
-        <div class="card-title">
-
-            <i class="fa-solid fa-circle-info"></i>
-
-            <span>
-                Withdrawal Information
-            </span>
-
-        </div>
+        <a
+            href="/team_members"
+            class="loading-link"
+        >
+            <i data-lucide="users"></i>
+            <span>Team</span>
+        </a>
 
 
-        <div class="info-row">
-
-            Your withdrawal request will be
-            submitted for review after you
-            complete the withdrawal process.
-
-        </div>
-
-
-        <div class="info-row">
-
-            Make sure the selected account
-            belongs to you and that your
-            withdrawal password is correct.
-
-        </div>
+        <a
+            href="/team"
+            class="loading-link"
+        >
+            <i data-lucide="share-2"></i>
+            <span>Share</span>
+        </a>
 
 
-        <div class="info-row">
-
-            The <strong>16% withdrawal fee</strong>
-            is automatically calculated before
-            you submit your request.
-
-        </div>
+        <a
+            href="/profile"
+            class="loading-link"
+        >
+            <i data-lucide="user"></i>
+            <span>My</span>
+        </a>
 
     </div>
 
 </div>
 
 
-<!-- =========================
-     PROFILE 5-ITEM BOTTOM NAV
-========================= -->
+<script>
 
-<nav class="bottom-nav">
+    /* =========================
+       LUCIDE
+    ========================= */
 
-    <div class="bottom-nav-inner">
-
-        <a
-            href="{{ url_for('dashboard') }}"
-            class="active"
-        >
-
-            <i class="fa-solid fa-house"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
+    lucide.createIcons();
 
 
-        <a
-            href="{{ url_for('my_plan') }}"
-        >
+    /* =========================
+       AMOUNT CALCULATION
+    ========================= */
 
-            <i class="fa-solid fa-chart-line"></i>
+    const amountInput =
+        document.getElementById("withdrawAmount");
 
-            <span>
-                Income
-            </span>
+    const displayAmount =
+        document.getElementById("displayAmount");
 
-        </a>
+    const displayFee =
+        document.getElementById("displayFee");
 
-
-        <a
-            href="{{ url_for('team') }}"
-        >
-
-            <i class="fa-solid fa-users"></i>
-
-            <span>
-                Team
-            </span>
-
-        </a>
+    const displayReceive =
+        document.getElementById("displayReceive");
 
 
-        <a
-            href="{{ url_for('team') }}"
-        >
+    function calculateWithdrawal() {
 
-            <i class="fa-solid fa-share-nodes"></i>
+        if (!amountInput) {
+            return;
+        }
 
-            <span>
-                Share
-            </span>
+        const amount =
+            parseFloat(amountInput.value) || 0;
 
-        </a>
+        const fee =
+            amount * 0.16;
 
-
-        <a
-            href="{{ url_for('profile') }}"
-        >
-
-            <i class="fa-solid fa-user"></i>
-
-            <span>
-                My
-            </span>
-
-        </a>
-
-    </div>
-
-</nav>
-
-</div><!-- =========================
-     FEE CALCULATION JAVASCRIPT
-========================= --><script>
-
-const amountInput =
-    document.getElementById("withdrawAmount");
-
-const displayAmount =
-    document.getElementById("displayAmount");
-
-const displayFee =
-    document.getElementById("displayFee");
-
-const displayReceive =
-    document.getElementById("displayReceive");
+        const receive =
+            amount - fee;
 
 
-function calculateWithdrawal(){
+        displayAmount.textContent =
+            "GHS " + amount.toFixed(2);
 
-    if(!amountInput){
-        return;
+        displayFee.textContent =
+            "GHS " + fee.toFixed(2);
+
+        displayReceive.textContent =
+            "GHS " + receive.toFixed(2);
+
     }
 
-    const amount =
-        parseFloat(amountInput.value) || 0;
 
-    const fee =
-        amount * 0.16;
+    if (amountInput) {
 
-    const receive =
-        amount - fee;
+        amountInput.addEventListener(
+            "input",
+            calculateWithdrawal
+        );
 
-
-    displayAmount.textContent =
-        "GHS " + amount.toFixed(2);
-
-
-    displayFee.textContent =
-        "GHS " + fee.toFixed(2);
-
-
-    displayReceive.textContent =
-        "GHS " + receive.toFixed(2);
-
-}
-
-
-/* Calculate while typing */
-
-if(amountInput){
-
-    amountInput.addEventListener(
-        "input",
-        calculateWithdrawal
-    );
-
-}
-
-
-/* Quick amount buttons */
-
-function setAmount(amount){
-
-    if(!amountInput){
-        return;
     }
 
-    amountInput.value =
-        amount.toFixed(2);
+
+    function setAmount(amount) {
+
+        if (!amountInput) {
+            return;
+        }
+
+        amountInput.value =
+            amount.toFixed(2);
+
+        calculateWithdrawal();
+
+    }
+
 
     calculateWithdrawal();
 
-}
+
+    /* =========================
+       FORM VALIDATION + LOADING
+    ========================= */
+
+    function validateWithdrawal() {
+
+        if (!amountInput) {
+            return false;
+        }
+
+        const amount =
+            parseFloat(amountInput.value) || 0;
+
+        const maxBalance =
+            parseFloat(
+                amountInput.getAttribute("max")
+            ) || 0;
+
+        const selectedAccount =
+            document.querySelector(
+                'input[name="account_id"]:checked'
+            );
+
+        const password =
+            document.querySelector(
+                'input[name="password"]'
+            );
 
 
-/* Initial calculation */
+        if (!selectedAccount) {
 
-calculateWithdrawal();
+            alert(
+                "Please select a withdrawal account."
+            );
 
-</script></body>
+            return false;
+
+        }
+
+
+        if (amount < 30) {
+
+            alert(
+                "Minimum withdrawal amount is GHS 30.00."
+            );
+
+            return false;
+
+        }
+
+
+        if (amount > maxBalance) {
+
+            alert(
+                "Withdrawal amount cannot be greater than your available balance."
+            );
+
+            return false;
+
+        }
+
+
+        if (!password || !password.value.trim()) {
+
+            alert(
+                "Please enter your withdrawal password."
+            );
+
+            return false;
+
+        }
+
+
+        const button =
+            document.getElementById("submitButton");
+
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.innerHTML =
+                '<i data-lucide="loader-circle"></i> Processing...';
+
+            lucide.createIcons();
+
+        }
+
+
+        showLoading(
+            "Processing..."
+        );
+
+        return true;
+
+    }
+
+
+    /* =========================
+       LOADING FOR NAVIGATION
+    ========================= */
+
+    const loading =
+        document.getElementById("loading");
+
+
+    function showLoading(text) {
+
+        if (!loading) {
+            return;
+        }
+
+        const loadingText =
+            loading.querySelector(
+                ".loading-text"
+            );
+
+        if (loadingText && text) {
+            loadingText.textContent = text;
+        }
+
+        loading.style.display = "flex";
+
+    }
+
+
+    document
+        .querySelectorAll(".loading-link")
+        .forEach(function(link) {
+
+            link.addEventListener(
+                "click",
+                function(event) {
+
+                    /*
+                     * Ignore modified clicks such as
+                     * opening a link in another tab.
+                     */
+
+                    if (
+                        event.ctrlKey ||
+                        event.metaKey ||
+                        event.shiftKey ||
+                        event.button !== 0
+                    ) {
+                        return;
+                    }
+
+
+                    const destination =
+                        this.href;
+
+
+                    if (!destination) {
+                        return;
+                    }
+
+
+                    event.preventDefault();
+
+
+                    showLoading(
+                        "Loading..."
+                    );
+
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            destination;
+
+                    }, 350);
+
+                }
+            );
+
+        });
+
+
+    /* =========================
+       FORM SUBMISSION PROTECTION
+    ========================= */
+
+    const withdrawForm =
+        document.getElementById(
+            "withdrawForm"
+        );
+
+
+    if (withdrawForm) {
+
+        withdrawForm.addEventListener(
+            "submit",
+            function(event) {
+
+                /*
+                 * validateWithdrawal() handles
+                 * validation and loading.
+                 */
+
+                if (!validateWithdrawal()) {
+
+                    event.preventDefault();
+
+                }
+
+            }
+        );
+
+    }
+
+</script>
+
+</body>
 </html>
