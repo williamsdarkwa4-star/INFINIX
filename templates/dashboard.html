@@ -2280,15 +2280,14 @@
             </div>  
 
 
-            <button  
-                class="locked-button"  
-                disabled>  
-
-                <i data-lucide="lock"></i>  
-
-                Coming soon  
-
-            </button>  
+            <a
+    href="{{ url_for('product', product_id=9) }}"
+    class="buy-btn loading-link"
+    data-loading="Opening Infinix 9..."
+>
+    Buy now
+    <i data-lucide="arrow-right"></i>
+</a>  
 
         </article>  
 
@@ -2297,7 +2296,7 @@
              DEVICE 9  
         ================================= -->  
 
-        <article class="product-card locked">  
+        <article class="product-card">  
 
             <div class="vip-tag">  
 
