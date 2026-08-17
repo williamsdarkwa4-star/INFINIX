@@ -16,16 +16,8 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-
-    font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Roboto,Arial,sans-serif;
     -webkit-tap-highlight-color:transparent;
 }
 
@@ -33,10 +25,8 @@ body{
     background:#000000;
     color:#ffffff;
     min-height:100vh;
-
     display:flex;
     justify-content:center;
-
     padding-bottom:80px;
 }
 
@@ -44,29 +34,23 @@ body{
     width:100%;
     max-width:440px;
     min-height:100vh;
-
     background:#000000;
-
     position:relative;
     padding-bottom:80px;
 }
 
 
 /* =========================
-   HEADER
+   TOP HEADER
 ========================= */
 
 .top-header{
     width:100%;
-
     background:#000000;
-
     padding:18px 20px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     border-bottom:1px solid #242424;
 }
 
@@ -77,18 +61,14 @@ body{
 .header-title strong{
     display:block;
     color:#ffffff;
-
     font-size:18px;
     font-weight:800;
 }
 
 .header-title small{
     display:block;
-
     margin-top:3px;
-
     color:#666666;
-
     font-size:10px;
 }
 
@@ -99,20 +79,15 @@ body{
 
 .page-header{
     background:#0b0b0b;
-
     padding:22px 16px;
-
     text-align:center;
-
     border-bottom:1px solid #1f1f1f;
 }
 
 .page-header h1{
     color:#ffffff;
-
     font-size:21px;
     font-weight:800;
-
     margin-bottom:5px;
 }
 
@@ -137,25 +112,17 @@ body{
 
 .card{
     background:#0b0b0b;
-
     border:1px solid #242424;
-
     border-radius:18px;
-
     padding:16px;
-
     margin-bottom:12px;
-
-    box-shadow:
-        0 7px 22px rgba(0,0,0,.45);
+    box-shadow:0 7px 22px rgba(0,0,0,.45);
 }
 
 .card h2{
     color:#ffffff;
-
     font-size:15px;
     font-weight:800;
-
     margin-bottom:13px;
 }
 
@@ -166,77 +133,53 @@ body{
 
 .code-box{
     background:#111111;
-
     border:1px solid #242424;
-
     border-radius:13px;
-
     padding:13px;
-
-    margin-bottom:10px;
-}
-
-.code-box:last-child{
-    margin-bottom:0;
 }
 
 .code-header{
     display:flex;
     align-items:center;
-
     gap:8px;
-
     margin-bottom:8px;
 }
 
 .code-header i{
     color:#22c55e;
-
     width:18px;
     height:18px;
 }
 
 .code-title{
     color:#ffffff;
-
     font-size:12px;
     font-weight:700;
 }
 
 .code-description{
     color:#666666;
-
     font-size:10px;
-
     margin-bottom:9px;
-
     line-height:1.5;
 }
 
 .code-row{
     display:flex;
     align-items:center;
-
     gap:8px;
 }
 
 .code-value{
     flex:1;
     min-width:0;
-
     background:#080808;
-
     border:1px solid #333333;
-
     color:#22c55e;
-
     padding:11px;
-
     border-radius:10px;
-
     font-size:12px;
     font-weight:700;
-
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
@@ -244,20 +187,13 @@ body{
 
 .copy-btn{
     border:none;
-
     background:#16a34a;
-
     color:#ffffff;
-
     padding:11px 12px;
-
     border-radius:10px;
-
     font-size:11px;
     font-weight:800;
-
     cursor:pointer;
-
     white-space:nowrap;
 }
 
@@ -268,90 +204,99 @@ body{
 
 
 /* =========================
+   SEPARATE CODE SECTIONS
+========================= */
+
+.code-section{
+    margin-bottom:12px;
+}
+
+.code-section:last-child{
+    margin-bottom:0;
+}
+
+
+/* =========================
+   REFERRAL LINK
+========================= */
+
+.referral-link{
+    margin-top:10px;
+    background:#080808;
+    border:1px solid #333333;
+    border-radius:10px;
+    padding:11px;
+    color:#22c55e;
+    font-size:10px;
+    line-height:1.5;
+    word-break:break-all;
+}
+
+
+/* =========================
    TEAM OVERVIEW
 ========================= */
 
 .stats{
     display:grid;
-
     grid-template-columns:1fr 1fr;
-
     gap:9px;
 }
 
 .stat-box{
     background:#111111;
-
     border:1px solid #242424;
-
     padding:16px 8px;
-
     border-radius:13px;
-
     text-align:center;
 }
 
 .number{
     color:#22c55e;
-
     font-size:18px;
     font-weight:800;
-
     margin-bottom:4px;
 }
 
 .stat-label{
     color:#777777;
-
     font-size:10px;
 }
 
 
 /* =========================
-   LEVELS
+   TEAM LEVELS
 ========================= */
 
 .level-grid{
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
+    grid-template-columns:repeat(3,1fr);
     gap:8px;
 }
 
 .level-box{
     background:#111111;
-
     border:1px solid #242424;
-
     padding:14px 5px;
-
     border-radius:12px;
-
     text-align:center;
 }
 
 .level-box h3{
     color:#22c55e;
-
     font-size:12px;
-
     margin-bottom:7px;
 }
 
 .level-count{
     color:#ffffff;
-
     font-size:17px;
     font-weight:800;
 }
 
 .level-limit{
     color:#666666;
-
     font-size:9px;
-
     margin-top:3px;
 }
 
@@ -362,18 +307,12 @@ body{
 
 .commission-level{
     display:flex;
-
     justify-content:space-between;
     align-items:center;
-
     background:#111111;
-
     border:1px solid #242424;
-
     padding:12px 13px;
-
     border-radius:11px;
-
     margin-bottom:8px;
 }
 
@@ -383,14 +322,12 @@ body{
 
 .commission-name{
     color:#aaaaaa;
-
     font-size:12px;
     font-weight:600;
 }
 
 .commission-percent{
     color:#22c55e;
-
     font-size:15px;
     font-weight:800;
 }
@@ -402,34 +339,18 @@ body{
 
 .members-btn{
     width:100%;
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     gap:8px;
-
     background:#16a34a;
-
     color:#ffffff;
-
     padding:14px;
-
     border-radius:12px;
-
     text-decoration:none;
-
     font-size:13px;
     font-weight:800;
-
-    box-shadow:
-        0 5px 15px rgba(22,163,74,.20);
-}
-
-.members-btn i{
-    width:18px;
-    height:18px;
+    box-shadow:0 5px 15px rgba(22,163,74,.20);
 }
 
 .members-btn:active{
@@ -444,57 +365,36 @@ body{
 
 .bottom-nav{
     position:fixed;
-
     bottom:0;
     left:0;
     right:0;
-
     height:67px;
-
     background:#080808;
-
     border-top:1px solid #242424;
-
     display:flex;
-
     justify-content:center;
-
     z-index:9999;
-
-    box-shadow:
-        0 -4px 15px rgba(0,0,0,.5);
+    box-shadow:0 -4px 15px rgba(0,0,0,.5);
 }
 
 .bottom-nav-inner{
     width:100%;
     max-width:440px;
-
     display:grid;
-
-    grid-template-columns:
-        repeat(5,1fr);
-
+    grid-template-columns:repeat(5,1fr);
     align-items:center;
 }
 
 .bottom-nav a{
     height:100%;
-
     position:relative;
-
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
     justify-content:center;
-
     gap:4px;
-
     text-decoration:none;
-
     color:#666666;
-
     font-size:9px;
     font-weight:500;
 }
@@ -506,26 +406,18 @@ body{
 
 .bottom-nav a.active{
     color:#22c55e;
-
     font-weight:800;
 }
 
 .bottom-nav a.active::after{
     content:"";
-
     position:absolute;
-
     bottom:0;
-
     left:25%;
     right:25%;
-
     height:3px;
-
     background:#22c55e;
-
-    border-radius:
-        4px 4px 0 0;
+    border-radius:4px 4px 0 0;
 }
 
 
@@ -541,7 +433,6 @@ body{
 
     .card{
         padding:14px;
-
         border-radius:16px;
     }
 
@@ -551,6 +442,14 @@ body{
 
     .bottom-nav{
         height:64px;
+    }
+
+    .code-row{
+        gap:6px;
+    }
+
+    .copy-btn{
+        padding:10px;
     }
 
 }
@@ -606,9 +505,9 @@ body{
 <div class="container">
 
 
-<!-- =========================
+<!-- =====================================================
      INVITE CODE
-========================= -->
+===================================================== -->
 
 <div class="card">
 
@@ -630,8 +529,8 @@ body{
 
         <div class="code-description">
 
-            Share this code with people you invite
-            to join your network.
+            Give this code to someone when they register
+            through your referral.
 
         </div>
 
@@ -645,6 +544,7 @@ body{
             </div>
 
             <button
+                type="button"
                 class="copy-btn"
                 onclick="copyCode('inviteCode', this)"
             >
@@ -658,9 +558,9 @@ body{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      TEAM CODE
-========================= -->
+===================================================== -->
 
 <div class="card">
 
@@ -682,8 +582,8 @@ body{
 
         <div class="code-description">
 
-            Your team code identifies your referral
-            network.
+            This is your separate team identification
+            code.
 
         </div>
 
@@ -693,12 +593,71 @@ body{
                 class="code-value"
                 id="teamCode"
             >
-                {{ user.team_code|default(user.referral_code) }}
+
+                {% if user.team_code %}
+                    {{ user.team_code }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+
             </div>
 
             <button
+                type="button"
                 class="copy-btn"
                 onclick="copyCode('teamCode', this)"
+            >
+                Copy
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REFERRAL LINK
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        Referral Link
+    </h2>
+
+    <div class="code-box">
+
+        <div class="code-header">
+
+            <i data-lucide="link"></i>
+
+            <span class="code-title">
+                Your Referral Link
+            </span>
+
+        </div>
+
+        <div class="code-description">
+
+            Share this link with people you want to invite.
+
+        </div>
+
+        <div class="code-row">
+
+            <div
+                class="code-value"
+                id="referralLink"
+            >
+                https://infinix-3afi.onrender.com/register?ref={{ user.referral_code }}
+            </div>
+
+            <button
+                type="button"
+                class="copy-btn"
+                onclick="copyCode('referralLink', this)"
             >
                 Copy
             </button>
@@ -725,9 +684,7 @@ body{
         <div class="stat-box">
 
             <div class="number">
-
                 {{ total_team|default(0) }}
-
             </div>
 
             <div class="stat-label">
@@ -779,11 +736,11 @@ body{
             </h3>
 
             <div class="level-count">
-                {{ level1_count|default(0) }}
+                {{ level1_count|default(0) }}/5
             </div>
 
             <div class="level-limit">
-                Direct Team
+                Maximum 5
             </div>
 
         </div>
@@ -796,11 +753,11 @@ body{
             </h3>
 
             <div class="level-count">
-                {{ level2_count|default(0) }}
+                {{ level2_count|default(0) }}/10
             </div>
 
             <div class="level-limit">
-                Second Level
+                2 per Level 1
             </div>
 
         </div>
@@ -813,11 +770,11 @@ body{
             </h3>
 
             <div class="level-count">
-                {{ level3_count|default(0) }}
+                {{ level3_count|default(0) }}/300
             </div>
 
             <div class="level-limit">
-                Third Level
+                Maximum 300
             </div>
 
         </div>
@@ -837,6 +794,7 @@ body{
     <h2>
         Referral Commission
     </h2>
+
 
     <div class="commission-level">
 
@@ -1019,5 +977,7 @@ function copyCode(elementId, button){
 
 </script>
 
+
 </body>
+
 </html>
