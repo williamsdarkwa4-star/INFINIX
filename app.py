@@ -1189,7 +1189,10 @@ def team():
         if account
         else Decimal("0.00")
     )
+    site_url = "https://infinix-3afi.onrender.com"
 
+    referral_link = (
+        f"{site_url}/register?ref={user['referral_code']}"
     # ==========================================
     # TEAM RULES
     # ==========================================
