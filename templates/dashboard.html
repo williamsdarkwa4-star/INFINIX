@@ -2303,7 +2303,7 @@
                 INFINIX 9  
 
                 <span>  
-                    COMING SOON  
+                    buy now 
                 </span>  
 
             </div>  
@@ -2358,15 +2358,16 @@
             </div>  
 
 
-            <button  
-                class="locked-button"  
-                disabled>  
+            <a
+    href="{{ url_for('buy_plan', plan_id=9) }}"
+    class="buy-btn loading-link"
+    data-loading="Opening Infinix 9...">
 
-                <i data-lucide="lock"></i>  
+    Buy now
 
-                Coming soon  
+    <i data-lucide="arrow-right"></i>
 
-            </button>  
+</a>  
 
         </article>  
 
