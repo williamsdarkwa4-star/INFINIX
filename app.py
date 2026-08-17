@@ -7,6 +7,7 @@ from werkzeug.routing import BuildError
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def create_app(config_object=None):
     app = Flask(__name__)
     if config_object:
@@ -38,9 +39,10 @@ def create_app(config_object=None):
     @app.route("/dashboard")
     def dashboard():
         # Example: gather user/account info here
-        user = {"username": "example"}  # replace with real lookup
+        # Replace these with your real lookup logic
+        user = {"username": "example"}
         account = {"id": 1, "name": "Example Co"}
-        PLANS = []  # replace with your actual plans
+        PLANS = []
 
         # Build support_url safely so templates don't raise BuildError
         try:
@@ -67,7 +69,11 @@ def create_app(config_object=None):
     def support():
         # If you have a template for support, render it.
         # Keep the endpoint name as 'support' so templates calling url_for('support') succeed.
-        return render_template("support.html")
+        try:
+            return render_template("support.html")
+        except Exception:
+            # Fallback: simple placeholder page if template missing
+            return ("<h1>Support</h1><p>Please create templates/support.html to show a support page.</p>"), 200
 
     # Admin login route to avoid 404s seen in logs (define real logic)
     @app.route("/admin/login", methods=["GET", "POST"])
@@ -75,7 +81,17 @@ def create_app(config_object=None):
         if request.method == "POST":
             # implement real authentication
             return redirect(url_for("dashboard"))
-        return render_template("admin_login.html")  # create this template or change as needed
+        # Try to render template; fallback to simple form if missing
+        try:
+            return render_template("admin_login.html")
+        except Exception:
+            return (
+                "<form method=post>\n"
+                "<input name=username placeholder=Username>\n"
+                "<input name=password type=password placeholder=Password>\n"
+                "<button type=submit>Login</button>\n"
+                "</form>"
+            )
 
     # Health check for platform (Render, Heroku, etc.)
     @app.route("/.well-known/health")
@@ -96,7 +112,10 @@ def create_app(config_object=None):
     def server_error(e):
         logger.exception("Server error: %s", e)
         # Show generic page - avoid showing exception details in production
-        return render_template("500.html"), 500
+        try:
+            return render_template("500.html"), 500
+        except Exception:
+            return ("An internal error occurred."), 500
 
     # Log available routes once app context is ready
     @app.before_first_request
@@ -106,9 +125,12 @@ def create_app(config_object=None):
 
     return app
 
-# If running stand-alone, create the app and run it. Platforms like Render set PORT env var.
+
+# Create the app at module level so WSGI servers can import it
+app = create_app()
+
+# If running stand-alone, run the development server. Platforms like Render set PORT env var.
 if __name__ == "__main__":
-    app = create_app()
     port = int(os.environ.get("PORT", 10000))  # Render often provides $PORT
     # In production, use a proper WSGI server; this is only for local/dev testing.
     app.run(host="0.0.0.0", port=port, debug=os.environ.get("FLASK_DEBUG", "0") == "1")
