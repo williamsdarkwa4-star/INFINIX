@@ -137,7 +137,7 @@ def parse_amount(value: Any) -> Optional[Decimal]:
 
 
 def generate_referral_code() -> str:
-    return "ZEN" + uuid.uuid4().hex[:12].upper()
+    return "INFIN" + uuid.uuid4().hex[:12].upper()
 
 
 def generate_reference(prefix: str) -> str:
