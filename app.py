@@ -1175,61 +1175,356 @@ def transaction_history():
     transactions = query_all("SELECT * FROM transactions WHERE user_id=%s ORDER BY created_at DESC, id DESC", (user["id"],))
     return render_template("transaction_history.html", transactions=transactions)
 
-
 @app.route("/team")
 def team():
     user = current_user()
+
     if not user:
         return redirect(url_for("login"))
 
     account = current_account(user["id"])
-    referral_income = money(account["referral_account"] if account else Decimal("0.00"))
 
-    # level 1
-    level1_users = query_all("SELECT id, username, fullname, phone, referral_code, referred_by, created_at FROM users WHERE referred_by=%s ORDER BY created_at DESC, id DESC", (user["referral_code"],))
-    level1_codes = [m["referral_code"] for m in level1_users if m.get("referral_code")]
+    referral_income = money(
+        account["referral_account"]
+        if account
+        else Decimal("0.00")
+    )
+
+    # ==========================================
+    # TEAM RULES
+    # ==========================================
+
+    LEVEL1_LIMIT = 5
+    LEVEL2_PER_LEVEL1 = 2
+    LEVEL3_LIMIT = 300
+
+    LEVEL1_RATE = 20
+    LEVEL2_RATE = 3
+    LEVEL3_RATE = 1
+
+
+    # ==========================================
+    # LEVEL 1
+    # Direct referrals
+    # ==========================================
+
+    level1_users = query_all(
+        """
+        SELECT
+            id,
+            username,
+            fullname,
+            phone,
+            referral_code,
+            referred_by,
+            created_at
+        FROM users
+        WHERE referred_by=%s
+        ORDER BY created_at ASC, id ASC
+        LIMIT %s
+        """,
+        (
+            user["referral_code"],
+            LEVEL1_LIMIT
+        )
+    )
+
+
+    # ==========================================
+    # LEVEL 2
+    # 2 members for EACH Level 1 member
+    # ==========================================
 
     level2_users = []
-    if level1_codes:
-        # psycopg2 RealDictCursor + ANY requires list to be passed as a python list/sequence
-        level2_users = query_all("SELECT id, username, fullname, phone, referral_code, referred_by, created_at FROM users WHERE referred_by = ANY(%s) ORDER BY created_at DESC, id DESC", (level1_codes,))
 
-    level2_codes = [m["referral_code"] for m in level2_users if m.get("referral_code")]
+    for level1_member in level1_users:
+
+        children = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by=%s
+            ORDER BY created_at ASC, id ASC
+            LIMIT %s
+            """,
+            (
+                level1_member["referral_code"],
+                LEVEL2_PER_LEVEL1
+            )
+        )
+
+        for member in children:
+            member["referral_level"] = 2
+            level2_users.append(member)
+
+
+    # ==========================================
+    # LEVEL 3
+    # Maximum 300
+    # ==========================================
+
+    level2_codes = [
+        member["referral_code"]
+        for member in level2_users
+        if member.get("referral_code")
+    ]
 
     level3_users = []
+
     if level2_codes:
-        level3_users = query_all("SELECT id, username, fullname, phone, referral_code, referred_by, created_at FROM users WHERE referred_by = ANY(%s) ORDER BY created_at DESC, id DESC", (level2_codes,))
 
-    members: List[Dict[str, Any]] = []
-    for m in level1_users:
-        m["referral_level"] = 1
-        members.append(m)
-    for m in level2_users:
-        m["referral_level"] = 2
-        members.append(m)
-    for m in level3_users:
-        m["referral_level"] = 3
-        members.append(m)
+        level3_users = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by = ANY(%s)
+            ORDER BY created_at ASC, id ASC
+            LIMIT %s
+            """,
+            (
+                level2_codes,
+                LEVEL3_LIMIT
+            )
+        )
 
-    for member in members:
-        inv = query_one("SELECT COALESCE(SUM(investment_amount), 0) AS total_investment FROM plans WHERE user_id=%s", (member["id"],))
-        member["invest_amount"] = money(inv["total_investment"] if inv else Decimal("0.00"))
+        for member in level3_users:
+            member["referral_level"] = 3
+
+
+    # ==========================================
+    # COUNTS
+    # ==========================================
 
     level1_count = len(level1_users)
     level2_count = len(level2_users)
     level3_count = len(level3_users)
-    total_team = level1_count + level2_count + level3_count
+
+    total_team = (
+        level1_count
+        + level2_count
+        + level3_count
+    )
+
+
+    # ==========================================
+    # RENDER TEAM SUMMARY
+    # ==========================================
 
     return render_template(
         "team.html",
+
         user=user,
-        members=members,
+
         total_team=total_team,
+
         referral_income=referral_income,
+
         level1_count=level1_count,
         level2_count=level2_count,
         level3_count=level3_count,
+
+        level1_limit=LEVEL1_LIMIT,
+        level2_limit=LEVEL2_PER_LEVEL1,
+        level3_limit=LEVEL3_LIMIT,
+
+        level1_rate=LEVEL1_RATE,
+        level2_rate=LEVEL2_RATE,
+        level3_rate=LEVEL3_RATE
     )
+
+
+
+@app.route("/team_members")
+def team_members():
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+
+    # ==========================================
+    # LEVEL 1
+    # ==========================================
+
+    level1_users = query_all(
+        """
+        SELECT
+            id,
+            username,
+            fullname,
+            phone,
+            referral_code,
+            referred_by,
+            created_at
+        FROM users
+        WHERE referred_by=%s
+        ORDER BY created_at ASC, id ASC
+        LIMIT 5
+        """,
+        (user["referral_code"],)
+    )
+
+    for member in level1_users:
+        member["referral_level"] = 1
+
+
+    # ==========================================
+    # LEVEL 2
+    # ==========================================
+
+    level2_users = []
+
+    for level1_member in level1_users:
+
+        children = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by=%s
+            ORDER BY created_at ASC, id ASC
+            LIMIT 2
+            """,
+            (level1_member["referral_code"],)
+        )
+
+        for member in children:
+            member["referral_level"] = 2
+            level2_users.append(member)
+
+
+    # ==========================================
+    # LEVEL 3
+    # ==========================================
+
+    level2_codes = [
+        member["referral_code"]
+        for member in level2_users
+        if member.get("referral_code")
+    ]
+
+    level3_users = []
+
+    if level2_codes:
+
+        level3_users = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by = ANY(%s)
+            ORDER BY created_at ASC, id ASC
+            LIMIT 300
+            """,
+            (level2_codes,)
+        )
+
+        for member in level3_users:
+            member["referral_level"] = 3
+
+
+    # ==========================================
+    # COMBINE ALL MEMBERS
+    # ==========================================
+
+    members = []
+
+    members.extend(level1_users)
+    members.extend(level2_users)
+    members.extend(level3_users)
+
+
+    # ==========================================
+    # GET INVESTMENT TOTAL FOR EACH MEMBER
+    # ==========================================
+
+    for member in members:
+
+        investment = query_one(
+            """
+            SELECT
+                COALESCE(
+                    SUM(investment_amount),
+                    0
+                ) AS total_investment
+            FROM plans
+            WHERE user_id=%s
+            """,
+            (member["id"],)
+        )
+
+        member["invest_amount"] = money(
+            investment["total_investment"]
+            if investment
+            else Decimal("0.00")
+        )
+
+
+    # ==========================================
+    # COUNTS
+    # ==========================================
+
+    level1_count = len(level1_users)
+    level2_count = len(level2_users)
+    level3_count = len(level3_users)
+
+    total_team = (
+        level1_count
+        + level2_count
+        + level3_count
+    )
+
+
+    # ==========================================
+    # RENDER SEPARATE PAGE
+    # ==========================================
+
+    return render_template(
+        "team_members.html",
+
+        user=user,
+
+        members=members,
+
+        total_team=total_team,
+
+        level1_count=level1_count,
+        level2_count=level2_count,
+        level3_count=level3_count,
+
+        level1_limit=5,
+        level2_limit=2,
+        level3_limit=300
+    )
+
+
+
 
 
 # ---------------------------
