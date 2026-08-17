@@ -55,12 +55,23 @@ def create_app(config_object=None):
                 support_url = None
                 logger.warning("No 'support' endpoint found; dashboard will render without a support link")
 
+        # Build deposit_url safely so templates don't raise BuildError
+        try:
+            deposit_url = url_for("deposit")
+        except BuildError:
+            try:
+                deposit_url = url_for("deposit_bp.deposit")  # change if your blueprint name differs
+            except BuildError:
+                deposit_url = None
+                logger.warning("No 'deposit' endpoint found; dashboard will render without a deposit link")
+
         return render_template(
             "dashboard.html",
             user=user,
             account=account,
             plans=PLANS,
             support_url=support_url,
+            deposit_url=deposit_url,
         )
 
     # Provide a support route so url_for('support') works.
@@ -74,6 +85,14 @@ def create_app(config_object=None):
         except Exception:
             # Fallback: simple placeholder page if template missing
             return ("<h1>Support</h1><p>Please create templates/support.html to show a support page.</p>"), 200
+
+    # Provide a deposit route so url_for('deposit') works.
+    @app.route("/deposit", endpoint="deposit")
+    def deposit():
+        try:
+            return render_template("deposit.html")
+        except Exception:
+            return ("<h1>Deposit</h1><p>Please create templates/deposit.html to show a deposit page.</p>"), 200
 
     # Admin login route to avoid 404s seen in logs (define real logic)
     @app.route("/admin/login", methods=["GET", "POST"])
