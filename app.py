@@ -90,7 +90,7 @@ logger = logging.getLogger("zenith.app")
 
 MIN_DEPOSIT = Decimal("100.00")
 MIN_WITHDRAWAL = Decimal("30.00")
-STARTING_WITHDRAW_BALANCE = Decimal("30.00")
+STARTING_DEPOSIT_BALANCE = Decimal("0")
 CLAIM_INTERVAL_HOURS = 24
 
 REFERRAL_PERCENTS: List[Decimal] = [Decimal("0.20"), Decimal("0.03"), Decimal("0.01")]
@@ -409,7 +409,7 @@ def init_db():
                 VALUES (%s, %s, 0, 0, 0)
                 ON CONFLICT (user_id) DO NOTHING
                 """,
-                (uid, STARTING_WITHDRAW_BALANCE),
+                (uid, STARTING_DEPOSIT_BALANCE),
             )
 
         # Ensure admin account
