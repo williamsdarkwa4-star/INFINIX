@@ -714,7 +714,7 @@
 
             <div>
                 <div class="brand">
-                    INFINIX<span>.</span>
+                    INFINIX<span></span>
                 </div>
 
                 <div class="header-title">
@@ -828,7 +828,7 @@
                 <strong>GHS 30.00</strong>
                 <br>
                 Withdrawal fee:
-                <strong>16%</strong>
+                <strong>18%</strong>
                 <br>
                 Please verify your withdrawal account before
                 submitting your request.
@@ -984,9 +984,9 @@
                     <button
                         type="button"
                         class="quick-btn"
-                        onclick="setAmount(50)"
+                        onclick="setAmount(45)"
                     >
-                        GHS 50
+                        GHS 45
                     </button>
 
                     <button
@@ -1044,7 +1044,7 @@
                     <div class="fee-row">
 
                         <span>
-                            Withdrawal Fee (16%)
+                            Withdrawal Fee (18%)
                         </span>
 
                         <strong id="displayFee">
@@ -1178,7 +1178,7 @@
                 </div>
 
                 <div class="info-text">
-                    The <strong>16% withdrawal fee</strong> is
+                    The <strong>18% withdrawal fee</strong> is
                     calculated automatically before submission.
                 </div>
 
@@ -1299,7 +1299,7 @@
             parseFloat(amountInput.value) || 0;
 
         const fee =
-            amount * 0.16;
+            amount * 0.18;
 
         const receive =
             amount - fee;
