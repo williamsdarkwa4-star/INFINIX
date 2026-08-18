@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Plans</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin - Plan Management</title>
 
     <link
         rel="stylesheet"
@@ -12,22 +17,33 @@
     >
 
     <style>
-        :root {
-            --bg: #000000;
-            --card: #0d0d0d;
-            --card2: #111111;
-            --border: #222222;
-            --green: #3cdc3c;
-            --green-dark: #1e9f1e;
-            --white: #ffffff;
-            --muted: #888888;
-            --danger: #ff4444;
-        }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --dark: #0b0b0b;
+            --card: #111111;
+            --card2: #151515;
+
+            --green: #3cdc3c;
+            --green-dark: #1e9f1e;
+
+            --white: #ffffff;
+            --muted: #888888;
+            --border: #242424;
+            --red: #ff4545;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000000;
+            color: #ffffff;
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -37,96 +53,153 @@
                 sans-serif;
         }
 
-        body {
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--white);
-        }
-
         .container {
             width: 100%;
-            max-width: 500px;
-            margin: auto;
+            max-width: 900px;
+
+            margin: 0 auto;
+
             padding: 15px;
-            padding-bottom: 40px;
+
+            padding-bottom: 50px;
         }
 
         /* HEADER */
 
         .header {
             display: flex;
+
             align-items: center;
-            gap: 12px;
-            padding: 15px 0 20px;
+            justify-content: space-between;
+
+            padding: 15px;
+
+            margin-bottom: 15px;
+
+            background: #0b0b0b;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
         }
 
-        .back-button {
-            width: 38px;
-            height: 38px;
+        .header-left {
             display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
             align-items: center;
             justify-content: center;
 
-            color: var(--white);
-            background: #111111;
-            border: 1px solid var(--border);
+            color: #000000;
+
+            background: var(--green);
+
             border-radius: 10px;
 
-            text-decoration: none;
+            font-size: 18px;
         }
 
-        .header-text h1 {
-            font-size: 19px;
+        .header h1 {
+            font-size: 18px;
+
             font-weight: 800;
         }
 
-        .header-text p {
+        .header p {
             margin-top: 3px;
+
             color: var(--muted);
-            font-size: 9px;
-        }
 
-        /* ALERT */
-
-        .alert {
-            padding: 10px 12px;
-            margin-bottom: 12px;
-
-            background: #101010;
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--green);
-            border-radius: 8px;
-
-            color: #bbbbbb;
             font-size: 10px;
         }
 
-        /* CARD */
+        .logout {
+            color: #ffffff;
 
-        .card {
-            margin-bottom: 13px;
-            padding: 13px;
+            text-decoration: none;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #050505,
-                    #111111
-                );
+            padding: 9px 12px;
+
+            background: #151515;
 
             border: 1px solid var(--border);
-            border-radius: 11px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+        }
+
+        .logout:active {
+            transform: scale(.96);
+        }
+
+        /* FLASH */
+
+        .flash-container {
+            margin-bottom: 12px;
+        }
+
+        .flash {
+            padding: 11px 12px;
+
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+        }
+
+        .flash.success {
+            color: #000000;
+
+            background: var(--green);
+        }
+
+        .flash.error {
+            color: #ffffff;
+
+            background: #3a1111;
+
+            border: 1px solid #722222;
+        }
+
+        /* CARDS */
+
+        .card {
+            margin-bottom: 15px;
+
+            padding: 15px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
         }
 
         .card-title {
             display: flex;
+
             align-items: center;
-            gap: 8px;
+
+            gap: 7px;
 
             margin-bottom: 12px;
 
-            color: var(--white);
-            font-size: 13px;
+            color: #ffffff;
+
+            font-size: 14px;
+
             font-weight: 800;
         }
 
@@ -134,237 +207,336 @@
             color: var(--green);
         }
 
+        .card-description {
+            margin-bottom: 13px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
         /* FORM */
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 11px;
         }
 
         .form-label {
             display: block;
+
             margin-bottom: 5px;
 
-            color: #999999;
+            color: #bbbbbb;
+
             font-size: 9px;
+
             font-weight: 600;
         }
 
-        select,
-        input {
+        select {
             width: 100%;
-            height: 40px;
 
-            padding: 0 11px;
+            padding: 11px;
 
-            color: var(--white);
+            color: #ffffff;
+
             background: #080808;
 
             border: 1px solid #292929;
-            border-radius: 7px;
+
+            border-radius: 8px;
 
             outline: none;
-            font-size: 11px;
+
+            font-size: 10px;
         }
 
-        select:focus,
-        input:focus {
+        select:focus {
             border-color: var(--green);
         }
 
-        select option {
-            color: #ffffff;
-            background: #111111;
-        }
-
-        /* BUTTON */
-
-        .button {
+        .assign-button {
             width: 100%;
-            min-height: 40px;
+
+            padding: 11px;
 
             border: none;
-            border-radius: 7px;
+
+            color: #000000;
+
+            background: var(--green);
+
+            border-radius: 8px;
 
             font-size: 10px;
+
             font-weight: 800;
 
             cursor: pointer;
-        }
-
-        .assign-button {
-            color: #000000;
-            background: var(--green);
         }
 
         .assign-button:active {
             transform: scale(.98);
         }
 
-        /* PLANS */
+        /* PLAN PREVIEW */
 
-        .plan-card {
-            margin-bottom: 8px;
-            padding: 10px;
+        .plan-preview {
+            display: grid;
 
-            background: #090909;
-            border: 1px solid #1b1b1b;
-            border-radius: 8px;
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 7px;
+
+            margin-top: 10px;
+        }
+
+        .preview-item {
+            padding: 9px;
+
+            background: #080808;
+
+            border: 1px solid #202020;
+
+            border-radius: 7px;
+        }
+
+        .preview-label {
+            color: #555555;
+
+            font-size: 7px;
+        }
+
+        .preview-value {
+            margin-top: 3px;
+
+            color: var(--green);
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+        /* PLAN LIST */
+
+        .plans-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .plan-row {
+            padding: 11px;
+
+            background: #0b0b0b;
+
+            border: 1px solid #202020;
+
+            border-radius: 9px;
         }
 
         .plan-top {
             display: flex;
+
             align-items: center;
             justify-content: space-between;
 
-            margin-bottom: 7px;
-        }
-
-        .plan-name {
-            color: var(--green);
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .plan-user {
-            color: #777777;
-            font-size: 8px;
-        }
-
-        .plan-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
+            gap: 8px;
 
             margin-bottom: 8px;
         }
 
+        .user-name {
+            color: #ffffff;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+        .user-phone {
+            margin-top: 2px;
+
+            color: #555555;
+
+            font-size: 8px;
+        }
+
+        .plan-name {
+            color: var(--green);
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+        .plan-details {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 6px;
+
+            margin-bottom: 9px;
+        }
+
         .detail {
-            padding: 7px 5px;
+            padding: 7px;
+
             background: #111111;
-            border-radius: 5px;
+
+            border-radius: 6px;
         }
 
         .detail-label {
-            display: block;
             color: #555555;
+
             font-size: 7px;
         }
 
         .detail-value {
-            display: block;
             margin-top: 2px;
 
-            color: #ffffff;
-            font-size: 9px;
+            color: #cccccc;
+
+            font-size: 8px;
+
             font-weight: 700;
         }
 
-        /* DELETE */
+        .plan-footer {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding-top: 7px;
+
+            border-top: 1px solid #1b1b1b;
+        }
+
+        .status {
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            color: #000000;
+
+            background: var(--green);
+
+            font-size: 7px;
+
+            font-weight: 800;
+        }
+
+        .status.inactive {
+            color: #ffffff;
+
+            background: #333333;
+        }
 
         .delete-button {
-            width: 100%;
-            min-height: 32px;
+            padding: 7px 9px;
 
-            color: #ff6666;
-            background: #170909;
+            color: #ffffff;
 
-            border: 1px solid #351313;
+            background: #261010;
+
+            border: 1px solid #572020;
+
             border-radius: 6px;
 
             font-size: 8px;
-            font-weight: 800;
+
+            font-weight: 700;
 
             cursor: pointer;
         }
 
         .delete-button:active {
-            transform: scale(.98);
+            transform: scale(.96);
         }
 
         /* EMPTY */
 
         .empty {
-            padding: 25px 10px;
+            padding: 30px 15px;
+
             text-align: center;
 
             color: #555555;
-            font-size: 9px;
+
+            background: #090909;
+
+            border: 1px solid #181818;
+
+            border-radius: 9px;
+
+            font-size: 10px;
         }
 
         .empty i {
             display: block;
+
             margin-bottom: 8px;
-            font-size: 25px;
+
+            font-size: 22px;
         }
 
-        /* LOADING */
+        /* BACK */
 
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
+        .back-link {
+            display: inline-flex;
 
-            display: none;
             align-items: center;
-            justify-content: center;
 
-            background: rgba(0,0,0,.80);
-            backdrop-filter: blur(3px);
+            gap: 6px;
 
-            z-index: 9999;
+            margin-bottom: 12px;
+
+            color: var(--green);
+
+            text-decoration: none;
+
+            font-size: 9px;
+
+            font-weight: 700;
         }
 
-        .loading-overlay.active {
-            display: flex;
-        }
+        /* MOBILE */
 
-        .loading-box {
-            width: 100px;
-            padding: 15px;
+        @media (max-width: 500px) {
 
-            text-align: center;
-
-            background: #101010;
-            border: 1px solid #252525;
-            border-radius: 10px;
-        }
-
-        .spinner {
-            width: 24px;
-            height: 24px;
-
-            margin: auto auto 7px;
-
-            border: 3px solid #333333;
-            border-top-color: var(--green);
-
-            border-radius: 50%;
-
-            animation: spin .8s linear infinite;
-        }
-
-        .loading-text {
-            color: #888888;
-            font-size: 8px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* SMALL SCREEN */
-
-        @media (max-width: 360px) {
             .container {
                 padding: 10px;
             }
 
-            .plan-details {
-                gap: 3px;
+            .header {
+                padding: 12px;
             }
+
+            .header h1 {
+                font-size: 15px;
+            }
+
+            .plan-preview {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .plan-details {
+                grid-template-columns: 1fr 1fr;
+            }
+
         }
+
     </style>
+
 </head>
 
 <body>
@@ -375,81 +547,98 @@
 
     <header class="header">
 
-        <a
-            href="{{ url_for('admin_dashboard') }}"
-            class="back-button"
-        >
-            <i class="fa-solid fa-chevron-left"></i>
-        </a>
+        <div class="header-left">
 
-        <div class="header-text">
+            <div class="header-icon">
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
 
-            <h1>
-                Plan Management
-            </h1>
+            <div>
 
-            <p>
-                Assign and manage user plans
-            </p>
+                <h1>
+                    Plan Management
+                </h1>
+
+                <p>
+                    Assign and manage user plans
+                </p>
+
+            </div>
 
         </div>
+
+        <a
+            href="{{ url_for('admin_logout') }}"
+            class="logout"
+        >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
 
     </header>
 
 
-    <!-- MESSAGE -->
+    <!-- FLASH -->
 
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
-            {% for category, message in messages %}
+            <div class="flash-container">
 
-                <div class="alert">
-                    {{ message }}
-                </div>
+                {% for category, message in messages %}
 
-            {% endfor %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
 
         {% endif %}
 
     {% endwith %}
 
 
-    <!-- INFORMATION -->
+    <!-- BACK -->
 
-    <div class="alert">
+    <a
+        href="{{ url_for('admin_dashboard') }}"
+        class="back-link"
+    >
 
-        <i class="fa-solid fa-circle-info"></i>
+        <i class="fa-solid fa-arrow-left"></i>
 
-        Admin can assign an available plan directly
-        to a selected user. Assigned plans will appear
-        in the user's My Device / My Plan section.
+        Back to Admin Dashboard
 
-    </div>
+    </a>
 
 
-    <!-- =====================================================
-         ASSIGN PLAN
-    ====================================================== -->
+    <!-- ASSIGN PLAN -->
 
     <section class="card">
 
         <div class="card-title">
 
-            <i class="fa-solid fa-plus-circle"></i>
+            <i class="fa-solid fa-user-plus"></i>
 
-            <span>
-                Assign Plan
-            </span>
+            Give Plan to User
 
         </div>
+
+        <p class="card-description">
+
+            Select a registered user and an available plan.
+            The selected plan will be added directly to the
+            user's account without deducting their deposit balance.
+
+        </p>
 
 
         <form
             method="POST"
             action="{{ url_for('admin_assign_plan') }}"
-            onsubmit="showLoading()"
         >
 
             <!-- USER -->
@@ -466,7 +655,7 @@
                 >
 
                     <option value="">
-                        Select a user
+                        -- Select User --
                     </option>
 
                     {% for user in users %}
@@ -475,8 +664,12 @@
 
                             {{ user.username }}
 
+                            {% if user.fullname %}
+                                - {{ user.fullname }}
+                            {% endif %}
+
                             {% if user.phone %}
-                                — {{ user.phone }}
+                                - {{ user.phone }}
                             {% endif %}
 
                         </option>
@@ -498,20 +691,25 @@
 
                 <select
                     name="plan_id"
+                    id="planSelect"
                     required
                 >
 
                     <option value="">
-                        Select a plan
+                        -- Select Plan --
                     </option>
 
                     {% for plan in available_plans %}
 
-                        <option value="{{ plan.id }}">
+                        <option
+                            value="{{ plan.id }}"
+                            data-investment="{{ plan.investment_amount }}"
+                            data-daily="{{ plan.daily_income }}"
+                            data-duration="{{ plan.duration }}"
+                        >
 
-                            {{ plan.name }}
-
-                            —
+                            {{ plan.plan_name }}
+                            -
                             GHS {{ "%.2f"|format(plan.investment_amount|float) }}
 
                         </option>
@@ -523,16 +721,72 @@
             </div>
 
 
-            <!-- SUBMIT -->
+            <!-- PLAN PREVIEW -->
+
+            <div
+                class="plan-preview"
+                id="planPreview"
+            >
+
+                <div class="preview-item">
+
+                    <div class="preview-label">
+                        Investment
+                    </div>
+
+                    <div
+                        class="preview-value"
+                        id="previewInvestment"
+                    >
+                        GHS 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="preview-item">
+
+                    <div class="preview-label">
+                        Daily Income
+                    </div>
+
+                    <div
+                        class="preview-value"
+                        id="previewDaily"
+                    >
+                        GHS 0.00
+                    </div>
+
+                </div>
+
+
+                <div class="preview-item">
+
+                    <div class="preview-label">
+                        Duration
+                    </div>
+
+                    <div
+                        class="preview-value"
+                        id="previewDuration"
+                    >
+                        0 days
+                    </div>
+
+                </div>
+
+            </div>
+
 
             <button
                 type="submit"
-                class="button assign-button"
+                class="assign-button"
+                style="margin-top: 12px;"
             >
 
                 <i class="fa-solid fa-gift"></i>
 
-                Assign Plan to User
+                Give Plan to User
 
             </button>
 
@@ -541,178 +795,175 @@
     </section>
 
 
-    <!-- =====================================================
-         CURRENT ASSIGNED PLANS
-    ====================================================== -->
+    <!-- EXISTING USER PLANS -->
 
     <section class="card">
 
         <div class="card-title">
 
-            <i class="fa-solid fa-list"></i>
+            <i class="fa-solid fa-list-check"></i>
 
-            <span>
-                Assigned Plans
-            </span>
+            Assigned Plans
 
         </div>
 
+        {% if user_plans %}
 
-        {% if assigned_plans %}
+            <div class="plans-list">
 
-            {% for item in assigned_plans %}
+                {% for plan in user_plans %}
 
-                <div class="plan-card">
+                    <div class="plan-row">
 
-                    <!-- TOP -->
+                        <div class="plan-top">
 
-                    <div class="plan-top">
+                            <div>
 
-                        <span class="plan-name">
+                                <div class="user-name">
 
-                            {{ item.plan_name }}
+                                    {{ plan.username }}
 
-                        </span>
+                                </div>
+
+                                {% if plan.fullname %}
+
+                                    <div class="user-phone">
+
+                                        {{ plan.fullname }}
+
+                                    </div>
+
+                                {% endif %}
+
+                                {% if plan.phone %}
+
+                                    <div class="user-phone">
+
+                                        {{ plan.phone }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
 
 
-                        <span class="plan-user">
+                            <div class="plan-name">
 
-                            {{ item.username }}
+                                {{ plan.plan_name }}
 
-                        </span>
-
-                    </div>
-
-
-                    <!-- DETAILS -->
-
-                    <div class="plan-details">
-
-                        <div class="detail">
-
-                            <span class="detail-label">
-                                User ID
-                            </span>
-
-                            <span class="detail-value">
-                                {{ item.user_id }}
-                            </span>
+                            </div>
 
                         </div>
 
 
-                        <div class="detail">
+                        <div class="plan-details">
 
-                            <span class="detail-label">
-                                Investment
-                            </span>
+                            <div class="detail">
 
-                            <span class="detail-value">
+                                <div class="detail-label">
+                                    Investment
+                                </div>
 
-                                GHS
-                                {{
-                                    "%.2f"|format(
-                                        item.investment_amount|float
+                                <div class="detail-value">
+
+                                    GHS
+                                    {{ "%.2f"|format(
+                                        plan.investment_amount|float
+                                    ) }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail">
+
+                                <div class="detail-label">
+                                    Daily Income
+                                </div>
+
+                                <div class="detail-value">
+
+                                    GHS
+                                    {{ "%.2f"|format(
+                                        plan.daily_income|float
+                                    ) }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail">
+
+                                <div class="detail-label">
+                                    Duration
+                                </div>
+
+                                <div class="detail-value">
+
+                                    {{ plan.duration }} days
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="plan-footer">
+
+                            {% if plan.active %}
+
+                                <span class="status">
+                                    ACTIVE
+                                </span>
+
+                            {% else %}
+
+                                <span class="status inactive">
+                                    INACTIVE
+                                </span>
+
+                            {% endif %}
+
+
+                            <form
+                                method="POST"
+                                action="{{
+                                    url_for(
+                                        'admin_delete_plan',
+                                        plan_record_id=plan.id
                                     )
-                                }}
-
-                            </span>
-
-                        </div>
-
-
-                        <div class="detail">
-
-                            <span class="detail-label">
-                                Daily
-                            </span>
-
-                            <span class="detail-value">
-
-                                GHS
-                                {{
-                                    "%.2f"|format(
-                                        item.daily_income|float
-                                    )
-                                }}
-
-                            </span>
-
-                        </div>
-
-
-                        <div class="detail">
-
-                            <span class="detail-label">
-                                Duration
-                            </span>
-
-                            <span class="detail-value">
-                                {{ item.duration }} days
-                            </span>
-
-                        </div>
-
-
-                        <div class="detail">
-
-                            <span class="detail-label">
-                                Plan ID
-                            </span>
-
-                            <span class="detail-value">
-                                {{ item.id }}
-                            </span>
-
-                        </div>
-
-
-                        <div class="detail">
-
-                            <span class="detail-label">
-                                Status
-                            </span>
-
-                            <span
-                                class="detail-value"
-                                style="color: var(--green);"
+                                }}"
+                                onsubmit="
+                                    return confirm(
+                                        'Delete this plan from the user?'
+                                    );
+                                "
                             >
-                                Active
-                            </span>
+
+                                <button
+                                    type="submit"
+                                    class="delete-button"
+                                >
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                    Delete Plan
+
+                                </button>
+
+                            </form>
 
                         </div>
 
                     </div>
 
+                {% endfor %}
 
-                    <!-- DELETE -->
-
-                    <form
-                        method="POST"
-                        action="{{ url_for(
-                            'admin_delete_plan',
-                            user_plan_id=item.id
-                        ) }}"
-                        onsubmit="return confirmDelete(this);"
-                    >
-
-                        <button
-                            type="submit"
-                            class="delete-button"
-                        >
-
-                            <i class="fa-solid fa-trash"></i>
-
-                            Delete Assigned Plan
-
-                        </button>
-
-                    </form>
-
-                </div>
-
-            {% endfor %}
-
+            </div>
 
         {% else %}
 
@@ -731,57 +982,70 @@
 </div>
 
 
-<!-- =====================================================
-     LOADING OVERLAY
-====================================================== -->
-
-<div
-    id="loadingOverlay"
-    class="loading-overlay"
->
-
-    <div class="loading-box">
-
-        <div class="spinner"></div>
-
-        <div class="loading-text">
-            Processing...
-        </div>
-
-    </div>
-
-</div>
-
-
 <script>
 
-    function showLoading() {
+    const planSelect =
+        document.getElementById("planSelect");
 
-        const overlay =
-            document.getElementById(
-                "loadingOverlay"
-            );
+    const previewInvestment =
+        document.getElementById("previewInvestment");
 
-        if (overlay) {
-            overlay.classList.add("active");
+    const previewDaily =
+        document.getElementById("previewDaily");
+
+    const previewDuration =
+        document.getElementById("previewDuration");
+
+
+    planSelect.addEventListener(
+        "change",
+        function () {
+
+            const option =
+                this.options[this.selectedIndex];
+
+
+            if (!option.value) {
+
+                previewInvestment.textContent =
+                    "GHS 0.00";
+
+                previewDaily.textContent =
+                    "GHS 0.00";
+
+                previewDuration.textContent =
+                    "0 days";
+
+                return;
+            }
+
+
+            const investment =
+                option.dataset.investment || "0";
+
+            const daily =
+                option.dataset.daily || "0";
+
+            const duration =
+                option.dataset.duration || "0";
+
+
+            previewInvestment.textContent =
+                "GHS " +
+                Number(investment).toFixed(2);
+
+
+            previewDaily.textContent =
+                "GHS " +
+                Number(daily).toFixed(2);
+
+
+            previewDuration.textContent =
+                duration +
+                " days";
+
         }
-
-    }
-
-
-    function confirmDelete(form) {
-
-        const confirmed = confirm(
-            "Are you sure you want to delete this assigned plan?"
-        );
-
-        if (confirmed) {
-            showLoading();
-        }
-
-        return confirmed;
-
-    }
+    );
 
 </script>
 
