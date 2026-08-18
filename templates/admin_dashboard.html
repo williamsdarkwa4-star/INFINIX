@@ -1,280 +1,675 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Dashboard - INFINIX</title>
+<title>INFINIX Admin Dashboard</title>
 
 <style>
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
 body{
-  background:#f4f7fb;
-  padding:20px;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  color:#0f172a;
+    min-height:100vh;
+    background:#f4f7fb;
+    color:#0f172a;
+    padding:14px;
 }
 
-/* Header */
 .header{
-  background:linear-gradient(135deg,#06121a,#0845a8);
-  color:white;
-  padding:24px;
-  border-radius:16px;
-  text-align:center;
-  box-shadow:0 8px 30px rgba(3,7,18,0.12);
+    max-width:1050px;
+    margin:auto;
+    padding:22px 20px;
+    border-radius:18px;
+    color:#fff;
+    text-align:center;
+    background:linear-gradient(135deg,#020617,#063fa8,#0874e8);
+    box-shadow:0 10px 30px rgba(0,40,120,.18);
 }
 
 .header h1{
-  font-size:20px;
-  letter-spacing:0.6px;
-  margin-bottom:6px;
+    font-size:22px;
+    font-weight:900;
 }
+
 .header p{
-  margin-top:6px;
-  color:rgba(255,255,255,0.85);
-  font-size:13px;
+    margin-top:6px;
+    font-size:12px;
+    color:#dbeafe;
 }
 
-/* Layout */
 .container{
-  margin-top:18px;
-  max-width:980px;
-  margin-left:auto;
-  margin-right:auto;
+    width:100%;
+    max-width:1050px;
+    margin:18px auto 40px;
 }
 
-/* Card */
 .card{
-  background:white;
-  padding:18px;
-  border-radius:14px;
-  margin-bottom:16px;
-  box-shadow:0 6px 20px rgba(16,24,40,0.06);
+    background:#fff;
+    border:1px solid #e5eaf2;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 6px 22px rgba(15,23,42,.06);
 }
 
-/* Stats */
+.card-title{
+    font-size:16px;
+    font-weight:900;
+    margin-bottom:5px;
+}
+
+.card-description{
+    color:#64748b;
+    font-size:12px;
+    margin-bottom:15px;
+}
+
+/* ================= STATS ================= */
+
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
 }
+
 .stat{
-  background:linear-gradient(180deg,#fbfdff,#f6f9ff);
-  padding:14px;
-  border-radius:10px;
-  text-align:center;
-  border:1px solid rgba(37,99,235,0.06);
+    padding:16px;
+    border-radius:13px;
+    background:linear-gradient(180deg,#fff,#f8fbff);
+    border:1px solid #e5edf8;
 }
+
+.stat-icon{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eaf3ff;
+    color:#1264d8;
+    font-size:18px;
+    margin-bottom:10px;
+}
+
 .stat h2{
-  color:#0b63d6;
-  font-size:20px;
-  margin-bottom:6px;
+    font-size:22px;
+    color:#0b63d6;
 }
+
 .stat p{
-  color:#475569;
-  font-size:12px;
+    margin-top:4px;
+    color:#64748b;
+    font-size:11px;
 }
 
-/* Management buttons */
-.buttons{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-.button-link{
-  display:block;
-  text-decoration:none;
-  background:#2563EB;
-  color:white;
-  padding:12px;
-  border-radius:10px;
-  text-align:center;
-  font-weight:700;
-  box-shadow:0 6px 18px rgba(37,99,235,0.12);
-}
-.button-link.logout{
-  background:#ef4444;
-  box-shadow:0 6px 18px rgba(239,68,68,0.12);
+/* ================= MANAGEMENT ================= */
+
+.management-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
 }
 
-/* Plans preview card */
-.plans-preview {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.plans-grid {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-.plan-mini {
-  background:#081024;
-  color:#ffffff;
-  padding:10px;
-  border-radius:8px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,0.04);
-}
-.plan-mini .name {
-  font-weight:800;
-  font-size:12px;
-  color:#a7f59a;
-  margin-bottom:6px;
-}
-.plan-mini .price {
-  font-size:12px;
-  color:#e6f7e9;
-}
-.plan-preview-footer {
-  display:flex;
-  gap:10px;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:6px;
-}
-.manage-plans-btn {
-  background:linear-gradient(135deg,#06c24f,#00a83a);
-  color:#001b09;
-  padding:10px 14px;
-  border-radius:8px;
-  font-weight:800;
-  text-decoration:none;
-  box-shadow:0 8px 20px rgba(0,168,58,0.12);
-}
-.view-all-link {
-  color:#475569;
-  font-size:13px;
-  text-decoration:none;
+.admin-button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:10px;
+    border-radius:11px;
+    text-decoration:none;
+    color:#fff;
+    background:linear-gradient(135deg,#1264d8,#0845a8);
+    font-size:12px;
+    font-weight:800;
+    transition:.2s;
 }
 
-/* Responsive */
-@media (max-width:900px){
-  .stats{ grid-template-columns:repeat(2,1fr); }
-  .buttons{ grid-template-columns:repeat(2,1fr); }
-  .plans-grid { grid-template-columns:repeat(2,1fr); }
+.admin-button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(18,100,216,.18);
 }
-@media (max-width:480px){
-  body{ padding:12px; }
-  .stats{ grid-template-columns:1fr; }
-  .buttons{ grid-template-columns:1fr; }
-  .plans-grid { grid-template-columns:1fr; }
+
+.admin-button.danger{
+    background:linear-gradient(135deg,#ef4444,#c81e1e);
+}
+
+/* ================= PLANS ================= */
+
+.plan-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.manage-button{
+    padding:10px 14px;
+    border-radius:10px;
+    background:#16a34a;
+    color:#fff;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.plans-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.plan{
+    padding:13px;
+    border-radius:12px;
+    background:#071329;
+    color:#fff;
+    border:1px solid #17284b;
+}
+
+.plan-name{
+    color:#7df58a;
+    font-size:12px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.plan-price{
+    font-size:14px;
+    font-weight:900;
+}
+
+.plan-info{
+    color:#aab6ca;
+    font-size:10px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+/* ================= QUICK ACTIONS ================= */
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.quick-action{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    border-radius:12px;
+    background:#f8fafc;
+    border:1px solid #e5eaf2;
+}
+
+.quick-icon{
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e8f1ff;
+    color:#1264d8;
+    font-size:17px;
+    flex-shrink:0;
+}
+
+.quick-action strong{
+    display:block;
+    font-size:12px;
+}
+
+.quick-action span{
+    display:block;
+    margin-top:4px;
+    color:#64748b;
+    font-size:10px;
+}
+
+/* ================= INVITES ================= */
+
+.invite{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    margin-bottom:8px;
+    border-radius:10px;
+    background:#f8fafc;
+    border:1px solid #e8edf4;
+}
+
+.invite-name{
+    font-size:12px;
+    font-weight:800;
+}
+
+.invite-info{
+    margin-top:4px;
+    color:#64748b;
+    font-size:10px;
+}
+
+.approved{
+    color:#16a34a;
+    font-size:11px;
+    font-weight:800;
+}
+
+.pending{
+    color:#d97706;
+    font-size:11px;
+    font-weight:800;
+}
+
+/* ================= EMPTY ================= */
+
+.empty{
+    padding:18px;
+    text-align:center;
+    color:#64748b;
+    background:#f8fafc;
+    border-radius:10px;
+    font-size:12px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:850px){
+
+    .plans-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .management-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:520px){
+
+    body{
+        padding:10px;
+    }
+
+    .header{
+        padding:20px 15px;
+    }
+
+    .header h1{
+        font-size:19px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .management-grid{
+        grid-template-columns:1fr;
+    }
+
+    .plans-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
+    .plan-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .manage-button{
+        width:100%;
+        text-align:center;
+    }
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="header">
-  <h1>INFINIX Admin</h1>
-  <p>Administrator Control Panel</p>
-</div>
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+    <h1>INFINIX ADMIN</h1>
+    <p>Administrator Control Panel</p>
+</header>
 
 <div class="container">
 
-  <!-- Top Stats -->
-  <div class="card">
+<!-- ================= STATISTICS ================= -->
+
+<section class="card">
+
+    <div class="card-title">Dashboard Overview</div>
+    <div class="card-description">
+        Monitor your platform activity.
+    </div>
+
     <div class="stats">
-      <div class="stat">
-        <h2>{{ total_users }}</h2>
-        <p>Users</p>
-      </div>
 
-      <div class="stat">
-        <h2>{{ pending_deposits }}</h2>
-        <p>Pending Deposits</p>
-      </div>
+        <div class="stat">
+            <div class="stat-icon">👥</div>
+            <h2>{{ total_users }}</h2>
+            <p>Total Users</p>
+        </div>
 
-      <div class="stat">
-        <h2>{{ pending_withdrawals }}</h2>
-        <p>Pending Withdrawals</p>
-      </div>
-    </div>
-  </div>
+        <div class="stat">
+            <div class="stat-icon">💰</div>
+            <h2>{{ pending_deposits }}</h2>
+            <p>Pending Deposits</p>
+        </div>
 
-  <!-- Management Buttons -->
-  <div class="card">
-    <h3 style="margin-bottom:10px;color:#0f172a;font-size:15px;font-weight:800;">Management</h3>
+        <div class="stat">
+            <div class="stat-icon">💸</div>
+            <h2>{{ pending_withdrawals }}</h2>
+            <p>Pending Withdrawals</p>
+        </div>
 
-    <div class="buttons">
-      <a class="button-link" href="{{ url_for('admin_users') }}">👥 Manage Users</a>
-      <a class="button-link" href="{{ url_for('admin_deposits') }}">💰 Manage Deposits</a>
-      <a class="button-link" href="{{ url_for('admin_withdrawals') }}">💸 Manage Withdrawals</a>
-      <a class="button-link" href="{{ url_for('admin_bind_accounts') }}">📱 Bind Accounts</a>
-      <a class="button-link" href="{{ url_for('admin_plans') }}">📦 Manage Plans</a>
-      <a class="button-link logout" href="{{ url_for('admin_logout') }}">🚪 Logout</a>
-    </div>
-  </div>
-
-  <!-- Plan Management Preview -->
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div>
-        <h3 style="margin:0;color:#0f172a;font-size:15px;font-weight:800;">Plan Management</h3>
-        <p style="margin:6px 0 0;color:#6b7280;font-size:13px;">Quick preview of available plans. Click Manage Plans to open the full editor.</p>
-      </div>
-      <a class="manage-plans-btn" href="{{ url_for('admin_plans') }}">Manage Plans</a>
     </div>
 
-    <div class="plans-preview">
-      {% if available_plans %}
-        <div class="plans-grid">
-          {% for plan in available_plans[:8] %}
-            <div class="plan-mini">
-              <div class="name">{{ plan.name }}</div>
-              <div class="price">GHS {{ "%.2f"|format(plan.investment_amount|float) }}</div>
-              <div style="font-size:11px;color:#9ca3af;margin-top:6px;">Daily: GHS {{ "%.2f"|format(plan.daily_income|float) }}</div>
-              <div style="font-size:11px;color:#9ca3af;">Duration: {{ plan.duration }}d</div>
+</section>
+
+
+<!-- ================= MANAGEMENT ================= -->
+
+<section class="card">
+
+    <div class="card-title">Management</div>
+
+    <div class="card-description">
+        Manage users, transactions, accounts and plans.
+    </div>
+
+    <div class="management-grid">
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_users') }}"
+        >
+            👥 Manage Users
+        </a>
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_deposits') }}"
+        >
+            💰 Manage Deposits
+        </a>
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_withdrawals') }}"
+        >
+            💸 Manage Withdrawals
+        </a>
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_bind_accounts') }}"
+        >
+            📱 Bind Accounts
+        </a>
+
+        <a
+            class="admin-button"
+            href="{{ url_for('admin_plans') }}"
+        >
+            📦 Manage Plans
+        </a>
+
+        <a
+            class="admin-button danger"
+            href="{{ url_for('admin_logout') }}"
+        >
+            🚪 Logout
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PLAN MANAGEMENT ================= -->
+
+<section class="card">
+
+    <div class="plan-header">
+
+        <div>
+            <div class="card-title">
+                Plan Management
             </div>
-          {% endfor %}
+
+            <div class="card-description" style="margin-bottom:0;">
+                View available plans and open the plan manager.
+            </div>
         </div>
 
-        <div class="plan-preview-footer">
-          <div style="color:#6b7280;font-size:13px;">
-            Showing {{ available_plans|length if available_plans|length < 8 else 8 }} of {{ available_plans|length }} plans
-          </div>
-          <a class="view-all-link" href="{{ url_for('admin_plans') }}">Open Plans Manager →</a>
-        </div>
-      {% else %}
-        <div style="padding:12px;border-radius:8px;background:#fbfdff;border:1px solid rgba(37,99,235,0.06);">
-          <div style="font-weight:700;color:#0b63d6;margin-bottom:6px;">No plan preview available</div>
-          <div style="color:#475569;font-size:13px;">Click Manage Plans to view, assign, or remove plans.</div>
-        </div>
-      {% endif %}
-    </div>
-  </div>
+        <a
+            href="{{ url_for('admin_plans') }}"
+            class="manage-button"
+        >
+            Manage Plans
+        </a>
 
-  <!-- Invites quick list (optional) -->
-  {% if invites %}
-  <div class="card">
-    <h3 style="margin:0 0 10px;color:#0f172a;font-size:15px;font-weight:800;">Recent Invites</h3>
-    <div style="display:grid;gap:8px;">
-      {% for inv in invites[:6] %}
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;background:#fffefc;border:1px solid rgba(2,6,23,0.04);">
-          <div>
-            <div style="font-weight:800;color:#0f172a;">{{ inv.owner_username or '—' }}</div>
-            <div style="font-size:12px;color:#6b7280;">Token: {{ inv.token }} &nbsp; • &nbsp; GHS {{ "%.2f"|format(inv.amount|float) }}</div>
-          </div>
-          <div style="font-size:12px;color:#6b7280;">{% if inv.approved %}Approved{% else %}<strong style="color:#d97706">Pending</strong>{% endif %}</div>
+    </div>
+
+
+    {% if available_plans %}
+
+        <div class="plans-grid">
+
+            {% for plan in available_plans[:8] %}
+
+                <div class="plan">
+
+                    <div class="plan-name">
+                        {{ plan.name }}
+                    </div>
+
+                    <div class="plan-price">
+                        GHS
+                        {{ "%.2f"|format(plan.investment_amount|float) }}
+                    </div>
+
+                    <div class="plan-info">
+                        Daily:
+                        GHS
+                        {{ "%.2f"|format(plan.daily_income|float) }}
+                    </div>
+
+                    <div class="plan-info">
+                        Duration:
+                        {{ plan.duration }} days
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
         </div>
-      {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+            No plans are currently available.
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<section class="card">
+
+    <div class="card-title">
+        Quick Actions
     </div>
-    <div style="margin-top:10px;color:#6b7280;font-size:13px;">
-      Showing latest {{ invites|length if invites|length < 6 else 6 }} invites.
+
+    <div class="card-description">
+        Frequently used administration sections.
     </div>
-  </div>
-  {% endif %}
+
+    <div class="quick-actions">
+
+        <a
+            href="{{ url_for('admin_users') }}"
+            style="text-decoration:none;color:inherit;"
+        >
+            <div class="quick-action">
+
+                <div class="quick-icon">
+                    👤
+                </div>
+
+                <div>
+                    <strong>User Management</strong>
+                    <span>View and manage registered users.</span>
+                </div>
+
+            </div>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin_plans') }}"
+            style="text-decoration:none;color:inherit;"
+        >
+            <div class="quick-action">
+
+                <div class="quick-icon">
+                    📦
+                </div>
+
+                <div>
+                    <strong>Plan Management</strong>
+                    <span>Manage platform plans.</span>
+                </div>
+
+            </div>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin_deposits') }}"
+            style="text-decoration:none;color:inherit;"
+        >
+            <div class="quick-action">
+
+                <div class="quick-icon">
+                    💳
+                </div>
+
+                <div>
+                    <strong>Deposit Management</strong>
+                    <span>Review deposit requests.</span>
+                </div>
+
+            </div>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin_withdrawals') }}"
+            style="text-decoration:none;color:inherit;"
+        >
+            <div class="quick-action">
+
+                <div class="quick-icon">
+                    💵
+                </div>
+
+                <div>
+                    <strong>Withdrawal Management</strong>
+                    <span>Review withdrawal requests.</span>
+                </div>
+
+            </div>
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RECENT INVITES ================= -->
+
+{% if invites %}
+
+<section class="card">
+
+    <div class="card-title">
+        Recent Invites
+    </div>
+
+    <div class="card-description">
+        Latest invitation activity.
+    </div>
+
+
+    {% for inv in invites[:6] %}
+
+        <div class="invite">
+
+            <div>
+
+                <div class="invite-name">
+                    {{ inv.owner_username or 'Unknown User' }}
+                </div>
+
+                <div class="invite-info">
+                    Token: {{ inv.token }}
+                    •
+                    GHS {{ "%.2f"|format(inv.amount|float) }}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                {% if inv.approved %}
+
+                    <span class="approved">
+                        ✓ Approved
+                    </span>
+
+                {% else %}
+
+                    <span class="pending">
+                        Pending
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}
 
 </div>
 
