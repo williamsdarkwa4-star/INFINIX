@@ -243,7 +243,7 @@ def ensure_account(cur, user_id: int, starting_balance: Decimal = Decimal("0.00"
         INSERT INTO accounts (
             user_id, deposit_account, income_account, referral_account, withdraw_account
         )
-        VALUES (%s, %s, 0, 0, 0)
+        VALUES (%s, %s, 0, 0, 30.00)
         ON CONFLICT (user_id) DO NOTHING
         """,
         (user_id, starting_balance),
@@ -583,7 +583,7 @@ def register():
                     """
                     INSERT INTO accounts (
                         user_id, deposit_account, income_account, referral_account, withdraw_account
-                    ) VALUES (%s,%s,0,0,0) ON CONFLICT (user_id) DO NOTHING
+                    ) VALUES (%s,%s,0,0,30.00) ON CONFLICT (user_id) DO NOTHING
                     """,
                     (new_user_id, STARTING_DEPOSIT_BALANCE),
                     (new_user_id,STARTING_WITHDRAW_BALANCE),
