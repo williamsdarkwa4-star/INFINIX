@@ -586,7 +586,7 @@ def register():
                     ) VALUES (%s,%s,0,0,0) ON CONFLICT (user_id) DO NOTHING
                     """,
                     (new_user_id, STARTING_DEPOSIT_BALANCE),
-                    (new_user_id,(STARTING_WITHDRAW_BALANCE),
+                    (new_user_id,STARTING_WITHDRAW_BALANCE),
                 )
         except Exception:
             logger.exception("REGISTRATION ERROR")
