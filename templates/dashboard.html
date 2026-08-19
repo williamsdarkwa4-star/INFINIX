@@ -1,2738 +1,2740 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>INFINIX</title>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>INFINIX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", Arial, sans-serif;
+}
+
+:root {
+    --bg: #050505;
+    --surface: #0b0b0b;
+    --surface2: #111111;
+    --surface3: #171717;
+
+    --text: #ffffff;
+    --muted: #858585;
+
+    --green: #00ff55;
+    --green2: #00d948;
+    --green-dark: #00a83a;
+
+    --border: rgba(255,255,255,.08);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    min-height: 100vh;
+    padding-bottom: 78px;
+}
+
+.phone-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
 
-<link rel="preconnect" href="https://fonts.googleapis.com">  
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(0,255,85,.08),
+            transparent 30%
+        ),
+        #050505;
+}
 
-<link  
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"  
-    rel="stylesheet"  
->  
+/* =========================================
+   HEADER
+========================================= */
 
-<script src="https://unpkg.com/lucide@latest"></script>  
+.top-header {
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 15px;
+
+    background: rgba(5,5,5,.96);
+
+    border-bottom: 1px solid var(--border);
 
-<style>  
+    backdrop-filter: blur(20px);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+}
 
-    * {  
-        margin: 0;  
-        padding: 0;  
-        box-sizing: border-box;  
-        font-family: "Inter", Arial, sans-serif;  
-    }  
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    :root {  
-        --bg: #050505;  
-        --surface: #0b0b0b;  
-        --surface2: #111111;  
-        --surface3: #171717;  
+.brand-logo {
+    width: 38px;
+    height: 38px;
 
-        --text: #ffffff;  
-        --muted: #858585;  
+    border-radius: 10px;
 
-        --green: #00ff55;  
-        --green2: #00d948;  
-        --green-dark: #00a83a;  
+    background:
+        linear-gradient(
+            135deg,
+            #00ff55,
+            #8affae
+        );
 
-        --border: rgba(255,255,255,.08);  
-    }  
+    color: #001b09;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 900;
+    font-size: 17px;
 
-    html {  
-        scroll-behavior: smooth;  
-    }  
+    box-shadow:
+        0 0 22px rgba(0,255,85,.18);
+}
 
-    body {  
-        margin: 0;  
-        background: #000;  
-        color: white;  
-        min-height: 100vh;  
-        padding-bottom: 78px;  
-    }  
+.brand-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .5px;
+}
 
-    /* =========================================  
-       PHONE CONTAINER  
-    ========================================= */  
+.brand-text span {
+    display: block;
+    color: var(--muted);
+    font-size: 8px;
+    margin-top: 2px;
+}
 
-    .phone-container {  
-        width: 100%;  
-        max-width: 480px;  
-        min-height: 100vh;  
-        margin: auto;  
+.header-button {
+    width: 38px;
+    height: 38px;
 
-        position: relative;  
-        overflow: hidden;  
+    border-radius: 10px;
 
-        background:  
-            radial-gradient(  
-                circle at 50% -10%,  
-                rgba(0,255,85,.08),  
-                transparent 30%  
-            ),  
-            #050505;  
-    }  
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    color: white;
 
-    /* =========================================  
-       HEADER  
-    ========================================= */  
+    background: #101010;
 
-    .top-header {  
-        height: 64px;  
+    border: 1px solid var(--border);
 
-        display: flex;  
-        align-items: center;  
-        justify-content: space-between;  
+    text-decoration: none;
+}
 
-        padding: 0 15px;  
+.header-button:active {
+    transform: scale(.92);
+}
 
-        background: rgba(5,5,5,.96);  
+.header-button svg {
+    width: 18px;
+}
 
-        border-bottom: 1px solid var(--border);  
+/* =========================================
+   HERO
+========================================= */
 
-        backdrop-filter: blur(20px);  
+.hero {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: #111;
+}
 
-        position: sticky;  
-        top: 0;  
+.hero-image {
+    position: absolute;
+    inset: 0;
 
-        z-index: 100;  
-    }  
+    width: 100%;
+    height: 100%;
 
-    .brand {  
-        display: flex;  
-        align-items: center;  
-        gap: 10px;  
-    }  
+    object-fit: cover;
+    opacity: .72;
 
-    .brand-logo {  
-        width: 38px;  
-        height: 38px;  
+    transition:
+        opacity .4s ease,
+        transform 5s ease;
 
-        border-radius: 10px;  
+    transform: scale(1.03);
+}
 
-        background:  
-            linear-gradient(  
-                135deg,  
-                #00ff55,  
-                #8affae  
-            );  
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
 
-        color: #001b09;  
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.40),
+            rgba(5,5,5,1)
+        );
 
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
+    pointer-events: none;
+}
 
-        font-weight: 900;  
-        font-size: 17px;  
+.hero-content {
+    position: absolute;
+    z-index: 5;
 
-        box-shadow:  
-            0 0 22px rgba(0,255,85,.18);  
-    }  
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+}
 
-    .brand-text strong {  
-        display: block;  
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 
-        font-size: 13px;  
-        font-weight: 900;  
+    padding: 5px 8px;
 
-        letter-spacing: .5px;  
-    }  
+    border-radius: 20px;
 
-    .brand-text span {  
-        display: block;  
+    background: rgba(0,255,85,.09);
 
-        color: var(--muted);  
+    border: 1px solid rgba(0,255,85,.22);
 
-        font-size: 8px;  
+    color: var(--green);
 
-        margin-top: 2px;  
-    }  
+    font-size: 8px;
+    font-weight: 800;
 
-    .header-button {  
-        width: 38px;  
-        height: 38px;  
+    margin-bottom: 8px;
+}
 
-        border-radius: 10px;  
+.eyebrow span {
+    width: 5px;
+    height: 5px;
 
-        display: flex;  
-        align-items: center;  
-        justify-content: center;  
+    border-radius: 50%;
 
-        color: white;  
+    background: var(--green);
 
-        background: #101010;  
+    box-shadow:
+        0 0 8px var(--green);
+}
 
-        border: 1px solid var(--border);  
+.hero h1 {
+    font-size: 23px;
+    line-height: 1.1;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
 
-        text-decoration: none;  
+.hero h1 span {
+    color: var(--green);
+}
 
-        transition: .2s;  
-    }  
+.hero p {
+    font-size: 9px;
+    color: #b5b5b5;
+    line-height: 1.5;
+    max-width: 290px;
+}
 
-    .header-button:active {  
-        transform: scale(.92);  
-    }  
+.hero-dots {
+    position: absolute;
 
-    .header-button svg {  
-        width: 18px;  
-    }  
+    right: 16px;
+    bottom: 22px;
 
+    z-index: 10;
 
-    /* =========================================  
-       HERO  
-    ========================================= */  
+    display: flex;
+    gap: 4px;
+}
 
-    .hero {  
-        height: 200px;  
+.hero-dot {
+    width: 5px;
+    height: 5px;
 
-        position: relative;  
+    border-radius: 10px;
 
-        overflow: hidden;  
+    background: rgba(255,255,255,.35);
 
-        background: #111;  
-    }  
+    transition: .3s;
+}
 
-    .hero-image {  
-        position: absolute;  
+.hero-dot.active {
+    width: 17px;
+    background: var(--green);
 
-        inset: 0;  
+    box-shadow:
+        0 0 8px rgba(0,255,85,.5);
+}
 
-        width: 100%;  
-        height: 100%;  
+/* =========================================
+   QUICK ACTIONS
+========================================= */
 
-        object-fit: cover;  
+.top-actions {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
 
-        opacity: .72;  
+    gap: 6px;
+    padding: 10px;
 
-        transition:  
-            opacity .4s ease,  
-            transform 5s ease;  
+    background: #090909;
 
-        transform: scale(1.03);  
-    }  
+    border-bottom: 1px solid var(--border);
+}
 
-    .hero::after {  
-        content: "";  
+.action-btn {
+    text-decoration: none;
 
-        position: absolute;  
+    background:
+        linear-gradient(
+            180deg,
+            #181818,
+            #0e0e0e
+        );
 
-        inset: 0;  
+    border: 1px solid var(--border);
 
-        background:  
-            linear-gradient(  
-                180deg,  
-                rgba(0,0,0,.05),  
-                rgba(0,0,0,.40),  
-                rgba(5,5,5,1)  
-            );  
+    border-radius: 9px;
 
-        pointer-events: none;  
-    }  
+    padding: 10px 4px;
 
-    .hero-content {  
-        position: absolute;  
+    text-align: center;
 
-        z-index: 5;  
+    color: white;
 
-        left: 16px;  
-        right: 16px;  
-        bottom: 20px;  
-    }  
+    transition: .2s;
 
-    .eyebrow {  
-        display: inline-flex;  
+    position: relative;
+    overflow: hidden;
+}
 
-        align-items: center;  
+.action-btn:active {
+    transform: scale(.96);
+}
 
-        gap: 6px;  
+.action-icon {
+    width: 28px;
+    height: 28px;
 
-        padding: 5px 8px;  
+    margin: auto auto 4px;
 
-        border-radius: 20px;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        background: rgba(0,255,85,.09);  
+    border-radius: 8px;
 
-        border: 1px solid rgba(0,255,85,.22);  
+    background: rgba(255,255,255,.04);
+}
 
-        color: var(--green);  
+.action-icon svg {
+    width: 15px;
+    height: 15px;
+}
 
-        font-size: 8px;  
-        font-weight: 800;  
+.action-label {
+    font-size: 8px;
+    color: #a0a0a0;
+}
 
-        margin-bottom: 8px;  
-    }  
+/* =========================================
+   ACCOUNT
+========================================= */
 
-    .eyebrow span {  
-        width: 5px;  
-        height: 5px;  
+.account {
+    margin: 14px 10px;
 
-        border-radius: 50%;  
+    padding: 14px;
 
-        background: var(--green);  
+    border-radius: 14px;
 
-        box-shadow:  
-            0 0 8px var(--green);  
-    }  
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0c0c0c
+        );
 
-    .hero h1 {  
-        font-size: 23px;  
+    border: 1px solid var(--border);
 
-        line-height: 1.1;  
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.20);
+}
 
-        font-weight: 900;  
+.account-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-        margin-bottom: 5px;  
-    }  
+    margin-bottom: 10px;
+}
 
-    .hero h1 span {  
-        color: var(--green);  
-    }  
+.account-header h3 {
+    font-size: 12px;
+}
 
-    .hero p {  
-        font-size: 9px;  
+.account-header span {
+    font-size: 8px;
+    color: var(--muted);
+}
 
-        color: #b5b5b5;  
+.balance-main {
+    font-size: 22px;
+    font-weight: 900;
 
-        line-height: 1.5;  
+    color: white;
 
-        max-width: 290px;  
-    }  
+    margin-bottom: 12px;
+}
 
-    .hero-dots {  
-        position: absolute;  
+.balance-main small {
+    font-size: 8px;
+    color: var(--muted);
+    font-weight: 500;
+}
 
-        right: 16px;  
-        bottom: 22px;  
+.balance-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
 
-        z-index: 10;  
+    border-top: 1px solid var(--border);
 
-        display: flex;  
+    padding-top: 11px;
+}
 
-        gap: 4px;  
-    }  
+.balance-box {
+    padding: 0 7px;
+    border-right: 1px solid var(--border);
+}
 
-    .hero-dot {  
-        width: 5px;  
-        height: 5px;  
+.balance-box:last-child {
+    border-right: none;
+}
 
-        border-radius: 10px;  
+.balance-box label {
+    display: block;
+    color: var(--muted);
 
-        background: rgba(255,255,255,.35);  
+    font-size: 7px;
+    margin-bottom: 4px;
+}
 
-        transition: .3s;  
-    }  
+.balance-box strong {
+    font-size: 9px;
+}
 
-    .hero-dot.active {  
-        width: 17px;  
+/* =========================================
+   SECTION
+========================================= */
 
-        background: var(--green);  
+.section {
+    padding: 0 10px;
+}
 
-        box-shadow:  
-            0 0 8px rgba(0,255,85,.5);  
-    }  
+.section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
 
+    margin: 18px 2px 10px;
+}
 
-    /* =========================================  
-       QUICK ACTIONS  
-    ========================================= */  
+.section-head h2 {
+    font-size: 18px;
+    letter-spacing: -.4px;
+}
 
-    .top-actions {  
-        display: grid;  
+.section-head p {
+    font-size: 8px;
+    color: var(--muted);
+    margin-top: 3px;
+}
 
-        grid-template-columns:  
-            repeat(4, 1fr);  
+.section-head a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 8px;
+}
 
-        gap: 6px;  
+/* =========================================
+   PRODUCT GRID
+========================================= */
 
-        padding: 10px;  
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
 
-        background: #090909;  
+    gap: 2px;
 
-        border-bottom: 1px solid var(--border);  
-    }  
+    background: #262626;
 
-    .action-btn {  
-        text-decoration: none;  
+    border: 1px solid #242424;
+}
 
-        background:  
-            linear-gradient(  
-                180deg,  
-                #181818,  
-                #0e0e0e  
-            );  
+/* =========================================
+   PRODUCT CARD
+========================================= */
 
-        border: 1px solid var(--border);  
+.product-card {
+    background: #090909;
 
-        border-radius: 9px;  
+    padding: 11px;
 
-        padding: 10px 4px;  
+    min-width: 0;
 
-        text-align: center;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-        color: white;  
+    position: relative;
+}
 
-        transition: .2s;  
+.product-card::before {
+    content: "";
 
-        position: relative;  
+    position: absolute;
 
-        overflow: hidden;  
-    }  
+    top: 0;
+    left: 0;
+    right: 0;
 
-    .action-btn::after {  
-        content: "";  
+    height: 1px;
 
-        position: absolute;  
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,255,85,.25),
+            transparent
+        );
+}
 
-        left: 50%;  
-        top: 50%;  
+.vip-tag {
+    width: 100%;
 
-        width: 0;  
-        height: 0;  
+    color: var(--green);
 
-        background:  
-            rgba(0,255,85,.08);  
+    font-weight: 900;
+    font-size: 12px;
 
-        border-radius: 50%;  
+    margin-bottom: 8px;
 
-        transform: translate(-50%,-50%);  
+    text-align: left;
+}
 
-        transition: .3s;  
-    }  
+.vip-tag span {
+    float: right;
 
-    .action-btn:active::after {  
-        width: 150px;  
-        height: 150px;  
-    }  
+    color: #666;
 
-    .action-btn:active {  
-        transform: scale(.96);  
-    }  
+    font-size: 7px;
+    font-weight: 600;
+}
 
-    .action-icon {  
-        width: 28px;  
-        height: 28px;  
+/* =========================================
+   PRODUCT IMAGE
+========================================= */
 
-        margin: auto auto 4px;  
+.product-img-box {
+    width: 100%;
+    height: 145px;
 
-        display: flex;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        align-items: center;  
-        justify-content: center;  
+    margin-bottom: 10px;
 
-        border-radius: 8px;  
+    overflow: hidden;
 
-        background: rgba(255,255,255,.04);  
-    }  
+    border-radius: 9px;
 
-    .action-icon svg {  
-        width: 15px;  
-        height: 15px;  
-    }  
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            #292929,
+            #090909 75%
+        );
 
-    .action-label {  
-        font-size: 8px;  
+    border: 1px solid rgba(255,255,255,.06);
 
-        color: #a0a0a0;  
-    }  
+    position: relative;
+}
 
+.product-img-box::after {
+    content: "";
 
-    /* =========================================  
-       ACCOUNT  
-    ========================================= */  
+    position: absolute;
+    inset: 0;
 
-    .account {  
-        margin: 14px 10px;  
+    background:
+        linear-gradient(
+            180deg,
+            transparent 55%,
+            rgba(0,0,0,.28)
+        );
 
-        padding: 14px;  
+    pointer-events: none;
+}
 
-        border-radius: 14px;  
+.product-img-box img {
+    width: 100%;
+    height: 100%;
 
-        background:  
-            linear-gradient(  
-                145deg,  
-                #151515,  
-                #0c0c0c  
-            );  
+    object-fit: contain;
 
-        border: 1px solid var(--border);  
+    padding: 5px;
 
-        box-shadow:  
-            0 10px 30px rgba(0,0,0,.20);  
-    }  
+    transition:
+        transform .5s ease,
+        opacity .3s ease;
+}
 
-    .account-header {  
-        display: flex;  
+.product-card:hover
+.product-img-box img {
+    transform: scale(1.06);
+}
 
-        align-items: center;  
-        justify-content: space-between;  
+.image-fallback {
+    display: none;
 
-        margin-bottom: 10px;  
-    }  
+    width: 100%;
+    height: 100%;
 
-    .account-header h3 {  
-        font-size: 12px;  
-    }  
+    align-items: center;
+    justify-content: center;
 
-    .account-header span {  
-        font-size: 8px;  
+    position: absolute;
+    inset: 0;
+}
 
-        color: var(--muted);  
-    }  
+.fake-phone {
+    width: 62px;
+    height: 112px;
 
-    .balance-main {  
-        font-size: 22px;  
+    border-radius: 13px;
 
-        font-weight: 900;  
+    background:
+        linear-gradient(
+            145deg,
+            #303030,
+            #080808
+        );
 
-        color: white;  
+    border: 2px solid #4a4a4a;
 
-        margin-bottom: 12px;  
-    }  
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.6);
 
-    .balance-main small {  
-        font-size: 8px;  
+    position: relative;
+}
 
-        color: var(--muted);  
+.fake-phone::before {
+    content: "";
 
-        font-weight: 500;  
-    }  
+    position: absolute;
 
-    .balance-grid {  
-        display: grid;  
+    width: 30px;
+    height: 4px;
 
-        grid-template-columns:  
-            repeat(3,1fr);  
+    border-radius: 10px;
 
-        border-top: 1px solid var(--border);  
+    background: #050505;
 
-        padding-top: 11px;  
-    }  
+    top: 5px;
+    left: 50%;
 
-    .balance-box {  
-        padding: 0 7px;  
+    transform: translateX(-50%);
+}
 
-        border-right: 1px solid var(--border);  
-    }  
+.fake-phone::after {
+    content: "INFINIX";
 
-    .balance-box:last-child {  
-        border-right: none;  
-    }  
+    position: absolute;
 
-    .balance-box label {  
-        display: block;  
+    bottom: 20px;
+    left: 50%;
 
-        color: var(--muted);  
+    transform:
+        translateX(-50%)
+        rotate(90deg);
 
-        font-size: 7px;  
+    color: rgba(255,255,255,.45);
 
-        margin-bottom: 4px;  
-    }  
+    font-size: 6px;
+    font-weight: 800;
+}
 
-    .balance-box strong {  
-        font-size: 9px;  
-    }  
+/* =========================================
+   INFO ROW
+========================================= */
 
+.info-row {
+    width: 100%;
 
-    /* =========================================  
-       SECTION  
-    ========================================= */  
+    font-size: 8px;
 
-    .section {  
-        padding: 0 10px;  
-    }  
+    margin-bottom: 5px;
 
-    .section-head {  
-        display: flex;  
+    color: #777;
 
-        align-items: end;  
+    text-align: left;
+}
 
-        justify-content: space-between;  
+.info-row span {
+    color: #d0d0d0;
 
-        margin: 18px 2px 10px;  
-    }  
+    font-weight: 600;
 
-    .section-head h2 {  
-        font-size: 18px;  
+    float: right;
+}
 
-        letter-spacing: -.4px;  
-    }  
+/* =========================================
+   PRICE
+========================================= */
 
-    .section-head p {  
-        font-size: 8px;  
+.price-tag {
+    width: 100%;
 
-        color: var(--muted);  
+    color: var(--green);
 
-        margin-top: 3px;  
-    }  
+    font-weight: 900;
 
-    .section-head a {  
-        color: var(--green);  
+    font-size: 14px;
 
-        text-decoration: none;  
+    margin: 7px 0 9px;
 
-        font-size: 8px;  
-    }  
+    text-align: left;
+}
 
+.price-tag small {
+    font-size: 7px;
+    color: #666;
+    font-weight: 500;
+}
 
-    /* =========================================  
-       PRODUCT GRID  
-    ========================================= */  
+/* =========================================
+   BUTTON
+========================================= */
 
-    .product-grid {  
-        display: grid;  
+.buy-btn {
+    width: 100%;
 
-        grid-template-columns:  
-            repeat(2, minmax(0,1fr));  
+    min-height: 32px;
 
-        gap: 2px;  
+    background:
+        linear-gradient(
+            135deg,
+            #00d948,
+            #00a83a
+        );
 
-        background: #262626;  
+    color: #001407;
 
-        border: 1px solid #242424;  
-    }  
+    border: none;
 
+    border-radius: 6px;
 
-    /* =========================================  
-       PRODUCT CARD  
-    ========================================= */  
+    padding: 7px 0;
 
-    .product-card {  
-        background: #090909;  
+    font-weight: 900;
+    font-size: 10px;
 
-        padding: 11px;  
+    cursor: pointer;
 
-        min-width: 0;  
+    text-align: center;
+    text-decoration: none;
 
-        display: flex;  
+    display: flex;
 
-        flex-direction: column;  
+    align-items: center;
+    justify-content: center;
 
-        align-items: center;  
+    gap: 5px;
 
-        position: relative;  
-    }  
+    transition: .2s;
+}
 
-    .product-card::before {  
-        content: "";  
+.buy-btn:active {
+    transform: scale(.95);
+}
 
-        position: absolute;  
+.buy-btn svg {
+    width: 13px;
+    height: 13px;
+}
 
-        top: 0;  
-        left: 0;  
-        right: 0;  
+/* =========================================
+   LOCKED
+========================================= */
 
-        height: 1px;  
+.locked {
+    opacity: .65;
+}
 
-        background:  
-            linear-gradient(  
-                90deg,  
-                transparent,  
-                rgba(0,255,85,.25),  
-                transparent  
-            );  
-    }  
+.locked .product-img-box img {
+    filter: grayscale(.5);
+}
 
-    .vip-tag {  
-        width: 100%;  
+.locked .vip-tag {
+    color: #777;
+}
 
-        color: var(--green);  
+.locked-button {
+    width: 100%;
 
-        font-weight: 900;  
+    min-height: 32px;
 
-        font-size: 12px;  
+    border: 1px solid #272727;
 
-        margin-bottom: 8px;  
+    border-radius: 6px;
 
-        text-align: left;  
-    }  
+    background: #151515;
 
-    .vip-tag span {  
-        float: right;  
+    color: #707070;
 
-        color: #666;  
+    font-size: 9px;
 
-        font-size: 7px;  
+    font-weight: 700;
 
-        font-weight: 600;  
-    }  
+    display: flex;
 
+    align-items: center;
+    justify-content: center;
 
-    /* =========================================  
-       PRODUCT IMAGE  
-    ========================================= */  
+    gap: 5px;
+}
 
-    .product-img-box {  
-        width: 100%;  
+.locked-button svg {
+    width: 13px;
+}
 
-        height: 145px;  
+/* =========================================
+   INFORMATION
+========================================= */
 
-        display: flex;  
+.info {
+    margin: 15px 10px;
 
-        align-items: center;  
-        justify-content: center;  
+    padding: 13px;
 
-        margin-bottom: 10px;  
+    border-radius: 12px;
 
-        overflow: hidden;  
+    background: #0e1110;
 
-        border-radius: 9px;  
+    border:
+        1px solid
+        rgba(0,255,85,.10);
 
-        background:  
-            radial-gradient(  
-                circle at 50% 35%,  
-                #292929,  
-                #090909 75%  
-            );  
+    display: flex;
 
-        border: 1px solid rgba(255,255,255,.06);  
+    gap: 9px;
+}
 
-        position: relative;  
-    }  
+.info-icon {
+    min-width: 30px;
+    height: 30px;
 
-    .product-img-box::after {  
-        content: "";  
+    border-radius: 8px;
 
-        position: absolute;  
+    display: flex;
 
-        inset: 0;  
+    align-items: center;
+    justify-content: center;
 
-        background:  
-            linear-gradient(  
-                180deg,  
-                transparent 55%,  
-                rgba(0,0,0,.28)  
-            );  
+    color: var(--green);
 
-        pointer-events: none;  
-    }  
+    background:
+        rgba(0,255,85,.08);
+}
 
-    .product-img-box img {  
-        width: 100%;  
-        height: 100%;  
+.info-icon svg {
+    width: 15px;
+}
 
-        object-fit: contain;  
+.info h4 {
+    font-size: 9px;
+    margin-bottom: 3px;
+}
 
-        padding: 5px;  
+.info p {
+    font-size: 7px;
 
-        opacity: 1;  
+    line-height: 1.5;
 
-        transition:  
-            transform .5s ease,  
-            opacity .3s ease;  
-    }  
+    color: var(--muted);
+}
 
-    .product-card:hover  
-    .product-img-box img {  
-        transform: scale(1.06);  
-    }  
+/* =========================================
+   BOTTOM NAVIGATION
+========================================= */
 
+.bottom-nav {
+    position: fixed;
 
-    /* =========================================  
-       IMAGE FALLBACK  
-    ========================================= */  
+    bottom: 0;
 
-    .image-fallback {  
-        display: none;  
+    left: 50%;
 
-        width: 100%;  
-        height: 100%;  
+    transform: translateX(-50%);
 
-        align-items: center;  
-        justify-content: center;  
+    width: 100%;
+    max-width: 480px;
 
-        position: absolute;  
+    height: 68px;
 
-        inset: 0;  
-    }  
+    display: grid;
 
-    .fake-phone {  
-        width: 62px;  
-        height: 112px;  
+    grid-template-columns:
+        repeat(5,1fr);
 
-        border-radius: 13px;  
+    background:
+        rgba(14,14,14,.97);
 
-        background:  
-            linear-gradient(  
-                145deg,  
-                #303030,  
-                #080808  
-            );  
+    border-top:
+        1px solid #252525;
 
-        border: 2px solid #4a4a4a;  
+    backdrop-filter:
+        blur(18px);
 
-        box-shadow:  
-            0 15px 35px rgba(0,0,0,.6);  
+    z-index: 500;
+}
 
-        position: relative;  
-    }  
+.nav-item {
+    position: relative;
 
-    .fake-phone::before {  
-        content: "";  
+    display: flex;
 
-        position: absolute;  
+    flex-direction: column;
 
-        width: 30px;  
-        height: 4px;  
+    align-items: center;
+    justify-content: center;
 
-        border-radius: 10px;  
+    gap: 4px;
 
-        background: #050505;  
+    text-decoration: none;
 
-        top: 5px;  
-        left: 50%;  
+    color: #686868;
 
-        transform: translateX(-50%);  
-    }  
+    font-size: 7px;
 
-    .fake-phone::after {  
-        content: "INFINIX";  
+    transition: .2s;
+}
 
-        position: absolute;  
+.nav-item svg {
+    width: 18px;
+    height: 18px;
+}
 
-        bottom: 20px;  
-        left: 50%;  
+.nav-item:active {
+    transform: scale(.91);
+}
 
-        transform:  
-            translateX(-50%)  
-            rotate(90deg);  
+.nav-item.active {
+    color: var(--green);
+}
 
-        color: rgba(255,255,255,.45);  
+.nav-item.active::before {
+    content: "";
 
-        font-size: 6px;  
+    position: absolute;
 
-        font-weight: 800;  
-    }  
+    top: 0;
 
+    width: 28px;
+    height: 2px;
 
-    /* =========================================  
-       INFO ROW  
-    ========================================= */  
+    border-radius:
+        0 0 5px 5px;
 
-    .info-row {  
-        width: 100%;  
+    background: var(--green);
 
-        font-size: 8px;  
+    box-shadow:
+        0 0 10px
+        rgba(0,255,85,.5);
+}
 
-        margin-bottom: 5px;  
+/* =========================================
+   DRAGGABLE ROUND STAR BUTTON
+========================================= */
 
-        color: #777;  
+.floating-star {
+    position: fixed;
 
-        text-align: left;  
-    }  
+    left: 18px;
+    top: 48%;
 
-    .info-row span {  
-        color: #d0d0d0;  
+    width: 54px;
+    height: 54px;
 
-        font-weight: 600;  
+    border-radius: 50%;
 
-        float: right;  
-    }  
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #8affae 0%,
+            #00ff55 35%,
+            #00a83a 100%
+        );
 
-    .info-row .income {  
-        color: var(--green);  
-    }  
+    border:
+        2px solid rgba(255,255,255,.18);
 
+    display: flex;
 
-    /* =========================================  
-       PRICE  
-    ========================================= */  
+    align-items: center;
+    justify-content: center;
 
-    .price-tag {  
-        width: 100%;  
+    color: #001b09;
 
-        color: var(--green);  
+    box-shadow:
+        0 0 12px rgba(0,255,85,.35),
+        0 8px 25px rgba(0,0,0,.55);
 
-        font-weight: 900;  
+    z-index: 9000;
 
-        font-size: 14px;  
+    cursor: grab;
 
-        margin: 7px 0 9px;  
+    touch-action: none;
 
-        text-align: left;  
-    }  
+    user-select: none;
 
-    .price-tag small {  
-        font-size: 7px;  
+    text-decoration: none;
 
-        color: #666;  
+    animation:
+        starFloat 2.2s ease-in-out infinite;
+}
 
-        font-weight: 500;  
-    }  
+.floating-star:active {
+    cursor: grabbing;
+}
 
+.floating-star svg {
+    width: 25px;
+    height: 25px;
 
-    /* =========================================  
-       BUY BUTTON  
-    ========================================= */  
+    fill: rgba(255,255,255,.25);
 
-    .buy-btn {  
-        width: 100%;  
+    stroke: #001b09;
 
-        min-height: 32px;  
+    stroke-width: 2.5;
+}
 
-        background:  
-            linear-gradient(  
-                135deg,  
-                #00d948,  
-                #00a83a  
-            );  
+.floating-star::after {
+    content: "";
 
-        color: #001407;  
+    position: absolute;
 
-        border: none;  
+    inset: -5px;
 
-        border-radius: 6px;  
+    border-radius: 50%;
 
-        padding: 7px 0;  
+    border:
+        1px solid
+        rgba(0,255,85,.22);
 
-        font-weight: 900;  
+    animation:
+        starPulse 1.8s ease-out infinite;
 
-        font-size: 10px;  
+    pointer-events: none;
+}
 
-        cursor: pointer;  
+@keyframes starFloat {
 
-        text-align: center;  
+    0%, 100% {
+        box-shadow:
+            0 0 12px rgba(0,255,85,.35),
+            0 8px 25px rgba(0,0,0,.55);
+    }
 
-        text-decoration: none;  
+    50% {
+        box-shadow:
+            0 0 25px rgba(0,255,85,.65),
+            0 8px 25px rgba(0,0,0,.55);
+    }
+}
 
-        display: flex;  
+@keyframes starPulse {
 
-        align-items: center;  
+    0% {
+        transform: scale(.85);
+        opacity: .8;
+    }
 
-        justify-content: center;  
+    100% {
+        transform: scale(1.35);
+        opacity: 0;
+    }
+}
 
-        gap: 5px;  
+/* =========================================
+   LOADER
+========================================= */
 
-        transition: .2s;  
-    }  
+.page-loader {
+    position: fixed;
 
-    .buy-btn:active {  
-        transform: scale(.95);  
-    }  
+    inset: 0;
 
-    .buy-btn svg {  
-        width: 13px;  
-        height: 13px;  
-    }  
+    background:
+        rgba(0,0,0,.88);
 
+    backdrop-filter:
+        blur(12px);
 
-    /* =========================================  
-       LOCKED  
-    ========================================= */  
+    display: flex;
 
-    .locked {  
-        opacity: .65;  
-    }  
+    align-items: center;
+    justify-content: center;
 
-    .locked .product-img-box img {  
-        filter: grayscale(.5);  
-    }  
+    flex-direction: column;
 
-    .locked .vip-tag {  
-        color: #777;  
-    }  
+    gap: 14px;
 
-    .locked-button {  
-        width: 100%;  
+    z-index: 99999;
 
-        min-height: 32px;  
+    opacity: 0;
+    visibility: hidden;
 
-        border: 1px solid #272727;  
+    pointer-events: none;
 
-        border-radius: 6px;  
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
 
-        background: #151515;  
+.page-loader.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
 
-        color: #707070;  
+.loader-card {
+    width: 155px;
 
-        font-size: 9px;  
+    padding: 22px 15px;
 
-        font-weight: 700;  
+    border-radius: 18px;
 
-        display: flex;  
+    background:
+        linear-gradient(
+            145deg,
+            #171717,
+            #090909
+        );
 
-        align-items: center;  
-        justify-content: center;  
+    border:
+        1px solid
+        rgba(0,255,85,.16);
 
-        gap: 5px;  
-    }  
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.7);
 
-    .locked-button svg {  
-        width: 13px;  
-    }  
+    display: flex;
 
+    flex-direction: column;
 
-    /* =========================================  
-       INFORMATION  
-    ========================================= */  
+    align-items: center;
 
-    .info {  
-        margin: 15px 10px;  
+    gap: 13px;
+}
 
-        padding: 13px;  
+.loader-logo {
+    width: 44px;
+    height: 44px;
 
-        border-radius: 12px;  
+    border-radius: 12px;
 
-        background: #0e1110;  
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            #8affae
+        );
 
-        border:  
-            1px solid  
-            rgba(0,255,85,.10);  
+    color: #001b09;
 
-        display: flex;  
+    display: flex;
 
-        gap: 9px;  
-    }  
+    align-items: center;
+    justify-content: center;
 
-    .info-icon {  
-        min-width: 30px;  
-        height: 30px;  
+    font-weight: 900;
 
-        border-radius: 8px;  
+    font-size: 18px;
+}
 
-        display: flex;  
+.loader-ring {
+    width: 28px;
+    height: 28px;
 
-        align-items: center;  
-        justify-content: center;  
+    border-radius: 50%;
 
-        color: var(--green);  
+    border:
+        2px solid
+        rgba(255,255,255,.10);
 
-        background:  
-            rgba(0,255,85,.08);  
-    }  
+    border-top-color:
+        var(--green);
 
-    .info-icon svg {  
-        width: 15px;  
-    }  
+    border-right-color:
+        rgba(0,255,85,.35);
 
-    .info h4 {  
-        font-size: 9px;  
+    animation:
+        spin .65s linear infinite;
+}
 
-        margin-bottom: 3px;  
-    }  
+.loader-text {
+    color: #a0a0a0;
 
-    .info p {  
-        font-size: 7px;  
+    font-size: 8px;
 
-        line-height: 1.5;  
+    font-weight: 600;
 
-        color: var(--muted);  
-    }  
+    letter-spacing: .5px;
+}
 
+.loader-bar {
+    width: 100%;
+    height: 3px;
 
-    /* =========================================  
-       BOTTOM NAV  
-    ========================================= */  
+    overflow: hidden;
 
-    .bottom-nav {  
-        position: fixed;  
+    border-radius: 20px;
 
-        bottom: 0;  
+    background: #242424;
+}
 
-        left: 50%;  
+.loader-bar span {
+    display: block;
 
-        transform:  
-            translateX(-50%);  
+    height: 100%;
 
-        width: 100%;  
+    width: 40%;
 
-        max-width: 480px;  
+    border-radius: 20px;
 
-        height: 68px;  
+    background: var(--green);
 
-        display: grid;  
+    animation:
+        loadingBar 1.1s ease-in-out infinite;
+}
 
-        grid-template-columns:  
-            repeat(5,1fr);  
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-        background:  
-            rgba(14,14,14,.97);  
+@keyframes loadingBar {
+    0% {
+        transform: translateX(-120%);
+    }
 
-        border-top:  
-            1px solid #252525;  
+    100% {
+        transform: translateX(280%);
+    }
+}
 
-        backdrop-filter:  
-            blur(18px);  
+.loading-now {
+    opacity: .7;
+}
 
-        z-index: 500;  
-    }  
+/* =========================================
+   RESPONSIVE
+========================================= */
 
-    .nav-item {  
-        position: relative;  
+@media(max-width:360px) {
 
-        display: flex;  
+    .product-img-box {
+        height: 120px;
+    }
 
-        flex-direction: column;  
+    .product-card {
+        padding: 9px;
+    }
 
-        align-items: center;  
+    .hero {
+        height: 180px;
+    }
 
-        justify-content: center;  
+    .hero h1 {
+        font-size: 21px;
+    }
 
-        gap: 4px;  
-
-        text-decoration: none;  
-
-        color: #686868;  
-
-        font-size: 7px;  
-
-        transition: .2s;  
-    }  
-
-    .nav-item svg {  
-        width: 18px;  
-        height: 18px;  
-    }  
-
-    .nav-item:active {  
-        transform: scale(.91);  
-    }  
-
-    .nav-item.active {  
-        color: var(--green);  
-    }  
-
-    .nav-item.active::before {  
-        content: "";  
-
-        position: absolute;  
-
-        top: 0;  
-
-        width: 28px;  
-        height: 2px;  
-
-        border-radius:  
-            0 0 5px 5px;  
-
-        background: var(--green);  
-
-        box-shadow:  
-            0 0 10px  
-            rgba(0,255,85,.5);  
-    }  
-
-
-    /* =========================================  
-       PROFESSIONAL LOADING SCREEN  
-    ========================================= */  
-
-    .page-loader {  
-        position: fixed;  
-
-        inset: 0;  
-
-        background:  
-            rgba(0,0,0,.88);  
-
-        backdrop-filter:  
-            blur(12px);  
-
-        display: flex;  
-
-        align-items: center;  
-
-        justify-content: center;  
-
-        flex-direction: column;  
-
-        gap: 14px;  
-
-        z-index: 99999;  
-
-        opacity: 0;  
-
-        visibility: hidden;  
-
-        pointer-events: none;  
-
-        transition:  
-            opacity .25s ease,  
-            visibility .25s ease;  
-    }  
-
-    .page-loader.show {  
-        opacity: 1;  
-
-        visibility: visible;  
-
-        pointer-events: all;  
-    }  
-
-    .loader-card {  
-        width: 155px;  
-
-        padding: 22px 15px;  
-
-        border-radius: 18px;  
-
-        background:  
-            linear-gradient(  
-                145deg,  
-                #171717,  
-                #090909  
-            );  
-
-        border:  
-            1px solid  
-            rgba(0,255,85,.16);  
-
-        box-shadow:  
-            0 25px 80px  
-            rgba(0,0,0,.7);  
-
-        display: flex;  
-
-        flex-direction: column;  
-
-        align-items: center;  
-
-        gap: 13px;  
-    }  
-
-    .loader-logo {  
-        width: 44px;  
-        height: 44px;  
-
-        border-radius: 12px;  
-
-        background:  
-            linear-gradient(  
-                135deg,  
-                var(--green),  
-                #8affae  
-            );  
-
-        color: #001b09;  
-
-        display: flex;  
-
-        align-items: center;  
-        justify-content: center;  
-
-        font-weight: 900;  
-
-        font-size: 18px;  
-
-        box-shadow:  
-            0 0 30px  
-            rgba(0,255,85,.18);  
-    }  
-
-    .loader-ring {  
-        width: 28px;  
-        height: 28px;  
-
-        border-radius: 50%;  
-
-        border:  
-            2px solid  
-            rgba(255,255,255,.10);  
-
-        border-top-color:  
-            var(--green);  
-
-        border-right-color:  
-            rgba(0,255,85,.35);  
-
-        animation:  
-            spin .65s linear infinite;  
-    }  
-
-    .loader-text {  
-        color: #a0a0a0;  
-
-        font-size: 8px;  
-
-        font-weight: 600;  
-
-        letter-spacing: .5px;  
-    }  
-
-    .loader-bar {  
-        width: 100%;  
-        height: 3px;  
-
-        overflow: hidden;  
-
-        border-radius: 20px;  
-
-        background:  
-            #242424;  
-    }  
-
-    .loader-bar span {  
-        display: block;  
-
-        height: 100%;  
-
-        width: 40%;  
-
-        border-radius: 20px;  
-
-        background:  
-            var(--green);  
-
-        animation:  
-            loadingBar 1.1s ease-in-out infinite;  
-    }  
-
-    @keyframes spin {  
-        to {  
-            transform: rotate(360deg);  
-        }  
-    }  
-
-    @keyframes loadingBar {  
-        0% {  
-            transform: translateX(-120%);  
-        }  
-
-        100% {  
-            transform: translateX(280%);  
-        }  
-    }  
-
-
-    /* =========================================  
-       TOUCH FEEDBACK  
-    ========================================= */  
-
-    .loading-link.loading-now {  
-        pointer-events: none;  
-    }  
-
-    .loading-now {  
-        opacity: .7;  
-    }  
-
-
-    /* =========================================  
-       RESPONSIVE  
-    ========================================= */  
-
-    @media(max-width:360px) {  
-
-        .product-img-box {  
-            height: 120px;  
-        }  
-
-        .product-card {  
-            padding: 9px;  
-        }  
-
-        .hero {  
-            height: 180px;  
-        }  
-
-        .hero h1 {  
-            font-size: 21px;  
-        }  
-    }  
+    .floating-star {
+        width: 50px;
+        height: 50px;
+    }
+}
 
 </style>
+</head>
 
-</head>  <body>  <!-- =========================================  
-     PROFESSIONAL LOADER  
-========================================= -->  <div  
-    class="page-loader"  
-    id="pageLoader">  <div class="loader-card">  
+<body>
 
-    <div class="loader-logo">  
-        I  
-    </div>  
+<!-- =========================================
+     LOADER
+========================================= -->
 
-    <div class="loader-ring"></div>  
+<div
+    class="page-loader"
+    id="pageLoader">
 
-    <div class="loader-text" id="loaderText">  
-        Loading Infinix...  
-    </div>  
+    <div class="loader-card">
 
-    <div class="loader-bar">  
-        <span></span>  
-    </div>  
+        <div class="loader-logo">
+            I
+        </div>
+
+        <div class="loader-ring"></div>
+
+        <div
+            class="loader-text"
+            id="loaderText">
+
+            Loading Infinix...
+
+        </div>
+
+        <div class="loader-bar">
+            <span></span>
+        </div>
+
+    </div>
 
 </div>
 
-</div>  <div class="phone-container">  <!-- =========================================  
-     HEADER  
-========================================== -->  
 
-<header class="top-header">  
+<!-- =========================================
+     DRAGGABLE STAR / GIFT BUTTON
+========================================= -->
 
-    <div class="brand">  
+<a
+    href="{{ url_for('gift_code') }}"
+    class="floating-star"
+    id="floatingStar"
+    aria-label="Gift Code"
+    title="Gift Code">
 
-        <div class="brand-logo">  
-            I  
-        </div>  
+    <i data-lucide="star"></i>
 
-        <div class="brand-text">  
+</a>
 
-            <strong>  
-                INFINIX  
-            </strong>  
 
-            <span>  
-                SMARTPHONE SHOWCASE  
-            </span>  
+<div class="phone-container">
 
-        </div>  
+<!-- =========================================
+     HEADER
+========================================= -->
 
-    </div>  
+<header class="top-header">
 
+    <div class="brand">
 
-    <a  
-        href="{{ url_for('support') }}"  
-        class="header-button loading-link"  
-        data-loading="Opening Support...">  
+        <div class="brand-logo">
+            I
+        </div>
 
-        <i data-lucide="bell"></i>  
+        <div class="brand-text">
 
-    </a>  
+            <strong>
+                INFINIX
+            </strong>
 
-</header>  
+            <span>
+                SMARTPHONE SHOWCASE
+            </span>
 
+        </div>
 
-<!-- =========================================  
-     HERO  
-========================================== -->  
+    </div>
 
-<section class="hero">  
+    <a
+        href="{{ url_for('support') }}"
+        class="header-button loading-link"
+        data-loading="Opening Support...">
 
-    <img  
-        id="heroImage"  
-        class="hero-image"  
-        src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"  
-        alt="Infinix smartphone"  
-        loading="eager"  
-        onerror="this.style.display='none';"  
-    >  
+        <i data-lucide="bell"></i>
 
-    <div class="hero-content">  
+    </a>
 
-        <div class="eyebrow">  
+</header>
 
-            <span></span>  
 
-            FEATURED DEVICE  
+<!-- =========================================
+     HERO
+========================================= -->
 
-        </div>  
+<section class="hero">
 
-        <h1>  
+    <img
+        id="heroImage"
+        class="hero-image"
+        src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
+        alt="Infinix smartphone"
+        loading="eager"
+        onerror="this.style.display='none';"
+    >
 
-            Welcome,  
-            <span>  
-                {{ user.fullname }}  
-            </span>  
+    <div class="hero-content">
 
-        </h1>  
+        <div class="eyebrow">
 
-        <p>  
-            Explore Infinix devices and manage your purchases.  
-        </p>  
+            <span></span>
 
-    </div>  
+            FEATURED DEVICE
 
+        </div>
 
-    <div class="hero-dots">  
+        <h1>
 
-        <span class="hero-dot active"></span>  
-        <span class="hero-dot"></span>  
-        <span class="hero-dot"></span>  
-        <span class="hero-dot"></span>  
+            Welcome,
+            <span>
+                {{ user.fullname }}
+            </span>
 
-    </div>  
+        </h1>
 
-</section>  
+        <p>
+            Explore Infinix devices and manage your account.
+        </p>
 
+    </div>
 
-<!-- =========================================  
-     QUICK ACTIONS  
-========================================== -->  
+    <div class="hero-dots">
 
-<div class="top-actions">  
+        <span class="hero-dot active"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
 
+    </div>
 
-    <a  
-        href="{{ url_for('deposit') }}"  
-        class="action-btn loading-link"  
-        data-loading="Opening Deposit...">  
+</section>
 
-        <div  
-            class="action-icon"  
-            style="color:#00ff55">  
 
-            <i data-lucide="wallet"></i>  
+<!-- =========================================
+     QUICK ACTIONS
+========================================= -->
 
-        </div>  
+<div class="top-actions">
 
-        <div class="action-label">  
-            Deposit  
-        </div>  
+    <a
+        href="{{ url_for('deposit') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Deposit...">
 
-    </a>  
+        <div
+            class="action-icon"
+            style="color:#00ff55">
 
+            <i data-lucide="wallet"></i>
 
-    <a  
-        href="{{ url_for('withdraw') }}"  
-        class="action-btn loading-link"  
-        data-loading="Opening Withdraw...">  
+        </div>
 
-        <div  
-            class="action-icon"  
-            style="color:#ffb45b">  
+        <div class="action-label">
+            Deposit
+        </div>
 
-            <i data-lucide="arrow-up-right"></i>  
+    </a>
 
-        </div>  
 
-        <div class="action-label">  
-            Withdraw  
-        </div>  
+    <a
+        href="{{ url_for('withdraw') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Withdraw...">
 
-    </a>  
+        <div
+            class="action-icon"
+            style="color:#ffb45b">
 
+            <i data-lucide="arrow-up-right"></i>
 
-    <a  
-        href="{{ url_for('support') }}"  
-        class="action-btn loading-link"  
-        data-loading="Opening Support...">  
+        </div>
 
-        <div  
-            class="action-icon"  
-            style="color:#67b5ff">  
+        <div class="action-label">
+            Withdraw
+        </div>
 
-            <i data-lucide="headphones"></i>  
+    </a>
 
-        </div>  
 
-        <div class="action-label">  
-            Support  
-        </div>  
+    <a
+        href="{{ url_for('support') }}"
+        class="action-btn loading-link"
+        data-loading="Opening Support...">
 
-    </a>  
+        <div
+            class="action-icon"
+            style="color:#67b5ff">
 
+            <i data-lucide="headphones"></i>
 
-    <a  
-        href="{{ url_for('my_plan') }}"  
-        class="action-btn loading-link"  
-        data-loading="Opening Profile...">  
+        </div>
 
-        <div  
-            class="action-icon"  
-            style="color:#d78cff">  
+        <div class="action-label">
+            Support
+        </div>
 
-            <i data-lucide="chart-no-axes-combined"></i>  
+    </a>
 
-        </div>  
 
-        <div class="action-label">  
-            My device  
-        </div>  
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="action-btn loading-link"
+        data-loading="Opening My Devices...">
 
-    </a>  
+        <div
+            class="action-icon"
+            style="color:#d78cff">
 
-</div>  
+            <i data-lucide="smartphone"></i>
 
+        </div>
 
-<!-- =========================================  
-     ACCOUNT  
-========================================== -->  
+        <div class="action-label">
+            My Device
+        </div>
 
-<section class="account">  
+    </a>
 
-    <div class="account-header">  
-
-        <h3>  
-            Account Overview  
-        </h3>  
-
-        <span>  
-            Available balances  
-        </span>  
-
-    </div>  
-
-
-    <div class="balance-main">  
-
-        GHS  
-        {{ "%.2f"|format(account.deposit_account|float) }}  
-
-        <small>  
-            Deposit  
-        </small>  
-
-    </div>  
-
-
-    <div class="balance-grid">  
-
-
-        <div class="balance-box">  
-
-            <label>  
-                Withdraw  
-            </label>  
-
-            <strong>  
-                GHS  
-                {{ "%.2f"|format(account.withdraw_account|float) }}  
-            </strong>  
-
-        </div>  
-
-
-        <div class="balance-box">  
-
-            <label>  
-                Income  
-            </label>  
-
-            <strong>  
-                GHS  
-                {{ "%.2f"|format(account.income_account|float) }}  
-            </strong>  
-
-        </div>  
-
-
-        <div class="balance-box">  
-
-            <label>  
-                Referral  
-            </label>  
-
-            <strong>  
-                GHS  
-                {{ "%.2f"|format(account.referral_account|float) }}  
-            </strong>  
-
-        </div>  
-
-    </div>  
-
-</section>  
-
-
-<!-- =========================================  
-     AVAILABLE DEVICES  
-========================================== -->  
-
-<section class="section">  
-
-
-    <div class="section-head">  
-
-        <div>  
-
-            <h2>  
-                Available Devices  
-            </h2>  
-
-            <p>  
-                Select an Infinix model to view  
-            </p>  
-
-        </div>  
-
-
-        <a  
-            href="{{ url_for('my_plan') }}"  
-            class="loading-link"  
-            data-loading="Opening My Devices...">  
-
-            My Devices  
-
-        </a>  
-
-    </div>  
-
-
-    <div class="product-grid">  
-
-
-        <!-- =================================  
-             DEVICE 1  
-        ================================= -->  
-
-        <article class="product-card">  
-
-            <div class="vip-tag">  
-
-                INFINIX 1  
-
-                <span>  
-                    STARTER  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"  
-                    alt="Infinix Note 10"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-
-                    <div class="fake-phone"></div>  
-
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 20  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 3600  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 100  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-            <a  
-                href="{{ url_for('buy_plan', plan_id=1) }}"  
-                class="buy-btn loading-link"  
-                data-loading="Opening Infinix 1...">  
-
-                Buy now  
-
-                <i data-lucide="arrow-right"></i>  
-
-            </a>  
-
-        </article>  
-
-
-        <!-- =================================  
-             DEVICE 2  
-        ================================= -->  
-
-        <article class="product-card">  
-
-            <div class="vip-tag">  
-
-                INFINIX 2  
-
-                <span>  
-                    BASIC  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"  
-                    alt="Infinix Hot 60 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 45  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 8,100  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 250  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-            <a  
-                href="{{ url_for('buy_plan', plan_id=2) }}"  
-                class="buy-btn loading-link"  
-                data-loading="Opening Infinix 2...">  
-
-                Buy now  
-
-                <i data-lucide="arrow-right"></i>  
-
-            </a>  
-
-        </article>  
-
-
-        <!-- =================================  
-             DEVICE 3  
-        ================================= -->  
-
-        <article class="product-card">  
-
-            <div class="vip-tag">  
-
-                INFINIX 3  
-
-                <span>  
-                    GROWTH  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2022/04/Infinix-Hot-12i.png"  
-                    alt="Infinix Hot 12i"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 120  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 21,600  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 600  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-            <a  
-                href="{{ url_for('buy_plan', plan_id=3) }}"  
-                class="buy-btn loading-link"  
-                data-loading="Opening Infinix 3...">  
-
-                Buy now  
-
-                <i data-lucide="arrow-right"></i>  
-
-            </a>  
-
-        </article>  
-
-
-        <!-- =================================  
-             DEVICE 4  
-        ================================= -->  
-
-        <article class="product-card locked">  
-
-            <div class="vip-tag">  
-
-                INFINIX 4  
-
-                <span>  
-                    ADVANCED  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"  
-                    alt="Infinix S5 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 200  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 36,000  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 1000  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-            <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
-</div>  
-
-        </article>  
-
-
-        <!-- =================================  
-             DEVICE 5  
-        ================================= -->  
-
-        <article class="product-card locked">  
-
-            <div class="vip-tag">  
-
-                INFINIX 5  
-
-                <span>  
-                    PREMIUM  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-s2-pro.png"  
-                    alt="Infinix S2 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 500  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 90,000  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 2500  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-             <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
-</div> 
-
-        </article>  
-
-
-        <!-- =================================  
-             DEVICE 6  
-        ================================= -->  
-
-        <article class="product-card locked">  
-
-            <div class="vip-tag">  
-
-                INFINIX 6  
-
-                <span>  
-                    ELITE  
-                </span>  
-
-            </div>  
-
-
-            <div class="product-img-box">  
-
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"  
-                    alt="Infinix Note device"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
-
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
-
-            </div>  
-
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 1000  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 180,000  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
-
-
-            <div class="price-tag">  
-
-                GHS 5000  
-
-                <small>  
-                    / DEVICE  
-                </small>  
-
-            </div>  
-
-
-              <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
 </div>
 
-        </article>  
+
+<!-- =========================================
+     ACCOUNT
+========================================= -->
+
+<section class="account">
+
+    <div class="account-header">
+
+        <h3>
+            Account Overview
+        </h3>
+
+        <span>
+            Available balances
+        </span>
+
+    </div>
 
 
-        <!-- =================================  
-             DEVICE 7  
-        ================================= -->  
+    <div class="balance-main">
 
-        <article class="product-card locked">  
+        GHS
+        {{ "%.2f"|format(account.deposit_account|float) }}
 
-            <div class="vip-tag">  
+        <small>
+            Deposit
+        </small>
 
-                INFINIX 7  
-
-                <span>  
-                    MASTER  
-                </span>  
-
-            </div>  
+    </div>
 
 
-            <div class="product-img-box">  
+    <div class="balance-grid">
 
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"  
-                    alt="Infinix Note 12 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
+        <div class="balance-box">
 
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
+            <label>
+                Withdraw
+            </label>
 
-            </div>  
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.withdraw_account|float) }}
+            </strong>
 
-
-            <div class="info-row">  
-                Daily income:  
-                <span class="income">  
-                    GHS 1,600  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 288000  
-                </span>  
-            </div>  
-
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
+        </div>
 
 
-            <div class="price-tag">  
+        <div class="balance-box">
 
-                GHS 8000  
+            <label>
+                Income
+            </label>
 
-                <small>  
-                    / DEVICE  
-                </small>  
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.income_account|float) }}
+            </strong>
 
-            </div>  
+        </div>
 
+
+        <div class="balance-box">
+
+            <label>
+                Referral
+            </label>
+
+            <strong>
+                GHS
+                {{ "%.2f"|format(account.referral_account|float) }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     AVAILABLE DEVICES
+========================================= -->
+
+<section class="section">
+
+    <div class="section-head">
+
+        <div>
+
+            <h2>
+                Available Devices
+            </h2>
+
+            <p>
+                Select an Infinix model to view
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('my_plan') }}"
+            class="loading-link"
+            data-loading="Opening My Devices...">
+
+            My Devices
+
+        </a>
+
+    </div>
+
+
+    <div class="product-grid">
+
+
+        <!-- DEVICE 1 -->
+
+        <article class="product-card">
+
+            <div class="vip-tag">
+
+                INFINIX 1
+
+                <span>
+                    STARTER
+                </span>
+
+            </div>
+
+            <div class="product-img-box">
+
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
+                    alt="Infinix Note 10"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+                Device:
+                <span>
+                    Infinix Note 10
+                </span>
+            </div>
+
+            <div class="info-row">
+                Status:
+                <span>
+                    Available
+                </span>
+            </div>
+
+            <div class="price-tag">
+                GHS 100
+                <small>
+                    / DEVICE
+                </small>
+            </div>
+
+            <a
+                href="{{ url_for('buy_plan', plan_id=1) }}"
+                class="buy-btn loading-link"
+                data-loading="Opening Infinix 1...">
+
+                View Device
+
+                <i data-lucide="arrow-right"></i>
+
+            </a>
+
+        </article>
+
+
+        <!-- DEVICE 2 -->
+
+        <article class="product-card">
+
+            <div class="vip-tag">
+
+                INFINIX 2
+
+                <span>
+                    BASIC
+                </span>
+
+            </div>
+
+            <div class="product-img-box">
+
+                <img
+                    src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
+                    alt="Infinix Hot 60 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+                Device:
+                <span>
+                    Hot 60 Pro
+                </span>
+            </div>
+
+            <div class="info-row">
+                Status:
+                <span>
+                    Available
+                </span>
+            </div>
+
+            <div class="price-tag">
+                GHS 250
+                <small>
+                    / DEVICE
+                </small>
+            </div>
+
+            <a
+                href="{{ url_for('buy_plan', plan_id=2) }}"
+                class="buy-btn loading-link"
+                data-loading="Opening Infinix 2...">
+
+                View Device
+
+                <i data-lucide="arrow-right"></i>
+
+            </a>
+
+        </article>
+
+
+        <!-- DEVICE 3 -->
+
+        <article class="product-card">
+
+            <div class="vip-tag">
+
+                INFINIX 3
+
+                <span>
+                    GROWTH
+                </span>
+
+            </div>
+
+            <div class="product-img-box">
+
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2022/04/Infinix-Hot-12i.png"
+                    alt="Infinix Hot 12i"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+                Device:
+                <span>
+                    Hot 12i
+                </span>
+            </div>
+
+            <div class="info-row">
+                Status:
+                <span>
+                    Available
+                </span>
+            </div>
+
+            <div class="price-tag">
+                GHS 600
+                <small>
+                    / DEVICE
+                </small>
+            </div>
+
+            <a
+                href="{{ url_for('buy_plan', plan_id=3) }}"
+                class="buy-btn loading-link"
+                data-loading="Opening Infinix 3...">
+
+                View Device
+
+                <i data-lucide="arrow-right"></i>
+
+            </a>
+
+        </article>
+
+
+        <!-- DEVICE 4 -->
+
+        <article class="product-card locked">
+
+            <div class="vip-tag">
+
+                INFINIX 4
+
+                <span>
+                    ADVANCED
+                </span>
+
+            </div>
+
+            <div class="product-img-box">
+
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+                    alt="Infinix S5 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
+
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+                Device:
+                <span>
+                    S5 Pro
+                </span>
+            </div>
+
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
+
+            <div class="price-tag">
+                GHS 1000
+                <small>
+                    / DEVICE
+                </small>
+            </div>
 
             <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
-</div>  
 
-        </article>  
+                <i data-lucide="lock"></i>
 
+                Coming Soon
 
-        <!-- =================================  
-             DEVICE 8  
-        ================================= -->  
+            </div>
 
-        <article class="product-card locked">  
+        </article>
 
-            <div class="vip-tag">  
 
-                INFINIX 8  
+        <!-- DEVICE 5 -->
 
-                <span>  
-                    buy now  
-                </span>  
+        <article class="product-card locked">
 
-            </div>  
+            <div class="vip-tag">
 
+                INFINIX 5
 
-            <div class="product-img-box">  
+                <span>
+                    PREMIUM
+                </span>
 
-                <img  
-                    src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"  
-                    alt="Infinix Hot 60 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
+            </div>
 
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
+            <div class="product-img-box">
 
-            </div>  
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-s2-pro.png"
+                    alt="Infinix S2 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
 
-            <div class="info-row">  
-                Daily income:  
-                <span>  
-                    GHS 2000  
-                </span>  
-            </div>  
+            </div>
 
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 360,000  
-                </span>  
-            </div>  
+            <div class="info-row">
+                Device:
+                <span>
+                    S2 Pro
+                </span>
+            </div>
 
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
 
+            <div class="price-tag">
+                GHS 2500
+                <small>
+                    / DEVICE
+                </small>
+            </div>
 
-            <div class="price-tag">  
+            <div class="locked-button">
 
-                GHS 10000  
+                <i data-lucide="lock"></i>
 
-                <small>  
-                    / DEVICE  
-                </small>  
+                Coming Soon
 
-            </div>  
+            </div>
 
+        </article>
 
-             <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
-</div> 
 
-        </article>  
+        <!-- DEVICE 6 -->
 
+        <article class="product-card locked">
 
-        <!-- =================================  
-             DEVICE 9  
-        ================================= -->  
+            <div class="vip-tag">
 
-        <article class="product-card locked">  
+                INFINIX 6
 
-            <div class="vip-tag">  
+                <span>
+                    ELITE
+                </span>
 
-                INFINIX 9  
+            </div>
 
-                <span>  
-                    buy now 
-                </span>  
+            <div class="product-img-box">
 
-            </div>  
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
+                    alt="Infinix Note"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
 
-            <div class="product-img-box">  
+            </div>
 
-                <img  
-                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"  
-                    alt="Infinix S5 Pro"  
-                    loading="lazy"  
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"  
-                >  
+            <div class="info-row">
+                Device:
+                <span>
+                    Infinix Note
+                </span>
+            </div>
 
-                <div class="image-fallback">  
-                    <div class="fake-phone"></div>  
-                </div>  
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
 
-            </div>  
+            <div class="price-tag">
+                GHS 5000
+                <small>
+                    / DEVICE
+                </small>
+            </div>
 
+            <div class="locked-button">
 
-            <div class="info-row">  
-                Daily income:  
-                <span>  
-                    GHS 3600  
-                </span>  
-            </div>  
+                <i data-lucide="lock"></i>
 
-            <div class="info-row">  
-                Total income:  
-                <span>  
-                    GHS 648,000  
-                </span>  
-            </div>  
+                Coming Soon
 
-            <div class="info-row">  
-                Validity:  
-                <span>  
-                    180 Days  
-                </span>  
-            </div>  
+            </div>
 
+        </article>
 
-            <div class="price-tag">  
 
-                GHS 20000  
+        <!-- DEVICE 7 -->
 
-                <small>  
-                    / DEVICE  
-                </small>  
+        <article class="product-card locked">
 
-            </div>  
+            <div class="vip-tag">
 
+                INFINIX 7
 
-             <div class="locked-button">
-    <i data-lucide="lock"></i>
-    Coming Soon
-</div> 
+                <span>
+                    MASTER
+                </span>
 
-        </article>  
+            </div>
 
-    </div>  
+            <div class="product-img-box">
 
-</section>  
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
+                    alt="Infinix Note 12 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
 
-<!-- =========================================  
-     INFORMATION  
-========================================== -->  
+            </div>
 
-<div class="info">  
+            <div class="info-row">
+                Device:
+                <span>
+                    Note 12 Pro
+                </span>
+            </div>
 
-    <div class="info-icon">  
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
 
-        <i data-lucide="shield-check"></i>  
+            <div class="price-tag">
+                GHS 8000
+                <small>
+                    / DEVICE
+                </small>
+            </div>
 
-    </div>  
+            <div class="locked-button">
 
-    <div>  
+                <i data-lucide="lock"></i>
 
-        <h4>  
-            Platform information  
-        </h4>  
+                Coming Soon
 
-        <p>  
-            Please review the device information  
-            carefully before buying. Images are  
-            used for device presentation.  
-        </p>  
+            </div>
 
-    </div>  
+        </article>
 
-</div>  
 
+        <!-- DEVICE 8 -->
 
-<!-- =========================================  
-     BOTTOM NAVIGATION  
-========================================== -->  
+        <article class="product-card locked">
 
-<nav class="bottom-nav">  
+            <div class="vip-tag">
 
+                INFINIX 8
 
-    <a  
-        href="{{ url_for('dashboard') }}"  
-        class="nav-item active loading-link"  
-        data-loading="Loading Home...">  
+                <span>
+                    PREMIUM
+                </span>
 
-        <i data-lucide="house"></i>  
+            </div>
 
-        <span>  
-            Home  
-        </span>  
+            <div class="product-img-box">
 
-    </a>  
+                <img
+                    src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
+                    alt="Infinix Hot 60 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
 
-    <a  
-        href="{{ url_for('my_plan') }}"  
-        class="nav-item loading-link"  
-        data-loading="Loading Income...">  
+            </div>
 
-        <i data-lucide="chart-no-axes-combined"></i>  
+            <div class="info-row">
+                Device:
+                <span>
+                    Hot 60 Pro
+                </span>
+            </div>
 
-        <span>  
-            My device  
-        </span>  
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
 
-    </a>  
+            <div class="price-tag">
+                GHS 10000
+                <small>
+                    / DEVICE
+                </small>
+            </div>
 
+            <div class="locked-button">
 
-    <a  
-        href="{{ url_for('team_members') }}"  
-        class="nav-item loading-link"  
-        data-loading="Loading Team...">  
+                <i data-lucide="lock"></i>
 
-        <i data-lucide="users"></i>  
+                Coming Soon
 
-        <span>  
-            Team  
-        </span>  
+            </div>
 
-    </a>  
+        </article>
 
 
-    <a  
-        href="{{ url_for('team') }}"  
-        class="nav-item loading-link"  
-        data-loading="Opening Share...">  
+        <!-- DEVICE 9 -->
 
-        <i data-lucide="share-2"></i>  
+        <article class="product-card locked">
 
-        <span>  
-            Share  
-        </span>  
+            <div class="vip-tag">
 
-    </a>  
+                INFINIX 9
 
+                <span>
+                    PREMIUM
+                </span>
 
-    <a  
-        href="{{ url_for('profile') }}"  
-        class="nav-item loading-link"  
-        data-loading="Loading Profile...">  
+            </div>
 
-        <i data-lucide="user-round"></i>  
+            <div class="product-img-box">
 
-        <span>  
-            My  
-        </span>  
+                <img
+                    src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+                    alt="Infinix S5 Pro"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                >
 
-    </a>  
+                <div class="image-fallback">
+                    <div class="fake-phone"></div>
+                </div>
+
+            </div>
+
+            <div class="info-row">
+                Device:
+                <span>
+                    S5 Pro
+                </span>
+            </div>
+
+            <div class="info-row">
+                Status:
+                <span>
+                    Coming Soon
+                </span>
+            </div>
+
+            <div class="price-tag">
+                GHS 20000
+                <small>
+                    / DEVICE
+                </small>
+            </div>
+
+            <div class="locked-button">
+
+                <i data-lucide="lock"></i>
+
+                Coming Soon
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     INFORMATION
+========================================= -->
+
+<div class="info">
+
+    <div class="info-icon">
+
+        <i data-lucide="shield-check"></i>
+
+    </div>
+
+    <div>
+
+        <h4>
+            Platform information
+        </h4>
+
+        <p>
+            Please review device information
+            carefully before making a purchase.
+            Product availability may change.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     BOTTOM NAVIGATION
+========================================= -->
+
+<nav class="bottom-nav">
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="nav-item active loading-link"
+        data-loading="Loading Home...">
+
+        <i data-lucide="house"></i>
+
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('my_plan') }}"
+        class="nav-item loading-link"
+        data-loading="Loading My Devices...">
+
+        <i data-lucide="smartphone"></i>
+
+        <span>
+            My Device
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('team_members') }}"
+        class="nav-item loading-link"
+        data-loading="Loading Team...">
+
+        <i data-lucide="users"></i>
+
+        <span>
+            Team
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('team') }}"
+        class="nav-item loading-link"
+        data-loading="Opening Share...">
+
+        <i data-lucide="share-2"></i>
+
+        <span>
+            Share
+        </span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('profile') }}"
+        class="nav-item loading-link"
+        data-loading="Loading Profile...">
+
+        <i data-lucide="user-round"></i>
+
+        <span>
+            My
+        </span>
+
+    </a>
 
 </nav>
 
-</div>  <script>  
-  
-    /* =========================================  
-       HERO IMAGES  
-    ========================================== */  
-  
-    const heroImages = [  
-  
-        "https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png",  
-  
-        "https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png",  
-  
-        "https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png",  
-  
-        "https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"  
-  
-    ];  
-  
-  
-    let heroIndex = 0;  
-  
-    const heroImage =  
-        document.getElementById("heroImage");  
-  
-    const heroDots =  
-        document.querySelectorAll(".hero-dot");  
-  
-  
-    function changeHero() {  
-  
-        if (!heroImage) {  
-            return;  
-        }  
-  
-        heroIndex++;  
-  
-        if (  
-            heroIndex >= heroImages.length  
-        ) {  
-            heroIndex = 0;  
-        }  
-  
-        heroImage.style.opacity = "0";  
-  
-        setTimeout(() => {  
-  
-            heroImage.src =  
-                heroImages[heroIndex];  
-  
-            heroImage.style.opacity = ".72";  
-  
-        }, 300);  
-  
-  
-        heroDots.forEach(  
-            (dot, index) => {  
-  
-                dot.classList.toggle(  
-                    "active",  
-                    index === heroIndex  
-                );  
-  
-            }  
-        );  
-  
-    }  
-  
-  
-    setInterval(  
-        changeHero,  
-        4500  
-    );  
-  
-  
-    /* =========================================  
-       GLOBAL PROFESSIONAL LOADER  
-    ========================================== */  
-  
-    const pageLoader =  
-        document.getElementById(  
-            "pageLoader"  
-        );  
-  
-    const loaderText =  
-        document.getElementById(  
-            "loaderText"  
-        );  
-  
-  
-    let navigationStarted = false;  
-  
-  
-    function showLoader(message) {  
-  
-        if (loaderText) {  
-  
-            loaderText.textContent =  
-                message ||  
-                "Loading Infinix...";  
-  
-        }  
-  
-        pageLoader.classList.add(  
-            "show"  
-        );  
-  
-    }  
-  
-  
-    function hideLoader() {  
-  
-        pageLoader.classList.remove(  
-            "show"  
-        );  
-  
-    }  
-  
-  
-    /* =========================================  
-       ALL NAVIGATION LINKS  
-    ========================================== */  
-  
-    document.querySelectorAll(  
-        ".loading-link"  
-    ).forEach(link => {  
-  
-        link.addEventListener(  
-            "click",  
-            function(event) {  
-  
-                if (navigationStarted) {  
-                    event.preventDefault();  
-                    return;  
-                }  
-  
-  
-                const href =  
-                    this.getAttribute("href");  
-  
-  
-                if (  
-                    !href ||  
-                    href === "#" ||  
-                    href.startsWith("javascript:")  
-                ) {  
-  
-                    return;  
-  
-                }  
-  
-  
-                event.preventDefault();  
-  
-  
-                navigationStarted = true;  
-  
-  
-                this.classList.add(  
-                    "loading-now"  
-                );  
-  
-  
-                const message =  
-                    this.dataset.loading ||  
-                    "Loading Infinix...";  
-  
-  
-                showLoader(message);  
-  
-  
-                /*  
-                    Small delay makes the  
-                    loading animation visible  
-                    before Flask navigation.  
-                */  
-  
-                setTimeout(() => {  
-  
-                    window.location.href =  
-                        href;  
-  
-                }, 420);  
-  
-            }  
-        );  
-  
-    });  
-  
-  
-    /* =========================================  
-       PAGE HISTORY  
-    ========================================== */  
-  
-    window.addEventListener(  
-        "pageshow",  
-        function() {  
-  
-            navigationStarted = false;  
-  
-            hideLoader();  
-  
-        }  
-    );  
-  
-  
-    /* =========================================  
-       PREVENT DOUBLE CLICK  
-    ========================================== */  
-  
-    document.querySelectorAll(  
-        ".buy-btn"  
-    ).forEach(button => {  
-  
-        button.addEventListener(  
-            "click",  
-            function() {  
-  
-                this.style.transform =  
-                    "scale(.96)";  
-  
-                setTimeout(() => {  
-  
-                    this.style.transform =  
-                        "";  
-  
-                }, 150);  
-  
-            }  
-        );  
-  
-    });  
-  
-  
-    /* =========================================  
-       IMAGE CHECK  
-    ========================================== */  
-  
-    document.querySelectorAll(  
-        ".product-img-box img"  
-    ).forEach(img => {  
-  
-        img.addEventListener(  
-            "load",  
-            function() {  
-  
-                this.style.opacity = "1";  
-  
-            }  
-        );  
-  
-        img.addEventListener(  
-            "error",  
-            function() {  
-  
-                this.style.display =  
-                    "none";  
-  
-                const fallback =  
-                    this.nextElementSibling;  
-  
-                if (fallback) {  
-  
-                    fallback.style.display =  
-                        "flex";  
-  
-                }  
-  
-            }  
-        );  
-  
-    });  
-  
-  
-    /* =========================================  
-       LUCIDE ICONS  
-    ========================================== */  
-  
-    if (  
-        typeof lucide !== "undefined"  
-    ) {  
-  
-        lucide.createIcons();  
-  
-    }  
-  
-</script>  </body>  
+</div>
+
+
+<script>
+
+/* =========================================
+   HERO SLIDER
+========================================= */
+
+const heroImages = [
+
+    "https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png",
+
+    "https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png",
+
+    "https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png",
+
+    "https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
+
+];
+
+let heroIndex = 0;
+
+const heroImage =
+    document.getElementById("heroImage");
+
+const heroDots =
+    document.querySelectorAll(".hero-dot");
+
+function changeHero() {
+
+    if (!heroImage) {
+        return;
+    }
+
+    heroIndex++;
+
+    if (heroIndex >= heroImages.length) {
+        heroIndex = 0;
+    }
+
+    heroImage.style.opacity = "0";
+
+    setTimeout(() => {
+
+        heroImage.src =
+            heroImages[heroIndex];
+
+        heroImage.style.opacity = ".72";
+
+    }, 300);
+
+    heroDots.forEach((dot,index) => {
+
+        dot.classList.toggle(
+            "active",
+            index === heroIndex
+        );
+
+    });
+
+}
+
+setInterval(changeHero,4500);
+
+
+/* =========================================
+   GLOBAL LOADER
+========================================= */
+
+const pageLoader =
+    document.getElementById("pageLoader");
+
+const loaderText =
+    document.getElementById("loaderText");
+
+let navigationStarted = false;
+
+function showLoader(message) {
+
+    if (loaderText) {
+
+        loaderText.textContent =
+            message ||
+            "Loading Infinix...";
+
+    }
+
+    pageLoader.classList.add("show");
+}
+
+function hideLoader() {
+
+    pageLoader.classList.remove("show");
+
+}
+
+
+/* =========================================
+   NAVIGATION LOADER
+========================================= */
+
+document.querySelectorAll(
+    ".loading-link"
+).forEach(link => {
+
+    link.addEventListener(
+        "click",
+        function(event) {
+
+            if (navigationStarted) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+            const href =
+                this.getAttribute("href");
+
+            if (
+                !href ||
+                href === "#" ||
+                href.startsWith("javascript:")
+            ) {
+
+                return;
+
+            }
+
+            event.preventDefault();
+
+            navigationStarted = true;
+
+            this.classList.add(
+                "loading-now"
+            );
+
+            const message =
+                this.dataset.loading ||
+                "Loading Infinix...";
+
+            showLoader(message);
+
+            setTimeout(() => {
+
+                window.location.href =
+                    href;
+
+            },420);
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   PAGE HISTORY
+========================================= */
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        navigationStarted = false;
+
+        hideLoader();
+
+    }
+);
+
+
+/* =========================================
+   DRAGGABLE STAR BUTTON
+========================================= */
+
+const floatingStar =
+    document.getElementById("floatingStar");
+
+let draggingStar = false;
+
+let movedStar = false;
+
+let startX = 0;
+let startY = 0;
+
+let originalX = 0;
+let originalY = 0;
+
+
+floatingStar.addEventListener(
+    "pointerdown",
+    function(event) {
+
+        draggingStar = true;
+
+        movedStar = false;
+
+        floatingStar.setPointerCapture(
+            event.pointerId
+        );
+
+        const rect =
+            floatingStar.getBoundingClientRect();
+
+        startX = event.clientX;
+        startY = event.clientY;
+
+        originalX = rect.left;
+        originalY = rect.top;
+
+        floatingStar.style.animation =
+            "none";
+
+    }
+);
+
+
+floatingStar.addEventListener(
+    "pointermove",
+    function(event) {
+
+        if (!draggingStar) {
+            return;
+        }
+
+        const moveX =
+            event.clientX - startX;
+
+        const moveY =
+            event.clientY - startY;
+
+        if (
+            Math.abs(moveX) > 5 ||
+            Math.abs(moveY) > 5
+        ) {
+
+            movedStar = true;
+
+        }
+
+        let newX =
+            originalX + moveX;
+
+        let newY =
+            originalY + moveY;
+
+        const buttonWidth =
+            floatingStar.offsetWidth;
+
+        const buttonHeight =
+            floatingStar.offsetHeight;
+
+        const maxX =
+            window.innerWidth -
+            buttonWidth;
+
+        const maxY =
+            window.innerHeight -
+            buttonHeight;
+
+        newX =
+            Math.max(
+                0,
+                Math.min(newX,maxX)
+            );
+
+        newY =
+            Math.max(
+                0,
+                Math.min(newY,maxY)
+            );
+
+        floatingStar.style.left =
+            newX + "px";
+
+        floatingStar.style.top =
+            newY + "px";
+
+        floatingStar.style.right =
+            "auto";
+
+        floatingStar.style.bottom =
+            "auto";
+
+    }
+);
+
+
+floatingStar.addEventListener(
+    "pointerup",
+    function(event) {
+
+        draggingStar = false;
+
+        try {
+
+            floatingStar.releasePointerCapture(
+                event.pointerId
+            );
+
+        } catch (error) {}
+
+        floatingStar.style.animation =
+            "starFloat 2.2s ease-in-out infinite";
+
+    }
+);
+
+
+/*
+   If the user dragged the star,
+   don't open the page.
+*/
+
+floatingStar.addEventListener(
+    "click",
+    function(event) {
+
+        if (movedStar) {
+
+            event.preventDefault();
+
+            movedStar = false;
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   KEEP STAR INSIDE SCREEN AFTER RESIZE
+========================================= */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        const rect =
+            floatingStar.getBoundingClientRect();
+
+        const maxX =
+            window.innerWidth -
+            floatingStar.offsetWidth;
+
+        const maxY =
+            window.innerHeight -
+            floatingStar.offsetHeight;
+
+        if (rect.left > maxX) {
+
+            floatingStar.style.left =
+                Math.max(0,maxX) + "px";
+
+        }
+
+        if (rect.top > maxY) {
+
+            floatingStar.style.top =
+                Math.max(0,maxY) + "px";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   IMAGE ERROR HANDLING
+========================================= */
+
+document.querySelectorAll(
+    ".product-img-box img"
+).forEach(img => {
+
+    img.addEventListener(
+        "error",
+        function() {
+
+            this.style.display =
+                "none";
+
+            const fallback =
+                this.nextElementSibling;
+
+            if (fallback) {
+
+                fallback.style.display =
+                    "flex";
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================
+   LUCIDE ICONS
+========================================= */
+
+if (
+    typeof lucide !== "undefined"
+) {
+
+    lucide.createIcons();
+
+}
+
+</script>
+
+</body>
 </html>
