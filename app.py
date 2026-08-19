@@ -2039,6 +2039,43 @@ def admin_withdraw_action(withdrawal_id: int, action: str):
         flash("Unable to process the withdrawal.", "error")
     return redirect(url_for("admin_withdrawals"))
 
+
+@app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
+def admin_approve_invite(token: str):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+            cur.execute("SELECT * FROM invites WHERE token=%s FOR UPDATE", (token,))
+            invite = cur.fetchone()
+            if not invite:
+                flash("Invite not found.", "error")
+                return redirect(url_for("admin_dashboard"))
+            if invite.get("approved"):
+                # keep info feedback for admin if needed
+                return redirect(url_for("admin_dashboard"))
+            owner_id = invite["owner_id"]
+            amount = money(invite.get("amount") or 0)
+            ensure_account(cur, owner_id, STARTING_DEPOSIT_BALANCE)
+            cur.execute("UPDATE accounts SET referral_account = COALESCE(referral_account,0) + %s WHERE user_id=%s", (amount, owner_id))
+            cur.execute("UPDATE invites SET approved=TRUE WHERE id=%s", (invite["id"],))
+            cur.execute(
+                """
+                INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
+                VALUES (%s, 'invite_credit', %s, 'successful', %s, %s)
+                """,
+                (owner_id, amount, generate_reference("INV"), "Admin approved invite " + token),
+            )
+        logger.info("Admin %s approved invite %s for owner %s (amount %s)", session.get("admin_id"), token, owner_id, amount)
+    except Exception:
+        logger.exception("APPROVE INVITE ERROR")
+        flash("Unable to approve invite.", "error")
+    return redirect(url_for("admin_dashboard"))
+
+# ============================================================
+# ADMIN PLAN MANAGEMENT
+# ============================================================
+
 @app.route("/admin/plans", methods=["GET"])
 def admin_plans():
     if not admin_required():
@@ -2091,39 +2128,226 @@ def admin_plans():
         user_plans=user_plans,
         available_plans=available_plans,
     )
-@app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
-def admin_approve_invite(token: str):
+
+
+@app.route("/admin/plans/assign", methods=["POST"])
+def admin_assign_plan():
     if not admin_required():
         return redirect(url_for("admin_login"))
+
+    try:
+        user_id = int(request.form.get("user_id", "0"))
+        plan_id = int(request.form.get("plan_id", "0"))
+    except (TypeError, ValueError):
+        flash("Please select a valid user and plan.", "error")
+        return redirect(url_for("admin_plans"))
+
+    user = query_one(
+        "SELECT id, username FROM users WHERE id=%s",
+        (user_id,)
+    )
+
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("admin_plans"))
+
+    if plan_id not in PLANS:
+        flash("Plan not found.", "error")
+        return redirect(url_for("admin_plans"))
+
+    plan = PLANS[plan_id]
+
     try:
         with db_cursor(commit=True, dict_cursor=True) as cur:
-            cur.execute("SELECT * FROM invites WHERE token=%s FOR UPDATE", (token,))
-            invite = cur.fetchone()
-            if not invite:
-                flash("Invite not found.", "error")
-                return redirect(url_for("admin_dashboard"))
-            if invite.get("approved"):
-                # keep info feedback for admin if needed
-                return redirect(url_for("admin_dashboard"))
-            owner_id = invite["owner_id"]
-            amount = money(invite.get("amount") or 0)
-            ensure_account(cur, owner_id, STARTING_DEPOSIT_BALANCE)
-            cur.execute("UPDATE accounts SET referral_account = COALESCE(referral_account,0) + %s WHERE user_id=%s", (amount, owner_id))
-            cur.execute("UPDATE invites SET approved=TRUE WHERE id=%s", (invite["id"],))
+
+            # Make sure the user's account exists.
+            ensure_account(
+                cur,
+                user_id,
+                Decimal("0.00")
+            )
+
+            # Give the plan directly to the user.
+            # IMPORTANT:
+            # No deposit balance is deducted here.
+            started_at = utcnow()
+
             cur.execute(
                 """
-                INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
-                VALUES (%s, 'invite_credit', %s, 'successful', %s, %s)
+                INSERT INTO plans (
+                    user_id,
+                    plan_id,
+                    plan_name,
+                    investment_amount,
+                    daily_income,
+                    duration,
+                    started_at,
+                    last_claim_at,
+                    active
+                )
+                VALUES (
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    NULL,
+                    TRUE
+                )
+                RETURNING id
                 """,
-                (owner_id, amount, generate_reference("INV"), "Admin approved invite " + token),
+                (
+                    user_id,
+                    plan_id,
+                    plan["name"],
+                    plan["investment"],
+                    plan["daily"],
+                    plan["duration"],
+                    started_at,
+                )
             )
-        logger.info("Admin %s approved invite %s for owner %s (amount %s)", session.get("admin_id"), token, owner_id, amount)
+
+            new_plan = cur.fetchone()
+            new_plan_id = fetch_id(new_plan, "id")
+
+            # Audit record only.
+            # This does NOT create a normal plan purchase.
+            cur.execute(
+                """
+                INSERT INTO transactions (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    status,
+                    reference,
+                    description
+                )
+                VALUES (
+                    %s,
+                    'admin_plan_grant',
+                    %s,
+                    'successful',
+                    %s,
+                    %s
+                )
+                """,
+                (
+                    user_id,
+                    plan["investment"],
+                    generate_reference("AGR"),
+                    (
+                        f"Admin granted {plan['name']} "
+                        f"to user {user['username']} "
+                        f"(plan #{new_plan_id})"
+                    ),
+                )
+            )
+
+        logger.info(
+            "Admin %s granted plan %s to user %s",
+            session.get("admin_id"),
+            plan_id,
+            user_id
+        )
+
+        flash(
+            f"{plan['name']} assigned to {user['username']} successfully.",
+            "success"
+        )
+
     except Exception:
-        logger.exception("APPROVE INVITE ERROR")
-        flash("Unable to approve invite.", "error")
-    return redirect(url_for("admin_dashboard"))
+        logger.exception("ADMIN PLAN ASSIGN ERROR")
+        flash("Unable to assign the plan.", "error")
+
+    return redirect(url_for("admin_plans"))
 
 
+@app.route("/admin/plans/delete/<int:plan_record_id>", methods=["POST"])
+def admin_delete_plan(plan_record_id: int):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+
+            cur.execute(
+                """
+                SELECT
+                    p.id,
+                    p.user_id,
+                    p.plan_name,
+                    p.investment_amount,
+                    u.username
+                FROM plans p
+                JOIN users u ON u.id = p.user_id
+                WHERE p.id=%s
+                FOR UPDATE
+                """,
+                (plan_record_id,)
+            )
+
+            plan = cur.fetchone()
+
+            if not plan:
+                flash("Plan record not found.", "error")
+                return redirect(url_for("admin_plans"))
+
+            # Permanently remove this plan record.
+            cur.execute(
+                "DELETE FROM plans WHERE id=%s",
+                (plan_record_id,)
+            )
+
+            # Keep an audit trail in transactions.
+            cur.execute(
+                """
+                INSERT INTO transactions (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    status,
+                    reference,
+                    description
+                )
+                VALUES (
+                    %s,
+                    'admin_plan_delete',
+                    %s,
+                    'successful',
+                    %s,
+                    %s
+                )
+                """,
+                (
+                    plan["user_id"],
+                    plan["investment_amount"],
+                    generate_reference("ADL"),
+                    (
+                        f"Admin removed {plan['plan_name']} "
+                        f"(plan #{plan_record_id})"
+                    ),
+                )
+            )
+
+        logger.info(
+            "Admin %s deleted plan record %s from user %s",
+            session.get("admin_id"),
+            plan_record_id,
+            plan["user_id"]
+        )
+
+        flash(
+            f"{plan['plan_name']} removed from {plan['username']}.",
+            "success"
+        )
+
+    except Exception:
+        logger.exception("ADMIN PLAN DELETE ERROR")
+        flash("Unable to delete the plan.", "error")
+
+    return redirect(url_for("admin_plans"))
 # ============================================================
 # Error handlers
 # ============================================================
