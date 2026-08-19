@@ -8,6 +8,7 @@ Changes made:
 - Admin form action names aligned with templates (update_password, update_withdraw_password).
 - Removed success flash messages for admin actions and admin login; errors still flash.
 - Small defensive fixes around withdrawals and deposit id extraction.
+- Ensure newly registered users receive GHS 30.00 in their withdraw account.
 """
 
 from __future__ import annotations
@@ -234,6 +235,15 @@ def execute(sql: str, params: Iterable = ()):
 
 
 def ensure_account(cur, user_id: int, starting_balance: Decimal = Decimal("0.00")) -> None:
+    """
+    Ensure an accounts row exists for user_id. If not present, create it.
+
+    Newly created accounts will have:
+    - deposit_account set to starting_balance
+    - income_account = 0
+    - referral_account = 0
+    - withdraw_account initialized to MIN_WITHDRAWAL (GHS 30.00)
+    """
     cur.execute("SELECT user_id FROM accounts WHERE user_id=%s FOR UPDATE", (user_id,))
     if cur.fetchone():
         return
@@ -242,10 +252,10 @@ def ensure_account(cur, user_id: int, starting_balance: Decimal = Decimal("0.00"
         INSERT INTO accounts (
             user_id, deposit_account, income_account, referral_account, withdraw_account
         )
-        VALUES (%s, %s, 0, 0, 0)
+        VALUES (%s, %s, 0, 0, %s)
         ON CONFLICT (user_id) DO NOTHING
         """,
-        (user_id, starting_balance),
+        (user_id, starting_balance, MIN_WITHDRAWAL),
     )
 
 
@@ -406,10 +416,10 @@ def init_db():
             cur.execute(
                 """
                 INSERT INTO accounts (user_id, deposit_account, income_account, referral_account, withdraw_account)
-                VALUES (%s, %s, 0, 0, 0)
+                VALUES (%s, %s, 0, 0, %s)
                 ON CONFLICT (user_id) DO NOTHING
                 """,
-                (uid, STARTING_DEPOSIT_BALANCE),
+                (uid, STARTING_DEPOSIT_BALANCE, MIN_WITHDRAWAL),
             )
 
         # Ensure admin account
@@ -463,9 +473,9 @@ def current_account(user_id: int) -> Dict[str, Any]:
     execute(
         """
         INSERT INTO accounts (user_id, deposit_account, income_account, referral_account, withdraw_account)
-        VALUES (%s, %s, 0, 0, 0) ON CONFLICT (user_id) DO NOTHING
+        VALUES (%s, %s, 0, 0, %s) ON CONFLICT (user_id) DO NOTHING
         """,
-        (user_id, STARTING_DEPOSIT_BALANCE),
+        (user_id, STARTING_DEPOSIT_BALANCE, MIN_WITHDRAWAL),
     )
     return query_one("SELECT * FROM accounts WHERE user_id=%s", (user_id,))
 
@@ -578,13 +588,14 @@ def register():
                     new_user_id = fetch_id(maybe, "id")
                     if not new_user_id:
                         raise RuntimeError("Could not determine new user id after insert.")
+                # Create accounts row and ensure withdraw_account initialized to MIN_WITHDRAWAL
                 cur.execute(
                     """
                     INSERT INTO accounts (
                         user_id, deposit_account, income_account, referral_account, withdraw_account
-                    ) VALUES (%s,%s,0,0,0) ON CONFLICT (user_id) DO NOTHING
+                    ) VALUES (%s,%s,0,0,%s) ON CONFLICT (user_id) DO NOTHING
                     """,
-                    (new_user_id, STARTING_DEPOSIT_BALANCE),
+                    (new_user_id, STARTING_DEPOSIT_BALANCE, MIN_WITHDRAWAL),
                 )
         except Exception:
             logger.exception("REGISTRATION ERROR")
@@ -1157,7 +1168,7 @@ def request_withdrawal():
             withdrawal_row = cur.fetchone()
             withdrawal_id = fetch_id(withdrawal_row, "id")
             reference = generate_reference("WDR")
-            cur.execute("INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description) VALUES (%s,'withdrawal',%s,'pending',%s,%s)", (user["id"], amount, reference, f"Demo withdrawal request #{withdrawal_id}"))
+            cur.execute("INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description) VALUES (%s,'withdrawal',%s,'pending',%s,%s)", (user["id"], amount, reference, f"De[...]
         flash("Withdrawal request submitted successfully.", "success")
     except ValueError as ve:
         flash(str(ve), "error")
