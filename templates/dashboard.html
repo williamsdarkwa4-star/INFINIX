@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -19,48 +20,48 @@
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Inter",Arial,sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", Arial, sans-serif;
 }
 
-:root{
-    --bg:#050505;
-    --surface:#0b0b0b;
-    --surface2:#111111;
-    --surface3:#171717;
+:root {
+    --bg: #050505;
+    --surface: #0b0b0b;
+    --surface2: #111111;
+    --surface3: #171717;
 
-    --text:#ffffff;
-    --muted:#858585;
+    --text: #ffffff;
+    --muted: #858585;
 
-    --green:#00ff55;
-    --green2:#00d948;
-    --green-dark:#00a83a;
+    --green: #00ff55;
+    --green2: #00d948;
+    --green-dark: #00a83a;
 
-    --border:rgba(255,255,255,.08);
+    --border: rgba(255,255,255,.08);
 }
 
-html{
-    scroll-behavior:smooth;
+html {
+    scroll-behavior: smooth;
 }
 
-body{
-    margin:0;
-    background:#000;
-    color:#fff;
-    min-height:100vh;
-    padding-bottom:78px;
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    min-height: 100vh;
+    padding-bottom: 78px;
 }
 
-.phone-container{
-    width:100%;
-    max-width:480px;
-    min-height:100vh;
-    margin:auto;
-    position:relative;
-    overflow:hidden;
+.phone-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
 
     background:
         radial-gradient(
@@ -72,37 +73,41 @@ body{
 }
 
 
-/* ================================
+/* =========================================
    HEADER
-================================ */
+========================================= */
 
-.top-header{
-    height:64px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 15px;
+.top-header {
+    height: 64px;
 
-    background:rgba(5,5,5,.96);
-    border-bottom:1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    backdrop-filter:blur(20px);
+    padding: 0 15px;
 
-    position:sticky;
-    top:0;
-    z-index:100;
+    background: rgba(5,5,5,.96);
+
+    border-bottom: 1px solid var(--border);
+
+    backdrop-filter: blur(20px);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.brand-logo{
-    width:38px;
-    height:38px;
-    border-radius:10px;
+.brand-logo {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
 
     background:
         linear-gradient(
@@ -111,94 +116,96 @@ body{
             #8affae
         );
 
-    color:#001b09;
+    color: #001b09;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    font-weight:900;
-    font-size:17px;
+    font-weight: 900;
+    font-size: 17px;
 
     box-shadow:
         0 0 22px rgba(0,255,85,.18);
 }
 
-.brand-text strong{
-    display:block;
-    font-size:13px;
-    font-weight:900;
-    letter-spacing:.5px;
+.brand-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .5px;
 }
 
-.brand-text span{
-    display:block;
-    color:var(--muted);
-    font-size:8px;
-    margin-top:2px;
+.brand-text span {
+    display: block;
+    color: var(--muted);
+    font-size: 8px;
+    margin-top: 2px;
 }
 
-.header-button{
-    width:38px;
-    height:38px;
-    border-radius:10px;
+.header-button {
+    width: 38px;
+    height: 38px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    border-radius: 10px;
 
-    color:#fff;
-    background:#101010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    border:1px solid var(--border);
+    color: white;
 
-    text-decoration:none;
+    background: #101010;
 
-    transition:.2s;
+    border: 1px solid var(--border);
+
+    text-decoration: none;
+
+    transition: .2s;
 }
 
-.header-button:active{
-    transform:scale(.92);
+.header-button:active {
+    transform: scale(.92);
 }
 
-.header-button svg{
-    width:18px;
+.header-button svg {
+    width: 18px;
 }
 
 
-/* ================================
+/* =========================================
    HERO
-================================ */
+========================================= */
 
-.hero{
-    height:200px;
-    position:relative;
-    overflow:hidden;
-    background:#111;
+.hero {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background: #111;
 }
 
-.hero-image{
-    position:absolute;
-    inset:0;
+.hero-image {
+    position: absolute;
+    inset: 0;
 
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 
-    object-fit:cover;
+    object-fit: cover;
 
-    opacity:.72;
+    opacity: .72;
 
     transition:
         opacity .4s ease,
         transform 5s ease;
 
-    transform:scale(1.03);
+    transform: scale(1.03);
 }
 
-.hero::after{
-    content:"";
-    position:absolute;
-    inset:0;
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
 
     background:
         linear-gradient(
@@ -208,119 +215,123 @@ body{
             rgba(5,5,5,1)
         );
 
-    pointer-events:none;
+    pointer-events: none;
 }
 
-.hero-content{
-    position:absolute;
-    z-index:5;
+.hero-content {
+    position: absolute;
 
-    left:16px;
-    right:16px;
-    bottom:20px;
+    z-index: 5;
+
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
 }
 
-.eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 
-    padding:5px 8px;
+    padding: 5px 8px;
 
-    border-radius:20px;
+    border-radius: 20px;
 
-    background:rgba(0,255,85,.09);
+    background: rgba(0,255,85,.09);
 
-    border:1px solid rgba(0,255,85,.22);
+    border: 1px solid rgba(0,255,85,.22);
 
-    color:var(--green);
+    color: var(--green);
 
-    font-size:8px;
-    font-weight:800;
+    font-size: 8px;
+    font-weight: 800;
 
-    margin-bottom:8px;
+    margin-bottom: 8px;
 }
 
-.eyebrow span{
-    width:5px;
-    height:5px;
+.eyebrow span {
+    width: 5px;
+    height: 5px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    background:var(--green);
+    background: var(--green);
 
     box-shadow:
         0 0 8px var(--green);
 }
 
-.hero h1{
-    font-size:23px;
-    line-height:1.1;
-    font-weight:900;
-    margin-bottom:5px;
+.hero h1 {
+    font-size: 23px;
+    line-height: 1.1;
+    font-weight: 900;
+    margin-bottom: 5px;
 }
 
-.hero h1 span{
-    color:var(--green);
+.hero h1 span {
+    color: var(--green);
 }
 
-.hero p{
-    font-size:9px;
-    color:#b5b5b5;
-    line-height:1.5;
-    max-width:290px;
+.hero p {
+    font-size: 9px;
+    color: #b5b5b5;
+    line-height: 1.5;
+    max-width: 290px;
 }
 
-.hero-dots{
-    position:absolute;
+.hero-dots {
+    position: absolute;
 
-    right:16px;
-    bottom:22px;
+    right: 16px;
+    bottom: 22px;
 
-    z-index:10;
+    z-index: 10;
 
-    display:flex;
-    gap:4px;
+    display: flex;
+    gap: 4px;
 }
 
-.hero-dot{
-    width:5px;
-    height:5px;
+.hero-dot {
+    width: 5px;
+    height: 5px;
 
-    border-radius:10px;
+    border-radius: 10px;
 
-    background:rgba(255,255,255,.35);
+    background: rgba(255,255,255,.35);
 
-    transition:.3s;
+    transition: .3s;
 }
 
-.hero-dot.active{
-    width:17px;
-    background:var(--green);
+.hero-dot.active {
+    width: 17px;
+    background: var(--green);
 
     box-shadow:
         0 0 8px rgba(0,255,85,.5);
 }
 
 
-/* ================================
+/* =========================================
    QUICK ACTIONS
-================================ */
+========================================= */
 
-.top-actions{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
+.top-actions {
+    display: grid;
 
-    gap:6px;
-    padding:10px;
+    grid-template-columns:
+        repeat(4, 1fr);
 
-    background:#090909;
+    gap: 6px;
 
-    border-bottom:1px solid var(--border);
+    padding: 10px;
+
+    background: #090909;
+
+    border-bottom: 1px solid var(--border);
 }
 
-.action-btn{
-    text-decoration:none;
+.action-btn {
+    text-decoration: none;
 
     background:
         linear-gradient(
@@ -329,61 +340,89 @@ body{
             #0e0e0e
         );
 
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:9px;
+    border-radius: 9px;
 
-    padding:10px 4px;
+    padding: 10px 4px;
 
-    text-align:center;
+    text-align: center;
 
-    color:#fff;
+    color: white;
 
-    transition:.2s;
+    transition: .2s;
 
-    position:relative;
-    overflow:hidden;
+    position: relative;
+
+    overflow: hidden;
 }
 
-.action-btn:active{
-    transform:scale(.96);
+.action-btn::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 0;
+    height: 0;
+
+    background: rgba(0,255,85,.08);
+
+    border-radius: 50%;
+
+    transform: translate(-50%,-50%);
+
+    transition: .3s;
 }
 
-.action-icon{
-    width:28px;
-    height:28px;
-
-    margin:auto auto 4px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:8px;
-
-    background:rgba(255,255,255,.04);
+.action-btn:active::after {
+    width: 150px;
+    height: 150px;
 }
 
-.action-icon svg{
-    width:15px;
-    height:15px;
+.action-btn:active {
+    transform: scale(.96);
 }
 
-.action-label{
-    font-size:8px;
-    color:#a0a0a0;
+.action-icon {
+    width: 28px;
+    height: 28px;
+
+    margin: auto auto 4px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.04);
+}
+
+.action-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.action-label {
+    font-size: 8px;
+    color: #a0a0a0;
 }
 
 
-/* ================================
+/* =========================================
    ACCOUNT
-================================ */
+========================================= */
 
-.account{
-    margin:14px 10px;
-    padding:14px;
+.account {
+    margin: 14px 10px;
 
-    border-radius:14px;
+    padding: 14px;
+
+    border-radius: 14px;
 
     background:
         linear-gradient(
@@ -392,149 +431,156 @@ body{
             #0c0c0c
         );
 
-    border:1px solid var(--border);
+    border: 1px solid var(--border);
 
     box-shadow:
         0 10px 30px rgba(0,0,0,.20);
 }
 
-.account-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.account-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
-.account-header h3{
-    font-size:12px;
+.account-header h3 {
+    font-size: 12px;
 }
 
-.account-header span{
-    font-size:8px;
-    color:var(--muted);
+.account-header span {
+    font-size: 8px;
+    color: var(--muted);
 }
 
-.balance-main{
-    font-size:22px;
-    font-weight:900;
-    color:#fff;
-    margin-bottom:12px;
+.balance-main {
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 12px;
 }
 
-.balance-main small{
-    font-size:8px;
-    color:var(--muted);
-    font-weight:500;
+.balance-main small {
+    font-size: 8px;
+    color: var(--muted);
+    font-weight: 500;
 }
 
-.balance-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
+.balance-grid {
+    display: grid;
 
-    border-top:1px solid var(--border);
+    grid-template-columns:
+        repeat(3,1fr);
 
-    padding-top:11px;
+    border-top: 1px solid var(--border);
+
+    padding-top: 11px;
 }
 
-.balance-box{
-    padding:0 7px;
-    border-right:1px solid var(--border);
+.balance-box {
+    padding: 0 7px;
+
+    border-right: 1px solid var(--border);
 }
 
-.balance-box:last-child{
-    border-right:none;
+.balance-box:last-child {
+    border-right: none;
 }
 
-.balance-box label{
-    display:block;
-    color:var(--muted);
-    font-size:7px;
-    margin-bottom:4px;
+.balance-box label {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 7px;
+
+    margin-bottom: 4px;
 }
 
-.balance-box strong{
-    font-size:9px;
+.balance-box strong {
+    font-size: 9px;
 }
 
 
-/* ================================
+/* =========================================
    SECTION
-================================ */
+========================================= */
 
-.section{
-    padding:0 10px;
+.section {
+    padding: 0 10px;
 }
 
-.section-head{
-    display:flex;
-    align-items:end;
-    justify-content:space-between;
+.section-head {
+    display: flex;
 
-    margin:18px 2px 10px;
+    align-items: end;
+    justify-content: space-between;
+
+    margin: 18px 2px 10px;
 }
 
-.section-head h2{
-    font-size:18px;
-    letter-spacing:-.4px;
+.section-head h2 {
+    font-size: 18px;
+    letter-spacing: -.4px;
 }
 
-.section-head p{
-    font-size:8px;
-    color:var(--muted);
-    margin-top:3px;
+.section-head p {
+    font-size: 8px;
+    color: var(--muted);
+    margin-top: 3px;
 }
 
-.section-head a{
-    color:var(--green);
-    text-decoration:none;
-    font-size:8px;
+.section-head a {
+    color: var(--green);
+    text-decoration: none;
+    font-size: 8px;
 }
 
 
-/* ================================
+/* =========================================
    PRODUCT GRID
-================================ */
+========================================= */
 
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
+.product-grid {
+    display: grid;
 
-    gap:2px;
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
 
-    background:#262626;
+    gap: 2px;
 
-    border:1px solid #242424;
+    background: #262626;
+
+    border: 1px solid #242424;
 }
 
+.product-card {
+    background: #090909;
 
-/* ================================
-   PRODUCT CARD
-================================ */
+    padding: 11px;
 
-.product-card{
-    background:#090909;
+    min-width: 0;
 
-    padding:11px;
+    display: flex;
 
-    min-width:0;
+    flex-direction: column;
 
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+    align-items: center;
 
-    position:relative;
+    position: relative;
 }
 
-.product-card::before{
-    content:"";
+.product-card::before {
+    content: "";
 
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
+    position: absolute;
 
-    height:1px;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
 
     background:
         linear-gradient(
@@ -545,47 +591,50 @@ body{
         );
 }
 
-.vip-tag{
-    width:100%;
+.vip-tag {
+    width: 100%;
 
-    color:var(--green);
+    color: var(--green);
 
-    font-weight:900;
-    font-size:12px;
+    font-weight: 900;
 
-    margin-bottom:8px;
+    font-size: 12px;
 
-    text-align:left;
+    margin-bottom: 8px;
+
+    text-align: left;
 }
 
-.vip-tag span{
-    float:right;
+.vip-tag span {
+    float: right;
 
-    color:#666;
+    color: #666;
 
-    font-size:7px;
+    font-size: 7px;
 
-    font-weight:600;
+    font-weight: 600;
 }
 
 
-/* ================================
+/* =========================================
    PRODUCT IMAGE
-================================ */
+========================================= */
 
-.product-img-box{
-    width:100%;
-    height:145px;
+.product-img-box {
+    width: 100%;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    height: 145px;
 
-    margin-bottom:10px;
+    display: flex;
 
-    overflow:hidden;
+    align-items: center;
+    justify-content: center;
 
-    border-radius:9px;
+    margin-bottom: 10px;
+
+    overflow: hidden;
+
+    border-radius: 9px;
 
     background:
         radial-gradient(
@@ -594,16 +643,17 @@ body{
             #090909 75%
         );
 
-    border:1px solid rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.06);
 
-    position:relative;
+    position: relative;
 }
 
-.product-img-box::after{
-    content:"";
+.product-img-box::after {
+    content: "";
 
-    position:absolute;
-    inset:0;
+    position: absolute;
+
+    inset: 0;
 
     background:
         linear-gradient(
@@ -612,51 +662,53 @@ body{
             rgba(0,0,0,.28)
         );
 
-    pointer-events:none;
+    pointer-events: none;
 }
 
-.product-img-box img{
-    width:100%;
-    height:100%;
+.product-img-box img {
+    width: 100%;
+    height: 100%;
 
-    object-fit:contain;
+    object-fit: contain;
 
-    padding:5px;
+    padding: 5px;
 
-    opacity:1;
+    opacity: 1;
 
     transition:
         transform .5s ease,
         opacity .3s ease;
 }
 
-.product-card:hover .product-img-box img{
-    transform:scale(1.06);
+.product-card:hover
+.product-img-box img {
+    transform: scale(1.06);
 }
 
 
-/* ================================
-   FALLBACK PHONE
-================================ */
+/* =========================================
+   IMAGE FALLBACK
+========================================= */
 
-.image-fallback{
-    display:none;
+.image-fallback {
+    display: none;
 
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    position:absolute;
-    inset:0;
+    position: absolute;
+
+    inset: 0;
 }
 
-.fake-phone{
-    width:62px;
-    height:112px;
+.fake-phone {
+    width: 62px;
+    height: 112px;
 
-    border-radius:13px;
+    border-radius: 13px;
 
     background:
         linear-gradient(
@@ -665,113 +717,116 @@ body{
             #080808
         );
 
-    border:2px solid #4a4a4a;
+    border: 2px solid #4a4a4a;
 
     box-shadow:
         0 15px 35px rgba(0,0,0,.6);
 
-    position:relative;
+    position: relative;
 }
 
-.fake-phone::before{
-    content:"";
+.fake-phone::before {
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    width:30px;
-    height:4px;
+    width: 30px;
+    height: 4px;
 
-    border-radius:10px;
+    border-radius: 10px;
 
-    background:#050505;
+    background: #050505;
 
-    top:5px;
-    left:50%;
+    top: 5px;
+    left: 50%;
 
-    transform:translateX(-50%);
+    transform: translateX(-50%);
 }
 
-.fake-phone::after{
-    content:"INFINIX";
+.fake-phone::after {
+    content: "INFINIX";
 
-    position:absolute;
+    position: absolute;
 
-    bottom:20px;
-    left:50%;
+    bottom: 20px;
+    left: 50%;
 
     transform:
         translateX(-50%)
         rotate(90deg);
 
-    color:rgba(255,255,255,.45);
+    color: rgba(255,255,255,.45);
 
-    font-size:6px;
-    font-weight:800;
+    font-size: 6px;
+
+    font-weight: 800;
 }
 
 
-/* ================================
+/* =========================================
    INFO ROW
-================================ */
+========================================= */
 
-.info-row{
-    width:100%;
+.info-row {
+    width: 100%;
 
-    font-size:8px;
+    font-size: 8px;
 
-    margin-bottom:5px;
+    margin-bottom: 5px;
 
-    color:#777;
+    color: #777;
 
-    text-align:left;
+    text-align: left;
 }
 
-.info-row span{
-    color:#d0d0d0;
+.info-row span {
+    color: #d0d0d0;
 
-    font-weight:600;
+    font-weight: 600;
 
-    float:right;
+    float: right;
 }
 
-.info-row .income{
-    color:var(--green);
+.info-row .income {
+    color: var(--green);
 }
 
 
-/* ================================
+/* =========================================
    PRICE
-================================ */
+========================================= */
 
-.price-tag{
-    width:100%;
+.price-tag {
+    width: 100%;
 
-    color:var(--green);
+    color: var(--green);
 
-    font-weight:900;
-    font-size:14px;
+    font-weight: 900;
 
-    margin:7px 0 9px;
+    font-size: 14px;
 
-    text-align:left;
+    margin: 7px 0 9px;
+
+    text-align: left;
 }
 
-.price-tag small{
-    font-size:7px;
+.price-tag small {
+    font-size: 7px;
 
-    color:#666;
+    color: #666;
 
-    font-weight:500;
+    font-weight: 500;
 }
 
 
-/* ================================
+/* =========================================
    BUY BUTTON
-================================ */
+========================================= */
 
-.buy-btn{
-    width:100%;
-    min-height:32px;
+.buy-btn {
+    width: 100%;
+
+    min-height: 32px;
 
     background:
         linear-gradient(
@@ -780,227 +835,253 @@ body{
             #00a83a
         );
 
-    color:#001407;
+    color: #001407;
 
-    border:none;
+    border: none;
 
-    border-radius:6px;
+    border-radius: 6px;
 
-    padding:7px 0;
+    padding: 7px 0;
 
-    font-weight:900;
-    font-size:10px;
+    font-weight: 900;
 
-    cursor:pointer;
+    font-size: 10px;
 
-    text-align:center;
-    text-decoration:none;
+    cursor: pointer;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    text-align: center;
 
-    gap:5px;
+    text-decoration: none;
 
-    transition:.2s;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    transition: .2s;
 }
 
-.buy-btn:active{
-    transform:scale(.95);
+.buy-btn:active {
+    transform: scale(.95);
 }
 
-.buy-btn svg{
-    width:13px;
-    height:13px;
+.buy-btn svg {
+    width: 13px;
+    height: 13px;
 }
 
 
-/* ================================
+/* =========================================
    LOCKED
-================================ */
+========================================= */
 
-.locked{
-    opacity:.65;
+.locked {
+    opacity: .65;
 }
 
-.locked .product-img-box img{
-    filter:grayscale(.5);
+.locked .product-img-box img {
+    filter: grayscale(.5);
 }
 
-.locked .vip-tag{
-    color:#777;
+.locked .vip-tag {
+    color: #777;
 }
 
-.locked-button{
-    width:100%;
-    min-height:32px;
+.locked-button {
+    width: 100%;
 
-    border:1px solid #272727;
+    min-height: 32px;
 
-    border-radius:6px;
+    border: 1px solid #272727;
 
-    background:#151515;
+    border-radius: 6px;
 
-    color:#707070;
+    background: #151515;
 
-    font-size:9px;
-    font-weight:700;
+    color: #707070;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    font-size: 9px;
 
-    gap:5px;
+    font-weight: 700;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
 }
 
-.locked-button svg{
-    width:13px;
+.locked-button svg {
+    width: 13px;
 }
 
 
-/* ================================
+/* =========================================
    INFORMATION
-================================ */
+========================================= */
 
-.info{
-    margin:15px 10px;
-    padding:13px;
+.info {
+    margin: 15px 10px;
 
-    border-radius:12px;
+    padding: 13px;
 
-    background:#0e1110;
+    border-radius: 12px;
 
-    border:1px solid rgba(0,255,85,.10);
+    background: #0e1110;
 
-    display:flex;
-    gap:9px;
+    border:
+        1px solid
+        rgba(0,255,85,.10);
+
+    display: flex;
+
+    gap: 9px;
 }
 
-.info-icon{
-    min-width:30px;
-    height:30px;
+.info-icon {
+    min-width: 30px;
+    height: 30px;
 
-    border-radius:8px;
+    border-radius: 8px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display: flex;
 
-    color:var(--green);
+    align-items: center;
+    justify-content: center;
 
-    background:rgba(0,255,85,.08);
+    color: var(--green);
+
+    background:
+        rgba(0,255,85,.08);
 }
 
-.info-icon svg{
-    width:15px;
+.info-icon svg {
+    width: 15px;
 }
 
-.info h4{
-    font-size:9px;
-    margin-bottom:3px;
+.info h4 {
+    font-size: 9px;
+    margin-bottom: 3px;
 }
 
-.info p{
-    font-size:7px;
-    line-height:1.5;
-    color:var(--muted);
+.info p {
+    font-size: 7px;
+    line-height: 1.5;
+    color: var(--muted);
 }
 
 
-/* ================================
+/* =========================================
    BOTTOM NAV
-================================ */
+========================================= */
 
-.bottom-nav{
-    position:fixed;
+.bottom-nav {
+    position: fixed;
 
-    bottom:0;
-    left:50%;
+    bottom: 0;
 
-    transform:translateX(-50%);
+    left: 50%;
 
-    width:100%;
-    max-width:480px;
+    transform:
+        translateX(-50%);
 
-    height:68px;
+    width: 100%;
 
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
+    max-width: 480px;
 
-    background:rgba(14,14,14,.97);
+    height: 68px;
 
-    border-top:1px solid #252525;
+    display: grid;
 
-    backdrop-filter:blur(18px);
+    grid-template-columns:
+        repeat(5,1fr);
 
-    z-index:500;
+    background:
+        rgba(14,14,14,.97);
+
+    border-top:
+        1px solid #252525;
+
+    backdrop-filter:
+        blur(18px);
+
+    z-index: 500;
 }
 
-.nav-item{
-    position:relative;
+.nav-item {
+    position: relative;
 
-    display:flex;
-    flex-direction:column;
+    display: flex;
 
-    align-items:center;
-    justify-content:center;
+    flex-direction: column;
 
-    gap:4px;
+    align-items: center;
 
-    text-decoration:none;
+    justify-content: center;
 
-    color:#686868;
+    gap: 4px;
 
-    font-size:7px;
+    text-decoration: none;
 
-    transition:.2s;
+    color: #686868;
+
+    font-size: 7px;
+
+    transition: .2s;
 }
 
-.nav-item svg{
-    width:18px;
-    height:18px;
+.nav-item svg {
+    width: 18px;
+    height: 18px;
 }
 
-.nav-item:active{
-    transform:scale(.91);
+.nav-item:active {
+    transform: scale(.91);
 }
 
-.nav-item.active{
-    color:var(--green);
+.nav-item.active {
+    color: var(--green);
 }
 
-.nav-item.active::before{
-    content:"";
+.nav-item.active::before {
+    content: "";
 
-    position:absolute;
-    top:0;
+    position: absolute;
 
-    width:28px;
-    height:2px;
+    top: 0;
 
-    border-radius:0 0 5px 5px;
+    width: 28px;
+    height: 2px;
 
-    background:var(--green);
+    border-radius:
+        0 0 5px 5px;
+
+    background: var(--green);
 
     box-shadow:
-        0 0 10px rgba(0,255,85,.5);
+        0 0 10px
+        rgba(0,255,85,.5);
 }
 
 
-/* ================================
-   FLOATING BUTTON
-================================ */
+/* =====================================================
+   MOVABLE ROUND SPIN BUTTON
+===================================================== */
 
-.floating-spin-button{
-    position:fixed;
+.floating-spin-button {
+    position: fixed;
 
-    left:18px;
-    top:45%;
+    left: 18px;
+    top: 45%;
 
-    width:54px;
-    height:54px;
+    width: 54px;
+    height: 54px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
     background:
         radial-gradient(
@@ -1009,154 +1090,174 @@ body{
             #080808 70%
         );
 
-    border:2px solid rgba(0,255,85,.75);
+    border: 2px solid
+        rgba(0,255,85,.75);
 
     box-shadow:
         0 0 12px rgba(0,255,85,.30),
         0 8px 25px rgba(0,0,0,.55);
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    z-index:9000;
+    z-index: 9000;
 
-    cursor:grab;
+    cursor: grab;
 
-    touch-action:none;
+    touch-action: none;
 
-    user-select:none;
-    -webkit-user-select:none;
+    user-select: none;
+    -webkit-user-select: none;
+
+    text-decoration: none;
 
     transition:
         box-shadow .2s ease,
         transform .15s ease;
 }
 
-.floating-spin-button:active{
-    cursor:grabbing;
+.floating-spin-button:active {
+    cursor: grabbing;
 
     box-shadow:
         0 0 20px rgba(0,255,85,.55),
         0 8px 30px rgba(0,0,0,.65);
-
-    transform:scale(.95);
 }
 
-.floating-spin-button::before{
-    content:"";
+.floating-spin-button .floating-star {
+    position: relative;
 
-    position:absolute;
-    inset:4px;
+    z-index: 2;
 
-    border-radius:50%;
+    color: var(--green);
 
-    border:1px dashed rgba(0,255,85,.45);
+    font-size: 23px;
 
-    animation:floatingRingSpin 3s linear infinite;
-}
-
-.floating-star{
-    position:relative;
-    z-index:2;
-
-    color:var(--green);
-
-    font-size:23px;
-    line-height:1;
+    line-height: 1;
 
     text-shadow:
         0 0 8px rgba(0,255,85,.8);
 
-    animation:floatingStarSpin 2.2s linear infinite;
+    animation:
+        floatingStarSpin 2.2s linear infinite;
+
+    pointer-events: none;
 }
 
-.floating-dot{
-    position:absolute;
+.floating-spin-button .floating-dot {
+    position: absolute;
 
-    width:5px;
-    height:5px;
+    width: 5px;
+    height: 5px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    background:#fff;
+    background: #ffffff;
 
     box-shadow:
         0 0 8px var(--green);
 
-    top:8px;
-    right:9px;
+    top: 8px;
+    right: 9px;
 
-    z-index:3;
+    z-index: 3;
+
+    pointer-events: none;
 }
 
-@keyframes floatingStarSpin{
-    from{
-        transform:rotate(0deg);
-    }
+.floating-spin-button::before {
+    content: "";
 
-    to{
-        transform:rotate(360deg);
-    }
+    position: absolute;
+
+    inset: 4px;
+
+    border-radius: 50%;
+
+    border: 1px dashed
+        rgba(0,255,85,.45);
+
+    animation:
+        floatingRingSpin 3s linear infinite;
+
+    pointer-events: none;
 }
 
-@keyframes floatingRingSpin{
-    from{
-        transform:rotate(0deg);
+@keyframes floatingStarSpin {
+
+    0% {
+        transform: rotate(0deg);
     }
 
-    to{
-        transform:rotate(-360deg);
+    100% {
+        transform: rotate(360deg);
     }
+
+}
+
+@keyframes floatingRingSpin {
+
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
+
 }
 
 
-/* ================================
-   LOADER
-================================ */
+/* =========================================
+   LOADING SCREEN
+========================================= */
 
-.page-loader{
-    position:fixed;
-    inset:0;
+.page-loader {
+    position: fixed;
 
-    background:rgba(0,0,0,.88);
+    inset: 0;
 
-    backdrop-filter:blur(12px);
+    background:
+        rgba(0,0,0,.88);
 
-    display:flex;
+    backdrop-filter:
+        blur(12px);
 
-    align-items:center;
-    justify-content:center;
+    display: flex;
 
-    flex-direction:column;
+    align-items: center;
+    justify-content: center;
 
-    gap:14px;
+    flex-direction: column;
 
-    z-index:99999;
+    gap: 14px;
 
-    opacity:0;
-    visibility:hidden;
+    z-index: 99999;
 
-    pointer-events:none;
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
 
     transition:
         opacity .25s ease,
         visibility .25s ease;
 }
 
-.page-loader.show{
-    opacity:1;
-    visibility:visible;
-    pointer-events:all;
+.page-loader.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
 }
 
-.loader-card{
-    width:155px;
+.loader-card {
+    width: 155px;
 
-    padding:22px 15px;
+    padding: 22px 15px;
 
-    border-radius:18px;
+    border-radius: 18px;
 
     background:
         linear-gradient(
@@ -1165,25 +1266,28 @@ body{
             #090909
         );
 
-    border:1px solid rgba(0,255,85,.16);
+    border:
+        1px solid
+        rgba(0,255,85,.16);
 
     box-shadow:
-        0 25px 80px rgba(0,0,0,.7);
+        0 25px 80px
+        rgba(0,0,0,.7);
 
-    display:flex;
+    display: flex;
 
-    flex-direction:column;
+    flex-direction: column;
 
-    align-items:center;
+    align-items: center;
 
-    gap:13px;
+    gap: 13px;
 }
 
-.loader-logo{
-    width:44px;
-    height:44px;
+.loader-logo {
+    width: 44px;
+    height: 44px;
 
-    border-radius:12px;
+    border-radius: 12px;
 
     background:
         linear-gradient(
@@ -1192,130 +1296,157 @@ body{
             #8affae
         );
 
-    color:#001b09;
+    color: #001b09;
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    font-weight:900;
-    font-size:18px;
+    font-weight: 900;
+
+    font-size: 18px;
 
     box-shadow:
-        0 0 30px rgba(0,255,85,.18);
+        0 0 30px
+        rgba(0,255,85,.18);
 }
 
-.loader-ring{
-    width:28px;
-    height:28px;
+.loader-ring {
+    width: 28px;
+    height: 28px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    border:2px solid rgba(255,255,255,.10);
+    border:
+        2px solid
+        rgba(255,255,255,.10);
 
-    border-top-color:var(--green);
-    border-right-color:rgba(0,255,85,.35);
+    border-top-color:
+        var(--green);
 
-    animation:spin .65s linear infinite;
+    border-right-color:
+        rgba(0,255,85,.35);
+
+    animation:
+        spin .65s linear infinite;
 }
 
-.loader-text{
-    color:#a0a0a0;
+.loader-text {
+    color: #a0a0a0;
 
-    font-size:8px;
+    font-size: 8px;
 
-    font-weight:600;
+    font-weight: 600;
 
-    letter-spacing:.5px;
+    letter-spacing: .5px;
 }
 
-.loader-bar{
-    width:100%;
-    height:3px;
+.loader-bar {
+    width: 100%;
+    height: 3px;
 
-    overflow:hidden;
+    overflow: hidden;
 
-    border-radius:20px;
+    border-radius: 20px;
 
-    background:#242424;
+    background:
+        #242424;
 }
 
-.loader-bar span{
-    display:block;
+.loader-bar span {
+    display: block;
 
-    height:100%;
-    width:40%;
+    height: 100%;
 
-    border-radius:20px;
+    width: 40%;
 
-    background:var(--green);
+    border-radius: 20px;
 
-    animation:loadingBar 1.1s ease-in-out infinite;
+    background:
+        var(--green);
+
+    animation:
+        loadingBar 1.1s ease-in-out infinite;
 }
 
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
     }
+
 }
 
-@keyframes loadingBar{
-    0%{
-        transform:translateX(-120%);
+@keyframes loadingBar {
+
+    0% {
+        transform: translateX(-120%);
     }
 
-    100%{
-        transform:translateX(280%);
+    100% {
+        transform: translateX(280%);
     }
-}
 
-.loading-now{
-    opacity:.7;
-    pointer-events:none;
 }
 
 
-/* ================================
+/* =========================================
+   TOUCH FEEDBACK
+========================================= */
+
+.loading-link.loading-now {
+    pointer-events: none;
+}
+
+.loading-now {
+    opacity: .7;
+}
+
+
+/* =========================================
    RESPONSIVE
-================================ */
+========================================= */
 
-@media(max-width:360px){
+@media(max-width:360px) {
 
-    .product-img-box{
-        height:120px;
+    .product-img-box {
+        height: 120px;
     }
 
-    .product-card{
-        padding:9px;
+    .product-card {
+        padding: 9px;
     }
 
-    .hero{
-        height:180px;
+    .hero {
+        height: 180px;
     }
 
-    .hero h1{
-        font-size:21px;
+    .hero h1 {
+        font-size: 21px;
     }
 
-    .floating-spin-button{
-        width:50px;
-        height:50px;
+    .floating-spin-button {
+        width: 50px;
+        height: 50px;
     }
+
 }
 
 </style>
-</head>
 
+</head>
 
 <body>
 
 
-<!-- ================================
-     LOADING SCREEN
-================================ -->
+<!-- =========================================
+     LOADER
+========================================= -->
 
-<div class="page-loader" id="pageLoader">
+<div
+    class="page-loader"
+    id="pageLoader">
 
     <div class="loader-card">
 
@@ -1325,8 +1456,12 @@ body{
 
         <div class="loader-ring"></div>
 
-        <div class="loader-text" id="loaderText">
+        <div
+            class="loader-text"
+            id="loaderText">
+
             Loading Infinix...
+
         </div>
 
         <div class="loader-bar">
@@ -1338,30 +1473,29 @@ body{
 </div>
 
 
-<!-- ================================
-     FLOATING BUTTON
-================================ -->
+<!-- =====================================================
+     MOVABLE + CLICKABLE ROUND BUTTON
+===================================================== -->
 
-<div
+<a
+    href="{{ url_for('gift_code') }}"
     class="floating-spin-button"
     id="floatingSpinButton"
-    role="button"
-    aria-label="Infinix floating button"
->
+    aria-label="Open Gift Code">
 
     <span class="floating-star">★</span>
 
     <span class="floating-dot"></span>
 
-</div>
+</a>
 
 
 <div class="phone-container">
 
 
-<!-- ================================
+<!-- =========================================
      HEADER
-================================ -->
+========================================= -->
 
 <header class="top-header">
 
@@ -1373,7 +1507,9 @@ body{
 
         <div class="brand-text">
 
-            <strong>INFINIX</strong>
+            <strong>
+                INFINIX
+            </strong>
 
             <span>
                 SMARTPHONE SHOWCASE
@@ -1383,12 +1519,10 @@ body{
 
     </div>
 
-
     <a
         href="{{ url_for('support') }}"
         class="header-button loading-link"
-        data-loading="Opening Support..."
-    >
+        data-loading="Opening Support...">
 
         <i data-lucide="bell"></i>
 
@@ -1397,9 +1531,9 @@ body{
 </header>
 
 
-<!-- ================================
+<!-- =========================================
      HERO
-================================ -->
+========================================= -->
 
 <section class="hero">
 
@@ -1409,6 +1543,7 @@ body{
         src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
         alt="Infinix smartphone"
         loading="eager"
+        onerror="this.style.display='none';"
     >
 
     <div class="hero-content">
@@ -1421,22 +1556,20 @@ body{
 
         </div>
 
-
         <h1>
 
             Welcome,
-            <span>{{ user.fullname }}</span>
+            <span>
+                {{ user.fullname }}
+            </span>
 
         </h1>
 
-
         <p>
-            Explore Infinix devices and manage
-            your purchases.
+            Explore Infinix devices and manage your purchases.
         </p>
 
     </div>
-
 
     <div class="hero-dots">
 
@@ -1450,23 +1583,20 @@ body{
 </section>
 
 
-<!-- ================================
+<!-- =========================================
      QUICK ACTIONS
-================================ -->
+========================================= -->
 
 <div class="top-actions">
-
 
     <a
         href="{{ url_for('deposit') }}"
         class="action-btn loading-link"
-        data-loading="Opening Deposit..."
-    >
+        data-loading="Opening Deposit...">
 
         <div
             class="action-icon"
-            style="color:#00ff55"
-        >
+            style="color:#00ff55">
 
             <i data-lucide="wallet"></i>
 
@@ -1482,13 +1612,11 @@ body{
     <a
         href="{{ url_for('withdraw') }}"
         class="action-btn loading-link"
-        data-loading="Opening Withdraw..."
-    >
+        data-loading="Opening Withdraw...">
 
         <div
             class="action-icon"
-            style="color:#ffb45b"
-        >
+            style="color:#ffb45b">
 
             <i data-lucide="arrow-up-right"></i>
 
@@ -1504,13 +1632,11 @@ body{
     <a
         href="{{ url_for('support') }}"
         class="action-btn loading-link"
-        data-loading="Opening Support..."
-    >
+        data-loading="Opening Support...">
 
         <div
             class="action-icon"
-            style="color:#67b5ff"
-        >
+            style="color:#67b5ff">
 
             <i data-lucide="headphones"></i>
 
@@ -1526,20 +1652,18 @@ body{
     <a
         href="{{ url_for('my_plan') }}"
         class="action-btn loading-link"
-        data-loading="Opening My Devices..."
-    >
+        data-loading="Opening Profile...">
 
         <div
             class="action-icon"
-            style="color:#d78cff"
-        >
+            style="color:#d78cff">
 
-            <i data-lucide="smartphone"></i>
+            <i data-lucide="chart-no-axes-combined"></i>
 
         </div>
 
         <div class="action-label">
-            My Device
+            My device
         </div>
 
     </a>
@@ -1547,9 +1671,9 @@ body{
 </div>
 
 
-<!-- ================================
+<!-- =========================================
      ACCOUNT
-================================ -->
+========================================= -->
 
 <section class="account">
 
@@ -1579,7 +1703,6 @@ body{
 
 
     <div class="balance-grid">
-
 
         <div class="balance-box">
 
@@ -1627,9 +1750,9 @@ body{
 </section>
 
 
-<!-- ================================
+<!-- =========================================
      AVAILABLE DEVICES
-================================ -->
+========================================= -->
 
 <section class="section">
 
@@ -1651,9 +1774,10 @@ body{
         <a
             href="{{ url_for('my_plan') }}"
             class="loading-link"
-            data-loading="Opening My Devices..."
-        >
+            data-loading="Opening My Devices...">
+
             My Devices
+
         </a>
 
     </div>
@@ -1671,13 +1795,13 @@ body{
                 <span>STARTER</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
                     alt="Infinix Note 10"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -1686,40 +1810,30 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 20
-                </span>
+                <span class="income">GHS 20</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 3,600
-                </span>
+                <span>GHS 3600</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
                 GHS 100
                 <small>/ DEVICE</small>
             </div>
 
-
             <a
                 href="{{ url_for('buy_plan', plan_id=1) }}"
                 class="buy-btn loading-link"
-                data-loading="Opening Infinix 1..."
-            >
+                data-loading="Opening Infinix 1...">
 
                 Buy now
 
@@ -1739,13 +1853,13 @@ body{
                 <span>BASIC</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
                     alt="Infinix Hot 60 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -1754,40 +1868,30 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 45
-                </span>
+                <span class="income">GHS 45</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 8,100
-                </span>
+                <span>GHS 8,100</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
                 GHS 250
                 <small>/ DEVICE</small>
             </div>
 
-
             <a
                 href="{{ url_for('buy_plan', plan_id=2) }}"
                 class="buy-btn loading-link"
-                data-loading="Opening Infinix 2..."
-            >
+                data-loading="Opening Infinix 2...">
 
                 Buy now
 
@@ -1807,13 +1911,13 @@ body{
                 <span>GROWTH</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2022/04/Infinix-Hot-12i.png"
                     alt="Infinix Hot 12i"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -1822,40 +1926,30 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 120
-                </span>
+                <span class="income">GHS 120</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 21,600
-                </span>
+                <span>GHS 21,600</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
                 GHS 600
                 <small>/ DEVICE</small>
             </div>
 
-
             <a
                 href="{{ url_for('buy_plan', plan_id=3) }}"
                 class="buy-btn loading-link"
-                data-loading="Opening Infinix 3..."
-            >
+                data-loading="Opening Infinix 3...">
 
                 Buy now
 
@@ -1875,13 +1969,13 @@ body{
                 <span>ADVANCED</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
                     alt="Infinix S5 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -1890,34 +1984,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 200
-                </span>
+                <span class="income">GHS 200</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 36,000
-                </span>
+                <span>GHS 36,000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 1,000
+                GHS 1000
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -1939,13 +2024,13 @@ body{
                 <span>PREMIUM</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-s2-pro.png"
                     alt="Infinix S2 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -1954,34 +2039,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 500
-                </span>
+                <span class="income">GHS 500</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 90,000
-                </span>
+                <span>GHS 90,000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 2,500
+                GHS 2500
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -2003,13 +2079,13 @@ body{
                 <span>ELITE</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2021/08/Infinix_Note_10.png"
-                    alt="Infinix Note"
+                    alt="Infinix Note device"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -2018,34 +2094,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 1,000
-                </span>
+                <span class="income">GHS 1000</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 180,000
-                </span>
+                <span>GHS 180,000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 5,000
+                GHS 5000
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -2067,13 +2134,13 @@ body{
                 <span>MASTER</span>
             </div>
 
-
             <div class="product-img-box">
 
                 <img
                     src="https://usbdriverspie.com/wp-content/uploads/2022/07/infinix-note-12-pro-usb-drivers.png"
                     alt="Infinix Note 12 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -2082,34 +2149,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 1,600
-                </span>
+                <span class="income">GHS 1,600</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 288,000
-                </span>
+                <span>GHS 288000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 8,000
+                GHS 8000
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -2128,9 +2186,8 @@ body{
 
             <div class="vip-tag">
                 INFINIX 8
-                <span>PREMIUM+</span>
+                <span>BUY NOW</span>
             </div>
-
 
             <div class="product-img-box">
 
@@ -2138,6 +2195,7 @@ body{
                     src="https://arina.mn/assets/img/product/images/202602/1749cc160ae0f646a185c8256393e2c0.png"
                     alt="Infinix Hot 60 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -2146,34 +2204,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 2,000
-                </span>
+                <span>GHS 2000</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 360,000
-                </span>
+                <span>GHS 360,000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 10,000
+                GHS 10000
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -2192,9 +2241,8 @@ body{
 
             <div class="vip-tag">
                 INFINIX 9
-                <span>ULTRA</span>
+                <span>BUY NOW</span>
             </div>
-
 
             <div class="product-img-box">
 
@@ -2202,6 +2250,7 @@ body{
                     src="https://usbdriverspie.com/wp-content/uploads/2020/07/infinix-S5-Pro.png"
                     alt="Infinix S5 Pro"
                     loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
 
                 <div class="image-fallback">
@@ -2210,34 +2259,25 @@ body{
 
             </div>
 
-
             <div class="info-row">
                 Daily income:
-                <span class="income">
-                    GHS 3,600
-                </span>
+                <span>GHS 3600</span>
             </div>
 
             <div class="info-row">
                 Total income:
-                <span>
-                    GHS 648,000
-                </span>
+                <span>GHS 648,000</span>
             </div>
 
             <div class="info-row">
                 Validity:
-                <span>
-                    180 Days
-                </span>
+                <span>180 Days</span>
             </div>
-
 
             <div class="price-tag">
-                GHS 20,000
+                GHS 20000
                 <small>/ DEVICE</small>
             </div>
-
 
             <div class="locked-button">
 
@@ -2254,9 +2294,9 @@ body{
 </section>
 
 
-<!-- ================================
+<!-- =========================================
      INFORMATION
-================================ -->
+========================================= -->
 
 <div class="info">
 
@@ -2266,7 +2306,6 @@ body{
 
     </div>
 
-
     <div>
 
         <h4>
@@ -2275,9 +2314,8 @@ body{
 
         <p>
             Please review the device information
-            carefully before making a purchase.
-            Images are provided for presentation
-            purposes.
+            carefully before buying. Images are
+            used for device presentation.
         </p>
 
     </div>
@@ -2285,18 +2323,16 @@ body{
 </div>
 
 
-<!-- ================================
+<!-- =========================================
      BOTTOM NAVIGATION
-================================ -->
+========================================= -->
 
 <nav class="bottom-nav">
-
 
     <a
         href="{{ url_for('dashboard') }}"
         class="nav-item active loading-link"
-        data-loading="Loading Home..."
-    >
+        data-loading="Loading Home...">
 
         <i data-lucide="house"></i>
 
@@ -2310,13 +2346,12 @@ body{
     <a
         href="{{ url_for('my_plan') }}"
         class="nav-item loading-link"
-        data-loading="Loading My Devices..."
-    >
+        data-loading="Loading Income...">
 
-        <i data-lucide="smartphone"></i>
+        <i data-lucide="chart-no-axes-combined"></i>
 
         <span>
-            My Device
+            My device
         </span>
 
     </a>
@@ -2325,8 +2360,7 @@ body{
     <a
         href="{{ url_for('team_members') }}"
         class="nav-item loading-link"
-        data-loading="Loading Team..."
-    >
+        data-loading="Loading Team...">
 
         <i data-lucide="users"></i>
 
@@ -2340,8 +2374,7 @@ body{
     <a
         href="{{ url_for('team') }}"
         class="nav-item loading-link"
-        data-loading="Opening Share..."
-    >
+        data-loading="Opening Share...">
 
         <i data-lucide="share-2"></i>
 
@@ -2355,8 +2388,7 @@ body{
     <a
         href="{{ url_for('profile') }}"
         class="nav-item loading-link"
-        data-loading="Loading Profile..."
-    >
+        data-loading="Loading Profile...">
 
         <i data-lucide="user-round"></i>
 
@@ -2367,7 +2399,6 @@ body{
     </a>
 
 </nav>
-
 
 </div>
 
@@ -2399,15 +2430,15 @@ const heroDots =
     document.querySelectorAll(".hero-dot");
 
 
-function changeHero(){
+function changeHero() {
 
-    if(!heroImage){
+    if (!heroImage) {
         return;
     }
 
     heroIndex++;
 
-    if(heroIndex >= heroImages.length){
+    if (heroIndex >= heroImages.length) {
         heroIndex = 0;
     }
 
@@ -2420,26 +2451,26 @@ function changeHero(){
 
         heroImage.style.opacity = ".72";
 
-    },300);
+    }, 300);
 
+    heroDots.forEach(
+        (dot, index) => {
 
-    heroDots.forEach((dot,index) => {
+            dot.classList.toggle(
+                "active",
+                index === heroIndex
+            );
 
-        dot.classList.toggle(
-            "active",
-            index === heroIndex
-        );
-
-    });
+        }
+    );
 
 }
 
-
-setInterval(changeHero,4500);
+setInterval(changeHero, 4500);
 
 
 /* =========================================
-   LOADER
+   GLOBAL LOADER
 ========================================= */
 
 const pageLoader =
@@ -2451,119 +2482,175 @@ const loaderText =
 let navigationStarted = false;
 
 
-function showLoader(message){
+function showLoader(message) {
 
-    if(loaderText){
+    if (loaderText) {
 
         loaderText.textContent =
-            message || "Loading Infinix...";
+            message ||
+            "Loading Infinix...";
 
     }
 
     pageLoader.classList.add("show");
+
 }
 
 
-function hideLoader(){
+function hideLoader() {
 
     pageLoader.classList.remove("show");
+
 }
 
 
 /* =========================================
-   NAVIGATION LOADING
+   NORMAL NAVIGATION LINKS
 ========================================= */
 
-document.querySelectorAll(".loading-link")
-.forEach(link => {
+document.querySelectorAll(
+    ".loading-link"
+).forEach(link => {
 
-    link.addEventListener("click",function(event){
+    link.addEventListener(
+        "click",
+        function(event) {
 
-        if(navigationStarted){
+            if (navigationStarted) {
+
+                event.preventDefault();
+
+                return;
+
+            }
+
+            const href =
+                this.getAttribute("href");
+
+            if (
+                !href ||
+                href === "#" ||
+                href.startsWith("javascript:")
+            ) {
+
+                return;
+
+            }
 
             event.preventDefault();
-            return;
+
+            navigationStarted = true;
+
+            this.classList.add(
+                "loading-now"
+            );
+
+            const message =
+                this.dataset.loading ||
+                "Loading Infinix...";
+
+            showLoader(message);
+
+            setTimeout(() => {
+
+                window.location.href =
+                    href;
+
+            }, 420);
 
         }
-
-        const href =
-            this.getAttribute("href");
-
-        if(
-            !href ||
-            href === "#" ||
-            href.startsWith("javascript:")
-        ){
-
-            return;
-
-        }
-
-        event.preventDefault();
-
-        navigationStarted = true;
-
-        this.classList.add("loading-now");
-
-        const message =
-            this.dataset.loading ||
-            "Loading Infinix...";
-
-        showLoader(message);
-
-        setTimeout(() => {
-
-            window.location.href = href;
-
-        },420);
-
-    });
+    );
 
 });
 
 
 /* =========================================
-   PAGE SHOW
+   PAGE HISTORY
 ========================================= */
 
-window.addEventListener("pageshow",function(){
+window.addEventListener(
+    "pageshow",
+    function() {
 
-    navigationStarted = false;
+        navigationStarted = false;
 
-    hideLoader();
+        hideLoader();
+
+    }
+);
+
+
+/* =========================================
+   BUY BUTTON FEEDBACK
+========================================= */
+
+document.querySelectorAll(
+    ".buy-btn"
+).forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            this.style.transform =
+                "scale(.96)";
+
+            setTimeout(() => {
+
+                this.style.transform =
+                    "";
+
+            }, 150);
+
+        }
+    );
 
 });
 
 
 /* =========================================
-   IMAGE FALLBACK
+   IMAGE CHECK
 ========================================= */
 
 document.querySelectorAll(
     ".product-img-box img"
 ).forEach(img => {
 
-    img.addEventListener("error",function(){
+    img.addEventListener(
+        "load",
+        function() {
 
-        this.style.display = "none";
-
-        const fallback =
-            this.nextElementSibling;
-
-        if(fallback){
-
-            fallback.style.display = "flex";
+            this.style.opacity = "1";
 
         }
+    );
 
-    });
+    img.addEventListener(
+        "error",
+        function() {
+
+            this.style.display =
+                "none";
+
+            const fallback =
+                this.nextElementSibling;
+
+            if (fallback) {
+
+                fallback.style.display =
+                    "flex";
+
+            }
+
+        }
+    );
 
 });
 
 
-/* =========================================
-   FLOATING BUTTON
-========================================= */
+/* =====================================================
+   MOVABLE + CLICKABLE ROUND BUTTON
+===================================================== */
 
 const floatingButton =
     document.getElementById(
@@ -2572,89 +2659,117 @@ const floatingButton =
 
 let dragging = false;
 
+let moved = false;
+
 let dragOffsetX = 0;
 let dragOffsetY = 0;
+
+let startX = 0;
+let startY = 0;
 
 
 /* =========================================
    LOAD SAVED POSITION
 ========================================= */
 
-try{
+function loadFloatingPosition() {
 
-    const saved =
-        JSON.parse(
-            localStorage.getItem(
-                "infinixFloatingButtonPosition"
-            )
+    try {
+
+        const savedPosition =
+            JSON.parse(
+                localStorage.getItem(
+                    "infinixFloatingButtonPosition"
+                )
+            );
+
+        if (
+            savedPosition &&
+            typeof savedPosition.left === "number" &&
+            typeof savedPosition.top === "number"
+        ) {
+
+            const maxLeft =
+                window.innerWidth -
+                floatingButton.offsetWidth;
+
+            const maxTop =
+                window.innerHeight -
+                floatingButton.offsetHeight;
+
+            const left =
+                Math.max(
+                    0,
+                    Math.min(
+                        savedPosition.left,
+                        maxLeft
+                    )
+                );
+
+            const top =
+                Math.max(
+                    0,
+                    Math.min(
+                        savedPosition.top,
+                        maxTop
+                    )
+                );
+
+            floatingButton.style.left =
+                left + "px";
+
+            floatingButton.style.top =
+                top + "px";
+
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Floating button position unavailable."
         );
-
-    if(
-        saved &&
-        typeof saved.left === "number" &&
-        typeof saved.top === "number"
-    ){
-
-        const maxLeft =
-            window.innerWidth -
-            floatingButton.offsetWidth;
-
-        const maxTop =
-            window.innerHeight -
-            floatingButton.offsetHeight;
-
-        floatingButton.style.left =
-            Math.max(
-                0,
-                Math.min(saved.left,maxLeft)
-            ) + "px";
-
-        floatingButton.style.top =
-            Math.max(
-                0,
-                Math.min(saved.top,maxTop)
-            ) + "px";
 
     }
 
-}catch(error){
-
-    console.log(
-        "Saved floating position unavailable."
-    );
-
 }
+
+loadFloatingPosition();
 
 
 /* =========================================
    START DRAG
 ========================================= */
 
-function startFloatingDrag(event){
-
-    dragging = true;
-
-    floatingButton.style.cursor =
-        "grabbing";
-
-    const rect =
-        floatingButton.getBoundingClientRect();
+function startFloatingDrag(event) {
 
     const point =
         event.touches
             ? event.touches[0]
             : event;
 
+    const rect =
+        floatingButton.getBoundingClientRect();
+
+    dragging = true;
+
+    moved = false;
+
+    startX = point.clientX;
+    startY = point.clientY;
+
     dragOffsetX =
-        point.clientX - rect.left;
+        point.clientX -
+        rect.left;
 
     dragOffsetY =
-        point.clientY - rect.top;
+        point.clientY -
+        rect.top;
 
-    if(event.cancelable){
+    floatingButton.style.cursor =
+        "grabbing";
 
+    if (event.cancelable) {
         event.preventDefault();
-
     }
 
 }
@@ -2664,12 +2779,10 @@ function startFloatingDrag(event){
    MOVE
 ========================================= */
 
-function moveFloatingButton(event){
+function moveFloatingButton(event) {
 
-    if(!dragging){
-
+    if (!dragging) {
         return;
-
     }
 
     const point =
@@ -2677,32 +2790,80 @@ function moveFloatingButton(event){
             ? event.touches[0]
             : event;
 
+
+    const distanceX =
+        Math.abs(
+            point.clientX - startX
+        );
+
+    const distanceY =
+        Math.abs(
+            point.clientY - startY
+        );
+
+
+    /*
+       Only consider it a drag after
+       the finger/mouse moves 6 pixels.
+    */
+
+    if (
+        distanceX > 6 ||
+        distanceY > 6
+    ) {
+
+        moved = true;
+
+    }
+
+
+    if (!moved) {
+        return;
+    }
+
+
     let newLeft =
-        point.clientX - dragOffsetX;
+        point.clientX -
+        dragOffsetX;
 
     let newTop =
-        point.clientY - dragOffsetY;
+        point.clientY -
+        dragOffsetY;
+
+
+    const buttonWidth =
+        floatingButton.offsetWidth;
+
+    const buttonHeight =
+        floatingButton.offsetHeight;
 
 
     const maxLeft =
         window.innerWidth -
-        floatingButton.offsetWidth;
+        buttonWidth;
 
     const maxTop =
         window.innerHeight -
-        floatingButton.offsetHeight;
+        buttonHeight;
 
 
     newLeft =
         Math.max(
             0,
-            Math.min(newLeft,maxLeft)
+            Math.min(
+                newLeft,
+                maxLeft
+            )
         );
+
 
     newTop =
         Math.max(
             0,
-            Math.min(newTop,maxTop)
+            Math.min(
+                newTop,
+                maxTop
+            )
         );
 
 
@@ -2713,26 +2874,23 @@ function moveFloatingButton(event){
         newTop + "px";
 
 
-    if(event.cancelable){
-
+    if (event.cancelable) {
         event.preventDefault();
-
     }
 
 }
 
 
 /* =========================================
-   STOP DRAG
+   END DRAG
 ========================================= */
 
-function stopFloatingDrag(){
+function stopFloatingDrag() {
 
-    if(!dragging){
-
+    if (!dragging) {
         return;
-
     }
+
 
     dragging = false;
 
@@ -2740,28 +2898,37 @@ function stopFloatingDrag(){
         "grab";
 
 
-    const rect =
-        floatingButton.getBoundingClientRect();
+    /*
+       Save the new position only
+       when the button was actually moved.
+    */
 
+    if (moved) {
 
-    try{
+        const rect =
+            floatingButton.getBoundingClientRect();
 
-        localStorage.setItem(
-            "infinixFloatingButtonPosition",
+        try {
 
-            JSON.stringify({
+            localStorage.setItem(
+                "infinixFloatingButtonPosition",
 
-                left:rect.left,
-                top:rect.top
+                JSON.stringify({
 
-            })
-        );
+                    left: rect.left,
 
-    }catch(error){
+                    top: rect.top
 
-        console.log(
-            "Unable to save floating position."
-        );
+                })
+            );
+
+        } catch (error) {
+
+            console.log(
+                "Unable to save button position."
+            );
+
+        }
 
     }
 
@@ -2769,7 +2936,39 @@ function stopFloatingDrag(){
 
 
 /* =========================================
-   MOUSE EVENTS
+   CLICK HANDLER
+========================================= */
+
+floatingButton.addEventListener(
+    "click",
+    function(event) {
+
+        /*
+           If the user dragged the button,
+           cancel the click.
+
+           If they simply tapped it,
+           allow the normal href to open.
+        */
+
+        if (moved) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            moved = false;
+
+            return;
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   MOUSE
 ========================================= */
 
 floatingButton.addEventListener(
@@ -2789,14 +2988,14 @@ document.addEventListener(
 
 
 /* =========================================
-   TOUCH EVENTS
+   TOUCH / ANDROID
 ========================================= */
 
 floatingButton.addEventListener(
     "touchstart",
     startFloatingDrag,
     {
-        passive:false
+        passive: false
     }
 );
 
@@ -2804,7 +3003,7 @@ document.addEventListener(
     "touchmove",
     moveFloatingButton,
     {
-        passive:false
+        passive: false
     }
 );
 
@@ -2815,22 +3014,19 @@ document.addEventListener(
 
 
 /* =========================================
-   KEEP BUTTON ON SCREEN
+   KEEP BUTTON INSIDE SCREEN
 ========================================= */
 
 window.addEventListener(
     "resize",
-    function(){
+    function() {
 
-        if(!floatingButton){
-
+        if (!floatingButton) {
             return;
-
         }
 
         const rect =
             floatingButton.getBoundingClientRect();
-
 
         const maxLeft =
             window.innerWidth -
@@ -2840,25 +3036,29 @@ window.addEventListener(
             window.innerHeight -
             floatingButton.offsetHeight;
 
-
-        const left =
+        const newLeft =
             Math.max(
                 0,
-                Math.min(rect.left,maxLeft)
+                Math.min(
+                    rect.left,
+                    maxLeft
+                )
             );
 
-        const top =
+        const newTop =
             Math.max(
                 0,
-                Math.min(rect.top,maxTop)
+                Math.min(
+                    rect.top,
+                    maxTop
+                )
             );
-
 
         floatingButton.style.left =
-            left + "px";
+            newLeft + "px";
 
         floatingButton.style.top =
-            top + "px";
+            newTop + "px";
 
     }
 );
@@ -2868,7 +3068,9 @@ window.addEventListener(
    LUCIDE ICONS
 ========================================= */
 
-if(typeof lucide !== "undefined"){
+if (
+    typeof lucide !== "undefined"
+) {
 
     lucide.createIcons();
 
@@ -2877,4 +3079,5 @@ if(typeof lucide !== "undefined"){
 </script>
 
 </body>
+
 </html>
