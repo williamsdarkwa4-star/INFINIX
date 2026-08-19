@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -45,14 +46,18 @@ html,
 body {
     width: 100%;
     min-height: 100%;
-    background: #000;
+    background: #000000;
 }
 
 body {
     display: flex;
     justify-content: center;
-    color: #fff;
+    color: #ffffff;
 }
+
+/* =====================================================
+   APP
+===================================================== */
 
 .app-viewport {
     position: relative;
@@ -60,15 +65,18 @@ body {
     max-width: 412px;
     height: 100vh;
     overflow: hidden;
-    background: #000;
+    background: #000000;
 }
 
-/* ================= HEADER ================= */
+/* =====================================================
+   HEADER
+===================================================== */
 
 .header {
     position: relative;
     width: 100%;
     height: 74px;
+    padding: 10px 18px;
 
     display: flex;
     align-items: center;
@@ -77,12 +85,11 @@ body {
     background:
         linear-gradient(
             180deg,
-            #080808,
-            #000
+            #080808 0%,
+            #000000 100%
         );
 
     border-bottom: 1px solid #1f1f1f;
-
     z-index: 20;
 
     box-shadow:
@@ -91,8 +98,8 @@ body {
 
 .header::after {
     content: "";
-
     position: absolute;
+
     left: 18%;
     right: 18%;
     bottom: -1px;
@@ -100,12 +107,13 @@ body {
     height: 1px;
 
     background: var(--green);
-
     opacity: .35;
 
     box-shadow:
         0 0 8px rgba(60,220,60,.35);
 }
+
+/* BACK BUTTON */
 
 .back-btn {
     position: absolute;
@@ -122,7 +130,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
 
     background:
@@ -134,17 +142,31 @@ body {
 
     border: 1px solid #292929;
     border-radius: 12px;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.45);
+
+    transition: .2s ease;
+}
+
+.back-btn i {
+    font-size: 14px;
 }
 
 .back-btn:active {
+    background: #1b1b1b;
+
     transform:
         translateY(-50%)
         scale(.93);
 }
 
+/* HEADER CENTER */
+
 .header-center {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 9px;
 }
 
@@ -156,10 +178,12 @@ body {
     align-items: center;
     justify-content: center;
 
-    color: #000;
+    color: #000000;
     background: var(--green);
 
     border-radius: 10px;
+
+    font-size: 14px;
 
     box-shadow:
         0 0 8px rgba(60,220,60,.35);
@@ -168,20 +192,32 @@ body {
 .header-content {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .header-brand {
+    color: #ffffff;
+
     font-size: 14px;
     font-weight: 900;
+
     letter-spacing: 1px;
+    line-height: 1;
 }
 
 .header-page {
     margin-top: 4px;
 
-    color: #666;
+    color: #666666;
+
     font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: .3px;
 }
+
+/* HEADER STATUS */
 
 .header-status {
     position: absolute;
@@ -193,6 +229,7 @@ body {
 
     display: flex;
     align-items: center;
+
     gap: 5px;
 
     padding: 6px 8px;
@@ -213,13 +250,16 @@ body {
     height: 5px;
 
     background: var(--green);
+
     border-radius: 50%;
 
     box-shadow:
         0 0 6px rgba(60,220,60,.8);
 }
 
-/* ================= SCROLL ================= */
+/* =====================================================
+   MAIN SCROLL
+===================================================== */
 
 .main-scroll-container {
     width: 100%;
@@ -237,32 +277,38 @@ body {
     display: none;
 }
 
-/* ================= TITLE ================= */
+/* =====================================================
+   PAGE TITLE
+===================================================== */
 
 .page-title {
     padding: 5px 2px 12px;
 }
 
 .page-title h2 {
+    color: #ffffff;
+
     font-size: 18px;
     font-weight: 800;
 }
 
 .page-title p {
     margin-top: 3px;
-    color: #555;
+
+    color: #555555;
+
     font-size: 9px;
 }
 
-/* =================================================
-   PHONE SHOWCASE
-================================================= */
+/* =====================================================
+   INFINIX TOP PHOTO
+===================================================== */
 
 .infinix-photo-card {
     position: relative;
 
     width: 100%;
-    height: 190px;
+    height: 185px;
 
     margin-bottom: 12px;
 
@@ -270,317 +316,47 @@ body {
 
     background: #050505;
 
-    border: 1px solid #fff;
+    border: 1px solid #ffffff;
+
     border-radius: 14px;
 
     box-shadow:
-        0 0 6px rgba(255,255,255,.3),
-        0 0 18px rgba(255,255,255,.15);
+        0 0 6px rgba(255,255,255,.30),
+        0 0 18px rgba(255,255,255,.15),
+        inset 0 0 20px rgba(255,255,255,.04);
 }
 
-.phone-slide {
+.infinix-photo {
     position: absolute;
+
     inset: 0;
 
     width: 100%;
     height: 100%;
 
-    opacity: 0;
+    display: block;
 
-    transform: scale(1.04);
-
-    transition:
-        opacity 1s ease,
-        transform 5s ease;
-}
-
-.phone-slide.active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.phone-background {
-    position: absolute;
-    inset: 0;
-
-    background:
-        radial-gradient(
-            circle at 75% 45%,
-            rgba(60,220,60,.25),
-            transparent 35%
-        ),
-        linear-gradient(
-            135deg,
-            #020202,
-            #151515,
-            #030303
-        );
-}
-
-/* PHONE BODY */
-
-.phone-body {
-    position: absolute;
-
-    width: 105px;
-    height: 180px;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(-8deg);
-
-    background:
-        linear-gradient(
-            145deg,
-            #555,
-            #171717 45%,
-            #050505
-        );
-
-    border: 2px solid #666;
-
-    border-radius: 20px;
-
-    box-shadow:
-        12px 20px 30px rgba(0,0,0,.8),
-        0 0 25px rgba(60,220,60,.12);
-}
-
-.phone-screen {
-    position: absolute;
-
-    left: 6px;
-    right: 6px;
-    top: 6px;
-    bottom: 6px;
-
-    border-radius: 15px;
-
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(60,220,60,.2),
-            transparent 35%
-        ),
-        linear-gradient(
-            145deg,
-            #202020,
-            #030303
-        );
-}
-
-.phone-camera {
-    position: absolute;
-
-    top: 15px;
-    left: 12px;
-
-    width: 42px;
-    height: 48px;
-
-    padding: 5px;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 4px;
+    object-fit: cover;
 
     background: #080808;
-
-    border: 1px solid #444;
-
-    border-radius: 10px;
-
-    z-index: 3;
 }
-
-.camera-lens {
-    width: 13px;
-    height: 13px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            #111 25%,
-            #777 30%,
-            #111 60%
-        );
-
-    border: 1px solid #888;
-}
-
-.phone-logo {
-    position: absolute;
-
-    bottom: 23px;
-
-    left: 0;
-    width: 100%;
-
-    text-align: center;
-
-    color: #fff;
-
-    font-size: 10px;
-    font-weight: 800;
-
-    letter-spacing: 1px;
-
-    z-index: 3;
-}
-
-.phone-line {
-    position: absolute;
-
-    bottom: 13px;
-
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: 28px;
-    height: 2px;
-
-    background: var(--green);
-
-    box-shadow:
-        0 0 8px var(--green);
-}
-
-/* SECOND PHONE */
-
-.phone-slide:nth-child(2) .phone-body {
-    width: 115px;
-    height: 175px;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(7deg);
-
-    background:
-        linear-gradient(
-            135deg,
-            #292929,
-            #080808
-        );
-}
-
-/* THIRD PHONE */
-
-.phone-slide:nth-child(3) .phone-body {
-    width: 100px;
-    height: 185px;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(-2deg);
-
-    background:
-        linear-gradient(
-            120deg,
-            #444,
-            #111,
-            #050505
-        );
-}
-
-/* OVERLAY */
 
 .photo-dark-overlay {
     position: absolute;
+
     inset: 0;
-
-    z-index: 4;
-
-    pointer-events: none;
 
     background:
         linear-gradient(
             to bottom,
-            rgba(0,0,0,.02),
-            rgba(0,0,0,.15) 40%,
-            rgba(0,0,0,.9)
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.25) 45%,
+            rgba(0,0,0,.88)
         );
-}
 
-.photo-content {
-    position: absolute;
+    z-index: 2;
 
-    left: 14px;
-    right: 14px;
-    bottom: 14px;
-
-    z-index: 6;
-
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-}
-
-.photo-title {
-    font-size: 14px;
-    font-weight: 900;
-    letter-spacing: .7px;
-}
-
-.photo-subtitle {
-    margin-top: 3px;
-
-    color: #bbb;
-    font-size: 8px;
-}
-
-.photo-status {
-    padding: 6px 9px;
-
-    color: #000;
-
-    background: #fff;
-
-    border-radius: 20px;
-
-    font-size: 7px;
-    font-weight: 900;
-}
-
-.slide-dots {
-    position: absolute;
-
-    bottom: 8px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    z-index: 7;
-
-    display: flex;
-    gap: 5px;
-}
-
-.slide-dot {
-    width: 5px;
-    height: 5px;
-
-    background: #555;
-
-    border-radius: 50%;
-}
-
-.slide-dot.active {
-    width: 15px;
-
-    background: var(--green);
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 0 7px var(--green);
+    pointer-events: none;
 }
 
 .infinix-photo-card::after {
@@ -594,15 +370,74 @@ body {
     width: 100%;
     height: 2px;
 
-    background: #fff;
+    background: #ffffff;
 
     box-shadow:
-        0 0 8px #fff;
+        0 0 8px #ffffff,
+        0 0 18px rgba(255,255,255,.65);
 
-    z-index: 8;
+    z-index: 4;
 }
 
-/* ================= METRICS ================= */
+.photo-content {
+    position: absolute;
+
+    left: 14px;
+    right: 14px;
+    bottom: 13px;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    z-index: 3;
+}
+
+.photo-title {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    letter-spacing: .7px;
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,.35);
+}
+
+.photo-subtitle {
+    margin-top: 3px;
+
+    color: #bdbdbd;
+
+    font-size: 8px;
+}
+
+.photo-status {
+    flex-shrink: 0;
+
+    padding: 6px 9px;
+
+    color: #000000;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    font-size: 7px;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 8px rgba(255,255,255,.45),
+        0 0 16px rgba(255,255,255,.18);
+}
+
+/* =====================================================
+   METRICS
+===================================================== */
 
 .dashboard-metrics-row {
     display: grid;
@@ -620,7 +455,9 @@ body {
     padding: 9px 10px;
 
     display: flex;
+
     flex-direction: column;
+
     justify-content: space-between;
 
     background: var(--green);
@@ -629,18 +466,22 @@ body {
 }
 
 .metric-label {
-    color: #000;
+    color: #000000;
+
     font-size: 10px;
     font-weight: 600;
 }
 
 .metric-counter-value {
-    color: #000;
+    color: #000000;
+
     font-size: 16px;
     font-weight: 800;
 }
 
-/* ================= SECTION ================= */
+/* =====================================================
+   SECTION HEADER
+===================================================== */
 
 .section-header {
     display: flex;
@@ -652,27 +493,41 @@ body {
 }
 
 .section-title {
+    color: #ffffff;
+
     font-size: 13px;
     font-weight: 700;
 }
 
 .section-count {
-    color: #555;
+    color: #555555;
+
     font-size: 9px;
 }
 
-/* ================= DEVICE CARD ================= */
+/* =====================================================
+   DEVICE CARD
+===================================================== */
 
 .portfolio-ledger-card {
     width: 100%;
 
     margin-bottom: 8px;
+
     padding: 9px;
 
     background: var(--card);
 
     border: 1px solid var(--border);
+
     border-radius: 8px;
+
+    transition: .2s ease;
+}
+
+.portfolio-ledger-card:active {
+    border-color: #2b2b2b;
+    transform: scale(.99);
 }
 
 .ledger-top-flex-row {
@@ -684,7 +539,13 @@ body {
     margin-bottom: 7px;
 }
 
-.vip-tier-indicator,
+.vip-tier-indicator {
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
 .asset-valuation-tag {
     color: var(--green);
 
@@ -700,6 +561,8 @@ body {
     gap: 9px;
 }
 
+/* PHONE THUMBNAIL */
+
 .hardware-thumbnail-wrapper {
     width: 40px;
     height: 48px;
@@ -711,9 +574,10 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: #111;
+    background: #111111;
 
     border: 1px solid #202020;
+
     border-radius: 6px;
 }
 
@@ -730,9 +594,12 @@ body {
             #151517
         );
 
-    border: 1px solid #444;
+    border: 1px solid #444444;
 
     border-radius: 4px;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.7);
 }
 
 .infinix-device::before {
@@ -765,7 +632,13 @@ body {
     height: 1px;
 
     background: var(--green);
+
+    opacity: .55;
 }
+
+/* =====================================================
+   DEVICE DETAILS
+===================================================== */
 
 .ledger-specs-column {
     flex: 1;
@@ -776,24 +649,36 @@ body {
 
     grid-template-columns: 1fr 1fr;
 
-    gap: 3px 7px;
+    column-gap: 7px;
+    row-gap: 2px;
 }
 
 .product-name {
     grid-column: 1 / -1;
 
+    color: #ffffff;
+
     font-size: 10px;
     font-weight: 700;
+
+    margin-bottom: 1px;
 }
 
 .spec-line-item {
     color: var(--muted);
 
     font-size: 8px;
+
+    line-height: 1.3;
+
+    white-space: nowrap;
 }
 
 .spec-highlight-value {
     color: var(--green);
+
+    margin-left: 2px;
+
     font-weight: 700;
 }
 
@@ -803,9 +688,156 @@ body {
     color: var(--dark);
 
     font-size: 7px;
+
+    margin-top: 1px;
 }
 
-/* ================= INFO ================= */
+/* =====================================================
+   COUNTDOWN
+===================================================== */
+
+.income-status-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 7px;
+
+    padding-top: 6px;
+
+    border-top: 1px solid #181818;
+}
+
+.countdown-label {
+    color: #555555;
+
+    font-size: 7px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.countdown {
+    color: var(--green);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.countdown.ready {
+    text-shadow:
+        0 0 7px rgba(60,220,60,.5),
+        0 0 15px rgba(60,220,60,.2);
+}
+
+/* =====================================================
+   CLAIM BUTTON
+===================================================== */
+
+.claim-form {
+    margin-top: 5px;
+}
+
+.claim-button {
+    width: 100%;
+
+    padding: 6px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    color: #000000;
+
+    background: var(--green);
+
+    border: 1px solid var(--green);
+
+    border-radius: 5px;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.claim-button:active {
+    transform: scale(.98);
+}
+
+.claim-button.disabled {
+    color: #555555;
+
+    background: #181818;
+
+    border-color: #292929;
+
+    cursor: not-allowed;
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-card {
+    padding: 25px 12px;
+
+    text-align: center;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 7px;
+}
+
+.empty-icon {
+    width: 40px;
+    height: 40px;
+
+    margin: 0 auto 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #555555;
+
+    background: #151515;
+
+    border-radius: 50%;
+
+    font-size: 15px;
+}
+
+.empty-title {
+    color: #777777;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.empty-text {
+    margin-top: 3px;
+
+    color: #444444;
+
+    font-size: 8px;
+}
+
+/* =====================================================
+   INFORMATION
+===================================================== */
 
 .info-card {
     margin-top: 9px;
@@ -828,7 +860,7 @@ body {
 
     margin-bottom: 4px;
 
-    color: #777;
+    color: #777777;
 
     font-size: 9px;
     font-weight: 600;
@@ -839,59 +871,16 @@ body {
 }
 
 .info-card p {
-    color: #444;
+    color: #444444;
 
     font-size: 8px;
 
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
-/* ================= EMPTY ================= */
-
-.empty-card {
-    padding: 25px 12px;
-
-    text-align: center;
-
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 7px;
-}
-
-.empty-icon {
-    width: 40px;
-    height: 40px;
-
-    margin: 0 auto 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #555;
-
-    background: #151515;
-
-    border-radius: 50%;
-}
-
-.empty-title {
-    color: #777;
-
-    font-size: 12px;
-}
-
-.empty-text {
-    margin-top: 3px;
-
-    color: #444;
-
-    font-size: 8px;
-}
-
-/* ================= BOTTOM NAV ================= */
+/* =====================================================
+   BOTTOM NAVIGATION
+===================================================== */
 
 .global-bottom-navigation {
     position: absolute;
@@ -903,7 +892,7 @@ body {
 
     display: grid;
 
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(5, 1fr);
 
     padding: 7px 0 4px;
 
@@ -923,6 +912,7 @@ body {
     min-height: 35px;
 
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
@@ -930,17 +920,26 @@ body {
 
     gap: 2px;
 
-    color: #555;
+    color: #555555;
 
     text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.nav-tab-node:active {
+    transform: scale(.92);
 }
 
 .nav-icon-glyph {
     font-size: 15px;
+
+    line-height: 1;
 }
 
 .nav-text-label {
     font-size: 7px;
+    font-weight: 500;
 }
 
 .nav-tab-node.active-focus-state {
@@ -950,10 +949,13 @@ body {
         0 0 7px rgba(60,220,60,.35);
 }
 
-/* ================= LOADING ================= */
+/* =====================================================
+   LOADING
+===================================================== */
 
 .loading-overlay {
     position: fixed;
+
     inset: 0;
 
     display: none;
@@ -981,7 +983,7 @@ body {
 
     background: #101010;
 
-    border: 1px solid #222;
+    border: 1px solid #222222;
 
     border-radius: 9px;
 }
@@ -992,7 +994,7 @@ body {
 
     margin: 0 auto 7px;
 
-    border: 3px solid #333;
+    border: 3px solid #333333;
 
     border-top-color: var(--green);
 
@@ -1002,7 +1004,8 @@ body {
 }
 
 .loading-text {
-    color: #888;
+    color: #888888;
+
     font-size: 8px;
 }
 
@@ -1012,15 +1015,37 @@ body {
     }
 }
 
-@media (max-width:360px) {
+/* =====================================================
+   SMALL SCREEN
+===================================================== */
+
+@media (max-width: 360px) {
 
     .main-scroll-container {
         padding: 10px;
         padding-bottom: 78px;
     }
 
+    .portfolio-ledger-card {
+        padding: 7px;
+    }
+
+    .hardware-thumbnail-wrapper {
+        width: 35px;
+        height: 43px;
+    }
+
+    .infinix-device {
+        width: 18px;
+        height: 32px;
+    }
+
+    .spec-line-item {
+        font-size: 7px;
+    }
+
     .infinix-photo-card {
-        height: 165px;
+        height: 160px;
     }
 
     .header {
@@ -1029,6 +1054,11 @@ body {
 
     .header-status {
         right: 10px;
+        padding: 5px 6px;
+    }
+
+    .header-page {
+        font-size: 7px;
     }
 }
 
@@ -1038,6 +1068,10 @@ body {
 <body>
 
 <div class="app-viewport">
+
+<!-- =====================================================
+     PREMIUM HEADER
+===================================================== -->
 
 <header class="header">
 
@@ -1079,11 +1113,20 @@ body {
 </header>
 
 
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <main class="main-scroll-container">
+
+
+<!-- PAGE TITLE -->
 
 <section class="page-title">
 
-    <h2>My Device</h2>
+    <h2>
+        My Device
+    </h2>
 
     <p>
         Your registered Infinix devices
@@ -1093,99 +1136,293 @@ body {
 
 
 <!-- =================================================
-     PHONE SHOWCASE
+     INFINIX PHOTO
 ================================================== -->
 
 <section class="infinix-photo-card">
 
-    <!-- PHONE 1 -->
+    <svg
+        class="infinix-photo"
+        viewBox="0 0 800 420"
+        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+    >
 
-    <div class="phone-slide active">
+        <defs>
 
-        <div class="phone-background"></div>
+            <linearGradient
+                id="phoneBackground"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="1"
+            >
 
-        <div class="phone-body">
+                <stop
+                    offset="0%"
+                    stop-color="#050505"
+                />
 
-            <div class="phone-screen"></div>
+                <stop
+                    offset="55%"
+                    stop-color="#151515"
+                />
 
-            <div class="phone-camera">
+                <stop
+                    offset="100%"
+                    stop-color="#020202"
+                />
 
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
+            </linearGradient>
 
-            </div>
 
-            <div class="phone-logo">
+            <linearGradient
+                id="phoneBody"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="1"
+            >
+
+                <stop
+                    offset="0%"
+                    stop-color="#555555"
+                />
+
+                <stop
+                    offset="35%"
+                    stop-color="#202020"
+                />
+
+                <stop
+                    offset="70%"
+                    stop-color="#080808"
+                />
+
+                <stop
+                    offset="100%"
+                    stop-color="#333333"
+                />
+
+            </linearGradient>
+
+
+            <linearGradient
+                id="screen"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="1"
+            >
+
+                <stop
+                    offset="0%"
+                    stop-color="#202020"
+                />
+
+                <stop
+                    offset="50%"
+                    stop-color="#050505"
+                />
+
+                <stop
+                    offset="100%"
+                    stop-color="#101010"
+                />
+
+            </linearGradient>
+
+
+            <radialGradient id="greenGlow">
+
+                <stop
+                    offset="0%"
+                    stop-color="#3cdc3c"
+                    stop-opacity=".45"
+                />
+
+                <stop
+                    offset="100%"
+                    stop-color="#3cdc3c"
+                    stop-opacity="0"
+                />
+
+            </radialGradient>
+
+
+            <filter
+                id="shadow"
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+            >
+
+                <feGaussianBlur
+                    stdDeviation="12"
+                />
+
+            </filter>
+
+        </defs>
+
+
+        <rect
+            width="800"
+            height="420"
+            fill="url(#phoneBackground)"
+        />
+
+
+        <ellipse
+            cx="590"
+            cy="220"
+            rx="250"
+            ry="180"
+            fill="url(#greenGlow)"
+        />
+
+
+        <ellipse
+            cx="400"
+            cy="390"
+            rx="180"
+            ry="22"
+            fill="#000000"
+            opacity=".8"
+            filter="url(#shadow)"
+        />
+
+
+        <g
+            transform="translate(300 25) rotate(-8 100 180)"
+        >
+
+            <rect
+                x="0"
+                y="0"
+                width="200"
+                height="370"
+                rx="30"
+                fill="url(#phoneBody)"
+                stroke="#666666"
+                stroke-width="2"
+            />
+
+
+            <rect
+                x="9"
+                y="9"
+                width="182"
+                height="352"
+                rx="24"
+                fill="url(#screen)"
+            />
+
+
+            <path
+                d="M18 25 L120 15 L190 90 L190 150 Z"
+                fill="#ffffff"
+                opacity=".035"
+            />
+
+
+            <rect
+                x="24"
+                y="30"
+                width="58"
+                height="86"
+                rx="15"
+                fill="#080808"
+                stroke="#555555"
+                stroke-width="2"
+            />
+
+
+            <circle
+                cx="43"
+                cy="50"
+                r="12"
+                fill="#111111"
+                stroke="#777777"
+                stroke-width="3"
+            />
+
+            <circle
+                cx="43"
+                cy="50"
+                r="6"
+                fill="#020202"
+            />
+
+
+            <circle
+                cx="68"
+                cy="72"
+                r="12"
+                fill="#111111"
+                stroke="#777777"
+                stroke-width="3"
+            />
+
+            <circle
+                cx="68"
+                cy="72"
+                r="6"
+                fill="#020202"
+            />
+
+
+            <circle
+                cx="42"
+                cy="92"
+                r="6"
+                fill="#dddddd"
+            />
+
+
+            <text
+                x="100"
+                y="320"
+                text-anchor="middle"
+                fill="#ffffff"
+                opacity=".85"
+                font-size="20"
+                font-family="Arial, sans-serif"
+                font-weight="700"
+            >
                 INFINIX
-            </div>
-
-            <div class="phone-line"></div>
-
-        </div>
-
-    </div>
+            </text>
 
 
-    <!-- PHONE 2 -->
+            <rect
+                x="74"
+                y="340"
+                width="52"
+                height="3"
+                rx="2"
+                fill="#3cdc3c"
+            />
 
-    <div class="phone-slide">
-
-        <div class="phone-background"></div>
-
-        <div class="phone-body">
-
-            <div class="phone-screen"></div>
-
-            <div class="phone-camera">
-
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-
-            </div>
-
-            <div class="phone-logo">
-                INFINIX
-            </div>
-
-            <div class="phone-line"></div>
-
-        </div>
-
-    </div>
+        </g>
 
 
-    <!-- PHONE 3 -->
+        <path
+            d="M35 350 H220"
+            stroke="#3cdc3c"
+            stroke-width="2"
+            opacity=".45"
+        />
 
-    <div class="phone-slide">
 
-        <div class="phone-background"></div>
+        <path
+            d="M580 70 H765"
+            stroke="#3cdc3c"
+            stroke-width="2"
+            opacity=".25"
+        />
 
-        <div class="phone-body">
-
-            <div class="phone-screen"></div>
-
-            <div class="phone-camera">
-
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-                <div class="camera-lens"></div>
-
-            </div>
-
-            <div class="phone-logo">
-                INFINIX
-            </div>
-
-            <div class="phone-line"></div>
-
-        </div>
-
-    </div>
+    </svg>
 
 
     <div class="photo-dark-overlay"></div>
@@ -1205,18 +1442,10 @@ body {
 
         </div>
 
+
         <span class="photo-status">
             ACTIVE
         </span>
-
-    </div>
-
-
-    <div class="slide-dots">
-
-        <span class="slide-dot active"></span>
-        <span class="slide-dot"></span>
-        <span class="slide-dot"></span>
 
     </div>
 
@@ -1245,11 +1474,11 @@ body {
     <div class="metric-panel">
 
         <span class="metric-label">
-            Device Status
+            My Income
         </span>
 
         <span class="metric-counter-value">
-            Active
+            GHS 0
         </span>
 
     </div>
@@ -1257,137 +1486,453 @@ body {
 </section>
 
 
+<!-- =================================================
+     DEVICE SECTION
+================================================== -->
+
 <div class="section-header">
 
     <h2 class="section-title">
-        Registered Devices
+        My Device
     </h2>
 
 
     {% if user_plans %}
 
-    <span class="section-count">
+        <span class="section-count">
 
-        {{ user_plans|length }}
+            {{ user_plans|length }}
 
-        device{% if user_plans|length != 1 %}s{% endif %}
+            device{% if user_plans|length != 1 %}s{% endif %}
 
-    </span>
+        </span>
 
     {% endif %}
 
 </div>
 
 
+<!-- =================================================
+     DEVICE LIST
+================================================== -->
+
 {% if user_plans %}
 
     {% for user_plan in user_plans %}
 
-    <section class="portfolio-ledger-card">
-
-        <div class="ledger-top-flex-row">
-
-            <span class="vip-tier-indicator">
-
-                {{ user_plan.plan_name }}
-
-            </span>
-
-            <span class="asset-valuation-tag">
-
-                Registered
-
-            </span>
-
-        </div>
+        <section class="portfolio-ledger-card">
 
 
-        <div class="ledger-inner-body">
+            <div class="ledger-top-flex-row">
 
-            <div class="hardware-thumbnail-wrapper">
+                <span class="vip-tier-indicator">
 
-                <div class="infinix-device"></div>
+                    {{ user_plan.plan_name }}
+
+                </span>
+
+
+                <span class="asset-valuation-tag">
+
+                    GHS
+                    {{
+                        "%.2f"|format(
+                            user_plan.investment_amount|float
+                        )
+                    }}
+
+                </span>
 
             </div>
 
 
-            <div class="ledger-specs-column">
+            <div class="ledger-inner-body">
 
-                <div class="product-name">
-                    Infinix Device
+
+                <div class="hardware-thumbnail-wrapper">
+
+                    <div class="infinix-device"></div>
+
                 </div>
 
 
-                <p class="spec-line-item">
-
-                    Status:
-
-                    <span class="spec-highlight-value">
-                        Active
-                    </span>
-
-                </p>
+                <div class="ledger-specs-column">
 
 
-                <p class="spec-line-item">
-
-                    Device:
-
-                    <span class="spec-highlight-value">
-                        Infinix
-                    </span>
-
-                </p>
+                    <div class="product-name">
+                        Infinix Device
+                    </div>
 
 
-                <p class="spec-line-item">
+                    <p class="spec-line-item">
 
-                    Plan:
+                        Daily:
 
-                    <span class="spec-highlight-value">
-                        {{ user_plan.plan_name }}
-                    </span>
+                        <span class="spec-highlight-value">
 
-                </p>
+                            GHS
+                            {{
+                                "%.2f"|format(
+                                    user_plan.daily_income|float
+                                )
+                            }}
+
+                        </span>
+
+                    </p>
 
 
-                <p class="system-log-timestamp">
+                    <p class="spec-line-item">
 
-                    Device #{{ loop.index }}
+                        Total:
 
-                </p>
+                        <span class="spec-highlight-value">
+
+                            GHS
+                            {{
+                                "%.2f"|format(
+                                    user_plan.daily_income|float
+                                    *
+                                    user_plan.duration|int
+                                )
+                            }}
+
+                        </span>
+
+                    </p>
+
+
+                    <p class="spec-line-item">
+
+                        Valid:
+
+                        <span class="spec-highlight-value">
+
+                            {{ user_plan.duration }}d
+
+                        </span>
+
+                    </p>
+
+
+                    <p class="system-log-timestamp">
+
+                        Device #{{ loop.index }}
+
+                    </p>
+
+                </div>
 
             </div>
 
-        </div>
 
-    </section>
+            <!-- COUNTDOWN -->
+
+            <div class="income-status-row">
+
+                <span class="countdown-label">
+                    Next income
+                </span>
+
+
+                <span
+                    id="countdown-{{ user_plan.id }}"
+                    class="countdown {% if user_plan.can_claim %}ready{% endif %}"
+                >
+
+                    {% if user_plan.can_claim %}
+
+                        00:00:00
+
+                    {% else %}
+
+                        --:--:--
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- CLAIM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('my_plan') }}"
+                class="claim-form"
+            >
+
+                <input
+                    type="hidden"
+                    name="user_plan_id"
+                    value="{{ user_plan.id }}"
+                >
+
+
+                <button
+                    type="submit"
+                    id="claimButton-{{ user_plan.id }}"
+                    class="claim-button {% if not user_plan.can_claim %}disabled{% endif %}"
+                    {% if not user_plan.can_claim %}disabled{% endif %}
+                >
+
+                    {% if user_plan.can_claim %}
+
+                        <i class="fa-solid fa-coins"></i>
+
+                        Claim Income
+
+                    {% else %}
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        Income Not Ready
+
+                    {% endif %}
+
+                </button>
+
+            </form>
+
+
+        </section>
+
+
+        <!-- COUNTDOWN SCRIPT -->
+
+        <script>
+
+        (function () {
+
+            const countdownEl =
+                document.getElementById(
+                    "countdown-{{ user_plan.id }}"
+                );
+
+            const claimButton =
+                document.getElementById(
+                    "claimButton-{{ user_plan.id }}"
+                );
+
+            const canClaim =
+                {{ 'true' if user_plan.can_claim else 'false' }};
+
+
+            {% if user_plan.next_income_at %}
+
+            const nextIncome =
+                new Date(
+                    "{{ user_plan.next_income_at.isoformat() }}"
+                ).getTime();
+
+            {% else %}
+
+            const nextIncome = null;
+
+            {% endif %}
+
+
+            function pad(value) {
+
+                return String(value)
+                    .padStart(2, "0");
+
+            }
+
+
+            function formatTime(milliseconds) {
+
+                if (milliseconds <= 0) {
+                    return "00:00:00";
+                }
+
+                const totalSeconds =
+                    Math.floor(
+                        milliseconds / 1000
+                    );
+
+                const hours =
+                    Math.floor(
+                        totalSeconds / 3600
+                    );
+
+                const minutes =
+                    Math.floor(
+                        (totalSeconds % 3600) / 60
+                    );
+
+                const seconds =
+                    totalSeconds % 60;
+
+                return (
+                    pad(hours) +
+                    ":" +
+                    pad(minutes) +
+                    ":" +
+                    pad(seconds)
+                );
+
+            }
+
+
+            function setReady() {
+
+                if (!countdownEl) {
+                    return;
+                }
+
+                countdownEl.textContent =
+                    "00:00:00";
+
+                countdownEl.classList.add(
+                    "ready"
+                );
+
+
+                if (claimButton) {
+
+                    claimButton.disabled =
+                        false;
+
+                    claimButton.classList.remove(
+                        "disabled"
+                    );
+
+                    claimButton.innerHTML =
+                        '<i class="fa-solid fa-coins"></i> Claim Income';
+
+                }
+
+            }
+
+
+            function setWaiting(milliseconds) {
+
+                if (!countdownEl) {
+                    return;
+                }
+
+                countdownEl.textContent =
+                    formatTime(
+                        milliseconds
+                    );
+
+                countdownEl.classList.remove(
+                    "ready"
+                );
+
+
+                if (claimButton) {
+
+                    claimButton.disabled =
+                        true;
+
+                    claimButton.classList.add(
+                        "disabled"
+                    );
+
+                    claimButton.innerHTML =
+                        '<i class="fa-solid fa-clock"></i> Income Not Ready';
+
+                }
+
+            }
+
+
+            function updateCountdown() {
+
+                if (canClaim) {
+
+                    setReady();
+
+                    return;
+
+                }
+
+
+                if (
+                    nextIncome === null ||
+                    isNaN(nextIncome)
+                ) {
+
+                    if (countdownEl) {
+
+                        countdownEl.textContent =
+                            "--:--:--";
+
+                    }
+
+                    return;
+
+                }
+
+
+                const remaining =
+                    nextIncome - Date.now();
+
+
+                if (remaining <= 0) {
+
+                    setReady();
+
+                } else {
+
+                    setWaiting(
+                        remaining
+                    );
+
+                }
+
+            }
+
+
+            updateCountdown();
+
+
+            setInterval(
+                updateCountdown,
+                1000
+            );
+
+        })();
+
+        </script>
+
 
     {% endfor %}
 
 
 {% else %}
 
-<section class="empty-card">
 
-    <div class="empty-icon">
+    <section class="empty-card">
 
-        <i class="fa-solid fa-mobile-screen"></i>
+        <div class="empty-icon">
 
-    </div>
+            <i class="fa-solid fa-mobile-screen"></i>
 
-    <h2 class="empty-title">
-        No Device
-    </h2>
+        </div>
 
-    <p class="empty-text">
-        You currently have no registered device.
-    </p>
 
-</section>
+        <h2 class="empty-title">
+            No Device
+        </h2>
+
+
+        <p class="empty-text">
+            You currently have no registered device.
+        </p>
+
+    </section>
+
 
 {% endif %}
 
+
+<!-- =================================================
+     INFORMATION
+================================================== -->
 
 <section class="info-card">
 
@@ -1401,18 +1946,22 @@ body {
 
     </div>
 
+
     <p>
-        Your registered Infinix devices
-        and their current status are
-        displayed above.
+        Your registered Infinix device
+        and its associated plan details
+        are displayed above.
     </p>
 
 </section>
 
+
 </main>
 
 
-<!-- ================= LOADING ================= -->
+<!-- =====================================================
+     LOADING
+===================================================== -->
 
 <div
     id="loadingOverlay"
@@ -1435,117 +1984,41 @@ body {
 </div>
 
 
+<!-- =====================================================
+     GLOBAL LOADING SCRIPT
+===================================================== -->
+
 <script>
-
-/* =====================================================
-   PHONE SLIDESHOW
-===================================================== */
-
-(function () {
-
-    const slides =
-        document.querySelectorAll(
-            ".phone-slide"
-        );
-
-    const dots =
-        document.querySelectorAll(
-            ".slide-dot"
-        );
-
-    if (!slides.length) {
-        return;
-    }
-
-    let current = 0;
-
-
-    function showSlide(index) {
-
-        slides.forEach(
-            function(slide, i) {
-
-                slide.classList.toggle(
-                    "active",
-                    i === index
-                );
-
-            }
-        );
-
-
-        dots.forEach(
-            function(dot, i) {
-
-                dot.classList.toggle(
-                    "active",
-                    i === index
-                );
-
-            }
-        );
-
-    }
-
-
-    setInterval(
-        function () {
-
-            current++;
-
-            if (
-                current >=
-                slides.length
-            ) {
-                current = 0;
-            }
-
-            showSlide(current);
-
-        },
-        4000
-    );
-
-
-    dots.forEach(
-        function(dot, index) {
-
-            dot.addEventListener(
-                "click",
-                function() {
-
-                    current = index;
-
-                    showSlide(current);
-
-                }
-            );
-
-        }
-    );
-
-})();
-
-
-/* =====================================================
-   LOADING
-===================================================== */
 
 document.addEventListener(
     "click",
-    function(event) {
+    function (event) {
 
         const link =
             event.target.closest("a");
 
-        if (!link) {
+        const button =
+            event.target.closest("button");
+
+
+        if (!link && !button) {
             return;
         }
+
+
+        if (
+            button &&
+            button.disabled
+        ) {
+            return;
+        }
+
 
         const overlay =
             document.getElementById(
                 "loadingOverlay"
             );
+
 
         if (overlay) {
 
@@ -1558,6 +2031,27 @@ document.addEventListener(
     }
 );
 
+
+document.addEventListener(
+    "submit",
+    function () {
+
+        const overlay =
+            document.getElementById(
+                "loadingOverlay"
+            );
+
+
+        if (overlay) {
+
+            overlay.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+);
 
 </script>
 
