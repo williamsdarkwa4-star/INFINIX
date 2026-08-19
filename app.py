@@ -16,6 +16,7 @@ from __future__ import annotations
 import logging
 import os
 import uuid
+import secrets
 from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal, InvalidOperation
@@ -386,6 +387,38 @@ def init_db():
             )"""
         )
 
+        # Gift-code promotional balance (kept separate from withdrawable funds)
+        cur.execute("ALTER TABLE accounts ADD COLUMN IF NOT EXISTS gift_balance NUMERIC(14,2) NOT NULL DEFAULT 0")
+
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS gift_codes (
+                id SERIAL PRIMARY KEY,
+                code VARCHAR(120) UNIQUE NOT NULL,
+                reward NUMERIC(14,2) NOT NULL,
+                max_claims INTEGER NOT NULL CHECK (max_claims > 0),
+                claims_count INTEGER NOT NULL DEFAULT 0,
+                active BOOLEAN NOT NULL DEFAULT TRUE,
+                created_by INTEGER REFERENCES admins(id) ON DELETE SET NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                deactivated_at TIMESTAMP
+            )
+            """
+        )
+
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS gift_code_claims (
+                id SERIAL PRIMARY KEY,
+                gift_code_id INTEGER NOT NULL REFERENCES gift_codes(id) ON DELETE CASCADE,
+                user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                reward NUMERIC(14,2) NOT NULL,
+                claimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(gift_code_id, user_id)
+            )
+            """
+        )
+
         # Backfill missing referral codes
         cur.execute("SELECT id FROM users WHERE referral_code IS NULL OR referral_code=''")
         rows = cur.fetchall() or []
@@ -431,6 +464,10 @@ def init_db():
         ]
         for stmt in indices:
             cur.execute(stmt)
+
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_gift_codes_active ON gift_codes(active)")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_gift_claims_user ON gift_code_claims(user_id)")
+        cur.execute("CREATE INDEX IF NOT EXISTS idx_gift_claims_code ON gift_code_claims(gift_code_id)")
 
         conn.commit()
         logger.info("Database initialized successfully.")
@@ -2348,6 +2385,204 @@ def admin_delete_plan(plan_record_id: int):
         flash("Unable to delete the plan.", "error")
 
     return redirect(url_for("admin_plans"))
+# ============================================================
+# GIFT CODE SYSTEM
+# ============================================================
+
+def _normalize_gift_code(value: str) -> str:
+    return "".join((value or "").strip().upper().split())
+
+
+@app.route("/gift-code", methods=["GET", "POST"])
+def gift_code():
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        code = _normalize_gift_code(request.form.get("code", ""))
+        if not code:
+            flash("Enter a gift code.", "error")
+            return redirect(url_for("gift_code"))
+
+        try:
+            with db_cursor(commit=True, dict_cursor=True) as cur:
+                cur.execute(
+                    """
+                    SELECT id, code, reward, max_claims, claims_count, active
+                    FROM gift_codes
+                    WHERE code=%s
+                    FOR UPDATE
+                    """,
+                    (code,),
+                )
+                gift = cur.fetchone()
+
+                if not gift:
+                    flash("Gift code not found.", "error")
+                    return redirect(url_for("gift_code"))
+                if not gift["active"]:
+                    flash("This gift code is no longer active.", "error")
+                    return redirect(url_for("gift_code"))
+                if gift["claims_count"] >= gift["max_claims"]:
+                    flash("This gift code has reached its claim limit.", "error")
+                    return redirect(url_for("gift_code"))
+
+                cur.execute(
+                    "SELECT id FROM gift_code_claims WHERE gift_code_id=%s AND user_id=%s",
+                    (gift["id"], user["id"]),
+                )
+                if cur.fetchone():
+                    flash("You have already claimed this gift code.", "error")
+                    return redirect(url_for("gift_code"))
+
+                cur.execute(
+                    """
+                    UPDATE accounts
+                    SET gift_balance = COALESCE(gift_balance, 0) + %s
+                    WHERE user_id=%s
+                    """,
+                    (gift["reward"], user["id"]),
+                )
+                cur.execute(
+                    """
+                    INSERT INTO gift_code_claims (gift_code_id, user_id, reward)
+                    VALUES (%s, %s, %s)
+                    """,
+                    (gift["id"], user["id"], gift["reward"]),
+                )
+                cur.execute(
+                    "UPDATE gift_codes SET claims_count=claims_count+1 WHERE id=%s",
+                    (gift["id"],),
+                )
+
+            flash(f"Gift code claimed successfully. Reward: GHS {money(gift['reward']):,.2f} gift balance.", "success")
+        except Exception:
+            logger.exception("GIFT CODE CLAIM ERROR")
+            flash("Unable to claim the gift code. Please try again.", "error")
+
+        return redirect(url_for("gift_code"))
+
+    account = current_account(user["id"])
+    claims = query_all(
+        """
+        SELECT g.code, c.reward, c.claimed_at
+        FROM gift_code_claims c
+        JOIN gift_codes g ON g.id=c.gift_code_id
+        WHERE c.user_id=%s
+        ORDER BY c.claimed_at DESC
+        LIMIT 50
+        """,
+        (user["id"],),
+    )
+    return render_template("gift_code.html", user=user, account=account, claims=claims)
+
+
+@app.route("/admin/gift-codes", methods=["GET", "POST"])
+def admin_gift_codes():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    if request.method == "POST":
+        code = _normalize_gift_code(request.form.get("code", ""))
+        reward_raw = request.form.get("reward", "0")
+        max_claims_raw = request.form.get("max_claims", "0")
+
+        try:
+            reward = Decimal(reward_raw).quantize(Decimal("0.01"))
+            max_claims = int(max_claims_raw)
+        except (InvalidOperation, ValueError):
+            flash("Enter a valid reward and claim limit.", "error")
+            return redirect(url_for("admin_gift_codes"))
+
+        if not code or len(code) < 3:
+            flash("Gift code must contain at least 3 characters.", "error")
+            return redirect(url_for("admin_gift_codes"))
+        if reward <= 0:
+            flash("Reward must be greater than zero.", "error")
+            return redirect(url_for("admin_gift_codes"))
+        if max_claims < 1:
+            flash("Claim limit must be at least 1 user.", "error")
+            return redirect(url_for("admin_gift_codes"))
+
+        try:
+            execute(
+                """
+                INSERT INTO gift_codes (code, reward, max_claims, created_by)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (code, reward, max_claims, session.get("admin_id")),
+            )
+            flash("Gift code created and activated.", "success")
+        except Exception as exc:
+            logger.exception("CREATE GIFT CODE ERROR")
+            if "unique" in str(exc).lower():
+                flash("That gift code already exists.", "error")
+            else:
+                flash("Unable to create the gift code.", "error")
+
+        return redirect(url_for("admin_gift_codes"))
+
+    gift_codes = query_all(
+        """
+        SELECT g.*, a.username AS created_by_username
+        FROM gift_codes g
+        LEFT JOIN admins a ON a.id=g.created_by
+        ORDER BY g.created_at DESC, g.id DESC
+        """
+    )
+    return render_template("admin_gift_codes.html", gift_codes=gift_codes)
+
+
+@app.route("/admin/gift-codes/<int:gift_id>/toggle", methods=["POST"])
+def admin_toggle_gift_code(gift_id: int):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    gift = query_one("SELECT id, active FROM gift_codes WHERE id=%s", (gift_id,))
+    if not gift:
+        flash("Gift code not found.", "error")
+        return redirect(url_for("admin_gift_codes"))
+
+    if gift["active"]:
+        execute(
+            "UPDATE gift_codes SET active=FALSE, deactivated_at=CURRENT_TIMESTAMP WHERE id=%s",
+            (gift_id,),
+        )
+        flash("Gift code deactivated.", "success")
+    else:
+        execute(
+            "UPDATE gift_codes SET active=TRUE, deactivated_at=NULL WHERE id=%s",
+            (gift_id,),
+        )
+        flash("Gift code activated.", "success")
+
+    return redirect(url_for("admin_gift_codes"))
+
+
+@app.route("/admin/gift-codes/<int:gift_id>/claims")
+def admin_gift_code_claims(gift_id: int):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    gift = query_one("SELECT * FROM gift_codes WHERE id=%s", (gift_id,))
+    if not gift:
+        flash("Gift code not found.", "error")
+        return redirect(url_for("admin_gift_codes"))
+
+    claims = query_all(
+        """
+        SELECT c.reward, c.claimed_at, u.username, u.fullname, u.phone
+        FROM gift_code_claims c
+        JOIN users u ON u.id=c.user_id
+        WHERE c.gift_code_id=%s
+        ORDER BY c.claimed_at DESC
+        """,
+        (gift_id,),
+    )
+    return render_template("admin_gift_claims.html", gift=gift, claims=claims)
+
+
 # ============================================================
 # Error handlers
 # ============================================================
