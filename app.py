@@ -1158,17 +1158,28 @@ def request_withdrawal():
             total_available = withdraw_balance + referral_balance
             if total_available < amount:
                 raise ValueError("Insufficient withdrawal/referral balance.")
+
             from_withdraw = min(withdraw_balance, amount)
             from_referral = amount - from_withdraw
+
             cur.execute(
-                "UPDATE accounts SET withdraw_account=COALESCE(withdraw_account,0)-%s, referral_account=COALESCE(referral_account,0)-%s WHERE user_id=%s",
+                "UPDATE accounts SET withdraw_account = COALESCE(withdraw_account,0) - %s, referral_account = COALESCE(referral_account,0) - %s WHERE user_id = %s",
                 (from_withdraw, from_referral, user["id"]),
             )
-            cur.execute("INSERT INTO withdrawal_requests (user_id, amount, account_id, status) VALUES (%s,%s,%s,'pending') RETURNING id", (user["id"], amount, selected["id"]))
+
+            cur.execute(
+                "INSERT INTO withdrawal_requests (user_id, amount, account_id, status) VALUES (%s, %s, %s, 'pending') RETURNING id",
+                (user["id"], amount, selected["id"]),
+            )
             withdrawal_row = cur.fetchone()
             withdrawal_id = fetch_id(withdrawal_row, "id")
+
             reference = generate_reference("WDR")
-            cur.execute("INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description) VALUES (%s,'withdrawal',%s,'pending',%s,%s)", (user["id"], amount, reference, f"De[...]
+            cur.execute(
+                "INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description) VALUES (%s, %s, %s, %s, %s, %s)",
+                (user["id"], "withdrawal", amount, "pending", reference, f"Withdrawal request #{withdrawal_id}"),
+            )
+
         flash("Withdrawal request submitted successfully.", "success")
     except ValueError as ve:
         flash(str(ve), "error")
@@ -1176,8 +1187,6 @@ def request_withdrawal():
         logger.exception("WITHDRAWAL REQUEST ERROR")
         flash("Unable to submit the withdrawal.", "error")
     return redirect(url_for("transaction_history"))
-
-
 # ---------------------------
 # Transactions & Team
 # ---------------------------
