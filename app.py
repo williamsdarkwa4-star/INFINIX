@@ -2039,6 +2039,58 @@ def admin_withdraw_action(withdrawal_id: int, action: str):
         flash("Unable to process the withdrawal.", "error")
     return redirect(url_for("admin_withdrawals"))
 
+@app.route("/admin/plans", methods=["GET"])
+def admin_plans():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+
+    users = query_all(
+        """
+        SELECT id, username, fullname, phone
+        FROM users
+        ORDER BY id DESC
+        """
+    )
+
+    user_plans = query_all(
+        """
+        SELECT
+            p.id,
+            p.user_id,
+            p.plan_id,
+            p.plan_name,
+            p.investment_amount,
+            p.daily_income,
+            p.duration,
+            p.started_at,
+            p.last_claim_at,
+            p.active,
+            u.username,
+            u.fullname,
+            u.phone
+        FROM plans p
+        JOIN users u ON u.id = p.user_id
+        ORDER BY p.id DESC
+        """
+    )
+
+    available_plans = [
+        {
+            "id": plan_id,
+            "plan_name": data["name"],
+            "investment_amount": data["investment"],
+            "daily_income": data["daily"],
+            "duration": data["duration"],
+        }
+        for plan_id, data in PLANS.items()
+    ]
+
+    return render_template(
+        "admin_plans.html",
+        users=users,
+        user_plans=user_plans,
+        available_plans=available_plans,
+    )
 
 @app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
 def admin_approve_invite(token: str):
