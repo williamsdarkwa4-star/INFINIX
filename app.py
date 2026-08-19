@@ -2039,58 +2039,89 @@ def admin_withdraw_action(withdrawal_id: int, action: str):
         flash("Unable to process the withdrawal.", "error")
     return redirect(url_for("admin_withdrawals"))
 
-@app.route("/admin/plans", methods=["GET"])
-def admin_plans():
+@app.route("/admin/plans/assign", methods=["POST"])
+def admin_assign_plan():
     if not admin_required():
         return redirect(url_for("admin_login"))
 
-    users = query_all(
-        """
-        SELECT id, username, fullname, phone
-        FROM users
-        ORDER BY id DESC
-        """
-    )
+    try:
+        user_id = int(request.form.get("user_id", "0"))
+        plan_id = int(request.form.get("plan_id", "0"))
+    except (TypeError, ValueError):
+        flash("Please select a valid user and plan.", "error")
+        return redirect(url_for("admin_plans"))
 
-    user_plans = query_all(
-        """
-        SELECT
-            p.id,
-            p.user_id,
-            p.plan_id,
-            p.plan_name,
-            p.investment_amount,
-            p.daily_income,
-            p.duration,
-            p.started_at,
-            p.last_claim_at,
-            p.active,
-            u.username,
-            u.fullname,
-            u.phone
-        FROM plans p
-        JOIN users u ON u.id = p.user_id
-        ORDER BY p.id DESC
-        """
-    )
+    user = query_one("SELECT id, username FROM users WHERE id=%s", (user_id,))
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("admin_plans"))
 
-    available_plans = [
-        {
-            "id": plan_id,
-            "plan_name": data["name"],
-            "investment_amount": data["investment"],
-            "daily_income": data["daily"],
-            "duration": data["duration"],
-        }
-        for plan_id, data in PLANS.items()
-    ]
+    if plan_id not in PLANS:
+        flash("Plan not found.", "error")
+        return redirect(url_for("admin_plans"))
 
-    return render_template(
-        "admin_plans.html",
-        users=users,
-        user_plans=user_plans,
-        available_plans=available_plans,
-    )
+    plan = PLANS[plan_id]
+
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+            ensure_account(cur, user_id, Decimal("0.00"))
+
+            started_at = utcnow()
+            cur.execute(
+                """
+                INSERT INTO plans (
+                    user_id,
+                    plan_id,
+                    plan_name,
+                    investment_amount,
+                    daily_income,
+                    duration,
+                    started_at,
+                    last_claim_at,
+                    active
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, NULL, TRUE)
+                RETURNING id
+                """,
+                (user_id, plan_id, plan["name"], plan["investment"], plan["daily"], plan["duration"], started_at),
+            )
+            new_plan = cur.fetchone()
+            new_plan_id = fetch_id(new_plan, "id")
+
+            cur.execute(
+                """
+                INSERT INTO transactions (
+                    user_id,
+                    transaction_type,
+                    amount,
+                    status,
+                    reference,
+                    description
+                )
+                VALUES (
+                    %s,
+                    'admin_plan_grant',
+                    %s,
+                    'successful',
+                    %s,
+                    %s
+                )
+                """,
+                (
+                    user_id,
+                    plan["investment"],
+                    generate_reference("AGR"),
+                    f"Admin granted {plan['name']} to user {user['username']} (plan #{new_plan_id})",
+                ),
+            )
+
+        logger.info("Admin %s granted plan %s to user %s", session.get("admin_id"), plan_id, user_id)
+        flash(f"{plan['name']} assigned to {user['username']} successfully.", "success")
+    except Exception:
+        logger.exception("ADMIN PLAN ASSIGN ERROR")
+        flash("Unable to assign the plan.", "error")
+
+    return redirect(url_for("admin_plans"))
 
 @app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
 def admin_approve_invite(token: str):
