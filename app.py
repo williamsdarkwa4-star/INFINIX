@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-app.py - Rewritten for clarity and reliability
+app.py - Complete application
 
-Key changes for you:
-- Fixed truncated string / syntax issues.
-- New users receive MIN_WITHDRAWAL (GHS 30.00) in withdraw_account at registration.
-- Any created accounts rows are initialized with withdraw_account = MIN_WITHDRAWAL.
-- Withdrawals are blocked if the user has any active plan.
+- All routes included (dashboard, deposit, withdraw, admin, team, etc.)
+- New users receive MIN_WITHDRAWAL in withdraw_account at registration and when accounts are created.
+- Withdrawals are blocked while the user has any active plan.
+- Fixed earlier truncated f-string and other syntax issues.
 """
 
 from __future__ import annotations
@@ -147,6 +146,10 @@ def generate_reference(prefix: str) -> str:
 def fetch_id(row: Optional[Any], key: str = "id"):
     """
     Safely extract an 'id' (or other single value) from a DB cursor.fetchone() row.
+
+    - If row is None -> None
+    - If row is mapping/dict -> return row.get(key) or (if single-column mapping) the single value
+    - If row is sequence/tuple -> return row[0]
     """
     if row is None:
         return None
@@ -226,7 +229,12 @@ def execute(sql: str, params: Iterable = ()):
 def ensure_account(cur, user_id: int, starting_balance: Decimal = Decimal("0.00")) -> None:
     """
     Ensure an accounts row exists for user_id. If not present, create it.
-    Newly created accounts will have withdraw_account initialized to MIN_WITHDRAWAL.
+
+    Newly created accounts will have:
+    - deposit_account set to starting_balance
+    - income_account = 0
+    - referral_account = 0
+    - withdraw_account initialized to MIN_WITHDRAWAL (GHS 30.00)
     """
     cur.execute("SELECT user_id FROM accounts WHERE user_id=%s FOR UPDATE", (user_id,))
     if cur.fetchone():
@@ -271,7 +279,7 @@ def init_db():
             )"""
         )
 
-        # accounts (withdraw_account default set to MIN_WITHDRAWAL)
+        # accounts
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS accounts (
@@ -387,7 +395,7 @@ def init_db():
         for (uid,) in rows:
             cur.execute("UPDATE users SET referral_code=%s WHERE id=%s", (generate_referral_code(), uid))
 
-        # Ensure every user has an account (initialize withdraw_account to MIN_WITHDRAWAL)
+        # Ensure every user has an account
         cur.execute(
             """
             SELECT u.id FROM users u
@@ -653,7 +661,6 @@ def dashboard():
 
 # ---------------------------
 # Buy/Confirm Plan
-# (unchanged, kept for brevity)
 # ---------------------------
 @app.route("/buy_plan/<int:plan_id>")
 def buy_plan(plan_id: int):
@@ -765,7 +772,7 @@ def confirm_buy_plan(plan_id: int):
 
 
 # ---------------------------
-# Plan time helpers (unchanged)
+# Plan time helpers
 # ---------------------------
 def plan_times(plan_row: Dict[str, Any], now: Optional[datetime] = None) -> Tuple[datetime, datetime]:
     now = now or utcnow()
@@ -797,7 +804,7 @@ def deactivate_expired_plans(user_id: int):
 
 
 # ---------------------------
-# My Plan (view + claim) - unchanged (kept as is)
+# My Plan (view + claim)
 # ---------------------------
 @app.route("/my_plan", methods=["GET", "POST"])
 def my_plan():
@@ -1193,8 +1200,8 @@ def request_withdrawal():
 
 # ---------------------------
 # Transactions & Team
-# (unchanged)
 # ---------------------------
+
 @app.route("/transaction_history")
 def transaction_history():
     user = current_user()
@@ -1203,10 +1210,704 @@ def transaction_history():
     transactions = query_all("SELECT * FROM transactions WHERE user_id=%s ORDER BY created_at DESC, id DESC", (user["id"],))
     return render_template("transaction_history.html", transactions=transactions)
 
-# ... remaining routes (team, admin, etc.) unchanged from previous layout ...
-# For brevity in this response I did not duplicate every admin/team route again,
-# but in your repo copy the prior implementations as needed (they were unchanged).
-# If you want the full file with ALL remaining unchanged routes included, tell me and I'll paste the absolute-complete file.
+
+@app.route("/team")
+def team():
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    account = current_account(user["id"])
+
+    referral_income = money(
+        account["referral_account"]
+        if account
+        else Decimal("0.00")
+    )
+
+    # SITE / REFERRAL LINK
+    site_url = "https://infinix-3afi.onrender.com"
+    referral_link = f"{site_url}/register?ref={user['referral_code']}"
+
+    # TEAM RULES
+    LEVEL1_LIMIT = 5
+    LEVEL2_PER_LEVEL1 = 2
+    LEVEL3_LIMIT = 300
+
+    LEVEL1_RATE = 20
+    LEVEL2_RATE = 3
+    LEVEL3_RATE = 1
+
+    # LEVEL 1
+    level1_users = query_all(
+        """
+        SELECT
+            id,
+            username,
+            fullname,
+            phone,
+            referral_code,
+            referred_by,
+            created_at
+        FROM users
+        WHERE referred_by=%s
+        ORDER BY created_at ASC, id ASC
+        LIMIT %s
+        """,
+        (user["referral_code"], LEVEL1_LIMIT),
+    )
+
+    # LEVEL 2
+    level1_codes = [member["referral_code"] for member in level1_users if member.get("referral_code")]
+    level2_users = []
+
+    if level1_codes:
+        level2_users = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by = ANY(%s)
+            ORDER BY created_at ASC, id ASC
+            """,
+            (level1_codes,),
+        )
+
+        limited_level2 = []
+        for level1_code in level1_codes:
+            count = 0
+            for member in level2_users:
+                if member["referred_by"] == level1_code:
+                    if count < LEVEL2_PER_LEVEL1:
+                        member["referral_level"] = 2
+                        limited_level2.append(member)
+                        count += 1
+        level2_users = limited_level2
+
+    # LEVEL 3
+    level2_codes = [member["referral_code"] for member in level2_users if member.get("referral_code")]
+    level3_users = []
+    if level2_codes:
+        level3_users = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by = ANY(%s)
+            ORDER BY created_at ASC, id ASC
+            LIMIT %s
+            """,
+            (level2_codes, LEVEL3_LIMIT),
+        )
+
+    members = []
+    for member in level1_users:
+        member["referral_level"] = 1
+        members.append(member)
+    for member in level2_users:
+        member["referral_level"] = 2
+        members.append(member)
+    for member in level3_users:
+        member["referral_level"] = 3
+        members.append(member)
+
+    for member in members:
+        inv = query_one(
+            """
+            SELECT
+                COALESCE(
+                    SUM(investment_amount),
+                    0
+                ) AS total_investment
+            FROM plans
+            WHERE user_id=%s
+            """,
+            (member["id"],),
+        )
+        member["invest_amount"] = money(inv["total_investment"] if inv else Decimal("0.00"))
+
+    level1_count = len(level1_users)
+    level2_count = len(level2_users)
+    level3_count = len(level3_users)
+    total_team = level1_count + level2_count + level3_count
+
+    return render_template(
+        "team.html",
+        user=user,
+        members=members,
+        total_team=total_team,
+        referral_income=referral_income,
+        referral_code=user["referral_code"],
+        referral_link=referral_link,
+        site_url=site_url,
+        level1_count=level1_count,
+        level2_count=level2_count,
+        level3_count=level3_count,
+        level1_limit=LEVEL1_LIMIT,
+        level2_per_level1=LEVEL2_PER_LEVEL1,
+        level3_limit=LEVEL3_LIMIT,
+        level1_rate=LEVEL1_RATE,
+        level2_rate=LEVEL2_RATE,
+        level3_rate=LEVEL3_RATE,
+    )
+
+
+@app.route("/team_members")
+def team_members():
+    user = current_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    # LEVEL 1
+    level1_users = query_all(
+        """
+        SELECT
+            id,
+            username,
+            fullname,
+            phone,
+            referral_code,
+            referred_by,
+            created_at
+        FROM users
+        WHERE referred_by=%s
+        ORDER BY created_at ASC, id ASC
+        LIMIT 5
+        """,
+        (user["referral_code"],),
+    )
+
+    for member in level1_users:
+        member["referral_level"] = 1
+
+    # LEVEL 2
+    level2_users = []
+    for level1_member in level1_users:
+        children = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by=%s
+            ORDER BY created_at ASC, id ASC
+            LIMIT 2
+            """,
+            (level1_member["referral_code"],),
+        )
+        for member in children:
+            member["referral_level"] = 2
+            level2_users.append(member)
+
+    # LEVEL 3
+    level2_codes = [member["referral_code"] for member in level2_users if member.get("referral_code")]
+    level3_users = []
+    if level2_codes:
+        level3_users = query_all(
+            """
+            SELECT
+                id,
+                username,
+                fullname,
+                phone,
+                referral_code,
+                referred_by,
+                created_at
+            FROM users
+            WHERE referred_by = ANY(%s)
+            ORDER BY created_at ASC, id ASC
+            LIMIT 300
+            """,
+            (level2_codes,),
+        )
+        for member in level3_users:
+            member["referral_level"] = 3
+
+    members = []
+    members.extend(level1_users)
+    members.extend(level2_users)
+    members.extend(level3_users)
+
+    for member in members:
+        investment = query_one(
+            """
+            SELECT
+                COALESCE(
+                    SUM(investment_amount),
+                    0
+                ) AS total_investment
+            FROM plans
+            WHERE user_id=%s
+            """,
+            (member["id"],),
+        )
+        member["invest_amount"] = money(investment["total_investment"] if investment else Decimal("0.00"))
+
+    level1_count = len(level1_users)
+    level2_count = len(level2_users)
+    level3_count = len(level3_users)
+    total_team = level1_count + level2_count + level3_count
+
+    return render_template(
+        "team_members.html",
+        user=user,
+        members=members,
+        total_team=total_team,
+        level1_count=level1_count,
+        level2_count=level2_count,
+        level3_count=level3_count,
+        level1_limit=5,
+        level2_limit=2,
+        level3_limit=300,
+    )
+
+
+# ---------------------------
+# Support/Profile/Passwords
+# ---------------------------
+@app.route("/support")
+@app.route("/service")
+def support():
+    return render_template("support.html")
+
+
+@app.route("/profile")
+def profile():
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+    account = current_account(user["id"])
+    return render_template(
+        "profile.html",
+        user=user,
+        deposit_balance=account["deposit_account"],
+        withdraw_balance=withdrawable_balance(account),
+        income_balance=account["income_account"],
+        referral_balance=account["referral_account"],
+    )
+
+
+@app.route("/admin_change_password", methods=["GET", "POST"])
+@app.route("/change_login_password", methods=["GET", "POST"])
+def admin_change_password():
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        current_password = request.form.get("current_password", "")
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
+        valid = False
+        if user.get("password_hash"):
+            try:
+                valid = check_password_hash(user["password_hash"], current_password)
+            except Exception:
+                valid = False
+        else:
+            valid = user.get("password") == current_password
+        if not valid:
+            flash("Current password is incorrect.", "error")
+            return render_template("change_login_password.html")
+        if len(new_password) < 6:
+            flash("New password must contain at least 6 characters.", "error")
+            return render_template("change_login_password.html")
+        if new_password != confirm_password:
+            flash("New passwords do not match.", "error")
+            return render_template("change_login_password.html")
+        execute("UPDATE users SET password_hash=%s, password=NULL WHERE id=%s", (generate_password_hash(new_password), user["id"]))
+        flash("Login password changed successfully.", "success")
+        return redirect(url_for("profile"))
+    return render_template("change_login_password.html")
+
+
+@app.route("/admin_withdraw_password", methods=["GET", "POST"])
+@app.route("/change_withdraw_password", methods=["GET", "POST"])
+def admin_change_withdraw_password():
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        current_password = request.form.get("current_password", "")
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
+        valid = False
+        if user.get("withdraw_password_hash"):
+            try:
+                valid = check_password_hash(user["withdraw_password_hash"], current_password)
+            except Exception:
+                valid = False
+        else:
+            valid = user.get("withdraw_password") == current_password
+        if not valid:
+            flash("Current withdrawal password is incorrect.", "error")
+            return render_template("change_withdraw_password.html")
+        if len(new_password) < 4:
+            flash("New withdrawal password must contain at least 4 characters.", "error")
+            return render_template("change_withdraw_password.html")
+        if new_password != confirm_password:
+            flash("New passwords do not match.", "error")
+            return render_template("change_withdraw_password.html")
+        execute("UPDATE users SET withdraw_password_hash=%s, withdraw_password=NULL WHERE id=%s", (generate_password_hash(new_password), user["id"]))
+        flash("Withdrawal password changed successfully.", "success")
+        return redirect(url_for("profile"))
+    return render_template("change_withdraw_password.html")
+
+
+# ---------------------------
+# Admin auth & helpers
+# ---------------------------
+def admin_required() -> bool:
+    return session.get("admin_logged_in") is True
+
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        admin = query_one("SELECT * FROM admins WHERE username=%s", (username,))
+        valid = False
+        if admin:
+            try:
+                valid = check_password_hash(admin["password_hash"], password)
+            except Exception:
+                valid = False
+        if valid:
+            session.clear()
+            session["admin_logged_in"] = True
+            session["admin_id"] = admin["id"]
+            return redirect(url_for("admin_dashboard"))
+        flash("Invalid administrator credentials.", "error")
+    return render_template("admin_login.html")
+
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.clear()
+    return redirect(url_for("admin_login"))
+
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    total_users = query_one("SELECT COUNT(*) AS count FROM users")["count"]
+    pending_deposits = query_one("SELECT COUNT(*) AS count FROM deposit_requests WHERE status='pending'")["count"]
+    pending_withdrawals = query_one("SELECT COUNT(*) AS count FROM withdrawal_requests WHERE status='pending'")["count"]
+    invites = query_all(
+        """
+        SELECT i.*, u.username AS owner_username
+        FROM invites i
+        LEFT JOIN users u ON u.id=i.owner_id
+        ORDER BY i.created_at DESC
+        LIMIT 100
+        """
+    )
+    return render_template("admin_dashboard.html", total_users=total_users, pending_deposits=pending_deposits, pending_withdrawals=pending_withdrawals, invites=invites)
+
+
+@app.route("/admin_users")
+@app.route("/admin/users")
+def admin_users():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    users = query_all(
+        """
+        SELECT u.*, a.deposit_account, a.income_account, a.referral_account, a.withdraw_account
+        FROM users u LEFT JOIN accounts a ON a.user_id=u.id
+        ORDER BY u.id DESC
+        """
+    )
+    return render_template("admin_users.html", users=users)
+
+
+@app.route("/admin/user/<int:user_id>", methods=["GET", "POST"])
+def admin_manage_user(user_id: int):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    user = query_one("SELECT * FROM users WHERE id=%s", (user_id,))
+    if not user:
+        return "User not found", 404
+
+    if request.method == "POST":
+        action = request.form.get("action", "")
+        # Map template action names to existing operations
+        if action == "update_password":
+            action = "change_login_password"
+        if action == "update_withdraw_password":
+            action = "change_withdraw_password"
+
+        balance_actions = {
+            "add_deposit": "deposit_account",
+            "deduct_deposit": "deposit_account",
+            "add_withdraw": "withdraw_account",
+            "deduct_withdraw": "withdraw_account",
+            "add_income": "income_account",
+            "deduct_income": "income_account",
+            "add_referral": "referral_account",
+            "deduct_referral": "referral_account",
+        }
+        if action in balance_actions:
+            amount = parse_amount(request.form.get("amount", "0"))
+            if amount is None:
+                flash("Amount must be greater than zero.", "error")
+                return redirect(url_for("admin_manage_user", user_id=user_id))
+            column = balance_actions[action]
+            is_add = action.startswith("add_")
+            try:
+                with db_cursor(commit=True, dict_cursor=True) as cur:
+                    ensure_account(cur, user_id, STARTING_DEPOSIT_BALANCE)
+                    if is_add:
+                        cur.execute(f"UPDATE accounts SET {column} = COALESCE({column}, 0) + %s WHERE user_id=%s", (amount, user_id))
+                    else:
+                        cur.execute(f"UPDATE accounts SET {column} = GREATEST(0, COALESCE({column}, 0) - %s) WHERE user_id=%s", (amount, user_id))
+                    cur.execute(
+                        """
+                        INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
+                        VALUES (%s, 'admin_balance_adjustment', %s, 'successful', %s, %s)
+                        """,
+                        (user_id, amount, generate_reference("ADM"), "Admin adjustment: " + action),
+                    )
+                logger.info("Admin %s adjusted %s for user %s by %s", session.get("admin_id"), column, user_id, amount)
+            except Exception:
+                logger.exception("ADMIN BALANCE ACTION FAILED")
+                flash("Unable to update balance.", "error")
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "change_login_password":
+            new_password = request.form.get("new_password", "")
+            if len(new_password) < 6:
+                flash("Login password must contain at least 6 characters.", "error")
+            else:
+                new_hash = generate_password_hash(new_password)
+                execute("UPDATE users SET password_hash=%s, password=NULL WHERE id=%s", (new_hash, user_id))
+                logger.info("Admin %s set login password for user %s", session.get("admin_id"), user_id)
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "change_withdraw_password":
+            new_password = request.form.get("new_password", "")
+            if len(new_password) < 4:
+                flash("Withdrawal password must contain at least 4 characters.", "error")
+            else:
+                new_hash = generate_password_hash(new_password)
+                execute("UPDATE users SET withdraw_password_hash=%s, withdraw_password=NULL WHERE id=%s", (new_hash, user_id))
+                logger.info("Admin %s set withdrawal password for user %s", session.get("admin_id"), user_id)
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "update_account":
+            account_id = request.form.get("account_id")
+            account_name = request.form.get("account_name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            network = request.form.get("network", "").strip()
+            if not account_id or not account_name or not phone or not network:
+                flash("Please complete all withdrawal account details.", "error")
+            else:
+                execute("UPDATE withdrawal_accounts SET account_name=%s, phone=%s, network=%s WHERE id=%s AND user_id=%s", (account_name, phone, network, account_id, user_id))
+                logger.info("Admin %s updated withdrawal account %s for user %s", session.get("admin_id"), account_id, user_id)
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        if action == "delete_account":
+            execute("DELETE FROM withdrawal_accounts WHERE id=%s AND user_id=%s", (request.form.get("account_id"), user_id))
+            logger.info("Admin %s deleted withdrawal account %s for user %s", session.get("admin_id"), request.form.get("account_id"), user_id)
+            return redirect(url_for("admin_manage_user", user_id=user_id))
+
+        flash("Unknown admin action.", "error")
+        return redirect(url_for("admin_manage_user", user_id=user_id))
+
+    account = current_account(user_id)
+    withdrawal_accounts = query_all("SELECT * FROM withdrawal_accounts WHERE user_id=%s ORDER BY id DESC", (user_id,))
+    return render_template("admin_manage_user.html", user=user, account=account, withdrawal_accounts=withdrawal_accounts)
+
+
+@app.route("/admin/bind_accounts")
+@app.route("/admin_bind_accounts")
+def admin_bind_accounts():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    accounts = query_all(
+        """
+        SELECT wa.*, u.username, u.phone AS user_phone
+        FROM withdrawal_accounts wa JOIN users u ON u.id=wa.user_id
+        ORDER BY wa.created_at DESC, wa.id DESC
+        """
+    )
+    return render_template("admin_bind_accounts.html", accounts=accounts)
+
+
+@app.route("/admin/deposits")
+def admin_deposits():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    deposits = query_all(
+        """
+        SELECT d.id, d.user_id, d.amount, d.payment_number, d.screenshot, d.screenshot_mime, d.reference, d.status, d.created_at,
+               u.username, u.fullname, u.phone
+        FROM deposit_requests d JOIN users u ON u.id=d.user_id
+        ORDER BY d.created_at DESC, d.id DESC
+        """
+    )
+    return render_template("admin_deposit.html", deposits=deposits)
+
+
+@app.route("/admin/deposit/<int:deposit_id>/<action>", methods=["POST"])
+def admin_deposit_action(deposit_id: int, action: str):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    if action not in {"approve", "reject"}:
+        flash("Invalid deposit action.", "error")
+        return redirect(url_for("admin_deposits"))
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+            cur.execute("SELECT id, user_id, amount, reference, status FROM deposit_requests WHERE id=%s FOR UPDATE", (deposit_id,))
+            deposit = cur.fetchone()
+            if not deposit:
+                flash("Deposit request not found.", "error")
+                return redirect(url_for("admin_deposits"))
+            if deposit["status"] != "pending":
+                flash("This deposit has already been reviewed.", "error")
+                return redirect(url_for("admin_deposits"))
+            user_id = deposit["user_id"]
+            amount = money(deposit["amount"])
+            reference = deposit.get("reference")
+            if action == "approve":
+                ensure_account(cur, user_id, Decimal("0.00"))
+                cur.execute("UPDATE accounts SET deposit_account = COALESCE(deposit_account,0) + %s WHERE user_id=%s", (amount, user_id))
+                cur.execute("UPDATE deposit_requests SET status='approved' WHERE id=%s", (deposit_id,))
+                cur.execute("UPDATE transactions SET status='successful' WHERE user_id=%s AND transaction_type='deposit' AND reference=%s AND status='pending'", (user_id, reference))
+                message = f"Demo deposit of GHS {amount:.2f} approved successfully."
+            else:
+                cur.execute("UPDATE deposit_requests SET status='rejected' WHERE id=%s", (deposit_id,))
+                cur.execute("UPDATE transactions SET status='failed' WHERE user_id=%s AND transaction_type='deposit' AND reference=%s AND status='pending'", (user_id, reference))
+                message = f"Demo deposit of GHS {amount:.2f} rejected."
+        logger.info("Admin %s processed deposit %s: %s", session.get("admin_id"), deposit_id, message)
+    except Exception:
+        logger.exception("ADMIN DEPOSIT ACTION ERROR")
+        flash("Unable to process the deposit.", "error")
+    return redirect(url_for("admin_deposits"))
+
+
+@app.route("/admin/withdrawals")
+def admin_withdrawals():
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    withdrawals = query_all(
+        """
+        SELECT w.*, u.username, u.fullname, u.phone, wa.account_name, wa.phone AS account_phone, wa.network
+        FROM withdrawal_requests w JOIN users u ON u.id=w.user_id LEFT JOIN withdrawal_accounts wa ON wa.id=w.account_id
+        ORDER BY w.created_at DESC, w.id DESC
+        """
+    )
+    return render_template("admin_withdraw.html", withdrawals=withdrawals)
+
+
+@app.route("/admin/withdraw/<int:withdrawal_id>/<action>", methods=["POST"])
+def admin_withdraw_action(withdrawal_id: int, action: str):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    if action not in {"approve", "reject"}:
+        flash("Invalid withdrawal action.", "error")
+        return redirect(url_for("admin_withdrawals"))
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+            cur.execute("SELECT * FROM withdrawal_requests WHERE id=%s FOR UPDATE", (withdrawal_id,))
+            withdrawal = cur.fetchone()
+            if not withdrawal:
+                flash("Withdrawal request not found.", "error")
+                return redirect(url_for("admin_withdrawals"))
+            if withdrawal["status"] != "pending":
+                flash("Withdrawal request is no longer pending.", "error")
+                return redirect(url_for("admin_withdrawals"))
+            user_id = withdrawal["user_id"]
+            amount = money(withdrawal["amount"])
+            if action == "approve":
+                cur.execute("UPDATE withdrawal_requests SET status='approved' WHERE id=%s", (withdrawal_id,))
+                cur.execute(
+                    """
+                    UPDATE transactions
+                    SET status='successful'
+                    WHERE id = (
+                        SELECT id FROM transactions
+                        WHERE user_id=%s AND transaction_type='withdrawal' AND amount=%s AND status='pending'
+                        ORDER BY created_at DESC, id DESC LIMIT 1
+                    )
+                    """,
+                    (user_id, amount),
+                )
+                message = "Withdrawal approved successfully."
+            else:
+                ensure_account(cur, user_id, Decimal("0.00"))
+                cur.execute("UPDATE accounts SET withdraw_account = COALESCE(withdraw_account,0) + %s WHERE user_id=%s", (amount, user_id))
+                cur.execute("UPDATE withdrawal_requests SET status='rejected' WHERE id=%s", (withdrawal_id,))
+                cur.execute(
+                    """
+                    UPDATE transactions
+                    SET status='failed'
+                    WHERE id = (
+                        SELECT id FROM transactions
+                        WHERE user_id=%s AND transaction_type='withdrawal' AND amount=%s AND status='pending'
+                        ORDER BY created_at DESC, id DESC LIMIT 1
+                    )
+                    """,
+                    (user_id, amount),
+                )
+                message = "Withdrawal rejected and balance restored."
+        logger.info("Admin %s processed withdrawal %s: %s", session.get("admin_id"), withdrawal_id, message)
+    except Exception:
+        logger.exception("ADMIN WITHDRAWAL ACTION ERROR")
+        flash("Unable to process the withdrawal.", "error")
+    return redirect(url_for("admin_withdrawals"))
+
+
+@app.route("/admin/approve_invite/<token>", methods=["GET", "POST"])
+def admin_approve_invite(token: str):
+    if not admin_required():
+        return redirect(url_for("admin_login"))
+    try:
+        with db_cursor(commit=True, dict_cursor=True) as cur:
+            cur.execute("SELECT * FROM invites WHERE token=%s FOR UPDATE", (token,))
+            invite = cur.fetchone()
+            if not invite:
+                flash("Invite not found.", "error")
+                return redirect(url_for("admin_dashboard"))
+            if invite.get("approved"):
+                return redirect(url_for("admin_dashboard"))
+            owner_id = invite["owner_id"]
+            amount = money(invite.get("amount") or 0)
+            ensure_account(cur, owner_id, STARTING_DEPOSIT_BALANCE)
+            cur.execute("UPDATE accounts SET referral_account = COALESCE(referral_account,0) + %s WHERE user_id=%s", (amount, owner_id))
+            cur.execute("UPDATE invites SET approved=TRUE WHERE id=%s", (invite["id"],))
+            cur.execute(
+                """
+                INSERT INTO transactions (user_id, transaction_type, amount, status, reference, description)
+                VALUES (%s, 'invite_credit', %s, 'successful', %s, %s)
+                """,
+                (owner_id, amount, generate_reference("INV"), "Admin approved invite " + token),
+            )
+        logger.info("Admin %s approved invite %s for owner %s (amount %s)", session.get("admin_id"), token, owner_id, amount)
+    except Exception:
+        logger.exception("APPROVE INVITE ERROR")
+        flash("Unable to approve invite.", "error")
+    return redirect(url_for("admin_dashboard"))
+
 
 # ============================================================
 # Error handlers
@@ -1233,7 +1934,6 @@ def server_error(error):
 # ============================================================
 with app.app_context():
     try:
-        # Only initialize DB if DATABASE_URL is set; init_db will raise helpful error otherwise.
         if settings.DATABASE_URL:
             init_db()
     except Exception:
