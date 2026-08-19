@@ -88,10 +88,9 @@ logger = logging.getLogger("zenith.app")
 # PLATFORM SETTINGS & PLANS
 # ============================================================
 
-MIN_DEPOSIT = Decimal("100.00")
+MIN_DEPOSIT = Decimal("45.00")
 MIN_WITHDRAWAL = Decimal("30.00")
-STARTING_DEPOSIT_BALANCE = Decimal("0")
-STARTING_WITHDRAW_BALANCE = 30
+STARTING_DEPOSIT_BALANCE = Decimal("5.00")
 CLAIM_INTERVAL_HOURS = 24
 
 REFERRAL_PERCENTS: List[Decimal] = [Decimal("0.20"), Decimal("0.03"), Decimal("0.01")]
@@ -243,7 +242,7 @@ def ensure_account(cur, user_id: int, starting_balance: Decimal = Decimal("0.00"
         INSERT INTO accounts (
             user_id, deposit_account, income_account, referral_account, withdraw_account
         )
-        VALUES (%s, %s, 0, 0, 30.00)
+        VALUES (%s, %s, 0, 0, 0)
         ON CONFLICT (user_id) DO NOTHING
         """,
         (user_id, starting_balance),
@@ -283,10 +282,10 @@ def init_db():
             """
             CREATE TABLE IF NOT EXISTS accounts (
                 user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-                deposit_account NUMERIC(14,2) NOT NULL DEFAULT 0,
+                deposit_account NUMERIC(14,2) NOT NULL DEFAULT 5.00,
                 income_account NUMERIC(14,2) NOT NULL DEFAULT 0,
                 referral_account NUMERIC(14,2) NOT NULL DEFAULT 0,
-                withdraw_account NUMERIC(14,2) NOT NULL DEFAULT 30.00
+                withdraw_account NUMERIC(14,2) NOT NULL DEFAULT 0
             )"""
         )
 
@@ -583,10 +582,9 @@ def register():
                     """
                     INSERT INTO accounts (
                         user_id, deposit_account, income_account, referral_account, withdraw_account
-                    ) VALUES (%s,%s,0,0,30.00) ON CONFLICT (user_id) DO NOTHING
+                    ) VALUES (%s,%s,0,0,0) ON CONFLICT (user_id) DO NOTHING
                     """,
                     (new_user_id, STARTING_DEPOSIT_BALANCE),
-                    (new_user_id,STARTING_WITHDRAW_BALANCE),
                 )
         except Exception:
             logger.exception("REGISTRATION ERROR")
@@ -2045,282 +2043,7 @@ def admin_approve_invite(token: str):
         logger.exception("APPROVE INVITE ERROR")
         flash("Unable to approve invite.", "error")
     return redirect(url_for("admin_dashboard"))
-# ============================================================
-# ADMIN PLAN MANAGEMENT
-# ============================================================
 
-@app.route("/admin/plans", methods=["GET"])
-def admin_plans():
-    if not admin_required():
-        return redirect(url_for("admin_login"))
-
-    users = query_all(
-        """
-        SELECT id, username, fullname, phone
-        FROM users
-        ORDER BY id DESC
-        """
-    )
-
-    user_plans = query_all(
-        """
-        SELECT
-            p.id,
-            p.user_id,
-            p.plan_id,
-            p.plan_name,
-            p.investment_amount,
-            p.daily_income,
-            p.duration,
-            p.started_at,
-            p.last_claim_at,
-            p.active,
-            u.username,
-            u.fullname,
-            u.phone
-        FROM plans p
-        JOIN users u ON u.id = p.user_id
-        ORDER BY p.id DESC
-        """
-    )
-
-    available_plans = [
-        {
-            "id": plan_id,
-            "plan_name": data["name"],
-            "investment_amount": data["investment"],
-            "daily_income": data["daily"],
-            "duration": data["duration"],
-        }
-        for plan_id, data in PLANS.items()
-    ]
-
-    return render_template(
-        "admin_plans.html",
-        users=users,
-        user_plans=user_plans,
-        available_plans=available_plans,
-    )
-
-
-@app.route("/admin/plans/assign", methods=["POST"])
-def admin_assign_plan():
-    if not admin_required():
-        return redirect(url_for("admin_login"))
-
-    try:
-        user_id = int(request.form.get("user_id", "0"))
-        plan_id = int(request.form.get("plan_id", "0"))
-    except (TypeError, ValueError):
-        flash("Please select a valid user and plan.", "error")
-        return redirect(url_for("admin_plans"))
-
-    user = query_one(
-        "SELECT id, username FROM users WHERE id=%s",
-        (user_id,)
-    )
-
-    if not user:
-        flash("User not found.", "error")
-        return redirect(url_for("admin_plans"))
-
-    if plan_id not in PLANS:
-        flash("Plan not found.", "error")
-        return redirect(url_for("admin_plans"))
-
-    plan = PLANS[plan_id]
-
-    try:
-        with db_cursor(commit=True, dict_cursor=True) as cur:
-
-            # Make sure the user's account exists.
-            ensure_account(
-                cur,
-                user_id,
-                Decimal("0.00")
-            )
-
-            # Give the plan directly to the user.
-            # IMPORTANT:
-            # No deposit balance is deducted here.
-            started_at = utcnow()
-
-            cur.execute(
-                """
-                INSERT INTO plans (
-                    user_id,
-                    plan_id,
-                    plan_name,
-                    investment_amount,
-                    daily_income,
-                    duration,
-                    started_at,
-                    last_claim_at,
-                    active
-                )
-                VALUES (
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    %s,
-                    NULL,
-                    TRUE
-                )
-                RETURNING id
-                """,
-                (
-                    user_id,
-                    plan_id,
-                    plan["name"],
-                    plan["investment"],
-                    plan["daily"],
-                    plan["duration"],
-                    started_at,
-                )
-            )
-
-            new_plan = cur.fetchone()
-            new_plan_id = fetch_id(new_plan, "id")
-
-            # Audit record only.
-            # This does NOT create a normal plan purchase.
-            cur.execute(
-                """
-                INSERT INTO transactions (
-                    user_id,
-                    transaction_type,
-                    amount,
-                    status,
-                    reference,
-                    description
-                )
-                VALUES (
-                    %s,
-                    'admin_plan_grant',
-                    %s,
-                    'successful',
-                    %s,
-                    %s
-                )
-                """,
-                (
-                    user_id,
-                    plan["investment"],
-                    generate_reference("AGR"),
-                    (
-                        f"Admin granted {plan['name']} "
-                        f"to user {user['username']} "
-                        f"(plan #{new_plan_id})"
-                    ),
-                )
-            )
-
-        logger.info(
-            "Admin %s granted plan %s to user %s",
-            session.get("admin_id"),
-            plan_id,
-            user_id
-        )
-
-        flash(
-            f"{plan['name']} assigned to {user['username']} successfully.",
-            "success"
-        )
-
-    except Exception:
-        logger.exception("ADMIN PLAN ASSIGN ERROR")
-        flash("Unable to assign the plan.", "error")
-
-    return redirect(url_for("admin_plans"))
-
-
-@app.route("/admin/plans/delete/<int:plan_record_id>", methods=["POST"])
-def admin_delete_plan(plan_record_id: int):
-    if not admin_required():
-        return redirect(url_for("admin_login"))
-
-    try:
-        with db_cursor(commit=True, dict_cursor=True) as cur:
-
-            cur.execute(
-                """
-                SELECT
-                    p.id,
-                    p.user_id,
-                    p.plan_name,
-                    p.investment_amount,
-                    u.username
-                FROM plans p
-                JOIN users u ON u.id = p.user_id
-                WHERE p.id=%s
-                FOR UPDATE
-                """,
-                (plan_record_id,)
-            )
-
-            plan = cur.fetchone()
-
-            if not plan:
-                flash("Plan record not found.", "error")
-                return redirect(url_for("admin_plans"))
-
-            # Permanently remove this plan record.
-            cur.execute(
-                "DELETE FROM plans WHERE id=%s",
-                (plan_record_id,)
-            )
-
-            # Keep an audit trail in transactions.
-            cur.execute(
-                """
-                INSERT INTO transactions (
-                    user_id,
-                    transaction_type,
-                    amount,
-                    status,
-                    reference,
-                    description
-                )
-                VALUES (
-                    %s,
-                    'admin_plan_delete',
-                    %s,
-                    'successful',
-                    %s,
-                    %s
-                )
-                """,
-                (
-                    plan["user_id"],
-                    plan["investment_amount"],
-                    generate_reference("ADL"),
-                    (
-                        f"Admin removed {plan['plan_name']} "
-                        f"(plan #{plan_record_id})"
-                    ),
-                )
-            )
-
-        logger.info(
-            "Admin %s deleted plan record %s from user %s",
-            session.get("admin_id"),
-            plan_record_id,
-            plan["user_id"]
-        )
-
-        flash(
-            f"{plan['plan_name']} removed from {plan['username']}.",
-            "success"
-        )
-
-    except Exception:
-        logger.exception("ADMIN PLAN DELETE ERROR")
-        flash("Unable to delete the plan.", "error")
-
-    return redirect(url_for("admin_plans"))
 
 # ============================================================
 # Error handlers
