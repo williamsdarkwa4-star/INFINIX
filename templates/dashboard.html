@@ -1067,9 +1067,8 @@ body {
         rgba(0,255,85,.5);
 }
 
-
 /* =====================================================
-   MOVABLE ROUND SPIN BUTTON
+   MOVABLE ROUND FLOATING BUTTON
 ===================================================== */
 
 .floating-spin-button {
@@ -1078,8 +1077,8 @@ body {
     left: 18px;
     top: 45%;
 
-    width: 54px;
-    height: 54px;
+    width: 56px;
+    height: 56px;
 
     border-radius: 50%;
 
@@ -1087,43 +1086,48 @@ body {
         radial-gradient(
             circle at 35% 30%,
             #202020,
-            #080808 70%
+            #080808 72%
         );
 
-    border: 2px solid
-        rgba(0,255,85,.75);
+    border: 2px solid rgba(0,255,85,.85);
 
     box-shadow:
-        0 0 12px rgba(0,255,85,.30),
-        0 8px 25px rgba(0,0,0,.55);
+        0 0 15px rgba(0,255,85,.35),
+        0 8px 28px rgba(0,0,0,.65);
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
-    z-index: 9000;
+    z-index: 999999;
 
     cursor: grab;
 
+    /*
+       Important for Android dragging.
+       Prevents the browser from treating
+       the gesture as page scrolling.
+    */
     touch-action: none;
 
     user-select: none;
     -webkit-user-select: none;
 
+    -webkit-tap-highlight-color: transparent;
+
     text-decoration: none;
 
-    transition:
-        box-shadow .2s ease,
-        transform .15s ease;
+    isolation: isolate;
 }
 
-.floating-spin-button:active {
+.floating-spin-button.dragging {
     cursor: grabbing;
 
     box-shadow:
-        0 0 20px rgba(0,255,85,.55),
-        0 8px 30px rgba(0,0,0,.65);
+        0 0 24px rgba(0,255,85,.65),
+        0 10px 32px rgba(0,0,0,.75);
+
+    transform: scale(1.04);
 }
 
 .floating-spin-button .floating-star {
@@ -1133,17 +1137,17 @@ body {
 
     color: var(--green);
 
-    font-size: 23px;
+    font-size: 24px;
 
     line-height: 1;
 
     text-shadow:
-        0 0 8px rgba(0,255,85,.8);
+        0 0 10px rgba(0,255,85,.85);
+
+    pointer-events: none;
 
     animation:
         floatingStarSpin 2.2s linear infinite;
-
-    pointer-events: none;
 }
 
 .floating-spin-button .floating-dot {
@@ -1154,7 +1158,7 @@ body {
 
     border-radius: 50%;
 
-    background: #ffffff;
+    background: #fff;
 
     box-shadow:
         0 0 8px var(--green);
@@ -1179,19 +1183,19 @@ body {
     border: 1px dashed
         rgba(0,255,85,.45);
 
+    pointer-events: none;
+
     animation:
         floatingRingSpin 3s linear infinite;
-
-    pointer-events: none;
 }
 
 @keyframes floatingStarSpin {
 
-    0% {
+    from {
         transform: rotate(0deg);
     }
 
-    100% {
+    to {
         transform: rotate(360deg);
     }
 
@@ -1199,15 +1203,24 @@ body {
 
 @keyframes floatingRingSpin {
 
-    0% {
+    from {
         transform: rotate(0deg);
     }
 
-    100% {
+    to {
         transform: rotate(-360deg);
     }
 
 }
+
+@media (max-width: 360px) {
+
+    .floating-spin-button {
+        width: 52px;
+        height: 52px;
+    }
+
+    }
 
 
 /* =========================================
