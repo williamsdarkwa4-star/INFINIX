@@ -1973,7 +1973,7 @@ body {
 
         <!-- DEVICE 4 -->
 
-        <article class="product-card locked">
+        <article class="product-card">
 
             <div class="vip-tag">
                 INFINIX 4
@@ -2015,13 +2015,16 @@ body {
                 <small>/ DEVICE</small>
             </div>
 
-            <div class="locked-button">
+            <a
+                href="{{ url_for('buy_plan', plan_id=3) }}"
+                class="buy-btn loading-link"
+                data-loading="Opening Infinix 3...">
 
-                <i data-lucide="lock"></i>
+                Buy now
 
-                Coming Soon
+                <i data-lucide="arrow-right"></i>
 
-            </div>
+            </a>
 
         </article>
 
