@@ -102,7 +102,7 @@ PLANS = {
     1: {"name": "INFINIX 1", "investment": Decimal("100.00"), "daily": Decimal("20.00"), "duration": 180},
     2: {"name": "INFINIX 2", "investment": Decimal("250.00"), "daily": Decimal("45.00"), "duration": 180},
     3: {"name": "INFINIX 3", "investment": Decimal("600.00"), "daily": Decimal("120.00"), "duration": 180},
-    4: {"name": "INFININX 4", "investment": Decimal("1000.00"), "daily": Decimal("200.00"), "duration": 180},
+    4: {"name": "INFININX 4", "investment": Decimal("1000.00"), "daily": Decimal("120.00"), "duration": 180},
     5: {"name": "INFINIX 5", "investment": Decimal("2500.00"), "daily": Decimal("500.00"), "duration": 180},
     6: {"name": "INFINIX 6", "investment": Decimal("5000.00"), "daily": Decimal("1000.00"), "duration": 180},
     7: {"name": "INFINIX 7", "investment": Decimal("8000.00"), "daily": Decimal("1600.00"), "duration": 180},
